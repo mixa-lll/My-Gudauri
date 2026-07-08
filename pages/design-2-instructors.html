@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design 2 - Instructors</title>
+    <link rel="stylesheet" href="../styles/system.css" />
+    <link rel="stylesheet" href="../styles/shared-faq.css" />
+    <link rel="stylesheet" href="../styles/design-2-instructors.css" />
+  </head>
+  <body class="catalog-page-body">
+    <div class="catalog-page">
+      <header class="site-nav-host catalog-nav-host" data-site-navbar></header>
+
+      <main class="catalog-main">
+        <section class="catalog-header">
+          <div class="container">
+            <div class="catalog-title-wrap">
+              <div class="catalog-sport-pills">
+                <span class="catalog-sport-pill ui-pill-md ui-pill-md--outline">
+                  <img class="ui-pill-md__icon" src="../assets/ui-kit/pill-icon.png" alt="" aria-hidden="true" />
+                  Snowboard
+                </span>
+                <span class="catalog-sport-pill ui-pill-md ui-pill-md--outline">
+                  <img class="ui-pill-md__icon" src="../assets/ui-kit/pill-icon.png" alt="" aria-hidden="true" />
+                  Ski
+                </span>
+              </div>
+              <h1 class="catalog-title">INSTRUCTORS</h1>
+            </div>
+
+            <article class="catalog-rate-banner">
+              <img class="catalog-rate-icon" src="../assets/design-2/icon-info.png" alt="" aria-hidden="true" />
+              <div class="catalog-rate-row">
+                <p>Single rate for all instructors</p>
+                <span class="catalog-rate-pill">345 gel/h</span>
+              </div>
+              <p class="catalog-rate-note">The more you take, the cheaper it gets !</p>
+              <button class="catalog-calc-btn ui-btn-md" type="button" data-calc-open>
+                <img class="ui-btn-md__icon" src="../assets/design-2/calc/btn-calc-left.png" alt="" aria-hidden="true" />
+                Calculate the cost
+                <img class="ui-btn-md__arrow" src="../assets/design-2/calc/btn-calc-right.png" alt="" aria-hidden="true" />
+              </button>
+            </article>
+          </div>
+        </section>
+
+        <div class="catalog-calc-overlay" data-calc-overlay hidden>
+          <button class="catalog-calc-backdrop" type="button" aria-label="Close calculator" data-calc-close></button>
+
+          <section class="catalog-calc-modal" role="dialog" aria-modal="true" aria-labelledby="catalog-calc-title">
+            <header class="catalog-calc-modal-head">
+              <h2 id="catalog-calc-title">Cost calculate</h2>
+              <button class="catalog-calc-close-btn" type="button" aria-label="Close calculator" data-calc-close>
+                <img src="../assets/design-2/calc/icon-calc-close.png" alt="" aria-hidden="true" />
+              </button>
+            </header>
+
+            <div class="catalog-calc-grid">
+              <div class="catalog-calc-metric">
+                <p>Total number of hours</p>
+                <div class="catalog-calc-metric-value">
+                  <span data-calc-hours-value>2</span>
+                  <span>hour</span>
+                </div>
+                <div class="catalog-calc-stepper">
+                  <button class="catalog-calc-step-btn" type="button" aria-label="Decrease hours" data-calc-decrease="hours">
+                    <img src="../assets/design-2/calc/stepper-minus.svg" alt="" aria-hidden="true" />
+                  </button>
+                  <button class="catalog-calc-step-btn" type="button" aria-label="Increase hours" data-calc-increase="hours">
+                    <img src="../assets/design-2/calc/stepper-plus.svg" alt="" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="catalog-calc-symbol catalog-calc-symbol--star">*</div>
+
+              <div class="catalog-calc-metric">
+                <p>Number of people</p>
+                <div class="catalog-calc-metric-value">
+                  <span data-calc-people-value>1</span>
+                  <span>people</span>
+                </div>
+                <div class="catalog-calc-stepper">
+                  <button class="catalog-calc-step-btn" type="button" aria-label="Decrease people" data-calc-decrease="people">
+                    <img src="../assets/design-2/calc/stepper-minus.svg" alt="" aria-hidden="true" />
+                  </button>
+                  <button class="catalog-calc-step-btn" type="button" aria-label="Increase people" data-calc-increase="people">
+                    <img src="../assets/design-2/calc/stepper-plus.svg" alt="" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="catalog-calc-symbol">=</div>
+
+              <div class="catalog-calc-result">
+                <div class="catalog-calc-result-top">
+                  <p>Final price</p>
+                  <p class="catalog-calc-save">Save <span>12%</span></p>
+                </div>
+                <div class="catalog-calc-result-value" data-calc-price>345 GEL</div>
+                <div class="catalog-calc-currency-toggle" role="tablist" aria-label="Currency">
+                  <button class="is-active" type="button" data-calc-currency="gel">GEL</button>
+                  <button type="button" data-calc-currency="usd">USD</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="catalog-calc-footnote">
+              <img src="../assets/design-2/calc/info-banner.png" alt="" aria-hidden="true" />
+              <p>
+                Hours can be split across multiple days
+                <br />
+                Available in <span>2</span>, <span>4</span> or <span>6-hour</span> daily sessions.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <section class="catalog-list">
+          <div class="container">
+            <p class="catalog-kicker">filters</p>
+            <div class="catalog-filters">
+              <button class="catalog-filter-btn ui-pill-md ui-pill-md--outline" type="button">Напровление <img src="../assets/design-2/icon-caret.png" alt="" aria-hidden="true" /></button>
+              <button class="catalog-filter-btn ui-pill-md ui-pill-md--outline" type="button">Уровень <img src="../assets/design-2/icon-caret.png" alt="" aria-hidden="true" /></button>
+              <button class="catalog-filter-btn ui-pill-md ui-pill-md--outline" type="button">Язык <img src="../assets/design-2/icon-caret.png" alt="" aria-hidden="true" /></button>
+            </div>
+
+            <p class="catalog-count">12 instruktars</p>
+            <div class="catalog-cards-grid">
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--mikhail">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-ski.png" alt="" aria-hidden="true" />Ski</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Mikhail Andeev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--oleg">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Oleg Yung</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--red">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Mikhail Andeev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--andrey">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-ski.png" alt="" aria-hidden="true" />Ski</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Andrey Gregorev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--mikhail">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-ski.png" alt="" aria-hidden="true" />Ski</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Mikhail Andeev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--mikhail">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-ski.png" alt="" aria-hidden="true" />Ski</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Mikhail Andeev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--mikhail">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-ski.png" alt="" aria-hidden="true" />Ski</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Mikhail Andeev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+
+              <a class="instructor-card card-hoverable catalog-card" href="./design-3-profile.html">
+                <div class="instructor-media catalog-media catalog-media--mikhail">
+                  <div class="chips-top">
+                    <span class="chip ui-pill-md ui-pill-md--outline">Ge</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline">En</span>
+                  </div>
+                  <div class="chips-bottom">
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-snow.png" alt="" aria-hidden="true" />Snowboard</span>
+                    <span class="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="../assets/design-2/icon-ski.png" alt="" aria-hidden="true" />Ski</span>
+                  </div>
+                </div>
+                <div class="instructor-body">
+                  <h3>Mikhail Andeev</h3>
+                  <p>Здесь краткое описание на русском</p>
+                  <div class="rating-line">
+                    <img src="../assets/design-2/stars-card.svg" alt="4.8 stars" />
+                    <span>4,8</span>
+                    <img class="dot" src="../assets/design-2/dot-card.svg" alt="" aria-hidden="true" />
+                    <span class="rating-link">6 reviews</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="catalog-benefits">
+          <div class="container">
+            <div class="catalog-benefits-panel">
+              <div class="section-heading">
+                <p class="catalog-kicker section-heading__kicker">Trust us</p>
+                <h2 class="catalog-section-title section-heading__title">Why choose My Gudauri instructors</h2>
+              </div>
+
+              <div class="benefits-grid">
+                <article class="benefit-card">
+                  <img src="../assets/design-2/icon-verified.png" alt="" aria-hidden="true" />
+                  <h3>Verified professionals</h3>
+                  <p>All instructors <span>are reviewed</span> before joining the platform</p>
+                </article>
+
+                <article class="benefit-card">
+                  <img src="../assets/design-2/icon-price.png" alt="" aria-hidden="true" />
+                  <h3>Transparent pricing</h3>
+                  <p>Same <span>official rate</span> for everyone. No hidden markups</p>
+                </article>
+
+                <article class="benefit-card">
+                  <img src="../assets/design-2/icon-profile.png" alt="" aria-hidden="true" />
+                  <h3>Real profiles</h3>
+                  <p><span>Experience,</span> languages, reviews, teaching style</p>
+                </article>
+
+                <article class="benefit-card">
+                  <img src="../assets/design-2/icon-calendar.png" alt="" aria-hidden="true" />
+                  <h3>Flexible scheduling</h3>
+                  <p><span>Split your hours</span> across days in a way that suits yo</p>
+                </article>
+              </div>
+
+              <div class="section-heading booking-head">
+                <p class="catalog-kicker booking-kicker section-heading__kicker">5 steps to book an instructor</p>
+                <h2 class="catalog-section-title section-heading__title">How booking works</h2>
+              </div>
+
+              <div class="steps-grid-top">
+                <article class="booking-step booking-step-1">
+                  <div class="step-head"><span class="step-index is-active">1</span><span>Step</span></div>
+                  <h3>Choose your instructor</h3>
+                  <p>Browse profiles, experience, reviews and languages. Select the instructor that fits you best and click Book now.</p>
+                  <div class="step-squares">
+                    <i></i><i></i><i class="active"></i><i></i><i></i><i></i>
+                  </div>
+                </article>
+
+                <article class="booking-step booking-step-2">
+                  <div class="step-head"><span class="step-index">2</span><span>Step</span></div>
+                  <h3>Submit your lesson details</h3>
+                  <p>Enter your preferred dates, total lesson hours, number of participants, skill level and any special requests. Leave your contact information and send the request.</p>
+                  <div class="step-form-icon">
+                    <b>Form</b>
+                    <i></i><i></i><i></i><i></i>
+                    <span></span><span></span>
+                  </div>
+                </article>
+
+                <article class="booking-step booking-step-3">
+                  <div class="step-head"><span class="step-index">3</span><span>Step</span></div>
+                  <h3>Request received</h3>
+                  <p>You’ll see a confirmation screen with your booking reference number.<br />There is no need to stay on the page — we take it from here.</p>
+                  <div class="step-id-icon">
+                    <img src="../assets/design-2/step-idcard.svg" alt="" aria-hidden="true" />
+                    <img class="step-id-dot" src="../assets/design-2/step-id-dot.svg" alt="" aria-hidden="true" />
+                    <img class="step-id-check" src="../assets/design-2/icon-check.svg" alt="" aria-hidden="true" />
+                  </div>
+                </article>
+              </div>
+
+              <div class="steps-grid-bottom">
+                <article class="booking-step booking-step-4 booking-step-wide">
+                  <div class="step-head"><span class="step-index">4</span><span>Step</span></div>
+                  <h3>Schedule coordination</h3>
+                  <p>Our booking manager contacts you via WhatsApp to confirm the instructor’s availability and finalize the details.</p>
+                  <img class="step-operator" src="../assets/design-2/step-operator.png" alt="" aria-hidden="true" />
+                  <img class="step-operator-arrow" src="../assets/design-2/step-arrow.png" alt="" aria-hidden="true" />
+                  <img class="step-operator-link" src="../assets/design-2/step-link.png" alt="" aria-hidden="true" />
+                </article>
+
+                <article class="booking-step booking-step-5 booking-step-xwide">
+                  <div class="step-head"><span class="step-index">5</span><span>Step</span></div>
+                  <h3>Secure payment and confirmation</h3>
+                  <div class="step5-copy">
+                    <p>You receive an email with your booking details and a secure payment link on our website. After completing the prepayment through the payment system, your lessons are officially reserved.</p>
+                    <p>Once the payment is processed, you receive a final confirmation email along with the instructor’s direct contact details, so you can coordinate the meeting and final arrangements.</p>
+                  </div>
+                  <img class="step-payment" src="../assets/design-2/step-payment.png" alt="" aria-hidden="true" />
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="catalog-faq-block">
+          <div class="container">
+            <div class="grid-12 faq-layout faq-component" data-faq-component></div>
+          </div>
+        </section>
+
+        <footer class="home-footer">
+          <div class="container">
+            <div class="grid-12 footer-layout">
+              <div class="footer-top">
+                <div class="footer-brand-wrap">
+                  <div class="brand">My Gudauri <img src="../assets/design-1/ellipse-8.svg" alt="" aria-hidden="true" /></div>
+                  <p>Independent platform connecting guests with verified local instructors and activities in Gudauri.</p>
+                </div>
+              </div>
+
+              <div class="footer-main">
+                <div class="contacts">
+                  <div><span>Phone number</span><p>+995 123 45 65</p></div>
+                  <div><span>Email</span><p>Mygudauri@gmail.com</p></div>
+                  <div><span>Adress</span><p>Gudauri, Georgia</p></div>
+                </div>
+                <div class="footer-nav">
+                  <a href="#">Articles</a>
+                  <a href="#">About Gudauri</a>
+                  <a href="#">Support</a>
+                </div>
+                <div class="footer-sections">
+                  <span>Sections</span>
+                  <div>
+                    <a href="#">Instructors</a><a href="#">Services</a>
+                    <a href="#">Places</a><a href="#">Activity</a>
+                    <a href="#">Transfer</a><a href="#">Rent</a>
+                  </div>
+                </div>
+              </div>
+
+              <img class="footer-line" src="../assets/design-1/line-26.svg" alt="" aria-hidden="true" />
+              <div class="footer-bottom">
+                <div class="legal"><span>© 2026 MuGudauri, Inc.</span><span>Cookies Policy</span><span>Privacy Policy</span></div>
+                <div class="socials">
+                  <img src="../assets/design-1/telegram-4-1.png" alt="Telegram" />
+                  <img src="../assets/design-1/instagram-3-1.png" alt="Instagram" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script src="../scripts/shared-navbar.js"></script>
+    <script src="../scripts/shared-faq.js"></script>
+    <script src="../scripts/design-2-instructors.js"></script>
+  </body>
+</html>

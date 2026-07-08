@@ -1,0 +1,21 @@
+.summary-page__content {
+  border-radius: var(--radius-xl);
+  background: var(--grey-50);
+  padding: var(--space-700);
+  display: grid;
+  gap: var(--space-500);
+}
+
+.summary-page__card {
+  border-radius: var(--radius-md);
+  background: var(--grey-white);
+  padding: var(--space-500);
+  display: grid;
+  gap: var(--space-150);
+}
+
+.summary-page__card p {
+  margin: 0;
+  font: 400 var(--text-md) / var(--lh-md) var(--font-body);
+  color: var(--grey-600);
+}

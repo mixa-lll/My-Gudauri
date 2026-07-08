@@ -1,0 +1,57 @@
+.ui-pill {
+  border: 1px solid transparent;
+  border-radius: var(--radius-xsm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.ui-pill--md {
+  height: var(--pill-md-h);
+  padding: 0 var(--pill-md-w);
+  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+}
+
+.ui-pill--sm {
+  height: 23px;
+  padding: 0 10px;
+  border-radius: 22px;
+  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+}
+
+.ui-pill--lg {
+  height: var(--pill-lg-h);
+  padding: 0 var(--pill-lg-w);
+  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+}
+
+.ui-pill--light {
+  border-color: var(--grey-100);
+  background: var(--grey-100);
+  color: var(--grey-600);
+}
+
+.ui-pill--outline {
+  border-color: var(--grey-600);
+  background: var(--grey-100);
+  color: #000;
+}
+
+.ui-pill--soft {
+  border-color: var(--grey-50);
+  background: var(--grey-50);
+  color: var(--grey-600);
+}
+
+.ui-pill--dark {
+  background: var(--grey-600);
+  color: var(--grey-white);
+}
+
+.ui-pill__icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}

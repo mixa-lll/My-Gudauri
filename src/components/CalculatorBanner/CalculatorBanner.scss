@@ -1,0 +1,280 @@
+.calc-banner {
+  min-height: 222px;
+  border-radius: var(--radius-xl);
+  background: var(--grey-600);
+  color: var(--grey-white);
+  padding: 23px var(--space-900);
+  display: grid;
+  align-content: start;
+  gap: 7px;
+}
+
+.calc-banner__info {
+  width: 32.573px;
+  height: 32.573px;
+}
+
+.calc-banner__row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-300);
+}
+
+.calc-banner__row p {
+  margin: 0;
+  font: 400 var(--text-h4) / 36px var(--font-heading);
+}
+
+.calc-banner__row span {
+  height: var(--pill-xl-h);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--grey-white);
+  color: var(--grey-50);
+  padding: 0 var(--pill-xl-w);
+  display: inline-flex;
+  align-items: center;
+  font: 400 32px / 36px var(--font-heading);
+}
+
+.calc-banner small {
+  font: 400 var(--text-md) / var(--lh-md) var(--font-body);
+}
+
+.calc-banner__trigger {
+  color: var(--grey-white);
+  border-color: var(--rad-600);
+  width: fit-content;
+}
+
+.calc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.calc-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.65);
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.calc-modal__panel {
+  position: relative;
+  width: min(924px, calc(100vw - 32px));
+  margin: 140px auto 0;
+  border-radius: var(--radius-xl);
+  background: var(--grey-700);
+  color: var(--grey-white);
+  padding: 27px var(--space-600);
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.calc-modal.is-open {
+  pointer-events: auto;
+}
+
+.calc-modal.is-open .calc-modal__backdrop,
+.calc-modal.is-open .calc-modal__panel {
+  opacity: 1;
+}
+
+.calc-modal.is-open .calc-modal__panel {
+  transform: translateY(0);
+}
+
+.calc-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calc-modal__head h3 {
+  margin: 0;
+  font: 400 var(--text-h4) / 36px var(--font-heading);
+}
+
+.calc-modal__close {
+  width: 30.5px;
+  height: 30.5px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.calc-modal__grid {
+  margin-top: var(--space-500);
+  display: grid;
+  grid-template-columns: 200px 24px 200px 24px minmax(280px, 1fr);
+  gap: var(--space-400);
+  align-items: center;
+}
+
+.calc-modal__metric p,
+.calc-modal__result-head p,
+.calc-modal__result-head small {
+  margin: 0;
+  color: var(--grey-500);
+  font: 400 var(--text-sm) / var(--lh-sm) var(--font-body);
+}
+
+.calc-modal__value {
+  margin-top: var(--space-150);
+  min-height: 91px;
+  border-radius: 19px;
+  background: var(--grey-600);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-150);
+  padding: 0 var(--space-350);
+}
+
+.calc-modal__value b {
+  font: 400 64px / 64px var(--font-heading);
+}
+
+.calc-modal__value span {
+  margin-top: 10px;
+  color: var(--grey-300);
+  font: 400 32px / 36px var(--font-heading);
+}
+
+.calc-modal__stepper {
+  margin-top: var(--space-200);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-200);
+}
+
+.calc-modal__stepper button {
+  height: 38.487px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--grey-white);
+  cursor: pointer;
+}
+
+.calc-modal__stepper img {
+  width: 22px;
+  height: 12px;
+  margin-inline: auto;
+}
+
+.calc-modal__symbol {
+  font: 400 32px / 32px var(--font-heading);
+  text-align: center;
+}
+
+.calc-modal__symbol--star {
+  font-family: var(--font-decor);
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.calc-modal__result-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.calc-modal__result-head small {
+  color: var(--green-600);
+}
+
+.calc-modal__result-head small span {
+  border-radius: 6px;
+  background: var(--green-700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.calc-modal__result strong {
+  margin-top: var(--space-150);
+  min-height: 91px;
+  border-radius: 19px;
+  background: var(--green-700);
+  color: var(--green-600);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-350);
+  font: 400 64px / 64px var(--font-heading);
+}
+
+.calc-modal__currency {
+  margin-top: var(--space-200);
+  border-radius: var(--radius-sm);
+  background: var(--grey-600);
+  height: 38.487px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.calc-modal__currency button {
+  border: 0;
+  background: transparent;
+  color: var(--grey-white);
+  font: 400 var(--text-h5) / 16px var(--font-heading);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.calc-modal__currency button.is-active {
+  background: var(--grey-white);
+  color: var(--grey-600);
+}
+
+.calc-modal__note {
+  margin: var(--space-500) 0 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-150);
+  font: 400 var(--text-sm) / var(--lh-sm) var(--font-body);
+}
+
+.calc-modal__note img {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.calc-modal__note span {
+  color: var(--rad-600);
+}
+
+@media (max-width: 1100px) {
+  .calc-modal__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calc-modal__symbol {
+    text-align: left;
+  }
+}
+
+@media (max-width: 860px) {
+  .calc-banner {
+    padding: var(--space-400);
+  }
+
+  .calc-banner__row {
+    flex-wrap: wrap;
+  }
+
+  .calc-modal__panel {
+    margin-top: 100px;
+    padding: var(--space-500);
+  }
+
+  .calc-modal__value b,
+  .calc-modal__result strong {
+    font-size: 52px;
+    line-height: 52px;
+  }
+}
