@@ -7,7 +7,7 @@
     <div class="site-nav" data-site-nav>
       <div class="site-nav__bar">
         <div class="site-nav__left">
-          <a class="site-nav__brand" href="../index.html" aria-label="My Gudauri home">
+          <a class="site-nav__brand" href="/" aria-label="My Gudauri home">
             <span class="site-nav__brand-muted">My </span>Gudauri
           </a>
 
@@ -33,7 +33,7 @@
             <img class="site-nav__category-icon" src="../assets/navbar/icon-instructors.png" alt="" aria-hidden="true" />
             <span class="site-nav__category-copy">
               <span class="site-nav__category-title">Instructors</span>
-              <span class="site-nav__category-desc">Ski, snowbord</span>
+              <span class="site-nav__category-desc">Ski and snowboard lessons</span>
             </span>
           </a>
 
@@ -49,7 +49,7 @@
             <img class="site-nav__category-icon" src="../assets/navbar/icon-transfer.png" alt="" aria-hidden="true" />
             <span class="site-nav__category-copy">
               <span class="site-nav__category-title">Transfer</span>
-              <span class="site-nav__category-desc site-nav__category-desc--muted">Batumi - Gudauri, Tbilisi- Gudauri</span>
+              <span class="site-nav__category-desc site-nav__category-desc--muted">Tbilisi, Kutaisi and Batumi routes</span>
             </span>
           </a>
 
@@ -73,7 +73,7 @@
             <img class="site-nav__category-icon" src="../assets/navbar/icon-places.png" alt="" aria-hidden="true" />
             <span class="site-nav__category-copy">
               <span class="site-nav__category-title">Places</span>
-              <span class="site-nav__category-desc">Ski, snowbord</span>
+              <span class="site-nav__category-desc">Restaurants, bars and local spots</span>
             </span>
           </a>
         </div>

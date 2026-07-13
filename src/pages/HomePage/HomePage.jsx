@@ -60,9 +60,9 @@ export function HomePage() {
               <header className="site-nav-host site-nav-host--hero" data-site-navbar="" />
 
               <div className="hero-inner">
-                <span className="date-pill">06.03.2026</span>
+                <span className="date-pill">LOCAL GUIDE · 2026</span>
                 <h1 className="hero-title-main">MY GUDAURI</h1>
-                <p className="hero-subtitle">All Gudauri services,one easy search</p>
+                <p className="hero-subtitle">Trusted local services for an effortless mountain stay.</p>
 
                 <div className="hero-lift-wrap">
                   <img className="hero-lift" src="/assets/design-1/lift-on-corner-1-25.png" alt="Cable car" />
@@ -79,19 +79,24 @@ export function HomePage() {
           <div className="container">
             <div className="grid-12">
               <div className="service-grid">
+                <div className="service-grid-intro">
+                  <p>Explore Gudauri</p>
+                  <h2>Everything you need,<br /><span>in one place.</span></h2>
+                  <div>Plan less. Ski more. Choose verified people and services with clear details and local support.</div>
+                </div>
                 <article className="service-card instructors">
                   <h2>Instructors</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Verified ski and snowboard coaches</p>
                   <img className="service-art instructors-art" src="/assets/design-1/mosaic/instructors-1-98.png" alt="Instructor" />
                   <div className="tags-row">
-                    <span className="tag">ski</span>
-                    <span className="tag">snowbord</span>
+                    <span className="tag">Ski</span>
+                    <span className="tag">Snowboard</span>
                   </div>
                 </article>
 
                 <article className="service-card tours">
                   <h2>Tours</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Routes, freeride and mountain adventures</p>
                   <img className="service-art tours-art" src="/assets/design-1/mosaic/tours-1-117-upd.png" alt="Tour activity" />
                   <div className="tags-row tours-tags">
                     <span className="tag hot">Freeride</span>
@@ -101,27 +106,27 @@ export function HomePage() {
 
                 <article className="service-card rental">
                   <h2>Rental</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Equipment for every level and style</p>
                   <img className="service-art rental-art" src="/assets/design-1/mosaic/rental-1-135-upd.png" alt="Ski equipment" />
                   <div className="tags-row rental-tags">
-                    <span className="tag">ski</span>
-                    <span className="tag">snowbord</span>
+                    <span className="tag">Ski</span>
+                    <span className="tag">Snowboard</span>
                   </div>
                 </article>
 
                 <article className="service-card places">
                   <h2>Places</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Restaurants, bars and places worth visiting</p>
                   <img className="service-art places-art" src="/assets/design-1/mosaic/places-1-154.png" alt="Mountain cafe" />
                   <div className="tags-row">
                     <span className="tag">Bars</span>
-                    <span className="tag">Restorans</span>
+                    <span className="tag">Restaurants</span>
                   </div>
                 </article>
 
                 <article className="service-card services tall">
                   <h2>Services</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Local professionals for your trip</p>
                   <img className="service-art services-art" src="/assets/design-1/mosaic/services-1-107.png" alt="Photographer" />
                   <div className="tags-row services-tags">
                     <span className="tag">Nannies</span>
@@ -132,7 +137,7 @@ export function HomePage() {
 
                 <article className="service-card transfer">
                   <h2>Transfer</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Comfortable rides to and from the resort</p>
                   <img className="service-art transfer-art" src="/assets/design-1/mosaic/transfer-1-144-upd.png" alt="Transfer van" />
                   <div className="tags-row transfer-tags">
                     <span className="tag">Batumi - Gudauri</span>
@@ -142,7 +147,7 @@ export function HomePage() {
 
                 <article className="service-card real-estate">
                   <h2>Real estate</h2>
-                  <p>Здесь краткое описание на русском</p>
+                  <p>Apartments and stays close to the slopes</p>
                   <div className="tags-row real-estate-tags">
                     <span className="tag">Apartments</span>
                   </div>
@@ -156,15 +161,13 @@ export function HomePage() {
           <div className="container">
             <div className="grid-12 instructors-layout">
               <div className="instructors-heading">
-                <SectionHeading kicker="Trust us" title="Find an instructor for yourself" />
+                <SectionHeading kicker="Verified professionals" title="Find your instructor" />
               </div>
 
               <div className="instructors-grid">
                 <article className="cta-card">
                   <p>
-                    Study <strong>the tool</strong>, ask for
-                    <strong>reviews</strong> and choose the
-                    best one <strong>for yourself</strong>!
+                    Compare experience, languages and real guest reviews to find the right teaching style for you.
                   </p>
                   <button className="outline-btn ui-btn-md" type="button">
                     Show all instructors
@@ -186,7 +189,7 @@ export function HomePage() {
                   </div>
                   <div className="instructor-body">
                     <h3>Mikhail Andeev</h3>
-                    <p>Здесь краткое описание на русском</p>
+                    <p>Ski & snowboard · 8 years experience</p>
                     <div className="rating-line">
                       <img src="/assets/design-1/stars-rating.svg" alt="4.8 stars" />
                       <span>4,8</span>
@@ -209,7 +212,7 @@ export function HomePage() {
                   </div>
                   <div className="instructor-body">
                     <h3>Oleg Yung</h3>
-                    <p>Здесь краткое описание на русском</p>
+                    <p>Snowboard · Freeride specialist</p>
                     <div className="rating-line">
                       <img src="/assets/design-1/stars-rating.svg" alt="4.8 stars" />
                       <span>4,8</span>
@@ -232,7 +235,7 @@ export function HomePage() {
                   </div>
                   <div className="instructor-body">
                     <h3>Mikhail Andeev</h3>
-                    <p>Здесь краткое описание на русском</p>
+                    <p>Ski · Beginner-friendly lessons</p>
                     <div className="rating-line">
                       <img src="/assets/design-1/stars-rating.svg" alt="4.8 stars" />
                       <span>4,8</span>
@@ -266,7 +269,7 @@ export function HomePage() {
                 <div className="contacts">
                   <div><span>Phone number</span><p>+995 123 45 65</p></div>
                   <div><span>Email</span><p>Mygudauri@gmail.com</p></div>
-                  <div><span>Adress</span><p>Gudauri, Georgia</p></div>
+                  <div><span>Address</span><p>Gudauri, Georgia</p></div>
                 </div>
                 <div className="footer-nav">
                   <a href="#">Articles</a>
@@ -285,7 +288,7 @@ export function HomePage() {
 
               <img className="footer-line" src="/assets/design-1/line-26.svg" alt="" aria-hidden="true" />
               <div className="footer-bottom">
-                <div className="legal"><span>© 2026 MuGudauri, Inc.</span><span>Cookies Policy</span><span>Privacy Policy</span></div>
+                <div className="legal"><span>© 2026 My Gudauri</span><span>Cookies Policy</span><span>Privacy Policy</span></div>
                 <div className="socials">
                   <img src="/assets/design-1/telegram-4-1.png" alt="Telegram" />
                   <img src="/assets/design-1/instagram-3-1.png" alt="Instagram" />

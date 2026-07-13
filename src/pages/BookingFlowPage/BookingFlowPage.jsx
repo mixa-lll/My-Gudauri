@@ -11,7 +11,7 @@ const SLOT_OPTIONS = [
 ];
 
 const LANG_OPTIONS = ['English', 'Russian', 'Georgian'];
-const MESSENGER_OPTIONS = ['WhatsApp', 'Telegramm', 'Mail'];
+const MESSENGER_OPTIONS = ['WhatsApp', 'Telegram', 'Email'];
 const SKILL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced'];
 const REQUEST_ERROR_KEY = 'bookingForceError';
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -78,7 +78,7 @@ function fromDateOnlyIso(isoDate) {
 
 function formatDateShort(dateValue) {
   const date = typeof dateValue === 'string' ? fromDateOnlyIso(dateValue) : null;
-  if (!date) return 'No selected';
+  if (!date) return 'Not selected';
   return `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getFullYear()).slice(-2)}`;
 }
 
@@ -381,7 +381,7 @@ export function BookingFlowPage() {
 
   const summaryDaysLabel = confirmed.step1
     ? `${confirmed.step1.days.map((day) => formatDateShort(day.date)).join(', ')}`
-    : 'No selected';
+    : 'Not selected';
   const isInitialSummary = !isSuccess && activeStep === 1 && !confirmed.step1 && !confirmed.step2 && !confirmed.step3;
 
   return (

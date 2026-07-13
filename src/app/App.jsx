@@ -5,6 +5,7 @@ import { InstructorsPage } from '../pages/InstructorsPage/InstructorsPage';
 import { ProfilePage } from '../pages/ProfilePage/ProfilePage';
 import { BookingFlowPage } from '../pages/BookingFlowPage/BookingFlowPage';
 import { SummaryPage } from '../pages/SummaryPage/SummaryPage';
+import '../styles/refinement.scss';
 
 export default function App() {
   return (
