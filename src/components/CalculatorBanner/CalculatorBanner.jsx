@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from '../UI/Button/Button';
 import './CalculatorBanner.scss';
 
@@ -11,6 +12,8 @@ export function CalculatorBanner() {
   const [hoursIndex, setHoursIndex] = useState(0);
   const [people, setPeople] = useState(1);
   const [currency, setCurrency] = useState('gel');
+  const triggerRef = useRef(null);
+  const closeRef = useRef(null);
 
   const hours = HOUR_OPTIONS[hoursIndex];
 
@@ -27,11 +30,14 @@ export function CalculatorBanner() {
     if (!open) return undefined;
 
     const onEscape = (event) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key !== 'Escape') return;
+      setOpen(false);
+      triggerRef.current?.focus();
     };
 
     document.addEventListener('keydown', onEscape);
     document.body.classList.add('is-scroll-locked');
+    requestAnimationFrame(() => closeRef.current?.focus());
 
     return () => {
       document.removeEventListener('keydown', onEscape);
@@ -43,6 +49,10 @@ export function CalculatorBanner() {
   const increaseHours = () => setHoursIndex((prev) => Math.min(prev + 1, HOUR_OPTIONS.length - 1));
   const decreasePeople = () => setPeople((prev) => Math.max(prev - 1, 1));
   const increasePeople = () => setPeople((prev) => Math.min(prev + 1, 10));
+  const closeModal = () => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
 
   return (
     <>
@@ -57,6 +67,7 @@ export function CalculatorBanner() {
         <small>The more you take, the cheaper it gets !</small>
 
         <Button
+          ref={triggerRef}
           variant="outline"
           size="md"
           className="calc-banner__trigger"
@@ -68,13 +79,14 @@ export function CalculatorBanner() {
         </Button>
       </article>
 
-      <div className={`calc-modal ${open ? 'is-open' : ''}`} aria-hidden={!open}>
-        <button className="calc-modal__backdrop" type="button" onClick={() => setOpen(false)} />
+      {open ? createPortal(
+        <div className="calc-modal is-open">
+        <button className="calc-modal__backdrop" type="button" aria-label="Close calculator" onClick={closeModal} />
 
-        <section className="calc-modal__panel" role="dialog" aria-modal="true" aria-label="Cost calculate">
+        <section className="calc-modal__panel" role="dialog" aria-modal="true" aria-labelledby="cost-calculator-title">
           <header className="calc-modal__head">
-            <h3>Cost calculate</h3>
-            <button className="calc-modal__close" type="button" onClick={() => setOpen(false)}>
+            <h3 id="cost-calculator-title">Cost calculate</h3>
+            <button ref={closeRef} className="calc-modal__close" type="button" aria-label="Close calculator" onClick={closeModal}>
               <img src="/assets/design-2/calc/icon-calc-close.png" alt="" aria-hidden="true" />
             </button>
           </header>
@@ -87,10 +99,10 @@ export function CalculatorBanner() {
                 <span>hour</span>
               </div>
               <div className="calc-modal__stepper">
-                <button type="button" onClick={decreaseHours}>
+                <button type="button" aria-label="Decrease lesson hours" onClick={decreaseHours}>
                   <img src="/assets/design-2/calc/stepper-minus.svg" alt="" aria-hidden="true" />
                 </button>
-                <button type="button" onClick={increaseHours}>
+                <button type="button" aria-label="Increase lesson hours" onClick={increaseHours}>
                   <img src="/assets/design-2/calc/stepper-plus.svg" alt="" aria-hidden="true" />
                 </button>
               </div>
@@ -105,10 +117,10 @@ export function CalculatorBanner() {
                 <span>people</span>
               </div>
               <div className="calc-modal__stepper">
-                <button type="button" onClick={decreasePeople}>
+                <button type="button" aria-label="Decrease number of people" onClick={decreasePeople}>
                   <img src="/assets/design-2/calc/stepper-minus.svg" alt="" aria-hidden="true" />
                 </button>
-                <button type="button" onClick={increasePeople}>
+                <button type="button" aria-label="Increase number of people" onClick={increasePeople}>
                   <img src="/assets/design-2/calc/stepper-plus.svg" alt="" aria-hidden="true" />
                 </button>
               </div>
@@ -130,6 +142,7 @@ export function CalculatorBanner() {
                 <button
                   className={currency === 'gel' ? 'is-active' : ''}
                   type="button"
+                  aria-pressed={currency === 'gel'}
                   onClick={() => setCurrency('gel')}
                 >
                   GEL
@@ -137,6 +150,7 @@ export function CalculatorBanner() {
                 <button
                   className={currency === 'usd' ? 'is-active' : ''}
                   type="button"
+                  aria-pressed={currency === 'usd'}
                   onClick={() => setCurrency('usd')}
                 >
                   USD
@@ -151,7 +165,9 @@ export function CalculatorBanner() {
             daily sessions.
           </p>
         </section>
-      </div>
+      </div>,
+        document.body
+      ) : null}
     </>
   );
 }

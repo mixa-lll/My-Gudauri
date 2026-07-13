@@ -1,2 +1,19 @@
-/* Home page visuals are intentionally sourced from legacy design CSS files:
-   styles/system.css, styles/design-1-home.css, styles/shared-faq.css */
+.home-page .outline-btn {
+  text-decoration: none;
+}
+
+.home-page .faq-layout {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  align-items: start;
+}
+
+.home-page .faq__item {
+  background: var(--grey-white);
+}
+
+@media (max-width: 820px) {
+  .home-page .faq-layout {
+    grid-template-columns: 1fr;
+  }
+}

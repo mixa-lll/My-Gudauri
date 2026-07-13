@@ -848,7 +848,7 @@ export function BookingFlowPage() {
                 ) : null}
 
                 <div className="booking-summary__price">
-                  <a href="#">{effectivePrice} gel</a>
+                  <strong>{effectivePrice} gel</strong>
                   <p>
                     for <b>{Math.max(effectiveHours, 0)} hour</b> & <b>{Math.max(effectivePeople, 1)} peple</b>
                   </p>

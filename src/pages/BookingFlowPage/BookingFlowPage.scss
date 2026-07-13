@@ -651,10 +651,9 @@
   gap: 5px;
 }
 
-.booking-summary__price a {
+.booking-summary__price > strong {
   color: var(--grey-600);
   font: 400 var(--text-h4) / var(--lh-h4) var(--font-heading);
-  text-decoration: underline;
 }
 
 .booking-summary__price p {

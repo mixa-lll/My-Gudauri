@@ -1,65 +1,30 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
 import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
 import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
+import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
+import { FAQ_ITEMS } from '../../data/faqItems';
 import { INSTRUCTORS } from '../../data/instructors';
 import '../../../styles/system.css';
 import '../../../styles/design-1-home.css';
-import '../../../styles/shared-faq.css';
 import './HomePage.scss';
-
-const LEGACY_SCRIPTS = [
-  { id: 'home-shared-navbar', src: '/scripts/shared-navbar.js' },
-  { id: 'home-shared-faq', src: '/scripts/shared-faq.js' },
-  { id: 'home-design-1', src: '/scripts/design-1-home.js' }
-];
-
-function loadLegacyScript({ id, src }) {
-  return new Promise((resolve, reject) => {
-    const prev = document.querySelector(`script[data-legacy-script="${id}"]`);
-    if (prev) prev.remove();
-
-    const script = document.createElement('script');
-    script.src = `${src}?v=${Date.now()}`;
-    script.async = false;
-    script.dataset.legacyScript = id;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error(`Failed to load ${src}`));
-    document.body.append(script);
-  });
-}
 
 export function HomePage() {
   useEffect(() => {
     document.body.classList.add('home-page-body');
-
-    let active = true;
-    const initLegacyScripts = async () => {
-      for (const descriptor of LEGACY_SCRIPTS) {
-        if (!active) return;
-        await loadLegacyScript(descriptor);
-      }
-    };
-
-    initLegacyScripts().catch(() => {
-      // Preserve page render even if one legacy script fails to load.
-    });
-
     return () => {
-      active = false;
       document.body.classList.remove('home-page-body');
-      document.body.classList.remove('menu-open');
-      document.querySelectorAll('script[data-legacy-script]').forEach((script) => script.remove());
     };
   }, []);
 
   return (
     <>
-      <div className="home-nav-backdrop" data-nav-backdrop="" hidden />
       <div className="home-page">
         <section className="hero-wrap">
           <div className="container">
             <div className="grid-12 hero-grid">
-              <header className="site-nav-host site-nav-host--hero" data-site-navbar="" />
+              <SiteNavbar className="site-nav-host--hero" />
 
               <div className="hero-inner">
                 <span className="date-pill">LOCAL GUIDE · 2026</span>
@@ -171,10 +136,10 @@ export function HomePage() {
                   <p>
                     Compare experience, languages and real guest reviews to find the right teaching style for you.
                   </p>
-                  <button className="outline-btn ui-btn-md" type="button">
+                  <Link className="outline-btn ui-btn-md" to="/instructors">
                     Show all instructors
                     <img className="ui-btn-md__arrow" src="/assets/ui-kit/btn-md-arrow-dark.png" alt="" aria-hidden="true" />
-                  </button>
+                  </Link>
                 </article>
 
                 {INSTRUCTORS.slice(0, 3).map((instructor) => (
@@ -187,7 +152,7 @@ export function HomePage() {
 
         <section className="faq-block">
           <div className="container">
-            <div className="grid-12 faq-layout faq-component" data-faq-component="" />
+            <FaqAccordion className="faq-layout" items={FAQ_ITEMS} />
           </div>
         </section>
 
@@ -208,16 +173,16 @@ export function HomePage() {
                   <div><span>Address</span><p>Gudauri, Georgia</p></div>
                 </div>
                 <div className="footer-nav">
-                  <a href="#">Articles</a>
-                  <a href="#">About Gudauri</a>
-                  <a href="#">Support</a>
+                  <a href="#articles">Articles</a>
+                  <a href="#about">About Gudauri</a>
+                  <a href="#support">Support</a>
                 </div>
                 <div className="footer-sections">
                   <span>Sections</span>
                   <div>
-                    <a href="#">Instructors</a><a href="#">Services</a>
-                    <a href="#">Places</a><a href="#">Activity</a>
-                    <a href="#">Transfer</a><a href="#">Rent</a>
+                    <Link to="/instructors">Instructors</Link><Link to="/summary">Services</Link>
+                    <Link to="/summary">Places</Link><Link to="/summary">Activity</Link>
+                    <Link to="/summary">Transfer</Link><Link to="/summary">Rent</Link>
                   </div>
                 </div>
               </div>
