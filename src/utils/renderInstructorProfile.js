@@ -17,6 +17,19 @@ function buildPills(document, container, items) {
   container.replaceChildren(...items.map((item) => createElement(document, 'span', 'fact-pill ui-pill-md', item)));
 }
 
+function buildSectionHeadings(document) {
+  document.querySelectorAll('[data-section-heading]').forEach((mount, index) => {
+    const headingId = `profile-section-title-${index + 1}`;
+    const header = createElement(document, 'header', 'section-heading section-heading--md section-heading--start');
+    const kicker = createElement(document, 'p', 'section-heading__kicker', mount.dataset.kicker);
+    const title = createElement(document, 'h2', 'section-heading__title', mount.dataset.title);
+    title.id = headingId;
+    header.append(kicker, title);
+    mount.closest('section')?.setAttribute('aria-labelledby', headingId);
+    mount.replaceWith(header);
+  });
+}
+
 function buildReviews(document, instructor) {
   const reviewsGrid = document.querySelector('.reviews-grid');
   const reviews = instructor.reviewsList ?? [];
@@ -91,6 +104,8 @@ export function renderInstructorProfile(template, instructor) {
   const sports = instructor.sports.map((sport) => sport.name);
   const languages = instructor.languages.map((language) => language.code);
 
+  buildSectionHeadings(document);
+
   const badges = document.querySelector('.profile-badges-row');
   badges.replaceChildren(...instructor.sports.map((sport) => {
     const badge = createElement(document, 'span', 'profile-badge ui-pill-md');
@@ -136,7 +151,7 @@ export function renderInstructorProfile(template, instructor) {
     return pill;
   }));
 
-  const summary = document.querySelectorAll('.reviews-summary h2');
+  const summary = document.querySelectorAll('.reviews-summary__value');
   summary[0].textContent = Number(instructor.rating).toFixed(1);
   summary[1].textContent = `${instructor.reviews} reviews`;
   buildReviews(document, instructor);

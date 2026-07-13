@@ -1,18 +1,17 @@
 import { useId, useState } from 'react';
 import { cn } from '../../utils/cn';
+import { SectionHeading } from '../UI/SectionHeading/SectionHeading';
 import './FaqAccordion.scss';
 
 export function FaqAccordion({ items, className, initialOpen = 0, title = 'FAQ', kicker = 'Frequently Asked Questions' }) {
   const [openIndex, setOpenIndex] = useState(initialOpen);
   const baseId = useId();
   const safeItems = items ?? [];
+  const titleId = `${baseId}-title`;
 
   return (
-    <section className={cn('faq', className)}>
-      <header className="faq__head">
-        <p>{kicker}</p>
-        <h2>{title}</h2>
-      </header>
+    <section className={cn('faq', className)} aria-labelledby={titleId}>
+      <SectionHeading className="faq__head" kicker={kicker} size="md" title={title} titleId={titleId} />
 
       <div className="faq__list">
         {safeItems.map((item, index) => {

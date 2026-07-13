@@ -38,11 +38,6 @@ body {
   width: min(100%, var(--content-width));
 }
 
-.section-heading {
-  gap: 10px;
-}
-
-.section-heading__kicker,
 .kicker {
   color: var(--grey-400);
   font-size: 13px;
@@ -52,7 +47,6 @@ body {
   text-transform: uppercase;
 }
 
-.section-heading__title,
 .section-title {
   max-width: 880px;
   font-family: var(--font-heading);

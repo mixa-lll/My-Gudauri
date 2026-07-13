@@ -609,22 +609,8 @@
   color: var(--grey-500);
 }
 
-.booking-kicker {
-  margin-top: 0;
-}
-
 .booking-head {
   margin-top: 43px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-150);
-}
-
-.catalog-benefits-panel .booking-head .section-heading__kicker,
-.catalog-benefits-panel .booking-head .section-heading__title {
-  margin: 0;
-  display: block;
 }
 
 .steps-grid-top {

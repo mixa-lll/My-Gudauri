@@ -1,5 +1,5 @@
-/* Profile page visuals are intentionally sourced from legacy design CSS files:
-   styles/system.css, styles/shared-faq.css, styles/design-3-profile.css */
+/* Profile layout still uses the legacy template; shared React components and
+   design-system styles provide its navigation, section headings and FAQ. */
 
 .legacy-profile-root {
   min-height: 100vh;
@@ -287,8 +287,13 @@
 .legacy-profile-root .profile-facts,
 .legacy-profile-root .profile-about,
 .legacy-profile-root .profile-reviews,
-.legacy-profile-root .profile-media {
+.legacy-profile-root .profile-media,
+.legacy-profile-root .profile-faq {
   padding: clamp(20px, 2.5vw, 36px);
+}
+
+.legacy-profile-root .profile-faq .faq {
+  width: 100%;
 }
 
 .legacy-profile-root .profile-facts {

@@ -1,17 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useParams } from 'react-router-dom';
 import legacyPageHtml from '../../../pages/design-3-profile.html?raw';
+import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
 import { ProfileGallery } from '../../components/ProfileGallery/ProfileGallery';
+import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructor } from '../../services/instructorsApi';
 import { renderInstructorProfile } from '../../utils/renderInstructorProfile';
 import '../../../styles/system.css';
-import '../../../styles/shared-faq.css';
 import '../../../styles/design-3-profile.css';
 import './ProfilePage.scss';
 
 const LEGACY_SCRIPTS = [
   { id: 'profile-shared-navbar', src: '/scripts/shared-navbar.js' },
-  { id: 'profile-shared-faq', src: '/scripts/shared-faq.js' },
   { id: 'profile-booking-draft', src: '/scripts/design-3-profile.js' }
 ];
 
@@ -49,6 +50,8 @@ export function ProfilePage() {
   const [status, setStatus] = useState('loading');
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [faqMount, setFaqMount] = useState(null);
+  const profileRootRef = useRef(null);
   const galleryTriggerRef = useRef(null);
 
   useEffect(() => {
@@ -81,6 +84,10 @@ export function ProfilePage() {
     setIsGalleryOpen(false);
     requestAnimationFrame(() => galleryTriggerRef.current?.focus({ preventScroll: true }));
   }, []);
+
+  useLayoutEffect(() => {
+    setFaqMount(profileRootRef.current?.querySelector('[data-profile-faq-mount]') ?? null);
+  }, [renderedProfile]);
 
   useEffect(() => {
     document.body.classList.add('profile-page-body');
@@ -137,7 +144,8 @@ export function ProfilePage() {
 
   return (
     <>
-      <div className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
+      <div ref={profileRootRef} className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
+      {faqMount ? createPortal(<FaqAccordion items={FAQ_ITEMS} />, faqMount) : null}
       <ProfileGallery
         images={renderedProfile.media}
         index={galleryIndex}

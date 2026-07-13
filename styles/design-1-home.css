@@ -423,14 +423,6 @@ body.menu-open {
   width: 920.398px;
 }
 
-.instructors-heading .section-heading__kicker {
-  color: var(--grey-500);
-}
-
-.instructors-heading .section-heading__title {
-  color: var(--grey-600);
-}
-
 .instructors-grid {
   grid-column: 1 / -1;
   display: grid;
@@ -755,6 +747,5 @@ body.menu-open {
   .hero-mountains-wrap { left: -10px; top: 190px; width: calc(100% + 20px); height: 260px; }
   .instructors-grid { grid-template-columns: 1fr; }
   .instructors-layout { row-gap: 24px; }
-  .instructors-heading .section-heading__title { font-size: 36px; line-height: 40px; }
   .legal { flex-wrap: wrap; gap: 12px; }
 }

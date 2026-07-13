@@ -24,3 +24,6 @@ All files populate `:root` variables, e.g.:
 3. Keep global reset/base in `src/styles/base/*`.
 4. Keep component-level styles near component files (`Component.scss`).
 5. Keep page-level styles near page files (`Page.scss`).
+6. Для заголовков маркетинговых и контентных секций использовать только `SectionHeading`; не дублировать `.section-heading__kicker` и `.section-heading__title` в стилях страниц.
+7. Общие стили заголовка находятся в `styles/section-heading.css`, чтобы один набор правил работал и в React, и в legacy-адаптерах.
+8. Заголовки карточек, шагов формы и модальных окон остаются локальными компонентными вариантами и не подменяются секционным заголовком.

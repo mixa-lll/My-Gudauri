@@ -5,6 +5,7 @@ import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
 import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
 import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
 import { Container } from '../../components/UI/Container/Container';
+import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructors } from '../../services/instructorsApi';
 import '../../../styles/system.css';
@@ -195,10 +196,7 @@ export function InstructorsPage() {
         <section className="catalog-benefits" aria-labelledby="benefits-title">
           <Container>
             <div className="catalog-benefits-panel">
-              <div className="section-heading">
-                <p className="catalog-kicker section-heading__kicker">Trust us</p>
-                <h2 id="benefits-title" className="catalog-section-title section-heading__title">Why choose My Gudauri instructors</h2>
-              </div>
+              <SectionHeading kicker="Trust us" title="Why choose My Gudauri instructors" titleId="benefits-title" />
 
               <div className="benefits-grid">
                 {BENEFITS.map((benefit) => (
@@ -210,10 +208,7 @@ export function InstructorsPage() {
                 ))}
               </div>
 
-              <div className="section-heading booking-head">
-                <p className="catalog-kicker booking-kicker section-heading__kicker">5 steps to book an instructor</p>
-                <h2 className="catalog-section-title section-heading__title">How booking works</h2>
-              </div>
+              <SectionHeading className="booking-head" kicker="5 steps to book an instructor" title="How booking works" />
 
               <div className="booking-steps-grid">
                 {BOOKING_STEPS.map((step, index) => (

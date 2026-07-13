@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Design 3 - Instructor Profile</title>
     <link rel="stylesheet" href="../styles/system.css" />
+    <link rel="stylesheet" href="../styles/section-heading.css" />
     <link rel="stylesheet" href="../styles/design-3-profile.css" />
-    <link rel="stylesheet" href="../styles/shared-faq.css" />
   </head>
   <body class="profile-page-body">
     <div class="profile-page">
@@ -118,10 +118,7 @@
             </section>
 
             <section class="profile-about">
-              <div class="section-head section-heading">
-                <p class="section-heading__kicker">Trust us</p>
-                <h2 class="section-heading__title">About</h2>
-              </div>
+              <div data-section-heading data-kicker="Trust us" data-title="About"></div>
               <div class="about-copy">
                 <p>I’m a certified ski instructor with over eight years of teaching experience in Gudauri. I work with adults and teenagers who want to feel confident and in control on the mountain, whether it’s their first day on skis or they are refining existing skills.</p>
                 <p>My lessons are structured and goal-oriented. I focus on proper technique from the beginning, clear explanations and practical exercises that bring steady improvement. Safety, comfort and visible progress are always the priority.</p>
@@ -137,14 +134,12 @@
             </section>
 
             <section id="reviews" class="profile-reviews">
-              <div class="section-head-reviews">
-                <p>Students about the instructor</p>
-                <div class="reviews-summary">
-                  <img src="../assets/design-3/star-big.svg" alt="" aria-hidden="true" />
-                  <h2>4.8</h2>
-                  <img src="../assets/design-3/dot-big.svg" alt="" aria-hidden="true" />
-                  <h2>10 reviews</h2>
-                </div>
+              <div data-section-heading data-kicker="Students about the instructor" data-title="Reviews"></div>
+              <div class="reviews-summary" aria-label="Review summary">
+                <img src="../assets/design-3/star-big.svg" alt="" aria-hidden="true" />
+                <span class="reviews-summary__value">4.8</span>
+                <img src="../assets/design-3/dot-big.svg" alt="" aria-hidden="true" />
+                <span class="reviews-summary__value">10 reviews</span>
               </div>
 
               <div class="reviews-grid">
@@ -224,10 +219,7 @@
             </section>
 
             <section class="profile-media">
-              <div class="section-head section-heading">
-                <p class="section-heading__kicker">Students about the instructor</p>
-                <h2 class="section-heading__title">Media</h2>
-              </div>
+              <div data-section-heading data-kicker="Photos and videos" data-title="Media"></div>
 
               <div class="media-filters">
                 <button class="media-filter ui-pill-md ui-pill-md--active active" type="button"><i></i>All</button>
@@ -250,7 +242,7 @@
               </button>
             </section>
 
-            <section class="profile-faq faq-component" data-faq-component></section>
+            <section class="profile-faq"><div data-profile-faq-mount></div></section>
           </div>
 
           <aside class="profile-booking-wrap">
