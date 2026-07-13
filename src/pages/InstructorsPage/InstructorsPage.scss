@@ -136,11 +136,11 @@
 }
 
 .catalog-faq-block {
-  padding-top: 0;
+  padding: 0 0 clamp(32px, 4vw, 56px);
 }
 
 .catalog-faq-block .faq {
-  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
   align-items: start;
   padding: clamp(24px, 4vw, 48px);
   border: 1px solid rgba(32, 33, 30, 0.07);
@@ -149,7 +149,7 @@
 }
 
 .catalog-page > .site-footer {
-  padding-top: clamp(32px, 4vw, 56px);
+  padding-top: 0;
 }
 
 @media (max-width: 1100px) {
