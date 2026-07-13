@@ -568,6 +568,58 @@ body {
   letter-spacing: -0.055em;
 }
 
+.catalog-title-wrap {
+  padding: clamp(44px, 5vw, 76px) 0 clamp(36px, 4vw, 60px);
+}
+
+.catalog-title {
+  margin-top: 18px;
+  font-size: clamp(72px, 7vw, 104px);
+  line-height: 0.9;
+}
+
+.catalog-rate-banner {
+  margin-top: 0;
+}
+
+.catalog-benefits-panel .booking-step h3 {
+  max-width: calc(100% - 108px);
+  min-height: 2.1em;
+  font-size: clamp(26px, 2vw, 32px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
+.catalog-benefits-panel .booking-step p {
+  max-width: 100%;
+  line-height: 1.35;
+}
+
+.profile-title {
+  max-width: 720px;
+  font-size: clamp(64px, 5.4vw, 84px);
+  line-height: 0.92;
+}
+
+.profile-hero-copy {
+  min-width: 0;
+  padding: 16px clamp(24px, 3vw, 48px) 30px 8px;
+}
+
+@media (min-width: 769px) {
+  .profile-hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
+    align-items: stretch;
+  }
+
+  .profile-hero-photo-wrap {
+    width: 100%;
+    height: auto;
+    min-height: 480px;
+  }
+}
+
 .catalog-filter-btn,
 .media-filter,
 .profile-badge,
@@ -811,6 +863,15 @@ body {
   .catalog-title {
     font-size: clamp(40px, 11.8vw, 48px);
     line-height: 0.95;
+  }
+
+  .catalog-title-wrap {
+    padding: 26px 0 30px;
+  }
+
+  .catalog-benefits-panel .booking-step h3 {
+    max-width: none;
+    min-height: 0;
   }
 
   .catalog-rate-row {

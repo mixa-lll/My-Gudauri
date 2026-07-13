@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
+import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
+import { INSTRUCTORS } from '../../data/instructors';
 import '../../../styles/system.css';
 import '../../../styles/design-1-home.css';
 import '../../../styles/shared-faq.css';
@@ -175,75 +177,9 @@ export function HomePage() {
                   </button>
                 </article>
 
-                <article className="instructor-card card-hoverable">
-                  <div className="instructor-media instructor-media--1">
-                    <img className="photo-overlay" src="/assets/design-1/instructor-foreground.png" alt="Mikhail Andeev" />
-                    <div className="chips-top">
-                      <span className="chip ui-pill-md ui-pill-md--outline">Ge</span>
-                      <span className="chip ui-pill-md ui-pill-md--outline">En</span>
-                    </div>
-                    <div className="chips-bottom">
-                      <span className="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="/assets/design-1/icon-snowboard-pill.png" alt="" aria-hidden="true" />Snowboard</span>
-                      <span className="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="/assets/design-1/icon-ski-pill.png" alt="" aria-hidden="true" />Ski</span>
-                    </div>
-                  </div>
-                  <div className="instructor-body">
-                    <h3>Mikhail Andeev</h3>
-                    <p>Ski & snowboard · 8 years experience</p>
-                    <div className="rating-line">
-                      <img src="/assets/design-1/stars-rating.svg" alt="4.8 stars" />
-                      <span>4,8</span>
-                      <img className="dot" src="/assets/design-1/dot-separator.svg" alt="" aria-hidden="true" />
-                      <a href="#">6 reviews</a>
-                    </div>
-                  </div>
-                </article>
-
-                <article className="instructor-card card-hoverable">
-                  <div className="instructor-media instructor-media--2">
-                    <img className="photo-overlay cover" src="/assets/design-1/instructor-card-2.jpg" alt="Oleg Yung" />
-                    <div className="chips-top">
-                      <span className="chip ui-pill-md ui-pill-md--outline">Ge</span>
-                      <span className="chip ui-pill-md ui-pill-md--outline">En</span>
-                    </div>
-                    <div className="chips-bottom">
-                      <span className="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="/assets/design-1/icon-snowboard-pill.png" alt="" aria-hidden="true" />Snowboard</span>
-                    </div>
-                  </div>
-                  <div className="instructor-body">
-                    <h3>Oleg Yung</h3>
-                    <p>Snowboard · Freeride specialist</p>
-                    <div className="rating-line">
-                      <img src="/assets/design-1/stars-rating.svg" alt="4.8 stars" />
-                      <span>4,8</span>
-                      <img className="dot" src="/assets/design-1/dot-separator.svg" alt="" aria-hidden="true" />
-                      <a href="#">6 reviews</a>
-                    </div>
-                  </div>
-                </article>
-
-                <article className="instructor-card card-hoverable">
-                  <div className="instructor-media instructor-media--3">
-                    <img className="photo-overlay cover" src="/assets/design-1/instructor-card-3.png" alt="Mikhail Andeev skiing" />
-                    <div className="chips-top">
-                      <span className="chip ui-pill-md ui-pill-md--outline">Ge</span>
-                      <span className="chip ui-pill-md ui-pill-md--outline">En</span>
-                    </div>
-                    <div className="chips-bottom">
-                      <span className="chip ui-pill-md ui-pill-md--outline icon-chip"><img src="/assets/design-1/icon-snowboard-pill.png" alt="" aria-hidden="true" />Snowboard</span>
-                    </div>
-                  </div>
-                  <div className="instructor-body">
-                    <h3>Mikhail Andeev</h3>
-                    <p>Ski · Beginner-friendly lessons</p>
-                    <div className="rating-line">
-                      <img src="/assets/design-1/stars-rating.svg" alt="4.8 stars" />
-                      <span>4,8</span>
-                      <img className="dot" src="/assets/design-1/dot-separator.svg" alt="" aria-hidden="true" />
-                      <a href="#">6 reviews</a>
-                    </div>
-                  </div>
-                </article>
+                {INSTRUCTORS.slice(0, 3).map((instructor) => (
+                  <InstructorCard instructor={instructor} key={instructor.id} />
+                ))}
               </div>
             </div>
           </div>
