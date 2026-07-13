@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import legacyPageHtml from '../../../pages/design-3-profile.html?raw';
+import { ProfileGallery } from '../../components/ProfileGallery/ProfileGallery';
 import '../../../styles/system.css';
 import '../../../styles/shared-faq.css';
 import '../../../styles/design-3-profile.css';
@@ -38,6 +39,14 @@ function extractBodyHtml(html) {
 
 export function ProfilePage() {
   const content = useMemo(() => extractBodyHtml(legacyPageHtml), []);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const galleryTriggerRef = useRef(null);
+
+  const closeGallery = useCallback(() => {
+    setIsGalleryOpen(false);
+    requestAnimationFrame(() => galleryTriggerRef.current?.focus({ preventScroll: true }));
+  }, []);
 
   useEffect(() => {
     document.body.classList.add('profile-page-body');
@@ -61,5 +70,23 @@ export function ProfilePage() {
     };
   }, []);
 
-  return <div className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: content }} />;
+  useEffect(() => {
+    const triggers = Array.from(document.querySelectorAll('.legacy-profile-root [data-profile-gallery-open]'));
+    const openGallery = (event) => {
+      const trigger = event.currentTarget;
+      galleryTriggerRef.current = trigger;
+      setGalleryIndex(Number(trigger.dataset.galleryIndex) || 0);
+      setIsGalleryOpen(true);
+    };
+
+    triggers.forEach((trigger) => trigger.addEventListener('click', openGallery));
+    return () => triggers.forEach((trigger) => trigger.removeEventListener('click', openGallery));
+  }, [content]);
+
+  return (
+    <>
+      <div className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: content }} />
+      <ProfileGallery index={galleryIndex} isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
+    </>
+  );
 }

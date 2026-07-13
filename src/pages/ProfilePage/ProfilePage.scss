@@ -55,6 +55,49 @@
   transform: translateX(-2px);
 }
 
+.legacy-profile-root .profile-hero-intro {
+  width: min(100%, 470px);
+  margin-top: clamp(54px, 7vh, 88px);
+}
+
+.legacy-profile-root .profile-hero-intro > p:first-child {
+  margin: 0;
+  color: var(--grey-400);
+  font: 600 12px / 1.2 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.legacy-profile-root .profile-hero-intro > p:nth-child(2) {
+  margin: 12px 0 0;
+  max-width: 44ch;
+  color: var(--grey-500);
+  font: 400 16px / 1.35 var(--font-body);
+}
+
+.legacy-profile-root .profile-hero-intro dl {
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.legacy-profile-root .profile-hero-intro dl > div {
+  padding-top: 12px;
+  border-top: 1px solid var(--grey-150);
+}
+
+.legacy-profile-root .profile-hero-intro dt {
+  font: 560 24px / 1 var(--font-heading);
+  letter-spacing: -0.04em;
+}
+
+.legacy-profile-root .profile-hero-intro dd {
+  margin: 5px 0 0;
+  color: var(--grey-400);
+  font: 400 12px / 1.2 var(--font-body);
+}
+
 .legacy-profile-root .profile-badges-row {
   margin-top: auto;
   gap: 8px;
@@ -94,6 +137,7 @@
 }
 
 .legacy-profile-root .profile-hero-photo-wrap {
+  position: relative;
   height: clamp(500px, 42vw, 580px);
   min-height: 0;
   border: 1px solid var(--grey-100);
@@ -102,6 +146,112 @@
 
 .legacy-profile-root .profile-hero-photo {
   object-position: center 38%;
+}
+
+.legacy-profile-root .profile-photo-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(12, 13, 11, 0.18), transparent 32%, transparent 62%, rgba(12, 13, 11, 0.44));
+}
+
+.legacy-profile-root .profile-availability {
+  width: fit-content;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--grey-600);
+  backdrop-filter: blur(12px);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 12px / 1 var(--font-body);
+}
+
+.legacy-profile-root .profile-availability i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4c9a59;
+  box-shadow: 0 0 0 4px rgba(76, 154, 89, 0.14);
+}
+
+.legacy-profile-root .profile-gallery-trigger {
+  width: fit-content;
+  min-width: 248px;
+  padding: 7px 10px 7px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 16px;
+  background: rgba(246, 246, 243, 0.88);
+  color: var(--grey-600);
+  backdrop-filter: blur(14px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.legacy-profile-root .profile-gallery-trigger:hover {
+  background: var(--grey-white);
+  transform: translateY(-2px);
+}
+
+.legacy-profile-root .profile-gallery-trigger__thumbs {
+  display: flex;
+}
+
+.legacy-profile-root .profile-gallery-trigger__thumbs img {
+  width: 34px;
+  height: 42px;
+  margin-left: -9px;
+  border: 2px solid var(--grey-white);
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.legacy-profile-root .profile-gallery-trigger__thumbs img:first-child {
+  margin-left: 0;
+}
+
+.legacy-profile-root .profile-gallery-trigger > span:nth-child(2) {
+  display: grid;
+  gap: 3px;
+}
+
+.legacy-profile-root .profile-gallery-trigger b {
+  font: 600 14px / 1 var(--font-body);
+}
+
+.legacy-profile-root .profile-gallery-trigger small {
+  color: var(--grey-400);
+  font: 400 11px / 1 var(--font-body);
+}
+
+.legacy-profile-root .profile-gallery-trigger__arrow {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--grey-600);
+  color: var(--grey-white);
+  display: grid;
+  place-items: center;
+}
+
+.legacy-profile-root .media-card {
+  padding: 0;
+  border: 0;
+  cursor: zoom-in;
 }
 
 .legacy-profile-root .profile-details {
@@ -162,7 +312,16 @@
   }
 
   .legacy-profile-root .profile-hero-copy {
-    min-height: 310px;
+    min-height: 420px;
+  }
+
+  .legacy-profile-root .profile-hero-intro {
+    margin-top: 42px;
+  }
+
+  .legacy-profile-root .profile-gallery-trigger {
+    min-width: 0;
+    width: 100%;
   }
 
   .legacy-profile-root .profile-badges-row {
