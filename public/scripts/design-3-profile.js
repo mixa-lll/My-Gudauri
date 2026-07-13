@@ -15,12 +15,14 @@
 
   if (!hoursValue || !peopleValue || !cta || !priceLink || !hoursLabel || !peopleLabel) return;
 
-  const HOURS_MIN = 2;
-  const HOURS_MAX = 12;
-  const PEOPLE_MIN = 1;
-  const PEOPLE_MAX = 10;
+  const HOURS_MIN = Number(card.dataset.minHours) || 2;
+  const HOURS_MAX = Number(card.dataset.maxHours) || 12;
+  const HOURS_STEP = Number(card.dataset.hoursStep) || 2;
+  const PEOPLE_MIN = Number(card.dataset.minPeople) || 1;
+  const PEOPLE_MAX = Number(card.dataset.maxPeople) || 10;
+  const HOURLY_RATE_GEL = Number(card.dataset.hourlyRateGel) || 345;
 
-  const calculatePrice = (hours, people) => Math.round((hours / 2) * 200 + people * 23.5);
+  const calculatePrice = (hours) => Math.round(hours * HOURLY_RATE_GEL);
 
   let hours = Number(hoursValue.textContent) || 8;
   let people = Number(peopleValue.textContent) || 2;
@@ -29,7 +31,7 @@
     hoursValue.textContent = String(hours);
     peopleValue.textContent = String(people);
 
-    const price = calculatePrice(hours, people);
+    const price = calculatePrice(hours);
     priceLink.textContent = `${price} gel`;
     hoursLabel.textContent = `${hours} hour`;
     peopleLabel.textContent = `${people} peple`;
@@ -49,12 +51,12 @@
   };
 
   hoursPlus?.addEventListener('click', () => {
-    hours = Math.min(HOURS_MAX, hours + 2);
+    hours = Math.min(HOURS_MAX, hours + HOURS_STEP);
     sync();
   });
 
   hoursMinus?.addEventListener('click', () => {
-    hours = Math.max(HOURS_MIN, hours - 2);
+    hours = Math.max(HOURS_MIN, hours - HOURS_STEP);
     sync();
   });
 
@@ -71,12 +73,13 @@
   cta.addEventListener('click', () => {
     const draft = {
       instructor: {
-        name: 'Mikhail Andreev',
-        avatar: '/assets/design-3/avatar-booking.jpg'
+        slug: window.location.pathname.split('/').filter(Boolean).at(-1),
+        name: card.dataset.instructorName,
+        avatar: card.dataset.instructorAvatar
       },
       hours,
       participants: people,
-      priceGel: calculatePrice(hours, people)
+      priceGel: calculatePrice(hours)
     };
 
     window.localStorage.setItem('bookingDraftV1', JSON.stringify(draft));

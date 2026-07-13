@@ -2,11 +2,21 @@
 
 React + SCSS refactor with reusable components, tokenized styling, and route-based pages.
 
+Instructor content is stored in Cloudflare D1 and served through Cloudflare Pages Functions.
+
 ## Quick start
 
 ```bash
 npm install
 npm run dev
+```
+
+Run the full Cloudflare stack with local D1 and API routes:
+
+```bash
+npm run db:migrate:local
+npm run db:seed:local
+npm run dev:cloudflare
 ```
 
 Build production bundle:
@@ -45,6 +55,7 @@ npm run preview
 
 - `/` Home
 - `/instructors` Instructor Catalog
-- `/profile` Instructor Profile
+- `/instructors/:slug` Dynamic Instructor Profile
+- `/profile` Redirect to the Mikhail profile for backwards compatibility
 - `/booking` Booking Flow
 - `/summary` Booking Summary

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CalculatorBanner } from '../../components/CalculatorBanner/CalculatorBanner';
 import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
 import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
@@ -6,7 +6,7 @@ import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
 import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
 import { Container } from '../../components/UI/Container/Container';
 import { FAQ_ITEMS } from '../../data/faqItems';
-import { INSTRUCTORS } from '../../data/instructors';
+import { getInstructors } from '../../services/instructorsApi';
 import '../../../styles/system.css';
 import '../../../styles/design-2-instructors.css';
 import './InstructorsPage.scss';
@@ -109,9 +109,30 @@ function BookingStep({ step, index }) {
 }
 
 export function InstructorsPage() {
+  const [instructors, setInstructors] = useState([]);
+  const [status, setStatus] = useState('loading');
+
   useEffect(() => {
     document.body.classList.add('catalog-page-body');
     return () => document.body.classList.remove('catalog-page-body');
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    getInstructors()
+      .then((items) => {
+        if (!active) return;
+        setInstructors(items);
+        setStatus('ready');
+      })
+      .catch(() => {
+        if (active) setStatus('error');
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (
@@ -152,15 +173,16 @@ export function InstructorsPage() {
               </div>
               <div className="catalog-list__meta">
                 <h2 id="catalog-list-title">Available instructors</h2>
-                <p className="catalog-count">{INSTRUCTORS.length} instructors</p>
+                <p className="catalog-count">{status === 'loading' ? 'Loading instructors…' : `${instructors.length} instructors`}</p>
               </div>
             </div>
 
             <div className="catalog-cards-grid">
-              {INSTRUCTORS.map((instructor) => (
+              {instructors.map((instructor) => (
                 <InstructorCard instructor={instructor} className="catalog-card" key={instructor.id} />
               ))}
             </div>
+            {status === 'error' && <p role="alert">Instructors are temporarily unavailable. Please try again later.</p>}
           </Container>
         </section>
 

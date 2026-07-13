@@ -5,6 +5,22 @@
   min-height: 100vh;
 }
 
+.profile-data-state {
+  width: min(1320px, calc(100% - (var(--layout-margin) * 2)));
+  min-height: 60vh;
+  margin: 24px auto;
+  padding: clamp(32px, 6vw, 72px);
+  border-radius: var(--radius-lg);
+  background: var(--grey-white);
+}
+
+.profile-data-state h1 {
+  max-width: 12ch;
+  margin-bottom: 20px;
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 0.95;
+}
+
 .legacy-profile-root .profile-page {
   width: 100%;
   max-width: 1600px;

@@ -2,24 +2,15 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import './ProfileGallery.scss';
 
-export const PROFILE_GALLERY = [
-  { src: '/assets/design-3/hero-main.png', alt: 'Mikhail Andreev on a ski slope' },
-  { src: '/assets/design-3/media-1.jpg', alt: 'Snowboard students on a slope' },
-  { src: '/assets/design-3/media-2.jpg', alt: 'Two riders resting in snow' },
-  { src: '/assets/design-3/media-3.jpg', alt: 'Child snowboard student' },
-  { src: '/assets/design-3/media-4.jpg', alt: 'Snowboard lesson moment' },
-  { src: '/assets/design-3/media-5.jpg', alt: 'Kids ski group' }
-];
-
-export function ProfileGallery({ index, isOpen, onClose, onIndexChange }) {
+export function ProfileGallery({ images, index, instructorName, isOpen, onClose, onIndexChange }) {
   const panelRef = useRef(null);
   const closeRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return undefined;
 
-    const showPrevious = () => onIndexChange((currentIndex) => (currentIndex - 1 + PROFILE_GALLERY.length) % PROFILE_GALLERY.length);
-    const showNext = () => onIndexChange((currentIndex) => (currentIndex + 1) % PROFILE_GALLERY.length);
+    const showPrevious = () => onIndexChange((currentIndex) => (currentIndex - 1 + images.length) % images.length);
+    const showNext = () => onIndexChange((currentIndex) => (currentIndex + 1) % images.length);
 
     const onKeyDown = (event) => {
       if (event.key === 'Escape') onClose();
@@ -50,13 +41,13 @@ export function ProfileGallery({ index, isOpen, onClose, onIndexChange }) {
       document.removeEventListener('keydown', onKeyDown);
       document.body.classList.remove('is-gallery-open');
     };
-  }, [isOpen, onClose, onIndexChange]);
+  }, [images.length, isOpen, onClose, onIndexChange]);
 
   if (!isOpen) return null;
 
-  const current = PROFILE_GALLERY[index];
-  const showPrevious = () => onIndexChange((index - 1 + PROFILE_GALLERY.length) % PROFILE_GALLERY.length);
-  const showNext = () => onIndexChange((index + 1) % PROFILE_GALLERY.length);
+  const current = images[index];
+  const showPrevious = () => onIndexChange((index - 1 + images.length) % images.length);
+  const showNext = () => onIndexChange((index + 1) % images.length);
 
   return createPortal(
     <div className="profile-gallery" role="presentation">
@@ -65,9 +56,9 @@ export function ProfileGallery({ index, isOpen, onClose, onIndexChange }) {
         <header className="profile-gallery__header">
           <div>
             <p>Instructor media</p>
-            <h2 id="profile-gallery-title">Mikhail Andreev</h2>
+            <h2 id="profile-gallery-title">{instructorName}</h2>
           </div>
-          <p className="profile-gallery__counter" aria-live="polite">{index + 1} / {PROFILE_GALLERY.length}</p>
+          <p className="profile-gallery__counter" aria-live="polite">{index + 1} / {images.length}</p>
           <button ref={closeRef} className="profile-gallery__close" type="button" aria-label="Close gallery" onClick={onClose}>×</button>
         </header>
 
@@ -78,7 +69,7 @@ export function ProfileGallery({ index, isOpen, onClose, onIndexChange }) {
         <footer className="profile-gallery__footer">
           <button className="profile-gallery__nav" type="button" aria-label="Previous photo" onClick={showPrevious}>←</button>
           <div className="profile-gallery__thumbs" aria-label="Choose photo">
-            {PROFILE_GALLERY.map((image, imageIndex) => (
+            {images.map((image, imageIndex) => (
               <button
                 className={imageIndex === index ? 'is-active' : ''}
                 type="button"

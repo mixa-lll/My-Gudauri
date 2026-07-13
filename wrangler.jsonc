@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "my-gudauri",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-07-13",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "my-gudauri-cms",
+      "database_id": "56e270c8-a3ca-4442-a669-55e33638b963",
+      "migrations_dir": "./db/migrations"
+    }
+  ]
+}

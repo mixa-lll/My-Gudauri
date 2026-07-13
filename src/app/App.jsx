@@ -12,7 +12,8 @@ export default function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/instructors" element={<InstructorsPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/instructors/:slug" element={<ProfilePage />} />
+      <Route path="/profile" element={<Navigate to="/instructors/mikhail" replace />} />
       <Route path="/booking" element={<BookingFlowPage />} />
       <Route element={<MainLayout />}>
         <Route path="/summary" element={<SummaryPage />} />
