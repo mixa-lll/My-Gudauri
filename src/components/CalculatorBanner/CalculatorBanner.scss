@@ -1,12 +1,12 @@
 .calc-banner {
-  min-height: 222px;
+  min-height: 320px;
   border-radius: var(--radius-xl);
   background: var(--grey-600);
   color: var(--grey-white);
-  padding: 23px var(--space-900);
-  display: grid;
-  align-content: start;
-  gap: 7px;
+  padding: clamp(26px, 3vw, 42px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .calc-banner__info {
@@ -15,35 +15,48 @@
 }
 
 .calc-banner__row {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-300);
+  margin-top: auto;
+  display: grid;
+  justify-items: start;
+  gap: 14px;
 }
 
 .calc-banner__row p {
   margin: 0;
-  font: 400 var(--text-h4) / 36px var(--font-heading);
+  max-width: 12ch;
+  font: 400 clamp(28px, 3vw, 42px) / 0.98 var(--font-heading);
+  letter-spacing: -0.04em;
 }
 
 .calc-banner__row span {
-  height: var(--pill-xl-h);
+  min-height: 58px;
   border-radius: var(--radius-md);
   border: 2px solid var(--grey-white);
   color: var(--grey-50);
   padding: 0 var(--pill-xl-w);
   display: inline-flex;
   align-items: center;
-  font: 400 32px / 36px var(--font-heading);
+  font: 400 clamp(28px, 2.5vw, 38px) / 1 var(--font-heading);
 }
 
 .calc-banner small {
+  margin-top: 18px;
   font: 400 var(--text-md) / var(--lh-md) var(--font-body);
 }
 
 .calc-banner__trigger {
+  margin-top: 18px;
   color: var(--grey-white);
   border-color: var(--rad-600);
   width: fit-content;
+}
+
+@media (max-width: 820px) {
+  .calc-banner {
+    min-height: 300px;
+    padding: 24px;
+    border-radius: calc(var(--radius-lg) - 4px);
+  }
 }
 
 .calc-modal {

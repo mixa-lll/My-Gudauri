@@ -142,18 +142,24 @@ export function InstructorsPage() {
       <main className="catalog-main">
         <section className="catalog-header" aria-labelledby="catalog-title">
           <Container className="catalog-header__container">
-            <div className="catalog-title-wrap">
-              <div className="catalog-sport-pills" aria-label="Available disciplines">
-                {['Snowboard', 'Ski'].map((sport) => (
-                  <span className="catalog-sport-pill ui-pill-md ui-pill-md--outline" key={sport}>
-                    <img className="ui-pill-md__icon" src="/assets/ui-kit/pill-icon.png" alt="" aria-hidden="true" />
-                    {sport}
-                  </span>
-                ))}
+            <div className="catalog-header__panel">
+              <div className="catalog-title-wrap">
+                <p className="catalog-header__eyebrow">Verified local experts</p>
+                <div className="catalog-sport-pills" aria-label="Available disciplines">
+                  {['Snowboard', 'Ski'].map((sport) => (
+                    <span className="catalog-sport-pill ui-pill-md ui-pill-md--outline" key={sport}>
+                      <img className="ui-pill-md__icon" src="/assets/ui-kit/pill-icon.png" alt="" aria-hidden="true" />
+                      {sport}
+                    </span>
+                  ))}
+                </div>
+                <h1 id="catalog-title" className="catalog-title">Instructors</h1>
+                <p className="catalog-header__description">
+                  Compare teaching styles, languages and experience to find the right instructor for your time in Gudauri.
+                </p>
               </div>
-              <h1 id="catalog-title" className="catalog-title">Instructors</h1>
+              <CalculatorBanner />
             </div>
-            <CalculatorBanner />
           </Container>
         </section>
 
