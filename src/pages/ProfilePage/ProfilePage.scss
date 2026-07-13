@@ -27,14 +27,81 @@
 .legacy-profile-root .profile-hero {
   gap: clamp(20px, 2.5vw, 36px);
   padding: clamp(20px, 2.5vw, 36px);
+  overflow: hidden;
 }
 
 .legacy-profile-root .profile-hero-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
   padding: 0;
 }
 
+.legacy-profile-root .profile-back-btn {
+  width: fit-content;
+  height: 40px;
+  padding-inline: 14px;
+  border-color: var(--grey-200);
+  border-radius: 999px;
+  background: var(--grey-50);
+  transition: border-color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.legacy-profile-root .profile-back-btn:hover {
+  border-color: var(--grey-300);
+  background: var(--grey-white);
+  transform: translateX(-2px);
+}
+
+.legacy-profile-root .profile-badges-row {
+  margin-top: auto;
+  gap: 8px;
+}
+
+.legacy-profile-root .profile-badge {
+  min-height: 32px;
+  padding-inline: 12px;
+  border: 1px solid var(--grey-100);
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .profile-role {
+  margin-left: 4px;
+  color: var(--grey-400);
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.legacy-profile-root .profile-title {
+  max-width: 8.2ch;
+  margin-top: 12px;
+  font-size: clamp(64px, 6vw, 92px);
+  line-height: 0.86;
+  letter-spacing: -0.065em;
+  text-wrap: balance;
+}
+
+.legacy-profile-root .profile-rating-main {
+  width: fit-content;
+  min-height: 38px;
+  margin-top: 18px;
+  padding: 0 12px;
+  border: 1px solid var(--grey-100);
+  border-radius: 999px;
+  background: var(--grey-50);
+}
+
 .legacy-profile-root .profile-hero-photo-wrap {
+  height: clamp(500px, 42vw, 580px);
+  min-height: 0;
+  border: 1px solid var(--grey-100);
   border-radius: var(--radius-lg);
+}
+
+.legacy-profile-root .profile-hero-photo {
+  object-position: center 38%;
 }
 
 .legacy-profile-root .profile-details {
@@ -70,6 +137,10 @@
 }
 
 @media (max-width: 1100px) {
+  .legacy-profile-root .profile-title {
+    font-size: clamp(58px, 7vw, 76px);
+  }
+
   .legacy-profile-root .profile-details {
     grid-template-columns: 1fr;
   }
@@ -88,6 +159,29 @@
   .legacy-profile-root .profile-hero {
     gap: 16px;
     padding: 12px;
+  }
+
+  .legacy-profile-root .profile-hero-copy {
+    min-height: 310px;
+  }
+
+  .legacy-profile-root .profile-badges-row {
+    margin-top: auto;
+    flex-wrap: wrap;
+  }
+
+  .legacy-profile-root .profile-title {
+    max-width: 100%;
+    font-size: clamp(44px, 13vw, 56px);
+    line-height: 0.9;
+  }
+
+  .legacy-profile-root .profile-rating-main {
+    margin-top: 14px;
+  }
+
+  .legacy-profile-root .profile-hero-photo-wrap {
+    height: min(112vw, 440px);
   }
 
   .legacy-profile-root .profile-facts {
