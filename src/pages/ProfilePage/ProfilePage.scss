@@ -57,7 +57,7 @@
 
 .legacy-profile-root .profile-hero-intro {
   width: min(100%, 470px);
-  margin-top: clamp(54px, 7vh, 88px);
+  margin-top: auto;
 }
 
 .legacy-profile-root .profile-hero-intro > p:first-child {
@@ -99,7 +99,7 @@
 }
 
 .legacy-profile-root .profile-badges-row {
-  margin-top: auto;
+  margin-top: clamp(40px, 6vh, 64px);
   gap: 8px;
 }
 
@@ -312,11 +312,15 @@
   }
 
   .legacy-profile-root .profile-hero-copy {
-    min-height: 420px;
+    min-height: 0;
   }
 
   .legacy-profile-root .profile-hero-intro {
-    margin-top: 42px;
+    margin-top: 36px;
+  }
+
+  .legacy-profile-root .profile-badges-row {
+    margin-top: 32px;
   }
 
   .legacy-profile-root .profile-gallery-trigger {
