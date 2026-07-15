@@ -4,9 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "design:sync": "sass src/styles/tokens/index.scss styles/tokens.css --no-source-map --style=expanded && sass src/components/UI/SectionHeading/SectionHeading.scss styles/section-heading.css --no-source-map --style=expanded && node scripts/sync-legacy-assets.mjs",
+    "predev": "npm run design:sync",
     "dev": "vite",
     "dev:cloudflare": "npm run build && wrangler pages dev",
-    "build": "vite build && npm run copy:assets",
+    "build": "npm run design:sync && vite build && npm run copy:assets",
     "copy:assets": "node scripts/copy-static-assets.mjs",
     "preview": "vite preview",
     "db:migrate:local": "wrangler d1 migrations apply my-gudauri-cms --local",
@@ -15,6 +17,7 @@
     "db:seed:remote": "wrangler d1 execute my-gudauri-cms --remote --file ./db/seed.sql"
   },
   "dependencies": {
+    "framer-motion": "^12.42.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.4"

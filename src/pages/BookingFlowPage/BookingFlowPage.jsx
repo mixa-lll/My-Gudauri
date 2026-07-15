@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import '../../../styles/system.css';
+import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
 import './BookingFlowPage.scss';
 
 const SLOT_OPTIONS = [
@@ -385,6 +385,7 @@ export function BookingFlowPage() {
   const isInitialSummary = !isSuccess && activeStep === 1 && !confirmed.step1 && !confirmed.step2 && !confirmed.step3;
 
   return (
+    <>
     <div className="booking-flow-page">
       <div className="container booking-flow-page__header-brand-wrap">
         <p className="site-nav__brand booking-flow-page__brand" aria-label="My Gudauri">
@@ -906,5 +907,7 @@ export function BookingFlowPage() {
         </div>
       </div>
     </div>
+    <SiteFooter />
+    </>
   );
 }

@@ -1,0 +1,300 @@
+.listing-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--grey-150);
+  border-radius: 28px;
+  background: var(--grey-white);
+  color: var(--grey-600);
+  text-decoration: none;
+  transition:
+    transform var(--motion-duration-slow) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-slow) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.listing-card:hover {
+  border-color: var(--grey-200);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+}
+
+.listing-card:focus-visible {
+  outline: 2px solid var(--grey-600);
+  outline-offset: 3px;
+}
+
+.listing-card__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  min-height: 240px;
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--grey-100);
+  clip-path: inset(0 round 22px);
+  isolation: isolate;
+}
+
+.listing-card__media::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 44%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.2));
+  pointer-events: none;
+}
+
+.listing-card__media > img,
+.listing-card__media > .media-placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 500ms var(--motion-ease-standard);
+}
+
+.listing-card--instructor .listing-card__media {
+  min-height: 0;
+  aspect-ratio: 6 / 5;
+}
+
+.listing-card--instructor .listing-card__media > img {
+  object-position: 50% 0;
+}
+
+.listing-card:hover .listing-card__media > img,
+.listing-card:hover .listing-card__media > .media-placeholder {
+  transform: scale(1.035);
+}
+
+.listing-card__media-top,
+.listing-card__media-bottom {
+  position: absolute;
+  z-index: 2;
+  right: 10px;
+  left: 10px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.listing-card__media-top {
+  top: 10px;
+}
+
+.listing-card__media-bottom {
+  bottom: 10px;
+}
+
+.listing-card__pill {
+  min-height: 28px;
+  max-width: 100%;
+  padding: 5px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(32, 33, 30, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--grey-600);
+  backdrop-filter: blur(9px);
+  font: var(--fw-semibold) 12px / 1 var(--font-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listing-card__pill img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
+
+.listing-card__body {
+  flex: 1;
+  min-width: 0;
+  padding: 17px 12px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.listing-card__eyebrow {
+  margin-bottom: 10px;
+  color: var(--grey-400);
+  font: 600 11px / 1.2 var(--font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.listing-card__title {
+  margin: 0;
+  color: var(--grey-600);
+  font: 600 22px / 1.1 var(--font-heading);
+  letter-spacing: -0.035em;
+}
+
+.listing-card__description {
+  min-height: 2.8em;
+  margin: 9px 0 0;
+  overflow: hidden;
+  color: var(--grey-400);
+  font: 400 14px / 1.4 var(--font-body);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+}
+
+.listing-card__footer {
+  min-height: 41px;
+  margin-top: auto;
+  padding-top: 14px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid var(--grey-100);
+}
+
+.listing-card__rating,
+.listing-card__price,
+.listing-card__action {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.listing-card__rating {
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.listing-card__rating b {
+  color: var(--grey-600);
+  font-size: 14px;
+}
+
+.listing-card__rating strong {
+  font: 600 14px / 1 var(--font-body);
+}
+
+.listing-card__rating small,
+.listing-card__price small {
+  color: var(--grey-400);
+  font: 400 11px / 1.2 var(--font-body);
+}
+
+.listing-card__price {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 4px;
+  text-align: right;
+}
+
+.listing-card__price strong {
+  font: var(--fw-bold) 17px / 1 var(--font-body);
+  white-space: nowrap;
+}
+
+.listing-card__action {
+  width: 100%;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--grey-500);
+  font: 600 12px / 1 var(--font-body);
+}
+
+.listing-card__action i {
+  font-style: normal;
+}
+
+.listing-card--featured {
+  min-height: clamp(500px, 50vw, 680px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  gap: 9px;
+}
+
+.listing-card--featured .listing-card__media {
+  height: 100%;
+  min-height: 460px;
+  aspect-ratio: auto;
+}
+
+.listing-card--featured .listing-card__body {
+  padding: clamp(28px, 4vw, 54px);
+}
+
+.listing-card--featured .listing-card__eyebrow {
+  margin-bottom: auto;
+}
+
+.listing-card--featured .listing-card__title {
+  margin-top: 54px;
+  font-size: clamp(38px, 4vw, 62px);
+  font-weight: var(--fw-medium);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.listing-card--featured .listing-card__description {
+  min-height: 0;
+  margin-top: 20px;
+  display: block;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.listing-card--featured .listing-card__footer {
+  margin-top: 30px;
+}
+
+@media (max-width: 980px) {
+  .listing-card--featured {
+    grid-template-columns: 1fr;
+  }
+
+  .listing-card--featured .listing-card__body {
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 720px) {
+  .listing-card__media {
+    min-height: 0;
+  }
+
+  .listing-card--featured {
+    min-height: 0;
+    display: flex;
+    gap: 0;
+  }
+
+  .listing-card--featured .listing-card__media {
+    height: 300px;
+    min-height: 300px;
+  }
+
+  .listing-card--featured .listing-card__body {
+    min-height: 0;
+    padding: 28px 12px 20px;
+  }
+
+  .listing-card--featured .listing-card__eyebrow {
+    margin-bottom: 0;
+  }
+
+  .listing-card--featured .listing-card__title {
+    margin-top: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listing-card,
+  .listing-card__media > img,
+  .listing-card__media > .media-placeholder {
+    transition-duration: 0.01ms !important;
+  }
+}

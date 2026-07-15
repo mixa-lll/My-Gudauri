@@ -48,7 +48,7 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 - FAQ logic is centralized in `FaqAccordion` and reused across pages.
 - Instructor card markup is centralized in `InstructorCard`.
 - All instructor cards and profiles use the same D1 records and API contracts.
-- Navbar menu data is centralized in `src/data/navCategories.js`.
+- The seven site categories are centralized in `src/data/siteCategories.js`; navbar and home cards derive from this list.
 - Common spacing/color/typography values live in token files only.
 
 ## Instructor request flow
@@ -92,4 +92,11 @@ npm run db:migrate:remote
 npm run db:seed:remote
 ```
 
-For a future editor UI, add authenticated write endpoints under `/api/admin/*`; public pages should continue reading through the same repository and response contracts.
+The authenticated editor lives under `/api/admin/*`; public pages continue reading through the same repository and response contracts.
+
+## Legacy boundary
+
+- `pages/`, `styles/` and classic `scripts/` are static reference prototypes, not production component sources.
+- React imports `styles/system.css` once as a temporary compatibility base for the remaining legacy profile template.
+- Tokens and `SectionHeading` compatibility CSS are generated from React sources by `npm run design:sync`.
+- Production navigation and footer are exclusively `SiteNavbar` and `SiteFooter`.

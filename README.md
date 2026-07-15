@@ -19,6 +19,19 @@ npm run db:seed:local
 npm run dev:cloudflare
 ```
 
+## Admin panel
+
+The content editor is available at `/admin`. It manages instructor cards (including status, profile data, disciplines, languages, gallery and reviews) and category visibility/order.
+
+Configure credentials before running Pages locally or deploying:
+
+```bash
+wrangler pages secret put ADMIN_PASSWORD
+wrangler pages secret put ADMIN_SESSION_SECRET
+```
+
+For local development, add `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET` to `.dev.vars` (do not commit it). Apply the new migration with `npm run db:migrate:local` or `npm run db:migrate:remote`.
+
 Build production bundle:
 
 ```bash

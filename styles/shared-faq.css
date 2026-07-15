@@ -16,18 +16,6 @@
   grid-column: 5 / -1;
 }
 
-.faq-component .faq-head .section-heading__kicker {
-  margin: 0;
-  color: var(--grey-500);
-  font: var(--fw-regular) var(--text-sm)/var(--lh-sm) var(--font-body);
-}
-
-.faq-component .faq-head .section-heading__title {
-  margin: 0;
-  color: var(--grey-600);
-  font: var(--fw-regular) var(--text-decor-3)/var(--lh-decor-3) var(--font-decor);
-}
-
 .faq-component .faq-list {
   margin-top: 47px;
   display: grid;

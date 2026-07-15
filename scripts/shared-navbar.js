@@ -12,7 +12,7 @@
           </a>
 
           <nav class="site-nav__links" aria-label="Main navigation">
-            <button class="site-nav__trigger" type="button" aria-expanded="false" aria-controls="site-nav-menu" data-site-nav-toggle>
+            <button class="site-nav__trigger" type="button" aria-label="Categories menu" aria-expanded="false" aria-controls="site-nav-menu" data-site-nav-toggle>
               <span class="site-nav__trigger-text">Categories</span>
               <span class="site-nav__chevron-wrap" aria-hidden="true">
                 <img class="site-nav__chevron" src="../assets/navbar/caret-down.png" alt="" />

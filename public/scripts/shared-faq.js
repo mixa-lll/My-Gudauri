@@ -41,9 +41,9 @@
       .join("");
 
     return `
-      <div class="faq-head">
-        <p>Frequently Asked Questions</p>
-        <h2>FAQ</h2>
+      <div class="faq-head section-heading">
+        <p class="section-heading__kicker">Frequently Asked Questions</p>
+        <h2 class="section-heading__title">FAQ</h2>
       </div>
       <div class="faq-list">${items}</div>
     `;

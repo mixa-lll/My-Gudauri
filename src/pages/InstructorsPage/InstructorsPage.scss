@@ -33,7 +33,7 @@
   min-height: clamp(390px, 36vw, 500px);
   padding: clamp(18px, 2vw, 28px);
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(18px, 2vw, 28px);
   border: 1px solid rgba(32, 33, 30, 0.07);
   border-radius: var(--radius-xl);
@@ -45,9 +45,9 @@
   padding: clamp(22px, 3vw, 48px);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  text-align: left;
+  text-align: center;
 }
 
 .catalog-header__eyebrow {
@@ -59,12 +59,14 @@
 }
 
 .catalog-title {
-  max-width: 7.6ch;
+  max-width: none;
+  width: 100%;
   margin-top: 18px;
   font-size: clamp(68px, 7vw, 112px);
   line-height: 0.86;
   letter-spacing: -0.065em;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .catalog-header__description {
@@ -72,10 +74,12 @@
   margin: clamp(24px, 3vw, 40px) 0 0;
   color: var(--grey-400);
   font: 400 clamp(15px, 1.2vw, 17px) / 1.45 var(--font-body);
+  text-align: center;
 }
 
 .catalog-header .calc-banner {
   height: 100%;
+  min-height: 320px;
 }
 
 .catalog-list {
@@ -107,6 +111,31 @@
 
 .catalog-cards-grid {
   margin-top: var(--space-500);
+}
+
+.catalog-empty-state {
+  margin-top: var(--space-500);
+  padding: 32px;
+  border: 1px dashed var(--grey-300);
+  border-radius: 20px;
+  background: var(--grey-white);
+  text-align: center;
+}
+
+.catalog-empty-state p {
+  margin: 0;
+}
+
+.catalog-empty-state button {
+  min-height: 42px;
+  margin-top: 16px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--grey-700);
+  color: var(--grey-white);
+  cursor: pointer;
+  font: 600 13px / 1 var(--font-body);
 }
 
 .catalog-benefits {
@@ -142,14 +171,14 @@
 .catalog-faq-block .faq {
   grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
   align-items: start;
-  padding: clamp(24px, 4vw, 48px);
-  border: 1px solid rgba(32, 33, 30, 0.07);
-  border-radius: var(--radius-xl);
-  background: var(--grey-white);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
-.catalog-page > .site-footer {
-  padding-top: 0;
+.catalog-faq-block .faq__item {
+  background: var(--grey-white);
 }
 
 @media (max-width: 1100px) {
@@ -229,5 +258,15 @@
 
   .catalog-faq-block .faq {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .catalog-filter-btn {
+    min-height: 44px;
+  }
+
+  .catalog-benefits-panel {
+    padding: 18px;
   }
 }

@@ -42,11 +42,17 @@ function buildReviews(document, instructor) {
   reviewsGrid.replaceChildren(...reviews.map((review) => {
     const card = createElement(document, 'article', 'review-card');
     const head = createElement(document, 'div', 'review-head');
-    const avatar = createElement(document, 'div', `avatar avatar-${Math.min(review.avatarPosition || 1, 4)}`);
-    const avatarImage = createElement(document, 'img');
-    avatarImage.src = review.avatar || '/assets/design-3/avatars-sprite.png';
-    avatarImage.alt = review.author;
-    avatar.append(avatarImage);
+    const avatar = createElement(document, 'div', 'avatar');
+    const hasStandaloneAvatar = review.avatar && !review.avatar.includes('avatars-sprite');
+
+    if (hasStandaloneAvatar) {
+      const avatarImage = createElement(document, 'img');
+      avatarImage.src = review.avatar;
+      avatarImage.alt = review.author;
+      avatar.append(avatarImage);
+    } else {
+      avatar.append(createElement(document, 'span', '', review.author.split(/\s+/).map((part) => part[0]).slice(0, 2).join('').toUpperCase()));
+    }
 
     const author = createElement(document, 'div');
     author.append(createElement(document, 'h3', '', review.author), createElement(document, 'p', '', review.lesson));

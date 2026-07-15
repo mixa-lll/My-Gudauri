@@ -8,10 +8,10 @@ export function SummaryPage() {
     <div className="summary-page">
       <Container>
         <section className="summary-page__content">
-          <SectionHeading kicker="Summary" title="Booking summary" />
+          <SectionHeading as="h1" kicker="Summary" title="Booking summary" />
 
           <div className="summary-page__card">
-            <p>Instructor: Mikhail Andeev</p>
+            <p>Instructor: Mikhail Andreev</p>
             <p>Hours: 4</p>
             <p>People: 2</p>
             <p>Total: 1380 GEL</p>

@@ -25,5 +25,15 @@ All files populate `:root` variables, e.g.:
 4. Keep component-level styles near component files (`Component.scss`).
 5. Keep page-level styles near page files (`Page.scss`).
 6. Для заголовков маркетинговых и контентных секций использовать только `SectionHeading`; не дублировать `.section-heading__kicker` и `.section-heading__title` в стилях страниц.
-7. Общие стили заголовка находятся в `styles/section-heading.css`, чтобы один набор правил работал и в React, и в legacy-адаптерах.
+7. Канонические стили заголовка находятся рядом с компонентом в `src/components/UI/SectionHeading/SectionHeading.scss`. Файл `styles/section-heading.css` генерируется из него только для статических прототипов.
 8. Заголовки карточек, шагов формы и модальных окон остаются локальными компонентными вариантами и не подменяются секционным заголовком.
+
+## Generated legacy compatibility
+
+Каталог `styles/` не является вторым источником токенов. Команда `npm run design:sync` генерирует:
+
+- `styles/tokens.css` из `src/styles/tokens/index.scss`;
+- `styles/section-heading.css` из React-компонента `SectionHeading`;
+- копии `scripts/shared-navbar.js` и `scripts/shared-faq.js` в `public/scripts/`.
+
+Эти файлы нужны только для HTML-прототипов из `pages/`. Их нельзя редактировать вручную.

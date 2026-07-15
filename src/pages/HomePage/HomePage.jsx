@@ -4,9 +4,11 @@ import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
 import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
 import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
 import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
+import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
+import { HomeHeroSearch } from '../../components/HomeHeroSearch/HomeHeroSearch';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { INSTRUCTORS } from '../../data/instructors';
-import '../../../styles/system.css';
+import { HOME_CATEGORIES } from '../../data/siteCategories';
 import '../../../styles/design-1-home.css';
 import './HomePage.scss';
 
@@ -30,6 +32,7 @@ export function HomePage() {
                 <span className="date-pill">LOCAL GUIDE · 2026</span>
                 <h1 className="hero-title-main">MY GUDAURI</h1>
                 <p className="hero-subtitle">Trusted local services for an effortless mountain stay.</p>
+                <HomeHeroSearch />
 
                 <div className="hero-lift-wrap">
                   <img className="hero-lift" src="/assets/design-1/lift-on-corner-1-25.png" alt="Cable car" />
@@ -51,74 +54,16 @@ export function HomePage() {
                   <h2>Everything you need,<br /><span>in one place.</span></h2>
                   <div>Plan less. Ski more. Choose verified people and services with clear details and local support.</div>
                 </div>
-                <article className="service-card instructors">
-                  <h2>Instructors</h2>
-                  <p>Verified ski and snowboard coaches</p>
-                  <img className="service-art instructors-art" src="/assets/design-1/mosaic/instructors-1-98.png" alt="Instructor" />
-                  <div className="tags-row">
-                    <span className="tag">Ski</span>
-                    <span className="tag">Snowboard</span>
-                  </div>
-                </article>
-
-                <article className="service-card tours">
-                  <h2>Tours</h2>
-                  <p>Routes, freeride and mountain adventures</p>
-                  <img className="service-art tours-art" src="/assets/design-1/mosaic/tours-1-117-upd.png" alt="Tour activity" />
-                  <div className="tags-row tours-tags">
-                    <span className="tag hot">Freeride</span>
-                    <span className="tag hot">Ski tour</span>
-                  </div>
-                </article>
-
-                <article className="service-card rental">
-                  <h2>Rental</h2>
-                  <p>Equipment for every level and style</p>
-                  <img className="service-art rental-art" src="/assets/design-1/mosaic/rental-1-135-upd.png" alt="Ski equipment" />
-                  <div className="tags-row rental-tags">
-                    <span className="tag">Ski</span>
-                    <span className="tag">Snowboard</span>
-                  </div>
-                </article>
-
-                <article className="service-card places">
-                  <h2>Places</h2>
-                  <p>Restaurants, bars and places worth visiting</p>
-                  <img className="service-art places-art" src="/assets/design-1/mosaic/places-1-154.png" alt="Mountain cafe" />
-                  <div className="tags-row">
-                    <span className="tag">Bars</span>
-                    <span className="tag">Restaurants</span>
-                  </div>
-                </article>
-
-                <article className="service-card services tall">
-                  <h2>Services</h2>
-                  <p>Local professionals for your trip</p>
-                  <img className="service-art services-art" src="/assets/design-1/mosaic/services-1-107.png" alt="Photographer" />
-                  <div className="tags-row services-tags">
-                    <span className="tag">Nannies</span>
-                    <span className="tag">Foto</span>
-                    <span className="tag">Video</span>
-                  </div>
-                </article>
-
-                <article className="service-card transfer">
-                  <h2>Transfer</h2>
-                  <p>Comfortable rides to and from the resort</p>
-                  <img className="service-art transfer-art" src="/assets/design-1/mosaic/transfer-1-144-upd.png" alt="Transfer van" />
-                  <div className="tags-row transfer-tags">
-                    <span className="tag">Batumi - Gudauri</span>
-                    <span className="tag">Tbilisi - Gudauri</span>
-                  </div>
-                </article>
-
-                <article className="service-card real-estate">
-                  <h2>Real estate</h2>
-                  <p>Apartments and stays close to the slopes</p>
-                  <div className="tags-row real-estate-tags">
-                    <span className="tag">Apartments</span>
-                  </div>
-                </article>
+                {HOME_CATEGORIES.map((category) => (
+                  <Link className={`service-card ${category.homeClass}`} to={category.href} key={category.slug}>
+                    <h2>{category.title}</h2>
+                    <p>{category.description}</p>
+                    {category.image ? <img className={`service-art ${category.homeClass}-art`} src={category.image} alt={category.imageAlt} /> : null}
+                    <div className={`tags-row ${category.tagsClass ?? ''}`.trim()}>
+                      {category.tags.map((tag) => <span className={`tag ${category.hotTags ? 'hot' : ''}`.trim()} key={tag}>{tag}</span>)}
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
@@ -156,48 +101,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <footer className="home-footer">
-          <div className="container">
-            <div className="grid-12 footer-layout">
-              <div className="footer-top">
-                <div className="footer-brand-wrap">
-                  <div className="brand">My Gudauri <img src="/assets/design-1/ellipse-8.svg" alt="" aria-hidden="true" /></div>
-                  <p>Independent platform connecting guests with verified local instructors and activities in Gudauri.</p>
-                </div>
-              </div>
-
-              <div className="footer-main">
-                <div className="contacts">
-                  <div><span>Phone number</span><p>+995 123 45 65</p></div>
-                  <div><span>Email</span><p>Mygudauri@gmail.com</p></div>
-                  <div><span>Address</span><p>Gudauri, Georgia</p></div>
-                </div>
-                <div className="footer-nav">
-                  <a href="#articles">Articles</a>
-                  <a href="#about">About Gudauri</a>
-                  <a href="#support">Support</a>
-                </div>
-                <div className="footer-sections">
-                  <span>Sections</span>
-                  <div>
-                    <Link to="/instructors">Instructors</Link><Link to="/summary">Services</Link>
-                    <Link to="/summary">Places</Link><Link to="/summary">Activity</Link>
-                    <Link to="/summary">Transfer</Link><Link to="/summary">Rent</Link>
-                  </div>
-                </div>
-              </div>
-
-              <img className="footer-line" src="/assets/design-1/line-26.svg" alt="" aria-hidden="true" />
-              <div className="footer-bottom">
-                <div className="legal"><span>© 2026 My Gudauri</span><span>Cookies Policy</span><span>Privacy Policy</span></div>
-                <div className="socials">
-                  <img src="/assets/design-1/telegram-4-1.png" alt="Telegram" />
-                  <img src="/assets/design-1/instagram-3-1.png" alt="Instagram" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

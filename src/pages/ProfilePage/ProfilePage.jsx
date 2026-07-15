@@ -4,15 +4,15 @@ import { Link, useParams } from 'react-router-dom';
 import legacyPageHtml from '../../../pages/design-3-profile.html?raw';
 import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
 import { ProfileGallery } from '../../components/ProfileGallery/ProfileGallery';
+import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
+import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructor } from '../../services/instructorsApi';
 import { renderInstructorProfile } from '../../utils/renderInstructorProfile';
-import '../../../styles/system.css';
 import '../../../styles/design-3-profile.css';
 import './ProfilePage.scss';
 
 const LEGACY_SCRIPTS = [
-  { id: 'profile-shared-navbar', src: '/scripts/shared-navbar.js' },
   { id: 'profile-booking-draft', src: '/scripts/design-3-profile.js' }
 ];
 
@@ -36,6 +36,8 @@ function extractBodyHtml(html) {
 
   return source
     .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<footer class="home-footer">[\s\S]*?<\/footer>/i, '')
+    .replace(/<header class="site-nav-host profile-nav-host" data-site-navbar><\/header>/i, '')
     .replaceAll('./design-2-instructors.html', '/instructors')
     .replaceAll('../index.html', '/')
     .replaceAll('../assets/', '/assets/')
@@ -144,8 +146,10 @@ export function ProfilePage() {
 
   return (
     <>
+      <SiteNavbar />
       <div ref={profileRootRef} className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
       {faqMount ? createPortal(<FaqAccordion items={FAQ_ITEMS} />, faqMount) : null}
+      <SiteFooter />
       <ProfileGallery
         images={renderedProfile.media}
         index={galleryIndex}

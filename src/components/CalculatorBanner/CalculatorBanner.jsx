@@ -85,7 +85,7 @@ export function CalculatorBanner() {
 
         <section className="calc-modal__panel" role="dialog" aria-modal="true" aria-labelledby="cost-calculator-title">
           <header className="calc-modal__head">
-            <h3 id="cost-calculator-title">Cost calculate</h3>
+            <h3 id="cost-calculator-title">Cost calculator</h3>
             <button ref={closeRef} className="calc-modal__close" type="button" aria-label="Close calculator" onClick={closeModal}>
               <img src="/assets/design-2/calc/icon-calc-close.png" alt="" aria-hidden="true" />
             </button>

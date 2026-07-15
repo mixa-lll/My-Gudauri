@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CalculatorBanner } from '../../components/CalculatorBanner/CalculatorBanner';
+import { CatalogCategoryTabs } from '../../components/CatalogCategoryTabs/CatalogCategoryTabs';
 import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
 import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
 import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
@@ -8,7 +9,6 @@ import { Container } from '../../components/UI/Container/Container';
 import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructors } from '../../services/instructorsApi';
-import '../../../styles/system.css';
 import '../../../styles/design-2-instructors.css';
 import './InstructorsPage.scss';
 
@@ -63,6 +63,22 @@ const BOOKING_STEPS = [
   }
 ];
 
+const hasSport = (instructor, sport) => instructor.sports?.some((item) => item.slug === sport);
+const isFamilyFriendly = (instructor) => /beginner|first-time|kids|famil/i.test(instructor.description);
+
+const INSTRUCTOR_CATEGORIES = [
+  { id: 'all', label: 'All instructors', description: 'Verified local professionals', matches: () => true },
+  { id: 'ski', label: 'Ski', description: 'Piste and technique lessons', matches: (instructor) => hasSport(instructor, 'ski') },
+  { id: 'snowboard', label: 'Snowboard', description: 'From first turns to freeride', matches: (instructor) => hasSport(instructor, 'snowboard') },
+  { id: 'families', label: 'Beginners & families', description: 'Patient, confidence-building lessons', matches: isFamilyFriendly }
+];
+
+const INSTRUCTOR_REFINEMENTS = [
+  { id: 'russian', label: 'Russian speaking', matches: (instructor) => instructor.languages?.some((language) => language.code === 'Ru') },
+  { id: 'top-rated', label: 'Rated 4.9+', matches: (instructor) => Number(instructor.rating) >= 4.9 },
+  { id: 'private', label: 'Private lessons', matches: (instructor) => /private/i.test(instructor.description) }
+];
+
 function StepVisual({ type }) {
   if (type === 'squares') {
     return <div className="step-squares" aria-hidden="true"><i /><i /><i className="active" /><i /><i /><i /></div>;
@@ -112,11 +128,28 @@ function BookingStep({ step, index }) {
 export function InstructorsPage() {
   const [instructors, setInstructors] = useState([]);
   const [status, setStatus] = useState('loading');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeFilters, setActiveFilters] = useState([]);
 
   useEffect(() => {
     document.body.classList.add('catalog-page-body');
     return () => document.body.classList.remove('catalog-page-body');
   }, []);
+
+  const categoryTabs = useMemo(() => INSTRUCTOR_CATEGORIES.map((category) => ({
+    ...category,
+    count: instructors.filter(category.matches).length
+  })), [instructors]);
+  const displayedInstructors = useMemo(() => {
+    const category = INSTRUCTOR_CATEGORIES.find((item) => item.id === activeCategory) ?? INSTRUCTOR_CATEGORIES[0];
+    return instructors.filter((instructor) => category.matches(instructor) && activeFilters.every((filterId) => (
+      INSTRUCTOR_REFINEMENTS.find((filter) => filter.id === filterId)?.matches(instructor)
+    )));
+  }, [activeCategory, activeFilters, instructors]);
+
+  const toggleFilter = (filterId) => {
+    setActiveFilters((current) => current.includes(filterId) ? current.filter((item) => item !== filterId) : [...current, filterId]);
+  };
 
   useEffect(() => {
     let active = true;
@@ -146,14 +179,6 @@ export function InstructorsPage() {
             <div className="catalog-header__panel">
               <div className="catalog-title-wrap">
                 <p className="catalog-header__eyebrow">Verified local experts</p>
-                <div className="catalog-sport-pills" aria-label="Available disciplines">
-                  {['Snowboard', 'Ski'].map((sport) => (
-                    <span className="catalog-sport-pill ui-pill-md ui-pill-md--outline" key={sport}>
-                      <img className="ui-pill-md__icon" src="/assets/ui-kit/pill-icon.png" alt="" aria-hidden="true" />
-                      {sport}
-                    </span>
-                  ))}
-                </div>
                 <h1 id="catalog-title" className="catalog-title">Instructors</h1>
                 <p className="catalog-header__description">
                   Compare teaching styles, languages and experience to find the right instructor for your time in Gudauri.
@@ -166,13 +191,22 @@ export function InstructorsPage() {
 
         <section className="catalog-list" aria-labelledby="catalog-list-title">
           <Container>
+            <CatalogCategoryTabs
+              categories={categoryTabs}
+              activeId={activeCategory}
+              onChange={(categoryId) => {
+                setActiveCategory(categoryId);
+                setActiveFilters([]);
+              }}
+              label="Instructor categories"
+            />
             <div className="catalog-list__toolbar">
               <div>
-                <p className="catalog-kicker">Filters</p>
+                <p className="catalog-kicker">Refine selection</p>
                 <div className="catalog-filters" aria-label="Instructor filters">
-                  {['Discipline', 'Level', 'Language'].map((filter) => (
-                    <button className="catalog-filter-btn ui-pill-md ui-pill-md--outline" type="button" key={filter}>
-                      {filter}
+                  {INSTRUCTOR_REFINEMENTS.map((filter) => (
+                    <button className={`catalog-filter-btn ui-pill-md ui-pill-md--outline ${activeFilters.includes(filter.id) ? 'is-active' : ''}`} type="button" aria-pressed={activeFilters.includes(filter.id)} onClick={() => toggleFilter(filter.id)} key={filter.id}>
+                      {filter.label}
                       <img src="/assets/design-2/icon-caret.png" alt="" aria-hidden="true" />
                     </button>
                   ))}
@@ -180,15 +214,21 @@ export function InstructorsPage() {
               </div>
               <div className="catalog-list__meta">
                 <h2 id="catalog-list-title">Available instructors</h2>
-                <p className="catalog-count">{status === 'loading' ? 'Loading instructors…' : `${instructors.length} instructors`}</p>
+                <p className="catalog-count">{status === 'loading' ? 'Loading instructors…' : `${displayedInstructors.length} instructors`}</p>
               </div>
             </div>
 
             <div className="catalog-cards-grid">
-              {instructors.map((instructor) => (
-                <InstructorCard instructor={instructor} className="catalog-card" key={instructor.id} />
+              {displayedInstructors.map((instructor) => (
+                <InstructorCard instructor={instructor} key={instructor.id} />
               ))}
             </div>
+            {status === 'ready' && !displayedInstructors.length && (
+              <div className="catalog-empty-state">
+                <p>No instructors match these filters yet.</p>
+                <button type="button" onClick={() => { setActiveCategory('all'); setActiveFilters([]); }}>Show all instructors</button>
+              </div>
+            )}
             {status === 'error' && <p role="alert">Instructors are temporarily unavailable. Please try again later.</p>}
           </Container>
         </section>

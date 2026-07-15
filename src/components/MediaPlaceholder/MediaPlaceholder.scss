@@ -1,0 +1,114 @@
+.media-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(145deg, #dce3e1 0%, #aebdbb 52%, #778b8b 100%);
+  color: var(--grey-white);
+}
+
+.media-placeholder--tone-1 {
+  background: linear-gradient(145deg, #ddd9cc 0%, #b8ad91 52%, #817765 100%);
+}
+
+.media-placeholder--tone-2 {
+  background: linear-gradient(145deg, #d9dce4 0%, #aeb6c5 50%, #747f92 100%);
+}
+
+.media-placeholder--tone-3 {
+  background: linear-gradient(145deg, #e5ddd7 0%, #c0a79b 50%, #8e7066 100%);
+}
+
+.media-placeholder::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(16, 20, 20, 0.02) 35%, rgba(16, 20, 20, 0.34) 100%);
+}
+
+.media-placeholder__sun {
+  position: absolute;
+  right: 12%;
+  top: 13%;
+  width: clamp(52px, 9vw, 120px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 0 0 18px rgba(255, 255, 255, 0.06);
+}
+
+.media-placeholder__ridge {
+  position: absolute;
+  z-index: -1;
+  left: -8%;
+  width: 116%;
+  clip-path: polygon(0 66%, 12% 50%, 21% 59%, 36% 28%, 47% 57%, 59% 38%, 70% 58%, 84% 25%, 100% 55%, 100% 100%, 0 100%);
+}
+
+.media-placeholder__ridge--back {
+  bottom: 12%;
+  height: 72%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5%);
+}
+
+.media-placeholder__ridge--front {
+  bottom: -4%;
+  height: 68%;
+  background: rgba(27, 35, 35, 0.22);
+  transform: scaleX(-1);
+}
+
+.media-placeholder__brand,
+.media-placeholder__copy {
+  position: absolute;
+  z-index: 2;
+  left: clamp(14px, 3vw, 28px);
+}
+
+.media-placeholder__brand {
+  top: clamp(14px, 3vw, 26px);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.media-placeholder__copy {
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 26px);
+  display: grid;
+  gap: 5px;
+}
+
+.media-placeholder__copy strong {
+  overflow: hidden;
+  font: 550 clamp(18px, 2.3vw, 30px) / 1.04 var(--font-heading);
+  letter-spacing: -0.045em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.media-placeholder__copy small {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.media-placeholder--compact .media-placeholder__brand,
+.media-placeholder--compact .media-placeholder__copy small {
+  display: none;
+}
+
+.media-placeholder--compact .media-placeholder__copy {
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+
+.media-placeholder--compact .media-placeholder__copy strong {
+  font-size: 10px;
+}

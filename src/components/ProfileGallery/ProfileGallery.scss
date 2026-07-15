@@ -27,7 +27,7 @@ body.is-gallery-open {
   padding: 18px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 28px;
-  background: #171815;
+  background: var(--grey-700);
   color: var(--grey-white);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -87,7 +87,7 @@ body.is-gallery-open {
   min-height: 0;
   overflow: hidden;
   border-radius: 20px;
-  background: #0e0f0d;
+  background: var(--grey-800);
 }
 
 .profile-gallery__stage img {

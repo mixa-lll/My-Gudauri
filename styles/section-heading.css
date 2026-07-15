@@ -8,7 +8,7 @@
 .section-heading__kicker {
   margin: 0;
   color: var(--grey-400);
-  font: 600 13px / 1.2 var(--font-body);
+  font: var(--fw-semibold) 13px/1.2 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -19,7 +19,7 @@
   color: var(--grey-600);
   font-family: var(--font-heading);
   font-size: clamp(44px, 5vw, 68px);
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   letter-spacing: -0.055em;
   line-height: 0.98;
   text-wrap: balance;
@@ -29,7 +29,7 @@
   max-width: 62ch;
   margin: 8px 0 0;
   color: var(--grey-400);
-  font: 400 var(--text-md) / 1.4 var(--font-body);
+  font: var(--fw-regular) var(--text-md)/1.4 var(--font-body);
 }
 
 .section-heading--md .section-heading__title {
@@ -56,11 +56,9 @@
   .section-heading__title {
     font-size: 36px;
   }
-
   .section-heading--md .section-heading__title {
     font-size: 34px;
   }
-
   .section-heading--sm .section-heading__title {
     font-size: 28px;
   }

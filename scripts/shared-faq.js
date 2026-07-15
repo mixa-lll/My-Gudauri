@@ -4,8 +4,8 @@
 
   const faqItems = [
     {
-      q: "Is the price different for each instructor?",
-      a: "You can browse instructor profiles, compare experience, languages, teaching style and reviews. All instructors follow the same official pricing, so you can choose based on fit, not price."
+      q: "How do I choose the right instructor?",
+      a: "Compare experience, languages, teaching style and verified guest reviews. Each profile gives you the details needed to choose with confidence."
     },
     {
       q: "Is the price different for each instructor?",

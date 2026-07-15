@@ -48,7 +48,7 @@
 
 .booking-flow-page__content {
   display: grid;
-  grid-template-columns: 839px 409px;
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
   gap: 12px;
   align-items: start;
   padding-top: 22px;
@@ -58,7 +58,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  width: 839px;
+  width: 100%;
 }
 
 .booking-step {
@@ -906,5 +906,32 @@
   .segment-control,
   .participant-skill {
     width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .booking-calendar-popover {
+    left: 50% !important;
+    top: 50% !important;
+    width: min(279px, calc(100vw - 16px));
+    max-height: calc(100dvh - 16px);
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+  }
+
+  .booking-step__actions {
+    gap: 10px;
+  }
+
+  .booking-step__actions .ui-btn-md {
+    min-height: 44px;
+  }
+
+  .booking-day-row .booking-slot-btn {
+    height: 44px;
+  }
+
+  .booking-summary__stat {
+    padding-inline: 14px;
   }
 }

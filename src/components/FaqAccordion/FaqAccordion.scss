@@ -113,6 +113,31 @@
   }
 }
 
+@media (max-width: 520px) {
+  .faq {
+    gap: 22px;
+  }
+
+  .faq__item {
+    padding-inline: 16px;
+  }
+
+  .faq__trigger {
+    min-height: 64px;
+    grid-template-columns: 20px 1fr;
+    column-gap: 10px;
+  }
+
+  .faq__icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .faq__answer {
+    margin: 4px 0 20px 30px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .faq__item,
   .faq__icon::after,

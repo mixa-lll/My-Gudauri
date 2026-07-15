@@ -1,0 +1,204 @@
+.article-page {
+  width: min(100%, 1600px);
+  margin-inline: auto;
+}
+
+.article-page main {
+  padding: 30px 0 clamp(80px, 10vw, 140px);
+}
+
+.article-shell {
+  width: min(1180px, calc(100% - 80px));
+  max-width: none;
+  padding-inline: 0;
+}
+
+.article-hero {
+  max-width: 1050px;
+  margin: clamp(60px, 8vw, 110px) auto 0;
+  text-align: center;
+}
+
+.article-hero > span {
+  color: var(--grey-400);
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.article-hero h1 {
+  margin: 24px 0 0;
+  font: 570 clamp(54px, 7vw, 98px) / 0.94 var(--font-heading);
+  letter-spacing: -0.07em;
+}
+
+.article-hero p {
+  max-width: 650px;
+  margin: 30px auto 0;
+  color: var(--grey-400);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.article-cover {
+  width: 100%;
+  height: clamp(430px, 56vw, 720px);
+  margin-top: clamp(54px, 7vw, 90px);
+  border-radius: 30px;
+  object-fit: cover;
+}
+
+.article-layout {
+  margin-top: clamp(60px, 8vw, 110px);
+  display: grid;
+  grid-template-columns: 240px minmax(0, 700px);
+  justify-content: center;
+  gap: clamp(50px, 8vw, 110px);
+  align-items: start;
+}
+
+.article-layout > aside {
+  position: sticky;
+  top: 30px;
+  display: grid;
+  gap: 12px;
+}
+
+.article-layout > aside span {
+  margin-bottom: 8px;
+  color: var(--grey-300);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article-layout > aside a {
+  color: var(--grey-500);
+  font-size: 13px;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
+.article-lead {
+  margin: 0;
+  font: 480 clamp(24px, 2.7vw, 34px) / 1.3 var(--font-heading);
+  letter-spacing: -0.035em;
+}
+
+.article-layout article section {
+  margin-top: 76px;
+  scroll-margin-top: 24px;
+}
+
+.article-layout article section > span {
+  color: var(--grey-300);
+  font-size: 11px;
+}
+
+.article-layout article h2 {
+  margin: 12px 0 0;
+  font: var(--fw-medium) clamp(34px, 4vw, 52px) / 1 var(--font-heading);
+  letter-spacing: -0.05em;
+}
+
+.article-layout article section p {
+  margin: 24px 0 0;
+  color: var(--grey-500);
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.article-layout article section p + p {
+  margin-top: 16px;
+}
+
+.article-note {
+  margin-top: 70px;
+  padding: 25px;
+  border-radius: 20px;
+  background: var(--sand-50);
+}
+
+.article-note p {
+  margin: 8px 0 0;
+  color: var(--grey-500);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.article-layout article .article-sources {
+  padding-top: 70px;
+  border-top: 1px solid var(--grey-200);
+}
+
+.article-sources > p {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+}
+
+.article-sources ul {
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.article-sources a {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  color: var(--grey-600);
+  font-size: 14px;
+  font-weight: 550;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 820px) {
+  .article-shell {
+    width: calc(100% - 32px);
+  }
+
+  .article-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .article-layout > aside {
+    position: static;
+  }
+
+  .article-layout > aside a {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .article-page main {
+    padding-top: 18px;
+  }
+
+  .article-hero {
+    margin-top: 44px;
+  }
+
+  .article-hero h1 {
+    font-size: clamp(42px, 13vw, 54px);
+    overflow-wrap: anywhere;
+  }
+
+  .article-hero p,
+  .article-layout article section p {
+    font-size: 17px;
+  }
+
+  .article-cover {
+    height: 320px;
+    margin-top: 44px;
+    border-radius: 22px;
+  }
+}

@@ -124,7 +124,7 @@
 .calc-modal__grid {
   margin-top: var(--space-500);
   display: grid;
-  grid-template-columns: 200px 24px 200px 24px minmax(280px, 1fr);
+  grid-template-columns: minmax(160px, 1fr) auto minmax(160px, 1fr) auto minmax(280px, 1.35fr);
   gap: var(--space-400);
   align-items: center;
 }
@@ -272,6 +272,11 @@
 }
 
 @media (max-width: 860px) {
+  .calc-modal {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
   .calc-banner {
     padding: var(--space-400);
   }
@@ -281,13 +286,65 @@
   }
 
   .calc-modal__panel {
-    margin-top: 100px;
+    margin: 8px auto;
     padding: var(--space-500);
+    border-radius: 20px;
   }
 
   .calc-modal__value b,
   .calc-modal__result strong {
     font-size: 52px;
     line-height: 52px;
+  }
+
+  .calc-modal__close,
+  .calc-modal__stepper button,
+  .calc-modal__currency {
+    min-height: 44px;
+  }
+
+  .calc-modal__close {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 520px) {
+  .calc-modal__panel {
+    width: calc(100vw - 16px);
+    padding: 18px;
+  }
+
+  .calc-modal__head h3 {
+    font-size: 28px;
+    line-height: 1.05;
+  }
+
+  .calc-modal__grid {
+    margin-top: 16px;
+    gap: 12px;
+  }
+
+  .calc-modal__value {
+    min-height: 72px;
+  }
+
+  .calc-modal__value b,
+  .calc-modal__result strong {
+    font-size: 44px;
+    line-height: 44px;
+  }
+
+  .calc-modal__value span,
+  .calc-modal__symbol {
+    font-size: 26px;
+  }
+
+  .calc-modal__result strong {
+    min-height: 72px;
+  }
+
+  .calc-modal__note {
+    margin-top: 16px;
   }
 }

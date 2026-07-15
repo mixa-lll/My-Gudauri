@@ -1,5 +1,5 @@
 import { cn } from '../../../utils/cn';
-import '../../../../styles/section-heading.css';
+import './SectionHeading.scss';
 
 export function SectionHeading({
   kicker,

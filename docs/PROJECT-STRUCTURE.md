@@ -32,7 +32,8 @@
 │   ├── data/
 │   │   ├── faqItems.js
 │   │   ├── instructors.js
-│   │   └── navCategories.js
+│   │   ├── navCategories.js       # compatibility re-export
+│   │   └── siteCategories.js      # canonical seven-category taxonomy
 │   ├── pages/
 │   │   ├── BookingFlowPage/
 │   │   ├── HomePage/

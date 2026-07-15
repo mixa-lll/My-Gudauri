@@ -1,7 +1,7 @@
 :root {
   --content-width: 1468px;
-  --layout-margin: 40px;
-  --layout-gutter: 20px;
+  --layout-margin: clamp(18px, 3vw, 48px);
+  --layout-gutter: clamp(12px, 1.4vw, 20px);
 
   --pill-md-w: 12px;
   --pill-md-h: 30px;
@@ -11,4 +11,11 @@
   --pill-xl-h: 60px;
 
   --shadow-soft: 4px 4px 60px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 1px 0 rgba(24, 25, 22, 0.05), 0 18px 48px rgba(24, 25, 22, 0.06);
+  --shadow-float: 0 24px 70px rgba(24, 25, 22, 0.12);
+
+  --motion-duration-fast: 150ms;
+  --motion-duration-base: 200ms;
+  --motion-duration-slow: 250ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }

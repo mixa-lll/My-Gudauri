@@ -1,0 +1,32 @@
+/* Static prototype compatibility only. Production React pages use SiteFooter. */
+.home-footer { min-height: 394px; padding: 64px 0 20px; background: var(--grey-50); }
+.footer-layout > * { grid-column: 1 / -1; }
+.footer-top { display: flex; justify-content: space-between; }
+.footer-brand-wrap { width: 100%; display: flex; justify-content: space-between; gap: 30px; align-items: flex-start; }
+.brand { display: inline-flex; align-items: flex-start; gap: 3px; font-family: var(--font-decor); font-size: 26px; line-height: 0.82; }
+.footer-brand-wrap p { max-width: 450px; margin: 0; color: var(--grey-400); font: var(--fw-regular) var(--text-md) / var(--lh-md) var(--font-body); }
+.footer-main { margin-top: 52px; display: grid; grid-template-columns: 1.1fr 0.7fr 1fr; gap: 40px; align-items: end; }
+.contacts { display: grid; gap: 20px; }
+.contacts span,
+.footer-sections span { display: block; margin-bottom: 5px; color: var(--grey-300); font: var(--fw-regular) var(--text-sm) / var(--lh-sm) var(--font-body); }
+.contacts p { margin: 0; font: var(--fw-regular) var(--text-md) / var(--lh-md-inline) var(--font-body); }
+.footer-nav,
+.footer-sections div { display: grid; gap: 15px; }
+.footer-sections div { grid-template-columns: 1fr 1fr; column-gap: 52px; }
+.footer-nav a,
+.footer-sections a { color: var(--grey-600); font: var(--fw-regular) var(--text-md) / var(--lh-md) var(--font-body); text-decoration: none; transition: color var(--motion-duration-base) var(--motion-ease-standard); }
+.footer-nav a:hover,
+.footer-sections a:hover { color: var(--rad-600); }
+.footer-line { width: 100%; margin: 25px 0 15px; display: block; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+.legal { display: flex; gap: 30px; font: var(--fw-regular) var(--text-md) / var(--lh-md) var(--font-body); }
+.socials { display: flex; gap: 10px; }
+.socials img { width: 20px; height: 20px; }
+
+@media (max-width: 1280px) { .footer-main { grid-template-columns: 1fr; } }
+@media (max-width: 768px) {
+  .footer-brand-wrap,
+  .footer-bottom { align-items: flex-start; flex-direction: column; }
+  .footer-main { gap: 42px; }
+  .legal { flex-wrap: wrap; gap: 12px; }
+}

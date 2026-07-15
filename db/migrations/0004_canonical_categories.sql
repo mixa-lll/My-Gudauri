@@ -1,0 +1,7 @@
+UPDATE categories SET slug = 'rental', name = 'Rental', description = 'Equipment for every level and riding style', href = '/rental', sort_order = 40, updated_at = CURRENT_TIMESTAMP WHERE slug = 'rent';
+UPDATE categories SET slug = 'transfers', name = 'Transfers', description = 'Tbilisi, Kutaisi, Batumi and regional routes', href = '/transfers', sort_order = 50, updated_at = CURRENT_TIMESTAMP WHERE slug = 'transfer';
+UPDATE categories SET slug = 'activities', name = 'Activities', description = 'Routes, freeride and mountain adventures', href = '/activities', sort_order = 20, updated_at = CURRENT_TIMESTAMP WHERE slug = 'activity';
+UPDATE categories SET name = 'Services', description = 'Photo, video, childcare and local professionals', href = '/services', sort_order = 30, updated_at = CURRENT_TIMESTAMP WHERE slug = 'services';
+UPDATE categories SET name = 'Stays', description = 'Apartments, hotels and chalets close to the slopes', href = '/stays', sort_order = 60, updated_at = CURRENT_TIMESTAMP WHERE slug = 'stays';
+UPDATE categories SET name = 'Places', description = 'Restaurants, wellness and local essentials', href = '/places', sort_order = 70, updated_at = CURRENT_TIMESTAMP WHERE slug = 'places';
+UPDATE categories SET name = 'Instructors', description = 'Verified ski and snowboard coaches', href = '/instructors', sort_order = 10, updated_at = CURRENT_TIMESTAMP WHERE slug = 'instructors';

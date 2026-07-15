@@ -2,6 +2,11 @@
   text-decoration: none;
 }
 
+.home-page .service-card {
+  color: inherit;
+  text-decoration: none;
+}
+
 .home-page .faq-layout {
   grid-column: 1 / -1;
   grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
