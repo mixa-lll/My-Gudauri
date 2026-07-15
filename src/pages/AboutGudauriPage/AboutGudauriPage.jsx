@@ -46,6 +46,30 @@ export function AboutGudauriPage() {
             </div>
           </section>
 
+          <section className="about-trail-map" id="trail-map" aria-labelledby="trail-map-title">
+            <div className="about-trail-map__heading">
+              <p className="destination-eyebrow">Plan your ski day</p>
+              <div>
+                <h2 id="trail-map-title">Gudauri trail map</h2>
+                <p>See the main lifts, marked pistes, Kobi connection and mountain facilities in one overview.</p>
+              </div>
+            </div>
+            <figure>
+              <a href="/assets/about-gudauri/map-gudauri-ski-resort.jpg" target="_blank" rel="noreferrer" aria-label="Open the Gudauri trail map at full size">
+                <img
+                  src="/assets/about-gudauri/map-gudauri-ski-resort.jpg"
+                  alt="Gudauri ski resort trail map showing lifts, pistes, Kobi connection and mountain facilities"
+                  width="3499"
+                  height="3933"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span>Open full-size map ↗</span>
+              </a>
+              <figcaption>Use this map for orientation. Lift status, piste openings and patrol instructions can change with weather and always take priority.</figcaption>
+            </figure>
+          </section>
+
           <section className="about-practical">
             <div><p className="destination-eyebrow">Good to know</p><h2>Mountain essentials</h2></div>
             <div>

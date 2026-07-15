@@ -155,10 +155,78 @@
 }
 
 .about-zones,
+.about-trail-map,
 .about-practical,
 .about-sources,
 .about-related {
   margin-top: clamp(90px, 11vw, 160px);
+}
+
+.about-trail-map__heading {
+  display: grid;
+  grid-template-columns: 0.33fr 0.67fr;
+  gap: 30px;
+  align-items: end;
+}
+
+.about-trail-map__heading h2 {
+  margin: 0;
+  font: var(--fw-medium) clamp(44px, 6vw, 82px) / 0.96 var(--font-heading);
+  letter-spacing: -0.065em;
+}
+
+.about-trail-map__heading div > p {
+  max-width: 580px;
+  margin: 22px 0 0;
+  color: var(--grey-400);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.about-trail-map figure {
+  margin: 44px 0 0;
+}
+
+.about-trail-map figure > a {
+  position: relative;
+  padding: clamp(8px, 1.2vw, 16px);
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--grey-150);
+  border-radius: 30px;
+  background: var(--grey-white);
+  color: var(--grey-700);
+  text-decoration: none;
+}
+
+.about-trail-map img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 20px;
+}
+
+.about-trail-map figure > a span {
+  width: max-content;
+  min-height: 44px;
+  margin: 12px 6px 2px auto;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-card);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  backdrop-filter: blur(12px);
+}
+
+.about-trail-map figcaption {
+  max-width: 760px;
+  margin: 16px 0 0 auto;
+  color: var(--grey-400);
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .about-sources {
@@ -387,6 +455,7 @@
 
   .about-intro,
   .about-section-heading,
+  .about-trail-map__heading,
   .about-sources > div:first-child,
   .about-practical,
   .about-seasons {
@@ -407,6 +476,10 @@
 
   .about-sources a {
     min-height: 110px;
+  }
+
+  .about-trail-map figure {
+    margin-top: 30px;
   }
 }
 
@@ -432,5 +505,21 @@
 
   .about-practical article {
     grid-template-columns: 1fr;
+  }
+
+  .about-trail-map figure > a {
+    padding: 6px;
+    border-radius: 22px;
+  }
+
+  .about-trail-map img {
+    border-radius: 16px;
+  }
+
+  .about-trail-map figure > a span {
+    min-height: 38px;
+    margin: 10px 5px 1px auto;
+    padding: 0 13px;
+    font-size: 11px;
   }
 }
