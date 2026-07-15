@@ -25,7 +25,15 @@ export function AboutGudauriPage() {
         <Container className="destination-shell">
           <section className="about-hero">
             <div><p className="destination-eyebrow">Greater Caucasus · Georgia</p><h1>About<br />Gudauri</h1><p>A high-mountain resort with open alpine terrain, broad views and direct road access from Tbilisi.</p></div>
-            <MediaPlaceholder label="Greater Caucasus" />
+            <img
+              className="about-hero__image"
+              src="/assets/about-gudauri/gudauri-panorama.jpg"
+              alt="Panoramic winter view of Gudauri ski resort, lifts and the Greater Caucasus"
+              width="1536"
+              height="1024"
+              decoding="async"
+              fetchPriority="high"
+            />
             <div className="about-hero__stats"><span><strong>2,196 m</strong>Village altitude</span><span><strong>3,276 m</strong>Highest lift</span><span><strong>~120 km</strong>From Tbilisi</span></div>
           </section>
 

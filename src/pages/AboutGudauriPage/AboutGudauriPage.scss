@@ -45,8 +45,15 @@
   width: 116%;
   height: 63%;
   object-fit: cover;
-  object-position: center top;
-  filter: saturate(0.75);
+  object-position: center 62%;
+  filter: saturate(0.88);
+}
+
+@media (min-width: 761px) {
+  .about-hero__image {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 12%);
+  }
 }
 
 .about-hero > .media-placeholder .media-placeholder__copy {
