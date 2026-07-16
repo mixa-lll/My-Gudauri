@@ -27,6 +27,7 @@ All files populate `:root` variables, e.g.:
 6. Для заголовков маркетинговых и контентных секций использовать только `SectionHeading`; не дублировать `.section-heading__kicker` и `.section-heading__title` в стилях страниц.
 7. Канонические стили заголовка находятся рядом с компонентом в `src/components/UI/SectionHeading/SectionHeading.scss`. Файл `styles/section-heading.css` генерируется из него только для статических прототипов.
 8. Заголовки карточек, шагов формы и модальных окон остаются локальными компонентными вариантами и не подменяются секционным заголовком.
+9. Kicker — короткая sentence-case подпись, описывающая содержание секции. Не использовать призывы к действию или служебные команды вроде “Trust us” и “Refine selection”.
 
 ## Generated legacy compatibility
 
@@ -34,6 +35,8 @@ All files populate `:root` variables, e.g.:
 
 - `styles/tokens.css` из `src/styles/tokens/index.scss`;
 - `styles/section-heading.css` из React-компонента `SectionHeading`;
+- `styles/system.css` из `src/styles/SystemCompat.scss`;
+- `styles/design-3-profile.css` из `src/pages/ProfilePage/ProfileLegacy.scss`;
 - копии `scripts/shared-navbar.js` и `scripts/shared-faq.js` в `public/scripts/`.
 
 Эти файлы нужны только для HTML-прототипов из `pages/`. Их нельзя редактировать вручную.

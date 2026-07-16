@@ -8,15 +8,6 @@ body.is-scroll-locked {
   overflow: hidden;
 }
 
-.app-shell {
-  min-height: 100vh;
-  background: var(--grey-white);
-}
-
-.app-main {
-  padding-bottom: var(--space-900);
-}
-
 .grid-12 {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));

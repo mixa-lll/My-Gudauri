@@ -10,7 +10,7 @@
 }
 
 .catalog-nav-host {
-  width: 1388px;
+  width: var(--content-inner);
   margin: 16px auto 0;
 }
 

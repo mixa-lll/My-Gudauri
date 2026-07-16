@@ -2,7 +2,7 @@
 
 ## UI components (`src/components/UI`)
 - `Button`: unified button variants (`outline`, `dark`, `light`) and sizes.
-- `Pill`: reusable chips/tags with tone/size options.
+- `Pill`: reusable chips/tags with independent size and tone options. Use `sm` (28 px) inside cards, search suggestions and compact metadata; use `md` (30 px) for standalone labels; reserve `lg` for roomy controls. Available tones: `light`, `soft`, `outline`, `glass`, `dark`, and `accent`. It supports `as="button"` for interactive chips.
 - `Container`: global horizontal layout wrapper.
 - `SectionHeading`: единый блок kicker + title + optional description. Размеры: `lg` для крупных маркетинговых секций, `md` для контентных секций и FAQ, `sm` для компактных панелей. Выравнивание задаётся через `align`.
 

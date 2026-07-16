@@ -34,7 +34,7 @@
     const price = calculatePrice(hours);
     priceLink.textContent = `${price} gel`;
     hoursLabel.textContent = `${hours} hour`;
-    peopleLabel.textContent = `${people} peple`;
+    peopleLabel.textContent = `${people} people`;
 
     const toggles = [
       [hoursPlus, hours >= HOURS_MAX],
@@ -83,7 +83,7 @@
     };
 
     window.localStorage.setItem('bookingDraftV1', JSON.stringify(draft));
-    window.location.href = '/booking';
+    window.dispatchEvent(new CustomEvent('mygudauri:instructor-request', { detail: draft }));
   });
 
   sync();

@@ -4,7 +4,7 @@
 }
 
 .home-page {
-  max-width: 1468px;
+  max-width: var(--content-width);
   margin: 0 auto;
   background: var(--grey-50);
 }
@@ -181,7 +181,7 @@ body.menu-open {
 
 .service-grid {
   grid-column: 1 / -1;
-  width: min(100%, 1386px);
+  width: min(100%, var(--content-inner));
   margin: 0 auto;
   padding: 44px 0;
   display: grid;

@@ -51,19 +51,19 @@ body.is-gallery-open {
 
 .profile-gallery__header > div > p {
   color: rgba(255, 255, 255, 0.5);
-  font: 500 12px / 1.2 var(--font-body);
+  font: var(--fw-medium) 12px / 1.2 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .profile-gallery__header h2 {
   margin-top: 3px;
-  font: 550 20px / 1.1 var(--font-heading);
+  font: var(--fw-medium) 20px / 1.1 var(--font-heading);
 }
 
 .profile-gallery__counter {
   color: rgba(255, 255, 255, 0.62);
-  font: 500 14px / 1 var(--font-body);
+  font: var(--fw-medium) 14px / 1 var(--font-body);
 }
 
 .profile-gallery__close,
@@ -80,7 +80,7 @@ body.is-gallery-open {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  font: 300 28px / 1 var(--font-body);
+  font: var(--fw-regular) 28px / 1 var(--font-body);
 }
 
 .profile-gallery__stage {

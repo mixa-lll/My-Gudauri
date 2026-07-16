@@ -61,6 +61,14 @@ SELECT id, 'Private lessons', 3 FROM instructors;
 INSERT INTO instructor_tags (instructor_id, label, sort_order)
 SELECT id, 'Confidence training', 4 FROM instructors;
 
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Technique', 10 FROM instructors WHERE slug IN ('mikhail', 'oleg', 'nino', 'levan');
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Carving', 11 FROM instructors WHERE slug IN ('mikhail', 'nino');
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Freeride', 11 FROM instructors WHERE slug IN ('oleg', 'levan');
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'First lessons', 10 FROM instructors WHERE slug IN ('alex-red', 'andrey', 'giorgi', 'mari');
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Kids & families', 11 FROM instructors WHERE slug IN ('andrey', 'mari');
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Kids lessons', 11 FROM instructors WHERE slug IN ('alex-red', 'giorgi');
+INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Freestyle', 12 FROM instructors WHERE slug = 'giorgi';
+
 INSERT INTO instructor_media (instructor_id, media_type, url, alt, sort_order, is_featured)
 SELECT id, 'image', '/assets/design-3/hero-main.png', 'Instructor on a Gudauri ski slope', 0, 1 FROM instructors WHERE slug = 'mikhail';
 INSERT INTO instructor_media (instructor_id, media_type, url, alt, sort_order) SELECT id, 'image', '/assets/design-3/media-1.jpg', 'Snowboard students on a slope', 1 FROM instructors WHERE slug = 'mikhail';

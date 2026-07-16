@@ -1,5 +1,481 @@
+.home-page-body,
+.home-page {
+  background: var(--grey-50);
+}
+
+.home-page {
+  width: 100%;
+  margin-inline: auto;
+}
+
 .home-page .outline-btn {
   text-decoration: none;
+}
+
+.home-page .hero-wrap {
+  position: relative;
+  padding: 14px 0 0;
+  overflow: hidden;
+  border-radius: 0 0 32px 32px;
+  background: #dbe5ef;
+  z-index: 7;
+}
+
+.home-page .hero-grid {
+  position: relative;
+  min-height: min(860px, calc(100svh - 20px));
+}
+
+.home-page > .site-nav-host--hero {
+  width: min(var(--content-inner), calc(100% - (var(--layout-margin) * 2)));
+  margin: 0;
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+.home-page .site-nav-host--hero .site-nav {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.83);
+  box-shadow: 0 12px 42px rgba(36, 58, 80, 0.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.08);
+  backdrop-filter: blur(20px) saturate(1.08);
+}
+
+.home-page .hero-inner {
+  position: relative;
+  grid-column: 1 / -1;
+  width: 100vw;
+  min-height: min(860px, calc(100svh - 20px));
+  margin-left: calc(50% - 50vw);
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: #dfe8f1;
+}
+
+.home-page .hero-inner::before,
+.home-page .hero-inner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.home-page .hero-inner::before {
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(243, 247, 251, 0.32) 0%, rgba(234, 241, 248, 0.06) 34%, rgba(214, 225, 237, 0.08) 70%, rgba(222, 232, 242, 0.28) 100%),
+    linear-gradient(90deg, rgba(228, 236, 245, 0.16), transparent 26%, transparent 74%, rgba(228, 236, 245, 0.13));
+}
+
+.home-page .hero-inner::after {
+  z-index: 2;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.24) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.24) 1px, transparent 1px);
+  background-size: 9.1% 100%, 100% 25%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 6%, #000 32%, #000 82%, transparent 98%);
+  mask-image: linear-gradient(to bottom, transparent 6%, #000 32%, #000 82%, transparent 98%);
+}
+
+.home-page .hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.home-page .hero-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 50%;
+  filter: saturate(0.86) contrast(0.96) brightness(1.015);
+  transform: scale(1.012);
+}
+
+.home-page .hero-content {
+  position: relative;
+  z-index: 4;
+  width: min(940px, calc(100% - 36px));
+  margin: 0 auto;
+  padding-top: clamp(154px, 21vh, 206px);
+  text-align: center;
+}
+
+.home-page .hero-meta-pills {
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.home-page .hero-title-main {
+  margin: 0 0 14px;
+  color: #081c2d;
+  font-family: var(--font-heading);
+  font-size: clamp(70px, 9.1vw, 134px);
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.085em;
+  line-height: 0.82;
+  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.38);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72),
+    0 0 30px rgba(255, 255, 255, 0.62),
+    0 10px 34px rgba(8, 28, 45, 0.08);
+}
+
+.home-page .hero-subtitle {
+  max-width: 560px;
+  margin: 0 auto;
+  color: rgba(7, 27, 43, 0.92);
+  font-size: clamp(17px, 1.35vw, 21px);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.96),
+    0 0 18px rgba(255, 255, 255, 0.94),
+    0 0 34px rgba(255, 255, 255, 0.8);
+}
+
+.home-page .hero-about-link {
+  position: absolute;
+  z-index: 4;
+  bottom: 22px;
+  right: max(var(--layout-margin), 30px);
+  min-height: 48px;
+  padding: 7px 10px 7px 7px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 16px;
+  background: rgba(247, 250, 253, 0.52);
+  box-shadow: 0 10px 28px rgba(25, 46, 65, 0.08);
+  color: #142d41;
+  text-align: left;
+  text-decoration: none;
+  -webkit-backdrop-filter: blur(13px) saturate(1.08);
+  backdrop-filter: blur(13px) saturate(1.08);
+  transition:
+    background var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.home-page .hero-about-link:hover,
+.home-page .hero-about-link:focus-visible {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.72);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.home-page .hero-about-link__icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.home-page .hero-about-link__icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.home-page .hero-about-link__copy {
+  display: grid;
+  gap: 2px;
+}
+
+.home-page .hero-about-link__copy strong {
+  font: var(--fw-semibold) 12px / 1.1 var(--font-body);
+}
+
+.home-page .hero-about-link__copy small {
+  color: rgba(20, 45, 65, 0.66);
+  font: var(--fw-medium) 10px / 1.1 var(--font-body);
+}
+
+.home-page .hero-about-link__arrow {
+  margin-left: 2px;
+  color: rgba(20, 45, 65, 0.62);
+  font-size: 13px;
+}
+
+.home-page .hero-content .home-hero-search {
+  width: min(900px, calc(100% - 24px));
+  margin-top: clamp(28px, 3.6vh, 38px);
+}
+
+.home-page .hero-content .home-hero-search__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.home-page .hero-content .home-hero-search__field {
+  min-height: 56px;
+  padding: 0 11px 0 19px;
+  gap: 11px;
+  border-color: rgba(45, 66, 85, 0.16);
+  border-radius: 18px;
+  background: rgba(252, 253, 254, 0.88);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.76) inset,
+    0 12px 32px rgba(31, 54, 76, 0.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.05);
+  backdrop-filter: blur(20px) saturate(1.05);
+}
+
+.home-page .hero-content .home-hero-search__field:focus-within {
+  border-color: rgba(22, 44, 64, 0.42);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.82) inset,
+    0 15px 38px rgba(31, 54, 76, 0.13);
+  transform: translateY(-1px);
+}
+
+.home-page .hero-content .home-hero-search__field svg {
+  width: 20px;
+  height: 20px;
+  stroke: #163044;
+  stroke-width: 1.7;
+}
+
+.home-page .hero-content .home-hero-search__field input {
+  color: #10283b;
+  font-size: 15px;
+  font-weight: var(--fw-medium);
+}
+
+.home-page .hero-content .home-hero-search__field input::placeholder {
+  color: rgba(36, 57, 75, 0.52);
+}
+
+.home-page .hero-content .home-hero-search__field kbd {
+  padding: 6px 8px;
+  border-color: rgba(32, 52, 70, 0.13);
+  border-radius: 8px;
+  background: rgba(245, 247, 249, 0.72);
+  color: rgba(32, 52, 70, 0.52);
+}
+
+.home-page .service-grid-wrap {
+  position: relative;
+  overflow: hidden;
+  margin-top: -28px;
+  border-top: 0;
+  border-radius: 0 0 30px 30px;
+  z-index: 1;
+  background: var(--grey-50);
+}
+
+.home-page .service-grid {
+  grid-column: 1 / -1;
+  width: min(100%, var(--content-inner));
+  margin-inline: auto;
+  padding: clamp(64px, 7vw, 104px) 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: auto repeat(3, 280px);
+  gap: var(--layout-gutter);
+}
+
+.home-page .service-grid-intro {
+  grid-column: 1 / -1;
+  min-height: 190px;
+  padding-bottom: clamp(32px, 5vw, 72px);
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  gap: var(--layout-gutter);
+  align-items: end;
+}
+
+.home-page .service-grid-intro > .section-heading__kicker {
+  align-self: start;
+  margin-top: 8px;
+}
+
+.home-page .service-grid-intro > .section-heading__title {
+  grid-column: 2;
+}
+
+.home-page .service-grid-intro > .section-heading__title span {
+  color: var(--grey-300);
+}
+
+.home-page .service-grid-intro > .section-heading__description {
+  grid-column: 3;
+  max-width: 330px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.home-page .service-card {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(32, 33, 30, 0.06);
+  border-radius: var(--radius-lg);
+  background: var(--grey-white);
+  box-shadow: none;
+  transform: translateZ(0);
+  transition:
+    transform var(--motion-duration-slow) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.home-page .service-card.instructors { grid-column: 1; grid-row: 2 / span 2; height: 580px; background: var(--blue-50); }
+.home-page .service-card.tours { grid-column: 2; grid-row: 2; background: var(--sand-50); }
+.home-page .service-card.rental { grid-column: 3; grid-row: 2; background: var(--olive-50); }
+.home-page .service-card.places { grid-column: 2 / span 2; grid-row: 3; background: var(--grey-white); }
+.home-page .service-card.services { grid-column: 1; grid-row: 4; background: var(--rad-100); }
+.home-page .service-card.transfer { grid-column: 2; grid-row: 4; background: var(--grey-white); }
+.home-page .service-card.real-estate { grid-column: 3; grid-row: 4; background: var(--grey-700); }
+
+.home-page .service-card:hover {
+  border-color: rgba(32, 33, 30, 0.14);
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+}
+
+.home-page .service-card h2,
+.home-page .service-card p {
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+}
+
+.home-page .service-card h2 {
+  top: 22px;
+  left: 24px;
+  color: var(--grey-600);
+  font: var(--fw-semibold) clamp(26px, 2.3vw, 36px) / 1 var(--font-heading);
+  letter-spacing: -0.045em;
+}
+
+.home-page .service-card p {
+  top: 66px;
+  left: 25px;
+  width: min(58%, 300px);
+  color: var(--grey-400);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.home-page .service-card.real-estate h2 { color: var(--grey-white); }
+.home-page .service-card.real-estate p { color: var(--grey-300); }
+
+.home-page .service-art {
+  position: absolute;
+  pointer-events: none;
+  filter: saturate(0.88);
+  transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
+}
+
+.home-page .service-card:hover .service-art { transform: scale(1.025); }
+.home-page .service-art.instructors-art { right: -12px; top: 94px; width: 86%; height: auto; }
+.home-page .service-art.tours-art { right: -30px; top: 54px; width: 88%; height: auto; }
+.home-page .service-art.rental-art { right: -42px; top: 34px; width: 78%; height: auto; }
+.home-page .service-art.places-art { right: -15px; top: 14px; width: 58%; height: auto; }
+.home-page .service-art.services-art { right: -18px; top: 62px; width: 54%; height: auto; }
+.home-page .service-art.transfer-art { right: -20px; top: 78px; width: 67%; height: auto; }
+
+.home-page .tags-row {
+  position: absolute;
+  z-index: 3;
+  left: 20px;
+  bottom: 20px;
+  max-width: calc(100% - 40px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.home-page .instructors-block {
+  padding: clamp(88px, 9vw, 140px) 0;
+}
+
+.home-page .instructors-layout {
+  row-gap: clamp(40px, 6vw, 80px);
+}
+
+.home-page .instructors-heading,
+.home-page .instructors-grid {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.home-page .instructors-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--layout-gutter);
+}
+
+.home-page .cta-card,
+.home-page .instructors-grid > .listing-card {
+  min-height: 420px;
+  border: 1px solid var(--grey-150);
+  border-radius: var(--radius-lg);
+  background: var(--grey-white);
+}
+
+.home-page .cta-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.home-page .cta-card p {
+  margin: 0;
+  font: var(--fw-regular) 22px / 1.18 var(--font-heading);
+  letter-spacing: -0.025em;
+}
+
+.home-page .outline-btn {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 18px;
+  padding-inline: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--grey-600);
+  border-radius: var(--radius-sm);
+  background: var(--grey-white);
+  color: var(--grey-600);
+  font: var(--fw-regular) var(--text-md) / var(--lh-md-inline) var(--font-body);
+}
+
+.home-page .faq-block {
+  padding: clamp(80px, 9vw, 140px) 0;
 }
 
 .home-page .service-card {
@@ -17,8 +493,161 @@
   background: var(--grey-white);
 }
 
+@media (max-width: 1100px) {
+  .home-page .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto repeat(4, 260px);
+  }
+
+  .home-page .service-grid-intro {
+    grid-template-columns: 0.7fr 1.3fr;
+  }
+
+  .home-page .service-grid-intro > .section-heading__description {
+    grid-column: 2;
+  }
+
+  .home-page .service-card.instructors { grid-column: 1; grid-row: 2 / span 2; height: 540px; }
+  .home-page .service-card.tours { grid-column: 2; grid-row: 2; }
+  .home-page .service-card.rental { grid-column: 2; grid-row: 3; }
+  .home-page .service-card.places { grid-column: 1 / -1; grid-row: 4; }
+  .home-page .service-card.services { grid-column: 1; grid-row: 5; }
+  .home-page .service-card.transfer { grid-column: 2; grid-row: 5; }
+  .home-page .service-card.real-estate { grid-column: 1 / -1; grid-row: 6; }
+
+  .home-page .instructors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 820px) {
+  .home-page > .site-nav-host--hero {
+    width: calc(100% - 24px);
+    top: 10px;
+  }
+
+  .home-page .hero-wrap {
+    padding-top: 10px;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .home-page .hero-grid,
+  .home-page .hero-inner {
+    min-height: min(740px, calc(100svh - 10px));
+  }
+
+  .home-page .hero-content {
+    width: calc(100% - 24px);
+    padding-top: clamp(130px, 19vh, 170px);
+  }
+
+  .home-page .hero-title-main {
+    font-size: clamp(50px, 14vw, 72px);
+    letter-spacing: -0.075em;
+  }
+
+  .home-page .hero-subtitle {
+    max-width: 330px;
+    padding: 0;
+    font-size: 15px;
+  }
+
+  .home-page .hero-media img {
+    object-position: 52% 50%;
+  }
+
+  .home-page .hero-content .home-hero-search {
+    width: 100%;
+    margin-top: 28px;
+  }
+
+  .home-page .hero-content .home-hero-search__field {
+    min-height: 54px;
+    border-radius: 16px;
+  }
+
+  .home-page .hero-about-link {
+    bottom: 20px;
+    right: 18px;
+  }
+
+  .home-page .service-grid-wrap {
+    margin-top: -22px;
+  }
+
+  .home-page .service-grid {
+    padding: 72px 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 14px;
+  }
+
+  .home-page .service-grid-intro {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding-bottom: 42px;
+  }
+
+  .home-page .service-grid-intro > .section-heading__title,
+  .home-page .service-grid-intro > .section-heading__description {
+    grid-column: 1;
+  }
+
+  .home-page .service-card.instructors,
+  .home-page .service-card.tours,
+  .home-page .service-card.rental,
+  .home-page .service-card.places,
+  .home-page .service-card.services,
+  .home-page .service-card.transfer,
+  .home-page .service-card.real-estate {
+    grid-column: 1;
+    grid-row: auto;
+    height: 280px;
+  }
+
+  .home-page .service-art.instructors-art {
+    width: 64%;
+    top: 40px;
+  }
+
+  .home-page .instructors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-page .cta-card {
+    min-height: 260px;
+  }
+
   .home-page .faq-layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-page .service-grid {
+    padding-block: 56px;
+  }
+
+  .home-page .service-grid-intro {
+    padding-bottom: 32px;
+  }
+
+  .home-page .hero-grid,
+  .home-page .hero-inner {
+    min-height: 680px;
+  }
+
+  .home-page .hero-content {
+    padding-top: 122px;
+  }
+
+  .home-page .hero-title-main {
+    font-size: clamp(44px, 14vw, 62px);
+  }
+
+  .home-page .hero-about-link__copy small,
+  .home-page .hero-about-link__arrow {
+    display: none;
   }
 }

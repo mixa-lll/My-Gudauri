@@ -24,7 +24,7 @@
 .calc-banner__row p {
   margin: 0;
   max-width: 12ch;
-  font: 400 clamp(28px, 3vw, 42px) / 0.98 var(--font-heading);
+  font: var(--fw-regular) clamp(28px, 3vw, 42px) / 0.98 var(--font-heading);
   letter-spacing: -0.04em;
 }
 
@@ -36,12 +36,12 @@
   padding: 0 var(--pill-xl-w);
   display: inline-flex;
   align-items: center;
-  font: 400 clamp(28px, 2.5vw, 38px) / 1 var(--font-heading);
+  font: var(--fw-regular) clamp(28px, 2.5vw, 38px) / 1 var(--font-heading);
 }
 
 .calc-banner small {
   margin-top: 18px;
-  font: 400 var(--text-md) / var(--lh-md) var(--font-body);
+  font: var(--fw-regular) var(--text-md) / var(--lh-md) var(--font-body);
 }
 
 .calc-banner__trigger {
@@ -109,7 +109,7 @@
 
 .calc-modal__head h3 {
   margin: 0;
-  font: 400 var(--text-h4) / 36px var(--font-heading);
+  font: var(--fw-regular) var(--text-h4) / 36px var(--font-heading);
 }
 
 .calc-modal__close {
@@ -134,7 +134,7 @@
 .calc-modal__result-head small {
   margin: 0;
   color: var(--grey-500);
-  font: 400 var(--text-sm) / var(--lh-sm) var(--font-body);
+  font: var(--fw-regular) var(--text-sm) / var(--lh-sm) var(--font-body);
 }
 
 .calc-modal__value {
@@ -149,13 +149,13 @@
 }
 
 .calc-modal__value b {
-  font: 400 64px / 64px var(--font-heading);
+  font: var(--fw-regular) 64px / 64px var(--font-heading);
 }
 
 .calc-modal__value span {
   margin-top: 10px;
   color: var(--grey-300);
-  font: 400 32px / 36px var(--font-heading);
+  font: var(--fw-regular) 32px / 36px var(--font-heading);
 }
 
 .calc-modal__stepper {
@@ -180,7 +180,7 @@
 }
 
 .calc-modal__symbol {
-  font: 400 32px / 32px var(--font-heading);
+  font: var(--fw-regular) 32px / 32px var(--font-heading);
   text-align: center;
 }
 
@@ -217,7 +217,7 @@
   display: flex;
   align-items: center;
   padding: 0 var(--space-350);
-  font: 400 64px / 64px var(--font-heading);
+  font: var(--fw-regular) 64px / 64px var(--font-heading);
 }
 
 .calc-modal__currency {
@@ -233,7 +233,7 @@
   border: 0;
   background: transparent;
   color: var(--grey-white);
-  font: 400 var(--text-h5) / 16px var(--font-heading);
+  font: var(--fw-regular) var(--text-h5) / 16px var(--font-heading);
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
@@ -248,7 +248,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-150);
-  font: 400 var(--text-sm) / var(--lh-sm) var(--font-body);
+  font: var(--fw-regular) var(--text-sm) / var(--lh-sm) var(--font-body);
 }
 
 .calc-modal__note img {

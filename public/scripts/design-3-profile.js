@@ -34,7 +34,7 @@
     const price = calculatePrice(hours);
     priceLink.textContent = `${price} gel`;
     hoursLabel.textContent = `${hours} hour`;
-    peopleLabel.textContent = `${people} peple`;
+    peopleLabel.textContent = `${people} people`;
 
     const toggles = [
       [hoursPlus, hours >= HOURS_MAX],

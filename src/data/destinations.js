@@ -1,4 +1,6 @@
-const SHARED_FAQ = [
+import { INSTRUCTORS } from './instructors';
+
+const INSTRUCTOR_FAQ = [
   {
     question: 'How does booking work?',
     answer: 'Send a request with your preferred date and details. A local booking manager checks availability before you receive a secure payment link.'
@@ -13,14 +15,50 @@ const SHARED_FAQ = [
   }
 ];
 
+const BROWSE_FAQ = [
+  {
+    question: 'How do availability inquiries work?',
+    answer: 'Send the local team an email from the offer page. They will check the current details with the provider and explain the available next steps.'
+  },
+  {
+    question: 'Are the listed prices final?',
+    answer: 'Prices are useful starting points. Seasonal dates, group size and custom requirements can change the final quote, which is confirmed directly before any arrangement.'
+  },
+  {
+    question: 'Can I book these offers online?',
+    answer: 'Not yet. Online booking currently supports instructor lessons only; other sections are curated browse-and-inquiry guides.'
+  }
+];
+
 const image = (name) => `/assets/design-1/${name}`;
 
 export const DESTINATIONS = {
+  instructors: {
+    slug: 'instructors',
+    navTitle: 'Instructors',
+    title: 'Instructors',
+    kicker: 'Verified local experts',
+    description: 'Compare teaching styles, languages and experience to find the right instructor for your time in Gudauri.',
+    countLabel: 'instructors',
+    promise: 'One clear lesson rate with flexible scheduling',
+    promiseNote: 'Lesson hours can be split across several days',
+    startingPrice: 'from 345 GEL/hour',
+    accent: 'blue',
+    benefitsTitle: 'Why choose My Gudauri instructors',
+    benefits: [
+      ['Verified professionals', 'Every instructor is reviewed before joining the platform.'],
+      ['Transparent pricing', 'The same official rate for everyone, with no hidden markups.'],
+      ['Real profiles', 'Compare experience, languages, reviews and teaching style.'],
+      ['Flexible scheduling', 'Split lesson hours across days in a way that suits you.']
+    ],
+    faq: INSTRUCTOR_FAQ,
+    items: INSTRUCTORS
+  },
   activities: {
     slug: 'activities',
     navTitle: 'Activities',
     title: 'Activities',
-    eyebrow: 'Mountain experiences',
+    kicker: 'Mountain experiences',
     description: 'Discover Gudauri beyond the piste with trusted local guides, clear itineraries and equipment included where you need it.',
     tabs: ['Winter', 'Excursions', 'Summer'],
     filters: ['Activity', 'Duration', 'Format'],
@@ -33,7 +71,7 @@ export const DESTINATIONS = {
     benefitsTitle: 'Why explore with My Gudauri',
     benefits: [
       ['Local guides', 'Routes led by people who know the mountain and current conditions.'],
-      ['Clear itineraries', 'Duration, difficulty and what to bring are explained before booking.'],
+      ['Clear itineraries', 'Duration, difficulty and what to bring are explained before an inquiry.'],
       ['Safety first', 'Verified providers and the right equipment for every activity.'],
       ['Flexible formats', 'Choose a private experience or join a small group.']
     ],
@@ -55,7 +93,7 @@ export const DESTINATIONS = {
     slug: 'rental',
     navTitle: 'Rental',
     title: 'Rental',
-    eyebrow: 'Ready for the mountain',
+    kicker: 'Mountain equipment',
     description: 'Well-maintained skis, snowboards and safety equipment, fitted locally and delivered close to the slopes.',
     tabs: ['Ski', 'Snowboard', 'Safety'],
     filters: ['Equipment', 'Level', 'Size'],
@@ -70,7 +108,7 @@ export const DESTINATIONS = {
     faq: [
       { question: 'Is a deposit required?', answer: 'A photo ID is normally enough. Any special deposit requirement is shown before confirmation.' },
       { question: 'What if the size does not fit?', answer: 'Message support and the rental team will arrange a free size swap, subject to availability.' },
-      { question: 'Where do I return the equipment?', answer: 'Choose a convenient return point during booking. Slope-side collection is available for selected packages.' }
+      { question: 'Where do I return the equipment?', answer: 'Ask about a convenient return point when you inquire. Slope-side collection is available for selected packages.' }
     ],
     items: [
       { slug: 'performance-ski-set', name: 'Performance ski set', category: 'Ski', price: '75 GEL', priceSuffix: 'per day', rating: '4.9', reviews: '98 reviews', tags: ['Intermediate+', 'Boots', 'Poles'], image: image('mosaic/rental-1-135-upd.png'), facts: [['Level', 'Intermediate+'], ['Sizes', '150–185 cm'], ['Boots', 'EU 36–48'], ['Service', 'Daily']], included: ['Skis', 'Boots', 'Poles', 'Slope delivery'], description: 'Responsive all-mountain skis for confident piste skiing and mixed conditions around Gudauri.' },
@@ -85,7 +123,7 @@ export const DESTINATIONS = {
     slug: 'transfers',
     navTitle: 'Transfers',
     title: 'Transfers',
-    eyebrow: 'Door to mountain',
+    kicker: 'Routes to Gudauri',
     description: 'Reliable airport and regional transfers with winter-ready vehicles, fixed prices and drivers who know the mountain road.',
     tabs: ['From airport', 'Around the region'],
     filters: ['Route', 'Vehicle', 'Passengers'],
@@ -98,7 +136,7 @@ export const DESTINATIONS = {
     benefitsTitle: 'Why transfer with My Gudauri',
     benefits: [['Meet & greet', 'Your driver waits in arrivals with a name sign.'], ['Winter-ready cars', 'All vehicles are prepared for the mountain road.'], ['Fixed prices', 'No surcharge for luggage or a delayed flight.'], ['Child seats', 'Available free of charge when requested in advance.']],
     faq: [
-      { question: 'What if my flight is delayed?', answer: 'We track your flight and adjust the pickup time automatically without creating a new booking.' },
+      { question: 'What if my flight is delayed?', answer: 'After a provider confirms your transfer, they will explain how pickup timing is adjusted for flight delays.' },
       { question: 'How much luggage can I bring?', answer: 'Standard luggage and ski bags are included. Choose a minivan for larger groups or extra equipment.' },
       { question: 'Are child seats available?', answer: 'Yes. Add the child age to your request and we will provide the correct seat free of charge.' }
     ],
@@ -112,12 +150,12 @@ export const DESTINATIONS = {
     ]
   },
   services: {
-    slug: 'services', navTitle: 'Services', title: 'Services', eyebrow: 'Trusted local professionals',
+    slug: 'services', navTitle: 'Services', title: 'Services', kicker: 'Trusted local professionals',
     description: 'Photography, childcare, wellness and practical help from independent Gudauri professionals with clear packages.',
     tabs: ['Photo & video', 'Personal', 'Events'], filters: ['Service', 'Availability', 'Language'], countLabel: 'professionals',
     promise: 'Choose a ready-made package or request a custom plan', promiseNote: 'Every provider is reviewed before joining the platform', startingPrice: 'from 80 GEL',
-    heroImage: image('mosaic/services-1-107.png'), accent: 'rad', benefitsTitle: 'Why book local professionals',
-    benefits: [['Verified profiles', 'Experience and portfolios are reviewed before publishing.'], ['Clear packages', 'Compare what is included without hidden add-ons.'], ['Local knowledge', 'Professionals know the best locations and suppliers.'], ['Human support', 'A booking manager helps coordinate every request.']], faq: SHARED_FAQ,
+    heroImage: image('mosaic/services-1-107.png'), accent: 'rad', benefitsTitle: 'Why choose local professionals',
+    benefits: [['Verified profiles', 'Experience and portfolios are reviewed before publishing.'], ['Clear packages', 'Compare what is included without hidden add-ons.'], ['Local knowledge', 'Professionals know the best locations and suppliers.'], ['Human support', 'The local team helps coordinate every inquiry.']], faq: BROWSE_FAQ,
     items: [
       { slug: 'mountain-photo-session', name: 'Mountain photo session', category: 'Photography', price: '250 GEL', priceSuffix: 'per session', rating: '5.0', reviews: '48 reviews', tags: ['90 min', '30 photos', 'Gudauri'], image: image('mosaic/services-1-107.png'), facts: [['Duration', '90 min'], ['Photos', '30 edited'], ['Delivery', '5 days'], ['Languages', 'EN · RU']], included: ['Location planning', '90 min shoot', '30 edited photos', 'Private gallery'], description: 'A relaxed portrait or family session on the slopes with help choosing the best light and location.' },
       { slug: 'ski-video-reel', name: 'Ski video reel', category: 'Video', price: '390 GEL', priceSuffix: 'per session', rating: '4.9', reviews: '36 reviews', tags: ['2 hours', 'Vertical reel', 'Drone option'], image: image('mosaic/tours-riders-1-117.png'), facts: [['Duration', '2 hours'], ['Result', '45–60 sec'], ['Delivery', '7 days'], ['Format', '4K']], included: ['Route planning', 'Slope filming', 'Edited reel', 'Music license'], description: 'Dynamic follow-cam filming and a polished vertical reel from your best runs.' },
@@ -128,12 +166,12 @@ export const DESTINATIONS = {
     ]
   },
   stays: {
-    slug: 'stays', navTitle: 'Stays', title: 'Stays', eyebrow: 'Stay close to the snow',
-    description: 'Apartments, hotels and chalets with honest location details, useful amenities and local booking support.',
+    slug: 'stays', navTitle: 'Stays', title: 'Stays', kicker: 'Slope-side stays',
+    description: 'Apartments, hotels and chalets with honest location details, useful amenities and local inquiry support.',
     tabs: ['Apartments', 'Hotels', 'Chalets'], filters: ['Dates', 'Guests', 'Location'], countLabel: 'places to stay',
-    promise: 'Real location details and no surprise booking fees', promiseNote: 'Availability is confirmed with the host before payment', startingPrice: 'from 180 GEL/night',
+    promise: 'Real location details and clear starting prices', promiseNote: 'Ask the local team to confirm availability with the host', startingPrice: 'from 180 GEL/night',
     heroImage: image('service-real-estate.png'), accent: 'blue', benefitsTitle: 'Book your Gudauri stay with confidence',
-    benefits: [['Verified listings', 'Photos and essential property details are reviewed.'], ['Slope distance', 'See the real walk or ski route to the nearest lift.'], ['Host confirmation', 'Availability is checked before you are asked to pay.'], ['Local support', 'Help is nearby throughout your stay.']], faq: SHARED_FAQ,
+    benefits: [['Verified listings', 'Photos and essential property details are reviewed.'], ['Slope distance', 'See the real walk or ski route to the nearest lift.'], ['Host confirmation', 'Availability is checked directly with the host.'], ['Local support', 'Help is nearby throughout your stay.']], faq: BROWSE_FAQ,
     items: [
       { slug: 'four-seasons-loft', name: 'Four Seasons slope loft', category: 'New Gudauri', price: '260 GEL', priceSuffix: 'per night', rating: '4.9', reviews: '72 stays', tags: ['4 guests', 'Ski-in', 'Mountain view'], image: image('service-real-estate.png'), facts: [['Guests', '4'], ['Beds', '2'], ['Size', '42 m²'], ['Lift', '120 m']], included: ['Kitchen', 'Ski storage', 'Wi-Fi', 'Mountain view'], description: 'A bright, compact loft with a balcony and easy access to the GoodAura gondola.' },
       { slug: 'neo-family-apartment', name: 'NEO family apartment', category: 'New Gudauri', price: '310 GEL', priceSuffix: 'per night', rating: '4.8', reviews: '58 stays', tags: ['6 guests', '2 bedrooms', 'Gondola'], image: image('mosaic/places-1-154.png'), facts: [['Guests', '6'], ['Bedrooms', '2'], ['Size', '68 m²'], ['Lift', '180 m']], included: ['Full kitchen', 'Washer', 'Ski storage', 'Parking'], description: 'A comfortable two-bedroom apartment for families, minutes from the gondola and restaurants.' },
@@ -144,12 +182,12 @@ export const DESTINATIONS = {
     ]
   },
   places: {
-    slug: 'places', navTitle: 'Places', title: 'Places', eyebrow: 'Eat, relax, discover',
+    slug: 'places', navTitle: 'Places', title: 'Places', kicker: 'Food, wellness and essentials',
     description: 'A practical local guide to restaurants, bars, spas, shops and useful places around Gudauri.',
     tabs: ['Food & drink', 'Wellness', 'Useful'], filters: ['Category', 'Area', 'Open now'], countLabel: 'local places',
     promise: 'Current opening hours and honest local recommendations', promiseNote: 'Table and spa requests are confirmed directly with the venue', startingPrice: 'local favourites',
     heroImage: image('mosaic/places-1-154.png'), accent: 'olive', benefitsTitle: 'A useful guide, curated locally',
-    benefits: [['Current details', 'Seasonal opening hours are checked regularly.'], ['Useful filters', 'Find what is open, nearby and right for your group.'], ['Local picks', 'A considered edit rather than an endless directory.'], ['Booking help', 'Request a restaurant table or spa visit in one place.']], faq: SHARED_FAQ,
+    benefits: [['Current details', 'Seasonal opening hours are checked regularly.'], ['Useful filters', 'Find what is open, nearby and right for your group.'], ['Local picks', 'A considered edit rather than an endless directory.'], ['Inquiry help', 'Ask the local team about a restaurant table or spa visit.']], faq: BROWSE_FAQ,
     items: [
       { slug: 'drunk-cherry', name: 'Drunk Cherry', category: 'Restaurant · Bar', price: '60 GEL', priceSuffix: 'average spend', rating: '4.8', reviews: '214 reviews', tags: ['Open late', 'Georgian', 'Cocktails'], image: image('mosaic/places-1-154.png'), facts: [['Cuisine', 'Georgian'], ['Hours', '12:00–02:00'], ['Area', 'New Gudauri'], ['Spend', '~60 GEL']], included: ['Vegetarian options', 'Cocktail bar', 'Terrace', 'Table request'], description: 'Modern Georgian comfort food, a lively bar and a convenient location in New Gudauri.' },
       { slug: 'black-dog-bar', name: 'Black Dog Bar', category: 'Bar', price: '45 GEL', priceSuffix: 'average spend', rating: '4.7', reviews: '173 reviews', tags: ['Après-ski', 'Burgers', 'Live DJ'], image: image('service-places.png'), facts: [['Style', 'Après-ski'], ['Hours', '16:00–02:00'], ['Area', 'New Gudauri'], ['Spend', '~45 GEL']], included: ['Food menu', 'Cocktails', 'DJ nights', 'Walk-ins'], description: 'A relaxed après-ski bar for burgers, drinks and late mountain evenings.' },

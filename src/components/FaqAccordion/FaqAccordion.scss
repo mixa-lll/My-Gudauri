@@ -72,7 +72,7 @@
 
 .faq__question {
   color: var(--grey-600);
-  font: 400 var(--text-md) / var(--lh-md) var(--font-body);
+  font: var(--fw-regular) var(--text-md) / var(--lh-md) var(--font-body);
 }
 
 .faq__answer-wrap {
@@ -87,7 +87,7 @@
   margin: 6px 0 22px 40px;
   overflow: hidden;
   color: var(--grey-500);
-  font: 400 var(--text-md) / var(--lh-md) var(--font-body);
+  font: var(--fw-regular) var(--text-md) / var(--lh-md) var(--font-body);
   max-width: 66ch;
   opacity: 0;
   transform: translateY(-2px);

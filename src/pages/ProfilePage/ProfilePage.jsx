@@ -3,13 +3,14 @@ import { createPortal } from 'react-dom';
 import { Link, useParams } from 'react-router-dom';
 import legacyPageHtml from '../../../pages/design-3-profile.html?raw';
 import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
+import { LazyInstructorRequestDialog } from '../../components/InstructorRequestDialog/LazyInstructorRequestDialog';
 import { ProfileGallery } from '../../components/ProfileGallery/ProfileGallery';
 import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
 import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructor } from '../../services/instructorsApi';
 import { renderInstructorProfile } from '../../utils/renderInstructorProfile';
-import '../../../styles/design-3-profile.css';
+import './ProfileLegacy.scss';
 import './ProfilePage.scss';
 
 const LEGACY_SCRIPTS = [
@@ -52,6 +53,7 @@ export function ProfilePage() {
   const [status, setStatus] = useState('loading');
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isRequestOpen, setIsRequestOpen] = useState(false);
   const [faqMount, setFaqMount] = useState(null);
   const profileRootRef = useRef(null);
   const galleryTriggerRef = useRef(null);
@@ -134,6 +136,26 @@ export function ProfilePage() {
     return () => triggers.forEach((trigger) => trigger.removeEventListener('click', openGallery));
   }, [renderedProfile]);
 
+  useEffect(() => {
+    if (!renderedProfile) return undefined;
+
+    const trigger = profileRootRef.current?.querySelector('.booking-cta-btn');
+    const openRequest = (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setIsRequestOpen(true);
+    };
+
+    trigger?.addEventListener('click', openRequest, true);
+    return () => trigger?.removeEventListener('click', openRequest, true);
+  }, [renderedProfile]);
+
+  useEffect(() => {
+    const openRequest = () => setIsRequestOpen(true);
+    window.addEventListener('mygudauri:instructor-request', openRequest);
+    return () => window.removeEventListener('mygudauri:instructor-request', openRequest);
+  }, []);
+
   if (status === 'loading') return <main className="profile-data-state">Loading instructor…</main>;
 
   if (status === 'not-found') {
@@ -158,6 +180,7 @@ export function ProfilePage() {
         onClose={closeGallery}
         onIndexChange={setGalleryIndex}
       />
+      <LazyInstructorRequestDialog open={isRequestOpen} onOpenChange={setIsRequestOpen} instructor={instructor} />
     </>
   );
 }

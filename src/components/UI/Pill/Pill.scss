@@ -1,30 +1,31 @@
 .ui-pill {
+  box-sizing: border-box;
   border: 1px solid transparent;
-  border-radius: var(--radius-xsm);
+  border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  vertical-align: middle;
   white-space: nowrap;
 }
 
 .ui-pill--md {
   height: var(--pill-md-h);
   padding: 0 var(--pill-md-w);
-  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+  font: var(--fw-medium) 13px / 1 var(--font-body);
 }
 
 .ui-pill--sm {
-  height: 23px;
-  padding: 0 10px;
-  border-radius: 22px;
-  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+  height: var(--pill-sm-h);
+  padding: 0 var(--pill-sm-w);
+  font: var(--fw-semibold) 12px / 1 var(--font-body);
 }
 
 .ui-pill--lg {
   height: var(--pill-lg-h);
   padding: 0 var(--pill-lg-w);
-  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+  font: var(--fw-medium) 14px / 1 var(--font-body);
 }
 
 .ui-pill--light {
@@ -50,8 +51,28 @@
   color: var(--grey-white);
 }
 
+.ui-pill--glass {
+  border-color: rgba(32, 33, 30, 0.1);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--grey-600);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+}
+
+.ui-pill--accent {
+  border-color: var(--rad-600);
+  background: var(--rad-600);
+  color: var(--grey-white);
+}
+
 .ui-pill__icon {
   width: 16px;
   height: 16px;
+  flex: 0 0 auto;
   object-fit: contain;
+}
+
+.ui-pill--sm .ui-pill__icon {
+  width: 15px;
+  height: 15px;
 }

@@ -7,6 +7,7 @@ function parseJson(value) {
 }
 
 function mapSummary(row) {
+  const tags = parseJson(row.tags_json);
   return {
     id: row.id,
     slug: row.slug,
@@ -14,9 +15,12 @@ function mapSummary(row) {
     description: row.card_description,
     rating: row.rating,
     reviews: row.review_count,
+    experienceYears: row.experience_years,
     image: row.card_image_url,
     sports: parseJson(row.disciplines_json),
-    languages: parseJson(row.languages_json)
+    languages: parseJson(row.languages_json),
+    tags,
+    cardFocus: tags.filter((tag) => /first lesson|technique|carving|freeride|off-piste|freestyle|kids|family/i.test(tag)).slice(0, 2).join(' · ')
   };
 }
 
@@ -28,7 +32,17 @@ const SUMMARY_SELECT = `
     i.card_description,
     i.rating,
     i.review_count,
+    i.experience_years,
     i.card_image_url,
+    COALESCE((
+      SELECT json_group_array(item.label)
+      FROM (
+        SELECT label
+        FROM instructor_tags
+        WHERE instructor_id = i.id
+        ORDER BY sort_order, id
+      ) item
+    ), '[]') AS tags_json,
     COALESCE((
       SELECT json_group_array(json_object('slug', item.slug, 'name', item.name, 'icon', item.icon_url))
       FROM (

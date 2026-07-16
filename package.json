@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "design:sync": "sass src/styles/tokens/index.scss styles/tokens.css --no-source-map --style=expanded && sass src/components/UI/SectionHeading/SectionHeading.scss styles/section-heading.css --no-source-map --style=expanded && node scripts/sync-legacy-assets.mjs",
+    "design:sync": "sass src/styles/tokens/index.scss styles/tokens.css --no-source-map --style=expanded && sass src/styles/SystemCompat.scss styles/system.css --no-source-map --style=expanded && sass src/components/UI/SectionHeading/SectionHeading.scss styles/section-heading.css --no-source-map --style=expanded && sass src/pages/ProfilePage/ProfileLegacy.scss styles/design-3-profile.css --no-source-map --style=expanded && node scripts/sync-legacy-assets.mjs",
     "predev": "npm run design:sync",
     "dev": "vite",
     "dev:cloudflare": "npm run build && wrangler pages dev",
@@ -17,6 +17,10 @@
     "db:seed:remote": "wrangler d1 execute my-gudauri-cms --remote --file ./db/seed.sql"
   },
   "dependencies": {
+    "@daypicker/react": "^10.0.1",
+    "@radix-ui/react-checkbox": "^1.3.7",
+    "@radix-ui/react-dialog": "^1.1.19",
+    "@radix-ui/react-popover": "^1.1.19",
     "framer-motion": "^12.42.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

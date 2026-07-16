@@ -6,7 +6,7 @@
 }
 
 .profile-data-state {
-  width: min(1320px, calc(100% - (var(--layout-margin) * 2)));
+  width: min(var(--content-inner), calc(100% - (var(--layout-margin) * 2)));
   min-height: 60vh;
   margin: 24px auto;
   padding: clamp(32px, 6vw, 72px);
@@ -23,12 +23,12 @@
 
 .legacy-profile-root .profile-page {
   width: 100%;
-  max-width: 1600px;
+  max-width: var(--content-width);
 }
 
 .legacy-profile-root .profile-nav-host,
 .legacy-profile-root .profile-main {
-  width: min(1320px, calc(100% - (var(--layout-margin) * 2)));
+  width: min(var(--content-inner), calc(100% - (var(--layout-margin) * 2)));
 }
 
 .legacy-profile-root .profile-main {
@@ -79,7 +79,7 @@
 .legacy-profile-root .profile-hero-intro > p:first-child {
   margin: 0;
   color: var(--grey-400);
-  font: 600 12px / 1.2 var(--font-body);
+  font: var(--fw-semibold) 12px / 1.2 var(--font-body);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -88,7 +88,7 @@
   margin: 12px 0 0;
   max-width: 44ch;
   color: var(--grey-500);
-  font: 400 16px / 1.35 var(--font-body);
+  font: var(--fw-regular) 16px / 1.35 var(--font-body);
 }
 
 .legacy-profile-root .profile-hero-intro dl {
@@ -111,7 +111,7 @@
 .legacy-profile-root .profile-hero-intro dd {
   margin: 5px 0 0;
   color: var(--grey-400);
-  font: 400 12px / 1.2 var(--font-body);
+  font: var(--fw-regular) 12px / 1.2 var(--font-body);
 }
 
 .legacy-profile-root .profile-badges-row {
@@ -119,18 +119,11 @@
   gap: 8px;
 }
 
-.legacy-profile-root .profile-badge {
-  min-height: 32px;
-  padding-inline: 12px;
-  border: 1px solid var(--grey-100);
-  background: var(--grey-50);
-}
-
 .legacy-profile-root .profile-role {
   margin-left: 4px;
   color: var(--grey-400);
   font-size: 14px;
-  font-weight: 550;
+  font-weight: var(--fw-medium);
 }
 
 .legacy-profile-root .profile-title {
@@ -187,7 +180,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font: 500 12px / 1 var(--font-body);
+  font: var(--fw-medium) 12px / 1 var(--font-body);
 }
 
 .legacy-profile-root .profile-availability i {
@@ -246,12 +239,12 @@
 }
 
 .legacy-profile-root .profile-gallery-trigger b {
-  font: 600 14px / 1 var(--font-body);
+  font: var(--fw-semibold) 14px / 1 var(--font-body);
 }
 
 .legacy-profile-root .profile-gallery-trigger small {
   color: var(--grey-400);
-  font: 400 11px / 1 var(--font-body);
+  font: var(--fw-regular) 11px / 1 var(--font-body);
 }
 
 .legacy-profile-root .profile-gallery-trigger__arrow {
@@ -278,7 +271,11 @@
 .legacy-profile-root .profile-left-col,
 .legacy-profile-root .profile-facts,
 .legacy-profile-root .profile-about,
+.legacy-profile-root .profile-lesson-formats,
+.legacy-profile-root .profile-lesson-details,
+.legacy-profile-root .profile-meeting-point,
 .legacy-profile-root .profile-reviews,
+.legacy-profile-root .profile-rules,
 .legacy-profile-root .profile-media,
 .legacy-profile-root .profile-faq {
   width: 100%;
@@ -286,7 +283,11 @@
 
 .legacy-profile-root .profile-facts,
 .legacy-profile-root .profile-about,
+.legacy-profile-root .profile-lesson-formats,
+.legacy-profile-root .profile-lesson-details,
+.legacy-profile-root .profile-meeting-point,
 .legacy-profile-root .profile-reviews,
+.legacy-profile-root .profile-rules,
 .legacy-profile-root .profile-media,
 .legacy-profile-root .profile-faq {
   padding: clamp(20px, 2.5vw, 36px);
@@ -305,6 +306,209 @@
 .legacy-profile-root .reviews-grid,
 .legacy-profile-root .media-grid {
   width: 100%;
+}
+
+.legacy-profile-root .profile-lesson-formats,
+.legacy-profile-root .profile-lesson-details,
+.legacy-profile-root .profile-meeting-point,
+.legacy-profile-root .profile-rules {
+  padding: clamp(20px, 2.5vw, 36px);
+}
+
+.legacy-profile-root .profile-format-list {
+  margin-top: 32px;
+  display: grid;
+}
+
+.legacy-profile-root .profile-format-list article {
+  min-height: 82px;
+  padding-block: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid var(--grey-100);
+}
+
+.legacy-profile-root .profile-format-list article:first-child {
+  border-top: 1px solid var(--grey-100);
+}
+
+.legacy-profile-root .profile-format-list h3,
+.legacy-profile-root .profile-meeting-card h3,
+.legacy-profile-root .profile-rules-grid h3 {
+  margin: 0;
+  color: var(--grey-650, #282927);
+  font: var(--fw-medium) 17px / 1.15 var(--font-heading);
+  letter-spacing: -0.025em;
+}
+
+.legacy-profile-root .profile-format-list p,
+.legacy-profile-root .profile-meeting-card p,
+.legacy-profile-root .profile-rules-grid p {
+  margin: 5px 0 0;
+  color: var(--grey-400);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.legacy-profile-root .profile-format-list article > span {
+  color: var(--grey-400);
+  font: var(--fw-medium) 11px / 1.3 var(--font-body);
+  text-align: right;
+}
+
+.legacy-profile-root .profile-lesson-details {
+  display: grid;
+  gap: 15px;
+}
+
+.legacy-profile-root .profile-lesson-details .section-heading {
+  margin-bottom: 16px;
+}
+
+.legacy-profile-root .profile-inclusion-row {
+  min-height: 62px;
+  padding: 13px 15px;
+  display: grid;
+  grid-template-columns: 126px 1fr;
+  align-items: center;
+  gap: 14px;
+  border-radius: 16px;
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .profile-inclusion-row > span {
+  color: var(--grey-400);
+  font: var(--fw-semibold) 10px / 1.2 var(--font-body);
+  letter-spacing: 0.065em;
+  text-transform: uppercase;
+}
+
+.legacy-profile-root .profile-inclusion-row > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.legacy-profile-root .profile-inclusion-row i {
+  padding: 6px 9px;
+  border: 1px solid var(--grey-150, #e6e6e2);
+  border-radius: 999px;
+  background: var(--grey-white);
+  color: var(--grey-500);
+  font: normal var(--fw-medium) 10px / 1 var(--font-body);
+}
+
+.legacy-profile-root .profile-meeting-card {
+  margin-top: 30px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: minmax(180px, 34%) 1fr;
+  gap: 20px;
+  align-items: center;
+  border: 1px solid var(--grey-100);
+  border-radius: 22px;
+  background: var(--grey-white);
+}
+
+.legacy-profile-root .profile-meeting-card > div:first-child {
+  min-height: 142px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #e2e3df, #f4f4f1);
+  color: var(--grey-400);
+  font: var(--fw-semibold) 11px / 1 var(--font-body);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.legacy-profile-root .profile-meeting-card > div:first-child::before,
+.legacy-profile-root .profile-meeting-card > div:first-child::after {
+  content: '';
+  position: absolute;
+  border: 1px solid rgba(32, 33, 30, 0.12);
+  border-radius: 50%;
+}
+
+.legacy-profile-root .profile-meeting-card > div:first-child::before {
+  width: 170px;
+  height: 170px;
+}
+
+.legacy-profile-root .profile-meeting-card > div:first-child::after {
+  width: 96px;
+  height: 96px;
+}
+
+.legacy-profile-root .profile-meeting-card > div:first-child i {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  z-index: 1;
+  border: 3px solid var(--grey-white);
+  border-radius: 50%;
+  background: var(--grey-700);
+  box-shadow: 0 2px 8px rgba(32, 33, 30, 0.22);
+}
+
+.legacy-profile-root .profile-meeting-card > div:last-child {
+  padding-right: 12px;
+}
+
+.legacy-profile-root .profile-meeting-card small {
+  margin-top: 12px;
+  display: block;
+  color: var(--grey-350, #979793);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.legacy-profile-root .profile-rules-grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.legacy-profile-root .profile-rules-grid article {
+  min-height: 170px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 17px;
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .profile-rules-grid article > span {
+  color: var(--grey-300);
+  font: var(--fw-semibold) 10px / 1 var(--font-body);
+}
+
+.legacy-profile-root .profile-rules-grid h3 {
+  margin-top: auto;
+}
+
+.legacy-profile-root .profile-booking-wrap {
+  height: auto;
+  align-self: stretch;
+}
+
+.legacy-profile-root .profile-booking-card {
+  border-color: var(--grey-150, #e6e6e2);
+  box-shadow: 0 18px 55px rgba(24, 25, 23, 0.08);
+}
+
+.legacy-profile-root .booking-cta-btn {
+  background: var(--grey-700);
+}
+
+.legacy-profile-root .profile-availability i {
+  background: var(--grey-700);
+  box-shadow: 0 0 0 4px rgba(32, 33, 30, 0.1);
 }
 
 @media (max-width: 1100px) {
@@ -371,4 +575,492 @@
   .legacy-profile-root .profile-facts {
     grid-template-columns: 1fr;
   }
+
+  .legacy-profile-root .profile-format-list article {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .legacy-profile-root .profile-format-list article > span {
+    text-align: left;
+  }
+
+  .legacy-profile-root .profile-inclusion-row,
+  .legacy-profile-root .profile-meeting-card {
+    grid-template-columns: 1fr;
+  }
+
+  .legacy-profile-root .profile-rules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .legacy-profile-root .profile-rules-grid article {
+    min-height: 140px;
+  }
+}
+
+/* Unified profile content system. The imported legacy template contains a
+   mixture of fixed canvas sizes; everything below normalises it into the
+   same responsive card, type and spacing language used across the site. */
+.legacy-profile-root {
+  --profile-card-radius: 28px;
+  --profile-card-padding: clamp(28px, 3vw, 40px);
+  --profile-subcard-radius: 18px;
+  --profile-copy-size: 15px;
+  --profile-copy-line: 1.6;
+}
+
+.legacy-profile-root .profile-details { align-items: start; }
+.legacy-profile-root .profile-left-col { gap: 16px; }
+
+.legacy-profile-root .profile-about,
+.legacy-profile-root .profile-lesson-formats,
+.legacy-profile-root .profile-lesson-details,
+.legacy-profile-root .profile-meeting-point,
+.legacy-profile-root .profile-reviews,
+.legacy-profile-root .profile-rules,
+.legacy-profile-root .profile-media,
+.legacy-profile-root .profile-faq {
+  padding: var(--profile-card-padding);
+  border: 1px solid var(--grey-100);
+  border-radius: var(--profile-card-radius);
+  background: var(--grey-white);
+}
+
+.legacy-profile-root .profile-about,
+.legacy-profile-root .profile-reviews,
+.legacy-profile-root .profile-media,
+.legacy-profile-root .profile-faq { border-top: 1px solid var(--grey-100); }
+
+.legacy-profile-root .profile-left-col > section .section-heading { gap: 8px; }
+
+.legacy-profile-root .profile-left-col > section .section-heading__kicker {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.legacy-profile-root .profile-left-col > section .section-heading__title {
+  max-width: 12ch;
+  font-size: clamp(36px, 4vw, 46px);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+/* Key facts */
+.legacy-profile-root .profile-facts {
+  padding: 0;
+  gap: 10px;
+  background: transparent;
+}
+
+.legacy-profile-root .fact-card {
+  min-width: 0;
+  min-height: 164px;
+  padding: 20px;
+  gap: 24px;
+  justify-content: space-between;
+  border: 1px solid var(--grey-100);
+  border-radius: 22px;
+  background: var(--grey-white);
+}
+
+.legacy-profile-root .fact-top { gap: 12px; }
+.legacy-profile-root .fact-top img { width: 32px; height: 32px; }
+
+.legacy-profile-root .fact-top p {
+  color: var(--grey-400);
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.25;
+}
+
+.legacy-profile-root .fact-bottom {
+  min-height: 34px;
+  padding-top: 12px;
+  gap: 6px;
+  border-top: 1px solid var(--grey-100);
+}
+
+.legacy-profile-root .fact-pill {
+  min-height: 30px;
+  padding-inline: 10px;
+  font-size: 12px;
+  white-space: normal;
+}
+
+.legacy-profile-root .fact-text { font-size: 13px; line-height: 1.3; }
+
+/* About */
+.legacy-profile-root .about-copy {
+  max-width: 68ch;
+  margin-top: 30px;
+  gap: 14px;
+}
+
+.legacy-profile-root .about-copy p {
+  color: var(--grey-500);
+  font-size: var(--profile-copy-size);
+  line-height: var(--profile-copy-line);
+}
+
+.legacy-profile-root .about-tags {
+  width: 100%;
+  margin-top: 28px;
+  gap: 8px;
+}
+
+.legacy-profile-root .about-tag {
+  min-height: 42px;
+  height: auto;
+  padding: 10px 14px;
+  gap: 7px;
+  border: 1px solid var(--grey-150, #e6e6e2);
+  border-radius: 999px;
+  background: var(--grey-50);
+  font: var(--fw-medium) 13px / 1.15 var(--font-body);
+}
+
+.legacy-profile-root .about-tag i,
+.legacy-profile-root .media-filter.active i { width: 7px; height: 7px; }
+
+/* Lesson formats */
+.legacy-profile-root .profile-format-list {
+  margin-top: 30px;
+  gap: 8px;
+}
+
+.legacy-profile-root .profile-format-list article {
+  min-height: 96px;
+  padding: 20px;
+  border: 0;
+  border-radius: var(--profile-subcard-radius);
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .profile-format-list article:first-child { border-top: 0; }
+
+.legacy-profile-root .profile-format-list h3,
+.legacy-profile-root .profile-meeting-card h3,
+.legacy-profile-root .profile-rules-grid h3 {
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+.legacy-profile-root .profile-format-list p,
+.legacy-profile-root .profile-meeting-card p,
+.legacy-profile-root .profile-rules-grid p {
+  margin-top: 7px;
+  color: var(--grey-450, #757671);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.legacy-profile-root .profile-format-list article > span {
+  flex: 0 0 180px;
+  padding: 8px 11px;
+  border: 1px solid var(--grey-150, #e6e6e2);
+  border-radius: 999px;
+  background: var(--grey-white);
+  color: var(--grey-500);
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Lesson details */
+.legacy-profile-root .profile-lesson-details { gap: 10px; }
+.legacy-profile-root .profile-lesson-details .section-heading { margin-bottom: 20px; }
+
+.legacy-profile-root .profile-inclusion-row {
+  min-height: 78px;
+  padding: 16px 18px;
+  grid-template-columns: 150px 1fr;
+  gap: 18px;
+  border: 1px solid var(--grey-100);
+  border-radius: var(--profile-subcard-radius);
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .profile-inclusion-row > span {
+  color: var(--grey-500);
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.legacy-profile-root .profile-inclusion-row > div { gap: 7px; }
+
+.legacy-profile-root .profile-inclusion-row i {
+  padding: 8px 11px;
+  color: var(--grey-550, #474843);
+  font-size: 12px;
+}
+
+/* Meeting point */
+.legacy-profile-root .profile-meeting-card {
+  margin-top: 30px;
+  padding: 12px;
+  grid-template-columns: minmax(210px, 38%) 1fr;
+  gap: 28px;
+  border-radius: 22px;
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .profile-meeting-card > div:first-child {
+  min-height: 184px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #dedfda, #f1f1ee);
+  font-size: 12px;
+}
+
+.legacy-profile-root .profile-meeting-card > div:last-child { padding-right: 20px; }
+
+.legacy-profile-root .profile-meeting-card small {
+  margin-top: 14px;
+  color: var(--grey-400);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* Reviews */
+.legacy-profile-root .reviews-summary {
+  width: fit-content;
+  min-height: 48px;
+  margin-top: 24px;
+  padding: 8px 14px;
+  border: 1px solid var(--grey-100);
+  border-radius: 999px;
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .reviews-summary img:first-child { width: 28px; height: 28px; }
+.legacy-profile-root .reviews-summary__value { font-size: 19px; }
+
+.legacy-profile-root .reviews-grid {
+  margin-top: 24px;
+  gap: 10px;
+}
+
+.legacy-profile-root .review-card {
+  width: 100%;
+  min-width: 0;
+  padding: 20px;
+  gap: 12px;
+  border: 1px solid var(--grey-100);
+  border-radius: var(--profile-subcard-radius);
+  background: var(--grey-50);
+}
+
+.legacy-profile-root .review-head { gap: 12px; }
+.legacy-profile-root .avatar { width: 44px; height: 44px; }
+
+.legacy-profile-root .review-head h3 {
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.legacy-profile-root .review-head p,
+.legacy-profile-root .review-meta span { font-size: 12px; line-height: 1.35; }
+
+.legacy-profile-root .review-text {
+  width: 100%;
+  color: var(--grey-500);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.legacy-profile-root .review-card a {
+  font-size: 13px;
+  line-height: 1.3;
+  text-underline-offset: 3px;
+}
+
+.legacy-profile-root .review-meta img:first-child {
+  filter: grayscale(1) brightness(0.38);
+}
+
+.legacy-profile-root .outline-md-btn {
+  border-color: var(--grey-700);
+  color: var(--grey-700);
+}
+
+/* Rules */
+.legacy-profile-root .profile-rules-grid {
+  margin-top: 30px;
+  gap: 10px;
+}
+
+.legacy-profile-root .profile-rules-grid article {
+  min-height: 204px;
+  padding: 20px;
+  border: 1px solid var(--grey-100);
+  border-radius: var(--profile-subcard-radius);
+}
+
+.legacy-profile-root .profile-rules-grid article > span { font-size: 11px; }
+
+/* Media */
+.legacy-profile-root .media-filters { margin-top: 26px; gap: 6px; }
+
+.legacy-profile-root .media-filter {
+  min-height: 38px;
+  height: auto;
+  padding: 8px 13px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.legacy-profile-root .media-filter.active {
+  border-color: var(--grey-600);
+  background: var(--grey-white);
+}
+
+.legacy-profile-root .media-grid {
+  margin-top: 16px;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas: none;
+  gap: 10px;
+}
+
+.legacy-profile-root .media-card,
+.legacy-profile-root .media-1,
+.legacy-profile-root .media-2,
+.legacy-profile-root .media-3,
+.legacy-profile-root .media-4,
+.legacy-profile-root .media-5 {
+  width: 100%;
+  min-height: 0;
+  height: auto;
+  grid-area: auto;
+  aspect-ratio: 1.45;
+  border-radius: var(--profile-subcard-radius);
+}
+
+.legacy-profile-root .media-card:first-child {
+  grid-column: 1 / -1;
+  aspect-ratio: 2.05;
+}
+
+/* Booking card */
+.legacy-profile-root .profile-booking-card {
+  width: 100%;
+  min-height: 0;
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.legacy-profile-root .booking-head { gap: 12px; }
+.legacy-profile-root .booking-avatar { width: 48px; height: 48px; }
+
+.legacy-profile-root .booking-head p { font-size: 12px; line-height: 1.3; }
+
+.legacy-profile-root .booking-head h3 {
+  margin-top: 2px;
+  font-size: 19px;
+  line-height: 1.15;
+}
+
+.legacy-profile-root .booking-price-row { margin-top: 24px; }
+.legacy-profile-root .booking-price-row a { font-size: 30px; line-height: 1; }
+
+.legacy-profile-root .booking-price-row p,
+.legacy-profile-root .booking-note-top p,
+.legacy-profile-root .booking-note-bottom p { font-size: 13px; line-height: 1.4; }
+
+.legacy-profile-root .booking-counter { height: 64px; }
+
+.legacy-profile-root .booking-counter-btn:hover,
+.legacy-profile-root .booking-counter-btn:active { background: var(--grey-700); }
+
+.legacy-profile-root .booking-cta-btn {
+  width: 100%;
+  margin-top: 24px;
+  border-color: var(--grey-700);
+  background: var(--grey-700);
+  color: var(--grey-white);
+  font-size: 17px;
+}
+
+.legacy-profile-root .booking-note-bottom p { width: auto; }
+
+@media (max-width: 1100px) {
+  .legacy-profile-root .profile-details { gap: 16px; }
+  .legacy-profile-root .profile-booking-wrap { order: -1; }
+  .legacy-profile-root .profile-booking-card { position: static; }
+}
+
+@media (max-width: 768px) {
+  .legacy-profile-root {
+    --profile-card-radius: 22px;
+    --profile-card-padding: 22px;
+  }
+
+  .legacy-profile-root .profile-left-col { gap: 12px; }
+
+  .legacy-profile-root .profile-left-col > section .section-heading__title {
+    font-size: 34px;
+  }
+
+  .legacy-profile-root .profile-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .legacy-profile-root .fact-card {
+    min-height: 148px;
+    padding: 16px;
+  }
+
+  .legacy-profile-root .profile-format-list article { gap: 14px; }
+
+  .legacy-profile-root .profile-format-list article > span {
+    flex-basis: auto;
+    text-align: left;
+  }
+
+  .legacy-profile-root .profile-inclusion-row,
+  .legacy-profile-root .profile-meeting-card { grid-template-columns: 1fr; }
+
+  .legacy-profile-root .profile-inclusion-row { gap: 12px; }
+  .legacy-profile-root .profile-meeting-card { gap: 20px; }
+
+  .legacy-profile-root .profile-meeting-card > div:last-child {
+    padding: 0 6px 8px;
+  }
+
+  .legacy-profile-root .reviews-grid,
+  .legacy-profile-root .profile-rules-grid { grid-template-columns: 1fr; }
+
+  .legacy-profile-root .profile-rules-grid article { min-height: 168px; }
+
+  .legacy-profile-root .media-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+
+  .legacy-profile-root .media-card,
+  .legacy-profile-root .media-1,
+  .legacy-profile-root .media-2,
+  .legacy-profile-root .media-3,
+  .legacy-profile-root .media-4,
+  .legacy-profile-root .media-5 {
+    grid-area: auto;
+    aspect-ratio: 1.45;
+  }
+
+  .legacy-profile-root .media-card:first-child {
+    grid-column: auto;
+    aspect-ratio: 1.45;
+  }
+}
+
+@media (max-width: 420px) {
+  .legacy-profile-root .profile-facts { grid-template-columns: 1fr; }
+  .legacy-profile-root .fact-card { min-height: 136px; }
+  .legacy-profile-root .reviews-summary { flex-wrap: wrap; }
+  .legacy-profile-root .booking-counters { grid-template-columns: 1fr; }
 }

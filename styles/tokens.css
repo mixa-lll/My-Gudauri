@@ -85,9 +85,12 @@
 }
 
 :root {
-  --content-width: 1468px;
+  --content-width: 1388px;
+  --content-inner: 1388px;
   --layout-margin: clamp(18px, 3vw, 48px);
   --layout-gutter: clamp(12px, 1.4vw, 20px);
+  --pill-sm-w: 10px;
+  --pill-sm-h: 28px;
   --pill-md-w: 12px;
   --pill-md-h: 30px;
   --pill-lg-w: 15px;

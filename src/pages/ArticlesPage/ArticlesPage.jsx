@@ -4,6 +4,7 @@ import { ListingCard, ListingCardAction, ListingCardPill } from '../../component
 import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
 import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
 import { Container } from '../../components/UI/Container/Container';
+import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
 import { ARTICLES } from '../../data/destinations';
 import './ArticlesPage.scss';
 
@@ -37,7 +38,7 @@ export function ArticlesPage() {
       <main>
         <Container className="destination-shell">
           <header className="articles-header">
-            <div><p className="destination-eyebrow">Local knowledge</p><h1>Articles</h1></div>
+            <SectionHeading as="h1" size="lg" kicker="Local knowledge" title="Articles" />
             <p>Practical guides for a smoother mountain trip — written with local experts and updated for the season.</p>
           </header>
 

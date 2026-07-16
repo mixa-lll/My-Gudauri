@@ -72,7 +72,7 @@
 .media-placeholder__brand {
   top: clamp(14px, 3vw, 26px);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   letter-spacing: 0.14em;
 }
 
@@ -85,7 +85,7 @@
 
 .media-placeholder__copy strong {
   overflow: hidden;
-  font: 550 clamp(18px, 2.3vw, 30px) / 1.04 var(--font-heading);
+  font: var(--fw-medium) clamp(18px, 2.3vw, 30px) / 1.04 var(--font-heading);
   letter-spacing: -0.045em;
   text-overflow: ellipsis;
   white-space: nowrap;

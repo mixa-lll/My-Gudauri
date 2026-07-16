@@ -15,14 +15,15 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 - `src/app/App.jsx` contains route table and top-level composition.
 
 2. `layout` layer
-- `MainLayout` composes global shell: navbar, page content, footer.
+- Standard content pages compose `SiteNavbar`, route content and `SiteFooter` in the same order.
+- `BookingFlowPage` intentionally owns a focused transaction header, but still uses the shared footer.
 
 3. `component` layer
 - UI primitives: `Button`, `Pill`, `Container`, `SectionHeading`.
 - Composite blocks: `SiteNavbar`, `FaqAccordion`, `CalculatorBanner`, `InstructorCard`, `SiteFooter`.
 
 4. `page` layer
-- Routes: Home, Instructors, Profile, Booking Flow, Summary.
+- Routes: Home, unified destination catalogs, destination details, instructor profiles, Booking Flow, Articles and About Gudauri.
 - Pages consume composite + UI components, no duplicated low-level markup.
 
 5. `style token` layer
@@ -46,7 +47,7 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 
 ## DRY decisions
 - FAQ logic is centralized in `FaqAccordion` and reused across pages.
-- Instructor card markup is centralized in `InstructorCard`.
+- Catalog card markup is centralized in `DestinationCard` and `ListingCard`; `InstructorCard` is a thin compatibility wrapper.
 - All instructor cards and profiles use the same D1 records and API contracts.
 - The seven site categories are centralized in `src/data/siteCategories.js`; navbar and home cards derive from this list.
 - Common spacing/color/typography values live in token files only.
@@ -59,6 +60,13 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 4. The profile route requests `GET /api/instructors/:slug`.
 5. The profile renderer binds the returned CMS record to the existing visual template.
 6. Gallery and booking receive the same instructor media and pricing data.
+
+## Transaction and inquiry boundaries
+
+- `instructors` is transactional: catalog → profile → `/booking` → an in-flow success summary with the real request ID and submitted details.
+- `activities`, `rental`, `transfers`, `services`, `stays` and `places` are browse-and-inquiry sections: catalog → detail → email inquiry.
+- Destination details must not link into the instructor booking flow until their own payload, validation and backend persistence exist.
+- There is no standalone `/summary` route. The former page was a hardcoded prototype; the live booking flow owns its request review and success state.
 
 ## CMS collections
 
@@ -97,6 +105,6 @@ The authenticated editor lives under `/api/admin/*`; public pages continue readi
 ## Legacy boundary
 
 - `pages/`, `styles/` and classic `scripts/` are static reference prototypes, not production component sources.
-- React imports `styles/system.css` once as a temporary compatibility base for the remaining legacy profile template.
-- Tokens and `SectionHeading` compatibility CSS are generated from React sources by `npm run design:sync`.
+- React imports only sources under `src/`; no production component imports a stylesheet from the root `styles/` directory.
+- `styles/system.css`, `styles/design-3-profile.css`, tokens and `SectionHeading` compatibility CSS are generated from React sources by `npm run design:sync` for static prototypes.
 - Production navigation and footer are exclusively `SiteNavbar` and `SiteFooter`.

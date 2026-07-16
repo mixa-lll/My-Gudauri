@@ -14,7 +14,7 @@ function formatReviewDate(value) {
 }
 
 function buildPills(document, container, items) {
-  container.replaceChildren(...items.map((item) => createElement(document, 'span', 'fact-pill ui-pill-md', item)));
+  container.replaceChildren(...items.map((item) => createElement(document, 'span', 'fact-pill ui-pill ui-pill--sm ui-pill--light', item)));
 }
 
 function buildSectionHeadings(document) {
@@ -114,7 +114,7 @@ export function renderInstructorProfile(template, instructor) {
 
   const badges = document.querySelector('.profile-badges-row');
   badges.replaceChildren(...instructor.sports.map((sport) => {
-    const badge = createElement(document, 'span', 'profile-badge ui-pill-md');
+    const badge = createElement(document, 'span', 'profile-badge ui-pill ui-pill--md ui-pill--soft');
     const icon = createElement(document, 'img');
     icon.src = sport.icon;
     icon.alt = '';
@@ -140,11 +140,13 @@ export function renderInstructorProfile(template, instructor) {
   hero.src = instructor.heroImage;
   hero.alt = instructor.heroImageAlt;
   const availability = document.querySelector('.profile-availability');
-  availability.lastChild.textContent = instructor.availability || 'Schedule on request';
+  availability.lastChild.textContent = 'Schedule confirmed by manager';
 
   const factBottoms = document.querySelectorAll('.profile-facts .fact-bottom');
   buildPills(document, factBottoms[0], sports);
   buildPills(document, factBottoms[1], languages);
+  factBottoms[2].querySelector('.fact-pill').className = 'fact-pill ui-pill ui-pill--sm ui-pill--light';
+  factBottoms[3].querySelector('.fact-pill').className = 'fact-pill ui-pill ui-pill--sm ui-pill--light';
   factBottoms[2].querySelector('.fact-pill').textContent = `${instructor.experienceYears}+`;
   factBottoms[3].querySelector('.fact-pill').textContent = instructor.certificate;
 

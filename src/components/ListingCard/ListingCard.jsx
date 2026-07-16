@@ -2,6 +2,7 @@ import { createElement, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 import { MediaPlaceholder } from '../MediaPlaceholder/MediaPlaceholder';
+import { Pill } from '../UI/Pill/Pill';
 import './ListingCard.scss';
 
 export function ListingCard({
@@ -13,8 +14,8 @@ export function ListingCard({
   placeholderLabel,
   mediaTop,
   mediaBottom,
-  eyebrow,
   title,
+  titleMeta,
   description,
   headingLevel = 3,
   footer,
@@ -37,8 +38,10 @@ export function ListingCard({
       </div>
 
       <div className="listing-card__body">
-        {eyebrow && <div className="listing-card__eyebrow">{eyebrow}</div>}
-        {createElement(`h${headingLevel}`, { className: 'listing-card__title' }, title)}
+        <div className="listing-card__title-row">
+          {createElement(`h${headingLevel}`, { className: 'listing-card__title' }, title)}
+          {titleMeta}
+        </div>
         {description && <p className="listing-card__description">{description}</p>}
         {footer && <div className="listing-card__footer">{footer}</div>}
       </div>
@@ -48,10 +51,9 @@ export function ListingCard({
 
 export function ListingCardPill({ children, icon, className, title }) {
   return (
-    <span className={cn('listing-card__pill', className)} title={title}>
-      {icon && <img src={icon} alt="" aria-hidden="true" />}
+    <Pill className={cn('listing-card__pill', className)} size="sm" tone="glass" icon={icon} title={title}>
       {children}
-    </span>
+    </Pill>
   );
 }
 

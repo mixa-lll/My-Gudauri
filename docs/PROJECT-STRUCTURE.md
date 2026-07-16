@@ -25,8 +25,6 @@
 │   │   ├── InstructorCard/
 │   │   ├── SiteFooter/
 │   │   ├── SiteNavbar/
-│   │   ├── layout/
-│   │   │   └── MainLayout/
 │   │   ├── index.js
 │   │   └── UI/index.js
 │   ├── data/
@@ -37,12 +35,13 @@
 │   ├── pages/
 │   │   ├── BookingFlowPage/
 │   │   ├── HomePage/
-│   │   ├── InstructorsPage/
 │   │   ├── ProfilePage/
-│   │   └── SummaryPage/
+│   │   ├── DestinationCatalogPage/
+│   │   └── DestinationDetailPage/
 │   ├── styles/
 │   │   ├── base/
 │   │   ├── tokens/
+│   │   ├── SystemCompat.scss
 │   │   └── globals.scss
 │   ├── utils/
 │   │   └── cn.js

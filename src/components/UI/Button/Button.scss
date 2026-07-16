@@ -18,13 +18,13 @@
 .ui-button--md {
   height: var(--pill-lg-h);
   padding: 0 var(--pill-lg-w);
-  font: 400 var(--text-md) / var(--lh-md-inline) var(--font-body);
+  font: var(--fw-regular) var(--text-md) / var(--lh-md-inline) var(--font-body);
 }
 
 .ui-button--lg {
   height: var(--pill-xl-h);
   padding: 0 var(--pill-xl-w);
-  font: 400 var(--text-h5) / var(--lh-h5) var(--font-heading);
+  font: var(--fw-regular) var(--text-h5) / var(--lh-h5) var(--font-heading);
   border-radius: var(--radius-md);
   border-width: 2px;
 }

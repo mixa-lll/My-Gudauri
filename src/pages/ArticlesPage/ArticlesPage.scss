@@ -1,5 +1,5 @@
 .articles-page {
-  width: min(100%, 1600px);
+  width: min(100%, var(--content-width));
   margin-inline: auto;
 }
 
@@ -12,13 +12,6 @@
   grid-template-columns: 1fr minmax(280px, 0.5fr);
   gap: 40px;
   align-items: end;
-}
-
-.articles-header h1 {
-  margin: 16px 0 0;
-  font: var(--fw-bold) clamp(72px, 10vw, 150px) / 0.82 var(--font-heading);
-  letter-spacing: -0.08em;
-  text-transform: uppercase;
 }
 
 .articles-header > p {
@@ -79,10 +72,6 @@
 
   .articles-header {
     grid-template-columns: 1fr;
-  }
-
-  .articles-header h1 {
-    font-size: clamp(56px, 18vw, 72px);
   }
 
   .articles-list__heading {

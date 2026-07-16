@@ -5,6 +5,7 @@ import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
 import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
 import { MediaPlaceholder } from '../../components/MediaPlaceholder/MediaPlaceholder';
 import { Container } from '../../components/UI/Container/Container';
+import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
 import { ARTICLES } from '../../data/destinations';
 import './AboutGudauriPage.scss';
 
@@ -24,22 +25,37 @@ export function AboutGudauriPage() {
       <main>
         <Container className="destination-shell">
           <section className="about-hero">
-            <div><p className="destination-eyebrow">Greater Caucasus · Georgia</p><h1>About<br />Gudauri</h1><p>A high-mountain resort with open alpine terrain, broad views and direct road access from Tbilisi.</p></div>
-            <img
-              className="about-hero__image"
-              src="/assets/about-gudauri/gudauri-panorama.jpg"
-              alt="Panoramic winter view of Gudauri ski resort, lifts and the Greater Caucasus"
-              width="1536"
-              height="1024"
-              decoding="async"
-              fetchPriority="high"
+            <SectionHeading
+              className="about-hero__heading"
+              as="h1"
+              size="lg"
+              kicker="Greater Caucasus · Georgia"
+              title={<>About<br />Gudauri</>}
+              description="A high-mountain resort with open alpine terrain, broad views and direct road access from Tbilisi."
             />
+            <figure className="about-hero__media">
+              <img
+                className="about-hero__image"
+                src="/assets/about-gudauri/gudauri-main-panorama.jpg"
+                alt="Wide winter panorama of Gudauri ski slopes, chairlifts and the Greater Caucasus"
+                width="1652"
+                height="952"
+                loading="eager"
+                decoding="async"
+              />
+              <figcaption><span>Gudauri ski area</span><span>View toward the Greater Caucasus</span></figcaption>
+            </figure>
             <div className="about-hero__stats"><span><strong>2,196 m</strong>Village altitude</span><span><strong>3,276 m</strong>Highest lift</span><span><strong>~120 km</strong>From Tbilisi</span></div>
           </section>
 
           <section className="about-intro">
-            <p className="destination-eyebrow">The resort</p>
-            <div><h2>Big mountain days,<br />with room to improvise.</h2><p>Gudauri lies in Kazbegi Municipality on the southern side of the Greater Caucasus, beside the Georgian Military Highway. The resort base begins at about 1,989 metres and the lift network reaches 3,276 metres. Open, largely treeless terrain defines the skiing; Georgian mountain food and the route toward Stepantsminda shape the time away from the pistes.</p></div>
+            <SectionHeading
+              className="about-split-heading"
+              size="lg"
+              kicker="The resort"
+              title={<>Big mountain days,<br />with room to improvise.</>}
+              description="Gudauri lies in Kazbegi Municipality on the southern side of the Greater Caucasus, beside the Georgian Military Highway. The resort base begins at about 1,989 metres and the lift network reaches 3,276 metres. Open, largely treeless terrain defines the skiing; Georgian mountain food and the route toward Stepantsminda shape the time away from the pistes."
+            />
           </section>
 
           <section className="about-seasons">
@@ -48,20 +64,21 @@ export function AboutGudauriPage() {
           </section>
 
           <section className="about-zones">
-            <div className="about-section-heading"><p className="destination-eyebrow">Know the mountain</p><h2>Four areas, four different rhythms</h2></div>
+            <SectionHeading className="about-split-heading" size="lg" kicker="Mountain areas" title="Four areas, four different rhythms" />
             <div className="about-zones__grid">
               {[['New Gudauri', 'A compact base around the GoodAura gondola, with apartments, rentals and a dense cluster of food options.'], ['Central Gudauri', 'Established hotels and several mountain access points spread along the main road.'], ['Upper Gudauri', 'Quieter accommodation higher on the road; verify the real walk or shuttle route to an operating lift.'], ['Kobi connection', 'A lift-served link across the pass toward Kobi. Check both sides’ status and return times before crossing.']].map(([title, text], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{text}</p></article>)}
             </div>
           </section>
 
           <section className="about-trail-map" id="trail-map" aria-labelledby="trail-map-title">
-            <div className="about-trail-map__heading">
-              <p className="destination-eyebrow">Plan your ski day</p>
-              <div>
-                <h2 id="trail-map-title">Gudauri trail map</h2>
-                <p>See the main lifts, marked pistes, Kobi connection and mountain facilities in one overview.</p>
-              </div>
-            </div>
+            <SectionHeading
+              className="about-split-heading"
+              size="lg"
+              kicker="Ski-day orientation"
+              title="Gudauri trail map"
+              titleId="trail-map-title"
+              description="See the main lifts, marked pistes, Kobi connection and mountain facilities in one overview."
+            />
             <figure>
               <a href="/assets/about-gudauri/map-gudauri-ski-resort.jpg" target="_blank" rel="noreferrer" aria-label="Open the Gudauri trail map at full size">
                 <img
@@ -79,14 +96,14 @@ export function AboutGudauriPage() {
           </section>
 
           <section className="about-practical">
-            <div><p className="destination-eyebrow">Good to know</p><h2>Mountain essentials</h2></div>
+            <SectionHeading size="md" kicker="Practical guidance" title="Mountain essentials" />
             <div>
               {[['Getting here', 'Tbilisi is the most practical gateway for most visitors. Allow roughly 2–2.5 hours by road in normal conditions and extra time in winter.'], ['Live information', 'Check the official MTA lift status and Roads Department notices. Saved maps and social posts may be out of date.'], ['Mountain safety', 'Stay on open marked pistes unless you have the skills, rescue equipment and a qualified guide for uncontrolled terrain.'], ['Emergency plan', 'Save your accommodation details offline. Georgia’s single emergency number is 112.']].map(([title, text]) => <article key={title}><h3>{title}</h3><p>{text}</p></article>)}
             </div>
           </section>
 
           <section className="about-sources" aria-labelledby="about-sources-title">
-            <div><p className="destination-eyebrow">Verified essentials</p><h2 id="about-sources-title">Check live information</h2></div>
+            <SectionHeading className="about-split-heading" size="md" kicker="Official sources" title="Check live information" titleId="about-sources-title" />
             <div>
               <a href="https://status.mta.ski/en/gudauri/gudauri" target="_blank" rel="noreferrer"><strong>Lift status & weather</strong><span>Mountain Trails Agency ↗</span></a>
               <a href="https://www.georoad.ge/?lang=eng" target="_blank" rel="noreferrer"><strong>Road restrictions</strong><span>Roads Department of Georgia ↗</span></a>
@@ -96,7 +113,7 @@ export function AboutGudauriPage() {
           </section>
 
           <section className="about-related">
-            <div className="about-section-heading"><p className="destination-eyebrow">Plan your trip</p><h2>Useful next reads</h2></div>
+            <SectionHeading className="about-split-heading" size="md" kicker="Trip planning" title="Useful next reads" />
             <div>{ARTICLES.slice(0, 3).map((article) => <Link to={`/articles/${article.slug}`} key={article.slug}><MediaPlaceholder label={article.title} /><span>{article.category}</span><h3>{article.title}</h3></Link>)}</div>
           </section>
 

@@ -71,4 +71,5 @@ npm run preview
 - `/instructors/:slug` Dynamic Instructor Profile
 - `/profile` Redirect to the Mikhail profile for backwards compatibility
 - `/booking` Booking Flow
-- `/summary` Booking Summary
+- `/activities`, `/rental`, `/transfers`, `/services`, `/stays`, `/places` Browse-and-inquiry catalogs
+- `/:section/:slug` Destination offer details

@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
+import { Pill } from '../UI/Pill/Pill';
 import { ARTICLES, DESTINATIONS } from '../../data/destinations';
-import { INSTRUCTORS } from '../../data/instructors';
 import './HomeHeroSearch.scss';
 
 const QUICK_SEARCHES = ['Ski instructor', 'Freeride', 'Transfer from Tbilisi', 'Apartments'];
 
 const SECTION_LABELS = {
+  instructors: 'Instructors',
   activities: 'Activities',
   rental: 'Rental',
   transfers: 'Transfers',
@@ -24,27 +25,27 @@ function createSearchIndex() {
       detail: section.description,
       type: 'Section',
       to: `/${section.slug}`,
-      keywords: [section.title, section.navTitle, section.eyebrow, ...section.tabs]
+      keywords: [section.title, section.navTitle, section.kicker, ...(section.tabs ?? [])]
     },
     ...section.items.map((item) => ({
       id: `${section.slug}-${item.slug}`,
       title: item.name,
-      detail: `${SECTION_LABELS[section.slug]} · ${item.category}`,
+      detail: `${SECTION_LABELS[section.slug]} · ${item.category ?? item.description}`,
       type: SECTION_LABELS[section.slug],
       to: `/${section.slug}/${item.slug}`,
-      keywords: [item.name, item.category, item.description, ...item.tags, ...item.included]
+      keywords: [
+        item.name,
+        item.category,
+        item.description,
+        ...(item.tags ?? []),
+        ...(item.included ?? []),
+        ...(item.sports ?? []).map((sport) => sport.name),
+        ...(item.languages ?? []).map((language) => language.name)
+      ].filter(Boolean)
     }))
   ]);
 
   return [
-    ...INSTRUCTORS.map((instructor) => ({
-      id: `instructor-${instructor.slug}`,
-      title: instructor.name,
-      detail: instructor.description,
-      type: 'Instructor',
-      to: `/instructors/${instructor.slug}`,
-      keywords: [instructor.name, instructor.description, ...instructor.sports.map((sport) => sport.name), ...instructor.languages.map((language) => language.name)]
-    })),
     ...sections,
     ...ARTICLES.map((article) => ({
       id: `article-${article.slug}`,
@@ -92,7 +93,12 @@ export function HomeHeroSearch() {
   const updatePosition = () => {
     const rect = searchRef.current?.getBoundingClientRect();
     if (!rect) return;
-    setPosition({ top: rect.bottom + 10, left: rect.left, width: rect.width });
+    setPosition({
+      top: rect.bottom + 10,
+      left: rect.left,
+      width: rect.width,
+      maxHeight: Math.max(180, window.innerHeight - rect.bottom - 22)
+    });
   };
 
   useEffect(() => {
@@ -173,7 +179,7 @@ export function HomeHeroSearch() {
           value={query}
           type="search"
           autoComplete="off"
-          placeholder="Search instructors, stays, transfers…"
+          placeholder="Find instructors, stays, transfers, places…"
           role="combobox"
           aria-autocomplete="list"
           aria-expanded={Boolean(shouldShowPanel)}
@@ -191,7 +197,16 @@ export function HomeHeroSearch() {
       </div>
       <div className="home-hero-search__quick" aria-label="Popular searches">
         {QUICK_SEARCHES.map((suggestion) => (
-          <button type="button" onClick={() => { setQuery(suggestion); setIsOpen(true); inputRef.current?.focus(); }} key={suggestion}>{suggestion}</button>
+          <Pill
+            as="button"
+            size="sm"
+            tone="glass"
+            type="button"
+            onClick={() => { setQuery(suggestion); setIsOpen(true); inputRef.current?.focus(); }}
+            key={suggestion}
+          >
+            {suggestion}
+          </Pill>
         ))}
       </div>
 
