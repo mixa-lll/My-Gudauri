@@ -89,6 +89,15 @@ export function ProfilePage() {
     requestAnimationFrame(() => galleryTriggerRef.current?.focus({ preventScroll: true }));
   }, []);
 
+  const handleProfileClickCapture = useCallback((event) => {
+    const trigger = event.target.closest?.('.booking-cta-btn');
+    if (!trigger || !event.currentTarget.contains(trigger)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    setIsRequestOpen(true);
+  }, []);
+
   useLayoutEffect(() => {
     setFaqMount(profileRootRef.current?.querySelector('[data-profile-faq-mount]') ?? null);
   }, [renderedProfile]);
@@ -136,26 +145,6 @@ export function ProfilePage() {
     return () => triggers.forEach((trigger) => trigger.removeEventListener('click', openGallery));
   }, [renderedProfile]);
 
-  useEffect(() => {
-    if (!renderedProfile) return undefined;
-
-    const trigger = profileRootRef.current?.querySelector('.booking-cta-btn');
-    const openRequest = (event) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      setIsRequestOpen(true);
-    };
-
-    trigger?.addEventListener('click', openRequest, true);
-    return () => trigger?.removeEventListener('click', openRequest, true);
-  }, [renderedProfile]);
-
-  useEffect(() => {
-    const openRequest = () => setIsRequestOpen(true);
-    window.addEventListener('mygudauri:instructor-request', openRequest);
-    return () => window.removeEventListener('mygudauri:instructor-request', openRequest);
-  }, []);
-
   if (status === 'loading') return <main className="profile-data-state">Loading instructor…</main>;
 
   if (status === 'not-found') {
@@ -169,7 +158,7 @@ export function ProfilePage() {
   return (
     <>
       <SiteNavbar />
-      <div ref={profileRootRef} className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
+      <div ref={profileRootRef} className="legacy-profile-root" onClickCapture={handleProfileClickCapture} dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
       {faqMount ? createPortal(<FaqAccordion items={FAQ_ITEMS} />, faqMount) : null}
       <SiteFooter />
       <ProfileGallery

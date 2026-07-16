@@ -8,12 +8,11 @@
   const peopleMinus = card.querySelector('[aria-label="Decrease people"]');
   const hoursValue = card.querySelector('.booking-counter:nth-child(1) .booking-counter-value span');
   const peopleValue = card.querySelector('.booking-counter:nth-child(2) .booking-counter-value span');
-  const cta = card.querySelector('.booking-cta-btn');
   const priceLink = card.querySelector('.booking-price-row a');
   const hoursLabel = card.querySelector('.booking-price-row p:nth-child(3)');
   const peopleLabel = card.querySelector('.booking-price-row p:nth-child(5)');
 
-  if (!hoursValue || !peopleValue || !cta || !priceLink || !hoursLabel || !peopleLabel) return;
+  if (!hoursValue || !peopleValue || !priceLink || !hoursLabel || !peopleLabel) return;
 
   const HOURS_MIN = Number(card.dataset.minHours) || 2;
   const HOURS_MAX = Number(card.dataset.maxHours) || 12;
@@ -68,22 +67,6 @@
   peopleMinus?.addEventListener('click', () => {
     people = Math.max(PEOPLE_MIN, people - 1);
     sync();
-  });
-
-  cta.addEventListener('click', () => {
-    const draft = {
-      instructor: {
-        slug: window.location.pathname.split('/').filter(Boolean).at(-1),
-        name: card.dataset.instructorName,
-        avatar: card.dataset.instructorAvatar
-      },
-      hours,
-      participants: people,
-      priceGel: calculatePrice(hours)
-    };
-
-    window.localStorage.setItem('bookingDraftV1', JSON.stringify(draft));
-    window.dispatchEvent(new CustomEvent('mygudauri:instructor-request', { detail: draft }));
   });
 
   sync();
