@@ -1,19 +1,26 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { HomePage } from '../pages/HomePage/HomePage';
-import { ProfilePage } from '../pages/ProfilePage/ProfilePage';
-import { BookingFlowPage } from '../pages/BookingFlowPage/BookingFlowPage';
-import { AdminPage } from '../pages/AdminPage/AdminPage';
-import { DestinationCatalogPage } from '../pages/DestinationCatalogPage/DestinationCatalogPage';
-import { DestinationDetailPage } from '../pages/DestinationDetailPage/DestinationDetailPage';
-import { ArticlesPage } from '../pages/ArticlesPage/ArticlesPage';
-import { ArticleDetailPage } from '../pages/ArticleDetailPage/ArticleDetailPage';
-import { AboutGudauriPage } from '../pages/AboutGudauriPage/AboutGudauriPage';
-import { ContactsPage } from '../pages/ContactsPage/ContactsPage';
 import '../styles/page-polish.scss';
+
+function lazyPage(importPage, exportName) {
+  return lazy(() => importPage().then((module) => ({ default: module[exportName] })));
+}
+
+const HomePage = lazyPage(() => import('../pages/HomePage/HomePage'), 'HomePage');
+const ProfilePage = lazyPage(() => import('../pages/ProfilePage/ProfilePage'), 'ProfilePage');
+const BookingFlowPage = lazyPage(() => import('../pages/BookingFlowPage/BookingFlowPage'), 'BookingFlowPage');
+const AdminPage = lazyPage(() => import('../pages/AdminPage/AdminPage'), 'AdminPage');
+const DestinationCatalogPage = lazyPage(() => import('../pages/DestinationCatalogPage/DestinationCatalogPage'), 'DestinationCatalogPage');
+const DestinationDetailPage = lazyPage(() => import('../pages/DestinationDetailPage/DestinationDetailPage'), 'DestinationDetailPage');
+const ArticlesPage = lazyPage(() => import('../pages/ArticlesPage/ArticlesPage'), 'ArticlesPage');
+const ArticleDetailPage = lazyPage(() => import('../pages/ArticleDetailPage/ArticleDetailPage'), 'ArticleDetailPage');
+const AboutGudauriPage = lazyPage(() => import('../pages/AboutGudauriPage/AboutGudauriPage'), 'AboutGudauriPage');
+const ContactsPage = lazyPage(() => import('../pages/ContactsPage/ContactsPage'), 'ContactsPage');
 
 export default function App() {
   return (
-    <Routes>
+    <Suspense fallback={<main className="app-route-loading" aria-live="polite">Loading…</main>}>
+      <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/instructors" element={<DestinationCatalogPage section="instructors" />} />
       <Route path="/instructors/:slug" element={<ProfilePage />} />
@@ -27,6 +34,7 @@ export default function App() {
       <Route path="/:section" element={<DestinationCatalogPage />} />
       <Route path="/:section/:slug" element={<DestinationDetailPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }

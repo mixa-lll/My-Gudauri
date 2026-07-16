@@ -70,22 +70,24 @@ export async function onRequestPost({ request, env }) {
   const skillLevel = allowedValue(payload.skillLevel, ALLOWED.skillLevel);
   const budget = allowedValue(payload.budget, ALLOWED.budget);
   const participants = cleanParticipants(payload.participants);
+  const groupSkillLevel = ['Beginner', 'Mixed', 'Advanced'].includes(payload.groupSkillLevel) ? payload.groupSkillLevel : '';
   const notes = cleanText(payload.notes, 1200);
   const contactName = cleanText(payload.contactName, 100);
   const contactPhone = cleanText(payload.contactPhone, 80);
   const contactEmail = cleanText(payload.contactEmail, 160);
   const messenger = allowedValue(payload.messenger, ALLOWED.messenger);
 
-  if (!requestType || !dateRangeStart || !dateRangeEnd || dateRangeEnd < dateRangeStart || !Object.values(sessionSlots).some((slots) => slots.length)) return apiError('Choose dates and at least one lesson time slot.', 400);
-  if (requestType === 'specific_instructor' && (!instructorSlug || !instructorName || !participants.length)) return apiError('Add the instructor and at least one participant.', 400);
+  const hasSelectedSlot = Object.values(sessionSlots).some((slots) => slots.length);
+  if (!requestType || !dateRangeStart || !dateRangeEnd || dateRangeEnd < dateRangeStart) return apiError('Choose a valid lesson date range.', 400);
+  if (requestType === 'specific_instructor' && (!instructorSlug || !instructorName || !participantCount || !hasSelectedSlot)) return apiError('Choose the instructor, group and at least one lesson time slot.', 400);
   if (requestType === 'manager_match' && (!languages.length || !activities.length || !pace || !skillLevel || !budget)) return apiError('Please complete your matching preferences.', 400);
   if (!contactName || !contactPhone || !messenger) return apiError('Please add your name, phone and preferred contact method.', 400);
 
   const requestCode = `MG-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
   const legacyDiscipline = activities.includes('Snowboard') && !activities.includes('Ski') ? 'Snowboard' : activities.includes('Ski') && !activities.includes('Snowboard') ? 'Ski' : 'Either';
-  const legacySkillLevel = skillLevel || participants[0]?.skillLevel || 'Beginner';
+  const legacySkillLevel = skillLevel || groupSkillLevel || participants[0]?.skillLevel || 'Beginner';
   const legacyLanguage = languages[0] || 'English';
-  const legacyParticipantCount = requestType === 'specific_instructor' ? participants.length : participantCount;
+  const legacyParticipantCount = participantCount;
 
   try {
     await env.DB.prepare(`
@@ -105,7 +107,10 @@ export async function onRequestPost({ request, env }) {
       contactName, contactPhone, contactEmail || null, messenger,
       requestType, dateRangeStart, dateRangeEnd, JSON.stringify(sessionSlots),
       companyType, childrenCount, JSON.stringify(languages), JSON.stringify(activities), pace || null,
-      budget || null, JSON.stringify(participants)
+      budget || null, JSON.stringify(participants.length ? participants : [{
+        type: 'group', adults: Math.max(1, Number.parseInt(payload.adultsCount, 10) || participantCount - childrenCount),
+        children: childrenCount, skillLevel: groupSkillLevel || legacySkillLevel, languages
+      }])
     ).run();
     return json({ data: { requestCode } }, { status: 201, cacheControl: 'no-store' });
   } catch (error) {
