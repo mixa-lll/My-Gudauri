@@ -8,7 +8,6 @@ import {
   ObjectDescription,
   ObjectMainTags,
   ObjectRelatedListings,
-  ObjectTagCloud,
   FaqAccordion,
   MediaPlaceholder,
   ObjectDetailPageTemplate,
@@ -61,8 +60,7 @@ export function DestinationDetailPage() {
 
   const content = <Pattern
     mainTags={<ObjectMainTags items={item.facts.map(([label, value]) => ({ label, value }))} />}
-    objectDescription={<ObjectDescription kicker="About the offer" title="What to expect"><p>{item.description}</p></ObjectDescription>}
-    tagCloud={<ObjectTagCloud kicker="At a glance" title="Useful details" items={item.tags} />}
+    objectDescription={<ObjectDescription kicker="About the offer" title="What to expect" tags={item.tags} tagsLabel="Useful details"><p>{item.description}</p></ObjectDescription>}
     additionalSections={[{ type: 'includedServices', kicker: 'Included essentials', title: 'What is included', items: item.included }]}
     bookingSteps={<BookingSteps context="object" items={BOOKING_STEPS} />}
     relatedListings={<ObjectRelatedListings cardType={cardType} items={related} />}

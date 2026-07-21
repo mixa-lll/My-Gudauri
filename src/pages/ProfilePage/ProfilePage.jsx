@@ -13,7 +13,6 @@ import {
   ObjectMainTags,
   ObjectRelatedListings,
   ObjectReviews,
-  ObjectTagCloud,
   ProfileGallery,
   SiteFooter,
   SiteNavbar,
@@ -114,8 +113,7 @@ export function ProfilePage() {
 
   const content = <InstructorObjectPattern
     mainTags={<ObjectMainTags items={facts} />}
-    objectDescription={<ObjectDescription kicker={instructor.tagline} title="About the instructor">{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
-    tagCloud={<ObjectTagCloud kicker="Lesson focus" title="Best suited for" items={instructor.tags} />}
+    objectDescription={<ObjectDescription kicker={instructor.tagline} title="About the instructor" tags={instructor.tags} tagsLabel="Lesson focus">{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
     additionalSections={[{ type: 'certifications', items: instructor.certifications.map((item) => ({ title: item.title, description: item.level })) }]}
     reviews={<ObjectReviews rating={{ value: instructor.rating, label: `${instructor.reviews} reviews` }} reviews={reviews} />}
     bookingSteps={<BookingSteps context="object" items={BOOKING_STEPS} />}

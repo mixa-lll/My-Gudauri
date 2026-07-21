@@ -47,14 +47,12 @@ export function ObjectMainTags({ items = [], ariaLabel = 'Key details' }) {
   return <dl className="ds-object-main-tags" aria-label={ariaLabel}>{items.slice(0, 4).map((item) => <MainTag key={item.label} {...item} />)}</dl>;
 }
 
-export function ObjectDescription({ kicker = 'Good to know', title = 'About this offer', description, children }) {
+export function ObjectDescription({ kicker = 'Good to know', title = 'About this offer', description, children, tags = [], tagsLabel = 'Key features' }) {
   const titleId = useId();
-  return <ObjectSection className="ds-description-section" kicker={kicker} title={title} description={description} titleId={titleId}><div className="ds-prose">{children}</div></ObjectSection>;
-}
-
-export function ObjectTagCloud({ kicker = 'More details', title = 'Features', description, items = [] }) {
-  const titleId = useId();
-  return <ObjectSection kicker={kicker} title={title} description={description} titleId={titleId}><div className="ds-secondary-tags" aria-label={title}>{items.map((item) => <Badge key={item}>{item}</Badge>)}</div></ObjectSection>;
+  return <ObjectSection className="ds-description-section" kicker={kicker} title={title} description={description} titleId={titleId}>
+    <div className="ds-prose">{children}</div>
+    {tags.length ? <div className="ds-description-section__tags" aria-label={tagsLabel}>{tags.map((item) => <Badge key={item}>{item}</Badge>)}</div> : null}
+  </ObjectSection>;
 }
 
 export function ReviewCard({ author, text, meta, rating = 5, verified = false, avatar }) {
@@ -87,7 +85,6 @@ export function ObjectRelatedListings({ kicker = 'You may also like', title = 'M
 // Compatibility aliases. New compositions use the object-anatomy names above.
 export const PrimaryFacts = ObjectMainTags;
 export const DescriptionSection = ObjectDescription;
-export const SecondaryTags = ObjectTagCloud;
 export const ReviewsSection = ObjectReviews;
 export const RelatedListings = ObjectRelatedListings;
 

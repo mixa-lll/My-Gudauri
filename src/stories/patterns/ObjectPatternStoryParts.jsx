@@ -1,4 +1,4 @@
-import { BookingSteps, BookingWidget, FaqAccordion, ObjectDescription, ObjectMainTags, ObjectRelatedListings, ObjectReviews, ObjectTagCloud } from '../../design-system';
+import { BookingSteps, BookingWidget, FaqAccordion, ObjectDescription, ObjectMainTags, ObjectRelatedListings, ObjectReviews } from '../../design-system';
 
 const facts = [{ label: 'Duration', value: '2–6 hours' }, { label: 'Languages', value: 'EN · RU · KA' }, { label: 'Group', value: '1–6 guests' }, { label: 'Season', value: 'All winter' }];
 const reviews = [{ author: 'Anna', text: 'Clear, patient and perfectly paced.', meta: 'February 2026', verified: true }, { author: 'Sam', text: 'A confident first day on skis.', meta: 'January 2026' }];
@@ -9,8 +9,7 @@ const related = [{ slug: 'snow-day', title: 'Guided snow day', category: 'Activi
 export function objectPatternProps(category) {
   return {
     mainTags: <ObjectMainTags items={facts} />,
-    objectDescription: <ObjectDescription><p>This common content column uses the same heading anatomy and readable measure on every object page.</p><p>Only data and registered category sections change.</p></ObjectDescription>,
-    tagCloud: <ObjectTagCloud items={['Private', 'Beginner friendly', 'Equipment advice', 'English']} />,
+    objectDescription: <ObjectDescription tags={['Private', 'Beginner friendly', 'Equipment advice', 'English']}><p>This common content column uses the same heading anatomy and readable measure on every object page.</p><p>Only data and registered category sections change.</p></ObjectDescription>,
     reviews: <ObjectReviews rating={{ value: 4.9, label: '38 reviews' }} reviews={reviews} />,
     bookingSteps: <BookingSteps context="object" items={steps} />,
     relatedListings: <ObjectRelatedListings items={[...related, { ...related[0], slug: 'snow-evening', title: 'Evening snow tour' }]} />,

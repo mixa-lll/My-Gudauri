@@ -12,7 +12,6 @@ export {
   ObjectMainTags,
   ObjectRelatedListings,
   ObjectReviews,
-  ObjectTagCloud,
   ReviewCard,
   RouteProgram,
   SafetyRequirements,
