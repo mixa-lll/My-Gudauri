@@ -14,10 +14,10 @@ export function CatalogPageTemplate({ navbar, hero, categoryTabs, filterToolbar,
   </div>;
 }
 
-export function ObjectDetailPageTemplate({ navbar, hero, primaryFacts, description, footer, additionalDetails, reviews, bookingSteps, relatedListings, bookingWidget, additionalSections = [] }) {
+export function ObjectDetailPageTemplate({ navbar, hero, primaryFacts, description, footer, additionalDetails, reviews, bookingSteps, relatedListings, faqSection, bookingWidget, additionalSections = [] }) {
   return <div className="cms-template cms-template--detail">
     <RequiredSlot name="SiteNavbar">{navbar}</RequiredSlot>
-    <main><RequiredSlot name="ObjectHero">{hero}</RequiredSlot><RequiredSlot name="PrimaryFacts">{primaryFacts}</RequiredSlot><div className="cms-template__detail-layout"><div className="cms-template__flow"><RequiredSlot name="DescriptionSection">{description}</RequiredSlot>{additionalDetails}<RegisteredAdditionalSections sections={additionalSections} />{reviews}{bookingSteps}{relatedListings}</div>{bookingWidget ? <aside>{bookingWidget}</aside> : null}</div></main>
+    <main><RequiredSlot name="ObjectHero">{hero}</RequiredSlot><RequiredSlot name="PrimaryFacts">{primaryFacts}</RequiredSlot><div className="cms-template__detail-layout"><div className="cms-template__flow"><RequiredSlot name="DescriptionSection">{description}</RequiredSlot>{additionalDetails}<RegisteredAdditionalSections sections={additionalSections} />{reviews}{bookingSteps}{relatedListings}{faqSection}</div>{bookingWidget ? <aside>{bookingWidget}</aside> : null}</div></main>
     <RequiredSlot name="SiteFooter">{footer}</RequiredSlot>
   </div>;
 }
@@ -34,10 +34,10 @@ export const CMS_TEMPLATE_CONTRACTS = {
   catalog: {
     name: 'CatalogPageTemplate',
     required: ['SiteNavbar', 'CatalogHero', 'CategoryTabs', 'FilterToolbar', 'ListingGrid', 'SiteFooter'],
-    optional: ['PromoArea', 'BenefitsSection', 'BookingSteps', 'FAQSection'],
-    order: ['SiteNavbar', 'CatalogHero', 'CategoryTabs', 'FilterToolbar', 'ListingGrid', 'PromoArea?', 'BenefitsSection?', 'BookingSteps?', 'FAQSection?', 'SiteFooter'],
+    optional: ['PromoArea', 'BenefitsSection', 'BookingSteps', 'FaqAccordion'],
+    order: ['SiteNavbar', 'CatalogHero', 'CategoryTabs', 'FilterToolbar', 'ListingGrid', 'PromoArea?', 'BenefitsSection?', 'BookingSteps?', 'FaqAccordion?', 'SiteFooter'],
     dataSource: 'CMS catalog model + search/index API',
-    allowedChildren: ['SiteNavbar', 'CatalogHero', 'CategoryTabs', 'FilterToolbar', 'ListingGrid', 'PromoArea', 'BenefitsSection', 'BookingSteps', 'FAQSection', 'SiteFooter'],
+    allowedChildren: ['SiteNavbar', 'CatalogHero', 'CategoryTabs', 'FilterToolbar', 'ListingGrid', 'PromoArea', 'BenefitsSection', 'BookingSteps', 'FaqAccordion', 'SiteFooter'],
     contentLimits: 'Hero title ≤ 72 chars; description ≤ 180 chars; listing media uses registered aspect-ratio tokens.',
     responsive: 'Single-column flow below tablet; filters wrap and may open in a dialog; grid keeps a 280px minimum card width.',
     states: ['loading', 'empty', 'error', 'ready'],
@@ -46,10 +46,10 @@ export const CMS_TEMPLATE_CONTRACTS = {
   objectDetail: {
     name: 'ObjectDetailPageTemplate',
     required: ['SiteNavbar', 'ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'SiteFooter'],
-    optional: ['AdditionalDetails', 'ReviewsSection', 'BookingSteps', 'RelatedListings', 'StickyBookingWidget', 'additionalSections[]'],
-    order: ['SiteNavbar', 'ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'AdditionalDetails?', 'additionalSections[]?', 'ReviewsSection?', 'BookingSteps?', 'RelatedListings?', 'SiteFooter'],
+    optional: ['AdditionalDetails', 'ReviewsSection', 'BookingSteps', 'RelatedListings', 'FaqAccordion', 'StickyBookingWidget', 'additionalSections[]'],
+    order: ['SiteNavbar', 'ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'AdditionalDetails?', 'additionalSections[]?', 'ReviewsSection?', 'BookingSteps?', 'RelatedListings?', 'FaqAccordion?', 'SiteFooter'],
     dataSource: 'CMS object model + availability/review services',
-    allowedChildren: ['ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'AdditionalDetails', 'ReviewsSection', 'DetailBookingSteps', 'RelatedListings', 'StickyBookingWidget', 'CertificationsSection', 'RouteProgram', 'IncludedServices', 'EquipmentList', 'SafetyRequirements'],
+    allowedChildren: ['ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'AdditionalDetails', 'ReviewsSection', 'DetailBookingSteps', 'RelatedListings', 'FaqAccordion', 'StickyBookingWidget', 'CertificationsSection', 'RouteProgram', 'IncludedServices', 'EquipmentList', 'SafetyRequirements'],
     contentLimits: 'Hero title ≤ 72 chars; lead ≤ 240 chars; galleries require descriptive alt text; arbitrary HTML blocks are rejected.',
     responsive: 'Hero and content/sidebar stack below tablet; booking widget becomes a bottom sticky action.',
     states: ['loading', 'not-found', 'error', 'ready', 'unavailable'],

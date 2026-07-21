@@ -21,7 +21,7 @@ export const Default = {
         promoArea={<Slot name="PromoArea" optional />}
         benefitsSection={<Slot name="BenefitsSection" optional />}
         bookingSteps={<Slot name="BookingSteps" optional />}
-        faqSection={<Slot name="FAQSection" optional />}
+        faqSection={<Slot name="FaqAccordion" optional />}
         footer={<Slot name="SiteFooter" />}
       />
     </>

@@ -1,4 +1,4 @@
-import { FilterChip, FilterToolbar, ListingGrid, ResultCount } from '../../design-system';
+import { FilterControl, FilterToolbar, ListingGrid, ResultCount } from '../../design-system';
 
 export const listingItems = [
   {
@@ -13,7 +13,7 @@ export const listingItems = [
 ];
 
 export function PatternFilterToolbar() {
-  return <FilterToolbar resultCount={1} controls={<FilterChip selected>Beginner</FilterChip>} />;
+  return <FilterToolbar resultCount={1} controls={<FilterControl id="pattern-level" label="Level" options={[{ id: 'beginner', label: 'Beginner' }]} selectedValues={['beginner']} />} />;
 }
 
 export function PatternListingGrid() {

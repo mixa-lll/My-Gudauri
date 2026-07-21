@@ -1,7 +1,7 @@
 import './Patterns.scss';
 
-export function CatalogDiscovery({ categoryTabs, filterToolbar, resultCount, listingGrid, pagination }) {
-  return <section className="ds-pattern ds-pattern--catalog-discovery" aria-label="Catalog discovery">{categoryTabs}{filterToolbar}{resultCount}{listingGrid}{pagination}</section>;
+export function CatalogDiscovery({ categoryTabs, filterToolbar, listingGrid, pagination }) {
+  return <section className="ds-pattern ds-pattern--catalog-discovery" aria-label="Catalog discovery">{categoryTabs}{filterToolbar}{listingGrid}{pagination}</section>;
 }
 
 export function SearchAndFiltering({ search, filters, activeFilters, resultCount, results }) {
@@ -27,7 +27,7 @@ export function EditorialReading({ header, media, tableOfContents, body, sources
 }
 
 export const PATTERN_CONTRACTS = {
-  catalogDiscovery: { task: 'Browse a category, refine it, understand result volume and move through result pages.', sequence: ['CategoryTabs', 'FilterToolbar', 'ResultCount', 'ListingGrid', 'EmptyState|Pagination'], states: ['loading', 'empty', 'error', 'ready'], interaction: 'Category changes reset pagination; filters update result count; focus remains on the initiating control.', mobile: 'Tabs scroll or wrap, filters move into a dialog, cards form one column.', accessibility: 'Filter labels, result aria-live, keyboard-operable tabs and pagination.', variations: ['instant filters', 'apply filters'] },
+  catalogDiscovery: { task: 'Browse a category, refine it, understand result volume and move through result pages.', sequence: ['CategoryTabs', 'FilterToolbar (includes ResultCount)', 'ListingGrid', 'EmptyState|Pagination'], states: ['loading', 'empty', 'error', 'ready'], interaction: 'Category changes reset pagination; filters update result count; focus remains on the initiating control.', mobile: 'Tabs wrap into a compact grid; grouped filters remain keyboard operable; cards form one column.', accessibility: 'Filter labels, result aria-live, keyboard-operable tabs and pagination.', variations: ['instant filters', 'apply filters'] },
   searchAndFiltering: { task: 'Search by intent and progressively narrow results.', sequence: ['Search', 'FilterControls', 'ActiveFilters', 'ResultCount', 'Results'], states: ['idle', 'loading', 'empty', 'error', 'ready'], interaction: 'Submit preserves query; removing a chip updates results and URL state.', mobile: 'Search remains visible; filter dialog announces active count.', accessibility: 'Search landmark, labelled controls, focus restoration after dialog close.', variations: ['inline', 'dialog filters'] },
   bookingFlow: { task: 'Complete a multi-step booking with a persistent, reviewable summary.', sequence: ['Progress', 'CurrentStep', 'Summary', 'Actions', 'Status'], states: ['editing', 'validating', 'submitting', 'error', 'success'], interaction: 'Validation blocks forward movement and sends focus to the first error.', mobile: 'Summary becomes a disclosure; primary action stays reachable.', accessibility: 'Ordered step labels, error summary links, status announcements.', variations: ['request', 'instant booking'] },
   searchFlow: { task: 'Move from a broad query to a useful destination.', sequence: ['SearchHero', 'Suggestions', 'Feedback', 'Results'], states: ['idle', 'loading', 'empty', 'error', 'ready'], interaction: 'Suggestions populate the same query model as typed search.', mobile: 'Single input/action stack and compact suggestions.', accessibility: 'Search landmark, meaningful status announcements, no focus theft.', variations: ['global', 'catalog'] },

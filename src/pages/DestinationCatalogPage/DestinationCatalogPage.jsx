@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
+import { Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
 import { getDestination } from '../../data/destinations';
 import { getInstructors } from '../../services/instructorsApi';
 import './DestinationCatalogPage.scss';
@@ -36,9 +35,9 @@ const CATALOG_FILTERS = {
       ['excursions', 'Excursions', 'Culture, views and food', ['kazbegi-gergeti', 'gastro-route']]
     ],
     refinements: [
-      ['beginner', 'Beginner friendly', ['kazbegi-gergeti', 'snowmobile-plateau', 'paragliding-gudauri', 'gastro-route']],
-      ['short', 'Half day', ['snowmobile-plateau', 'paragliding-gudauri', 'gastro-route']],
-      ['transfer', 'With transfer', ['kazbegi-gergeti', 'gastro-route']]
+      ['beginner', 'Beginner friendly', null, ['kazbegi-gergeti', 'snowmobile-plateau', 'paragliding-gudauri', 'gastro-route'], 'level', 'Level'],
+      ['short', 'Half day', null, ['snowmobile-plateau', 'paragliding-gudauri', 'gastro-route'], 'duration', 'Duration'],
+      ['transfer', 'With transfer', null, ['kazbegi-gergeti', 'gastro-route'], 'format', 'Format']
     ]
   },
   rental: {
@@ -49,9 +48,9 @@ const CATALOG_FILTERS = {
       ['safety', 'Safety & extras', 'Protection and avalanche gear', ['avalanche-set', 'premium-helmet-goggles']]
     ],
     refinements: [
-      ['all-levels', 'All levels', ['snowboard-set', 'kids-ski-set', 'premium-helmet-goggles']],
-      ['advanced', 'Advanced', ['performance-ski-set', 'freeride-ski-set', 'avalanche-set']],
-      ['kids', 'For children', ['kids-ski-set']]
+      ['all-levels', 'All levels', null, ['snowboard-set', 'kids-ski-set', 'premium-helmet-goggles'], 'level', 'Level'],
+      ['advanced', 'Advanced', null, ['performance-ski-set', 'freeride-ski-set', 'avalanche-set'], 'level', 'Level'],
+      ['kids', 'For children', null, ['kids-ski-set'], 'audience', 'Audience']
     ]
   },
   transfers: {
@@ -62,9 +61,9 @@ const CATALOG_FILTERS = {
       ['regional', 'Regional routes', 'Batumi, Kazbegi and Vladikavkaz', ['batumi-gudauri', 'kazbegi-gudauri', 'vladikavkaz-gudauri']]
     ],
     refinements: [
-      ['airport', 'Airport pickup', ['tbilisi-airport-gudauri', 'kutaisi-gudauri', 'vladikavkaz-gudauri']],
-      ['groups', 'For groups', ['tbilisi-minivan-gudauri', 'vladikavkaz-gudauri']],
-      ['four-by-four', 'Winter 4×4', ['kazbegi-gudauri']]
+      ['airport', 'Airport pickup', null, ['tbilisi-airport-gudauri', 'kutaisi-gudauri', 'vladikavkaz-gudauri'], 'pickup', 'Pickup'],
+      ['groups', 'For groups', null, ['tbilisi-minivan-gudauri', 'vladikavkaz-gudauri'], 'group', 'Group'],
+      ['four-by-four', 'Winter 4×4', null, ['kazbegi-gudauri'], 'vehicle', 'Vehicle']
     ]
   },
   services: {
@@ -75,9 +74,9 @@ const CATALOG_FILTERS = {
       ['hosting', 'Dining & events', 'Private moments, well planned', ['private-chef', 'event-decor']]
     ],
     refinements: [
-      ['at-your-stay', 'At your stay', ['evening-nanny', 'sports-massage', 'private-chef']],
-      ['family', 'For families', ['mountain-photo-session', 'evening-nanny', 'private-chef']],
-      ['custom', 'Custom plan', ['private-chef', 'event-decor']]
+      ['at-your-stay', 'At your stay', null, ['evening-nanny', 'sports-massage', 'private-chef'], 'location', 'Location'],
+      ['family', 'For families', null, ['mountain-photo-session', 'evening-nanny', 'private-chef'], 'audience', 'Audience'],
+      ['custom', 'Custom plan', null, ['private-chef', 'event-decor'], 'format', 'Format']
     ]
   },
   stays: {
@@ -88,9 +87,9 @@ const CATALOG_FILTERS = {
       ['hotels', 'Hotels', 'A room with useful services', ['twins-view-room']]
     ],
     refinements: [
-      ['ski-in', 'Ski-in / ski-out', ['four-seasons-loft', 'atrium-ski-in']],
-      ['family', 'Family stays', ['neo-family-apartment', 'panorama-chalet']],
-      ['two-guests', 'For two guests', ['twins-view-room', 'loft-long-stay']]
+      ['ski-in', 'Ski-in / ski-out', null, ['four-seasons-loft', 'atrium-ski-in'], 'access', 'Access'],
+      ['family', 'Family stays', null, ['neo-family-apartment', 'panorama-chalet'], 'guests', 'Guests'],
+      ['two-guests', 'For two guests', null, ['twins-view-room', 'loft-long-stay'], 'guests', 'Guests']
     ]
   },
   places: {
@@ -101,9 +100,9 @@ const CATALOG_FILTERS = {
       ['wellness', 'Spa & useful', 'Recovery and essentials', ['gudauri-lodge-spa', 'smart-market', 'friendship-monument']]
     ],
     refinements: [
-      ['late', 'Open late', ['drunk-cherry', 'black-dog-bar']],
-      ['new-gudauri', 'New Gudauri', ['drunk-cherry', 'black-dog-bar', 'platforma-cafe']],
-      ['bookable', 'Book ahead', ['drunk-cherry', 'gudauri-lodge-spa']]
+      ['late', 'Open late', null, ['drunk-cherry', 'black-dog-bar'], 'hours', 'Hours'],
+      ['new-gudauri', 'New Gudauri', null, ['drunk-cherry', 'black-dog-bar', 'platforma-cafe'], 'location', 'Location'],
+      ['bookable', 'Book ahead', null, ['drunk-cherry', 'gudauri-lodge-spa'], 'booking', 'Booking']
     ]
   }
 };
@@ -148,61 +147,6 @@ function matchesActiveRefinements(section, refinements, activeFilters, item) {
   }, {});
 
   return Object.values(grouped).every((filters) => filters.some((filter) => matchesFilter(section, filter, item)));
-}
-
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 12 10" aria-hidden="true">
-      <path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
-    </svg>
-  );
-}
-
-function ChevronIcon() {
-  return (
-    <svg viewBox="0 0 12 8" aria-hidden="true">
-      <path d="m1 1.25 5 5 5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function InstructorFilterDropdown({ group, activeFilters, onToggle, onClear }) {
-  const selectedCount = group.filters.filter((filter) => activeFilters.includes(filter.id)).length;
-
-  return (
-    <Popover.Root>
-      <Popover.Trigger asChild>
-        <button className={`instructor-filter-trigger ${selectedCount ? 'is-active' : ''}`.trim()} type="button">
-          <span>{group.label}</span>
-          {selectedCount ? <strong aria-label={`${selectedCount} selected`}>{selectedCount}</strong> : null}
-          <span className="instructor-filter-trigger__chevron"><ChevronIcon /></span>
-        </button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content className="instructor-filter-popover" align="start" sideOffset={9} collisionPadding={12}>
-          <div className="instructor-filter-popover__header">
-            <div><span>Filter by</span><strong>{group.label}</strong></div>
-            {selectedCount ? <button type="button" onClick={() => onClear(group.filters.map((filter) => filter.id))}>Clear</button> : null}
-          </div>
-          <div className="instructor-filter-popover__options">
-            {group.filters.map((filter) => {
-              const checked = activeFilters.includes(filter.id);
-              const controlId = `instructor-filter-${group.id}-${filter.id}`;
-              return (
-                <div className={`instructor-filter-option ${checked ? 'is-checked' : ''}`.trim()} key={filter.id}>
-                  <label htmlFor={controlId}>{filter.label}</label>
-                  <Checkbox.Root id={controlId} checked={checked} onCheckedChange={() => onToggle(filter.id)} aria-label={filter.label}>
-                    <Checkbox.Indicator><CheckIcon /></Checkbox.Indicator>
-                  </Checkbox.Root>
-                </div>
-              );
-            })}
-          </div>
-          <Popover.Arrow className="instructor-filter-popover__arrow" width={14} height={7} />
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
-  );
 }
 
 function PricingInfoPopover({ steps = [] }) {
@@ -361,37 +305,17 @@ export function DestinationCatalogPage({ section: sectionProp }) {
               }}
               label={section === 'instructors' ? 'Instructor disciplines' : `${config.title} categories`}
             />
-            <div className="destination-toolbar">
-              <div>
-                <SectionHeading size="sm" kicker="Selection options" title={section === 'instructors' ? 'Find the right fit' : 'Refine results'} />
-                {section === 'instructors' ? (
-                  <div className="instructor-filter-bar" aria-label="Instructor filters">
-                    {refinementGroups.map((group) => (
-                      <InstructorFilterDropdown
-                        group={group}
-                        activeFilters={activeFilters}
-                        onToggle={toggleFilter}
-                        onClear={clearFilters}
-                        key={group.id}
-                      />
-                    ))}
-                    {activeFilters.length ? <button className="instructor-filter-clear" type="button" onClick={() => setActiveFilters([])}>Clear all</button> : null}
-                  </div>
-                ) : (
-                  <div className="destination-filters">
-                    {refinements.map((filter) => (
-                      <button className={activeFilters.includes(filter.id) ? 'is-active' : ''} type="button" aria-pressed={activeFilters.includes(filter.id)} onClick={() => toggleFilter(filter.id)} key={filter.id}>
-                        {filter.label}<span aria-hidden="true">{activeFilters.includes(filter.id) ? '×' : '⌄'}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <div className="destination-toolbar__count">
-                <h2 id="destination-list-title">Selected for you</h2>
-                <p>{status === 'loading' ? `Loading ${config.countLabel}…` : `${displayedItems.length} ${section === 'instructors' && displayedItems.length === 1 ? 'instructor' : config.countLabel}`}</p>
-              </div>
-            </div>
+            <FilterToolbar
+              title={section === 'instructors' ? 'Find the right fit' : 'Refine results'}
+              titleId="destination-list-title"
+              ariaLabel={`${config.title} filters`}
+              resultCount={status === 'loading' ? '…' : displayedItems.length}
+              resultLabel={section === 'instructors' && displayedItems.length === 1 ? 'instructor' : config.countLabel}
+              controls={refinementGroups.map((group) => (
+                <FilterControl id={`${section}-${group.id}`} label={group.label} options={group.filters} selectedValues={activeFilters} onToggle={toggleFilter} onClear={clearFilters} key={group.id} />
+              ))}
+              actions={activeFilters.length ? <Button variant="link" onClick={() => setActiveFilters([])}>Clear all</Button> : null}
+            />
 
             {status === 'loading' ? (
               <div className="destination-empty-state"><p>Loading {config.countLabel}…</p></div>

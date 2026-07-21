@@ -3,10 +3,10 @@ import { FAQ_ITEMS } from '../data/faqItems';
 import { defineComposition } from '../design-system/architecture/registry';
 
 const meta = {
-  title: 'Blocks/Catalog/FAQ Section',
+  title: 'Blocks/Global/FAQ Section',
   component: FaqAccordion,
   args: { items: FAQ_ITEMS, initialOpen: 0, kicker: 'Frequently asked questions', title: 'FAQ' },
-  parameters: { composition: defineComposition({ root: 'FAQSection' }) }
+  parameters: { composition: defineComposition({ root: 'FaqAccordion' }) }
 };
 
 export default meta;

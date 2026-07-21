@@ -1,24 +1,57 @@
-import { ActivityCard, CatalogCategoryTabs, EditorialCard, FaqAccordion, InstructorCard, RentalCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
+import { useId } from 'react';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import * as Popover from '@radix-ui/react-popover';
+import { ActivityCard, CatalogCategoryTabs, EditorialCard, InstructorCard, RentalCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
 import './CatalogBlocks.scss';
 
-export function CatalogHero({ kicker, title, description, media, actions, breadcrumbs, align = 'center', titleId }) {
+export function CatalogHero({ kicker, title, description, align = 'center', titleId }) {
   if (!['start', 'center'].includes(align)) throw new Error(`CatalogHero: unknown alignment “${align}”.`);
-  return <section className={`ds-catalog-hero ds-catalog-hero--${align} ${media ? 'ds-catalog-hero--with-media' : 'ds-catalog-hero--without-media'}`}>{breadcrumbs}<div className="ds-catalog-hero__content"><SectionHeading headingLevel="h1" size="display" align={align} kicker={kicker} title={title} titleId={titleId} description={description} actions={actions} /></div>{media ? <div className="ds-catalog-hero__media">{media}</div> : null}</section>;
+  return <section className={`ds-catalog-hero ds-catalog-hero--${align}`}><div className="ds-catalog-hero__content"><SectionHeading headingLevel="h1" size="display" align={align} kicker={kicker} title={title} titleId={titleId} description={description} /></div></section>;
 }
 
 export function CategoryTabs(props) { return <CatalogCategoryTabs {...props} />; }
-export function FAQSection(props) { return <FaqAccordion {...props} />; }
 
-export function FilterControl({ label, value, options, onChange, disabled = false }) {
-  return <label className="ds-filter-control"><span>{label}</span><select value={value} onChange={(event) => onChange?.(event.target.value)} disabled={disabled}>{options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>;
+function CheckIcon() {
+  return <svg viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>;
 }
 
-export function ResultCount({ count, label = 'results' }) {
-  return <p className="ds-result-count" aria-live="polite"><strong>{count}</strong> {label}</p>;
+function ChevronIcon() {
+  return <svg viewBox="0 0 12 8" aria-hidden="true"><path d="m1 1.25 5 5 5-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" /></svg>;
 }
 
-export function FilterToolbar({ controls, resultCount, actions }) {
-  return <section className="ds-filter-toolbar" aria-label="Catalog filters"><div className="ds-filter-toolbar__controls">{controls}</div><ResultCount count={resultCount} />{actions ? <div className="ds-filter-toolbar__actions">{actions}</div> : null}</section>;
+export function FilterControl({ id, label, options = [], selectedValues = [], onToggle, onClear, disabled = false }) {
+  const generatedId = useId();
+  const controlId = id ?? generatedId;
+  const selectedCount = options.filter((option) => selectedValues.includes(option.id)).length;
+
+  return <Popover.Root>
+    <Popover.Trigger asChild>
+      <button className={`ds-filter-control ${selectedCount ? 'is-active' : ''}`.trim()} type="button" disabled={disabled}>
+        <span>{label}</span>{selectedCount ? <strong aria-label={`${selectedCount} selected`}>{selectedCount}</strong> : null}<span className="ds-filter-control__chevron"><ChevronIcon /></span>
+      </button>
+    </Popover.Trigger>
+    <Popover.Portal>
+      <Popover.Content className="ds-filter-popover" align="start" sideOffset={9} collisionPadding={12}>
+        <div className="ds-filter-popover__header"><div><span>Filter by</span><strong>{label}</strong></div>{selectedCount ? <button type="button" onClick={() => onClear?.(options.map((option) => option.id))}>Clear</button> : null}</div>
+        <div className="ds-filter-popover__options">
+          {options.map((option) => {
+            const checked = selectedValues.includes(option.id);
+            const optionId = `${controlId}-${option.id}`;
+            return <div className={`ds-filter-option ${checked ? 'is-checked' : ''}`.trim()} key={option.id}><label htmlFor={optionId}>{option.label}</label><Checkbox.Root id={optionId} checked={checked} onCheckedChange={() => onToggle?.(option.id)} aria-label={option.label}><Checkbox.Indicator><CheckIcon /></Checkbox.Indicator></Checkbox.Root></div>;
+          })}
+        </div>
+        <Popover.Arrow className="ds-filter-popover__arrow" width={14} height={7} />
+      </Popover.Content>
+    </Popover.Portal>
+  </Popover.Root>;
+}
+
+export function ResultCount({ count, label = 'results', eyebrow = 'Selected for you' }) {
+  return <div className="ds-result-count" aria-live="polite"><span>{eyebrow}</span><p><strong>{count}</strong> {label}</p></div>;
+}
+
+export function FilterToolbar({ kicker = 'Selection options', title = 'Refine results', controls, resultCount, resultLabel = 'results', resultEyebrow = 'Selected for you', actions, ariaLabel = 'Catalog filters', titleId }) {
+  return <section className="ds-filter-toolbar" aria-label={ariaLabel}><div className="ds-filter-toolbar__main"><SectionHeading size="sm" kicker={kicker} title={title} titleId={titleId} /><div className="ds-filter-toolbar__controls">{controls}{actions ? <div className="ds-filter-toolbar__actions">{actions}</div> : null}</div></div><ResultCount count={resultCount} label={resultLabel} eyebrow={resultEyebrow} /></section>;
 }
 
 const CARD_TYPES = { activity: ActivityCard, instructor: InstructorCard, rental: RentalCard, transfer: TransferCard, editorial: EditorialCard };

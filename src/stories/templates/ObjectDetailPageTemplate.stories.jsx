@@ -19,6 +19,7 @@ export const Default = {
         description={<Slot name="DescriptionSection" />}
         additionalDetails={<Slot name="AdditionalDetails" optional />}
         reviews={<Slot name="ReviewsSection" optional />}
+        faqSection={<Slot name="FaqAccordion" optional />}
         bookingWidget={<Slot name="StickyBookingWidget" optional />}
         footer={<Slot name="SiteFooter" />}
         additionalSections={[]}

@@ -1,6 +1,6 @@
 import { CatalogDiscovery, Pagination } from '../../design-system';
 import { defineComposition } from '../../design-system/architecture/registry';
-import { PatternFilterToolbar, PatternListingGrid, PatternResultCount } from './shared';
+import { PatternFilterToolbar, PatternListingGrid } from './shared';
 
 export default {
   title: 'Patterns/Catalog Discovery',
@@ -13,7 +13,6 @@ export const Default = {
     <CatalogDiscovery
       categoryTabs={<div className="sb-sample">Category tabs</div>}
       filterToolbar={<PatternFilterToolbar />}
-      resultCount={<PatternResultCount />}
       listingGrid={<PatternListingGrid />}
       pagination={<Pagination page={1} totalPages={3} />}
     />

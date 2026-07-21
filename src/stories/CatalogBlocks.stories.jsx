@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BenefitCard, BenefitsSection, BookingStep, BookingSteps, Button, CatalogHero, FilterControl, FilterToolbar, ListingGrid, MediaPlaceholder, ResultCount } from '../design-system';
+import { BenefitCard, BenefitsSection, BookingStep, BookingSteps, Button, CatalogHero, FilterControl, FilterToolbar, ListingGrid, ResultCount } from '../design-system';
 import { defineComposition } from '../design-system/architecture/registry';
 
 const listings = [
@@ -7,14 +7,17 @@ const listings = [
   { slug: 'freeride-day', title: 'Freeride day', category: 'Adventure', rating: 4.8, reviews: 16, price: '520 GEL', priceSuffix: 'per group', tags: ['Advanced', '6 hours'] }
 ];
 
-export default { title: 'Blocks/Catalog', parameters: { controls: { disable: true } } };
+export default { title: 'Blocks/Catalog', tags: ['autodocs'], parameters: { controls: { disable: true } } };
 const composition = (root) => ({ composition: defineComposition({ root }) });
 export const CatalogHeroBlock = { name: 'Catalog Hero', parameters: composition('CatalogHero'), render: () => <CatalogHero kicker="Mountain experiences" title="Activities" description="Discover Gudauri beyond the piste with trusted local guides and clear itineraries." /> };
 export const CatalogHeroSplitStart = { name: 'Catalog Hero / Split Start', parameters: composition('CatalogHero'), render: () => <CatalogHero align="start" kicker="Local knowledge" title="Articles" description="Practical guides for a smoother mountain trip — written with local experts and updated for the season." /> };
-export const CatalogHeroWithMedia = { name: 'Catalog Hero / With Media', parameters: composition('CatalogHero'), render: () => <CatalogHero align="start" kicker="Gudauri catalog" title="Book trusted mountain experiences" description="Compare verified local services with clear terms." actions={<Button>Browse all</Button>} media={<MediaPlaceholder label="Gudauri catalog" />} /> };
-function Toolbar() { const [value, setValue] = useState('all'); return <FilterToolbar resultCount={18} controls={<><FilterControl label="Category" value={value} onChange={setValue} options={[{ value: 'all', label: 'All' }, { value: 'lessons', label: 'Lessons' }]} /><FilterControl label="Sort" value="recommended" options={[{ value: 'recommended', label: 'Recommended' }, { value: 'price', label: 'Price' }]} /></>} actions={<Button variant="ghost">Reset</Button>} />; }
+const languageOptions = [{ id: 'english', label: 'English' }, { id: 'russian', label: 'Russian' }, { id: 'georgian', label: 'Georgian' }];
+const focusOptions = [{ id: 'first-lessons', label: 'First lessons' }, { id: 'technique', label: 'Technique' }, { id: 'freeride', label: 'Freeride' }];
+function Toolbar() { const [selected, setSelected] = useState(['english']); const toggle = (id) => setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]); const clear = (ids) => setSelected((current) => current.filter((id) => !ids.includes(id))); return <FilterToolbar title="Find the right fit" resultCount={18} resultLabel="instructors" controls={<><FilterControl id="story-language" label="Language" options={languageOptions} selectedValues={selected} onToggle={toggle} onClear={clear} /><FilterControl id="story-focus" label="Focus" options={focusOptions} selectedValues={selected} onToggle={toggle} onClear={clear} /></>} actions={<Button variant="link" onClick={() => setSelected([])}>Clear all</Button>} />; }
+function Control() { const [selected, setSelected] = useState(['english']); return <FilterControl id="story-filter" label="Language" options={languageOptions} selectedValues={selected} onToggle={(id) => setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])} onClear={() => setSelected([])} />; }
 export const FilterToolbarBlock = { name: 'Filter Toolbar', parameters: composition('FilterToolbar'), render: () => <div className="sb-canvas"><Toolbar /></div> };
-export const FilterControlComponent = { name: 'Filter Control', parameters: composition('FilterControl'), render: () => <div className="sb-canvas"><FilterControl label="Category" value="all" options={[{ value: 'all', label: 'All categories' }]} /></div> };
+export const FilterControlComponent = { name: 'Filter Control', parameters: composition('FilterControl'), render: () => <div className="sb-canvas"><Control /></div> };
+export const FilterControlDisabled = { name: 'Filter Control / Disabled', parameters: composition('FilterControl'), render: () => <div className="sb-canvas"><FilterControl label="Language" options={languageOptions} disabled /></div> };
 export const ResultCountComponent = { name: 'Result Count', parameters: composition('ResultCount'), render: () => <div className="sb-canvas"><ResultCount count={18} /></div> };
 export const ListingGridReady = { name: 'Listing Grid / Ready', parameters: composition('ListingGrid'), render: () => <div className="sb-canvas"><ListingGrid items={listings} /></div> };
 export const ListingGridStates = { name: 'Listing Grid / States', parameters: composition('ListingGrid'), render: () => <main className="sb-canvas sb-section"><ListingGrid state="loading" /><ListingGrid items={[]} emptyAction={<Button variant="secondary">Clear filters</Button>} /><ListingGrid state="error" onRetry={() => {}} /></main> };

@@ -1,7 +1,7 @@
 .ui-accordion { display: grid; gap: var(--space-300); }
 .ui-accordion__item { min-width: 0; padding: 0 clamp(18px, 2vw, 28px); border: 1px solid var(--border-subtle); border-radius: var(--radius-control); background: var(--surface-page); transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard); }
 .ui-accordion__item:hover { border-color: var(--border-default); }
-.ui-accordion__item.is-open { border-color: var(--border-default); background: var(--surface-card); }
+.ui-accordion__item.is-open { border-color: var(--border-default); }
 .ui-accordion__item h3 { margin: 0; }
 .ui-accordion__item button { width: 100%; min-height: 68px; padding: 0; border: 0; display: grid; grid-template-columns: 24px 1fr; align-items: center; gap: var(--space-400); background: transparent; color: var(--text-primary); cursor: pointer; font: var(--fw-regular) var(--type-body-size) / var(--type-body-line) var(--font-body); text-align: left; }
 .ui-accordion__item button:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
