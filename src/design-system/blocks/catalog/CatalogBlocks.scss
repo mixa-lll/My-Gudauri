@@ -35,7 +35,7 @@
 .ds-result-count { min-width: max-content; text-align: right; }
 .ds-result-count p { margin: var(--space-100) 0 0; color: var(--text-secondary); font-size: var(--type-body-small-size); }
 .ds-result-count strong { color: var(--text-primary); font: var(--fw-medium) var(--type-subsection-title-size) / 1 var(--font-heading); }
-.ds-listing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--layout-gutter); }
+.ds-listing-grid { width: 100%; }
 .ds-section { display: grid; gap: var(--space-900); }
 .ds-benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--layout-gutter); }
 .ds-benefit-card { padding: var(--space-600); }

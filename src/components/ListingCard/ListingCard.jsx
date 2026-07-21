@@ -5,10 +5,14 @@ import { MediaPlaceholder } from '../MediaPlaceholder/MediaPlaceholder';
 import { Badge } from '../UI/Badge/Badge';
 import './ListingCard.scss';
 
+const CARD_LAYOUTS = ['vertical', 'horizontal', 'featured'];
+const GRID_COLUMNS = ['auto', 2, 3, 4];
+
 export function ListingCard({
   to,
   className,
-  variant = 'default',
+  layout = 'vertical',
+  mediaPosition = 'center',
   image,
   imageAlt = '',
   placeholderLabel,
@@ -25,8 +29,12 @@ export function ListingCard({
 
   useEffect(() => setImageFailed(false), [image]);
 
+  if (!CARD_LAYOUTS.includes(layout)) throw new Error(`ListingCard: unknown layout “${layout}”.`);
+  if (!['center', 'top'].includes(mediaPosition)) throw new Error(`ListingCard: unknown media position “${mediaPosition}”.`);
+  if (!Number.isInteger(headingLevel) || headingLevel < 2 || headingLevel > 6) throw new Error('ListingCard: headingLevel must be between 2 and 6.');
+
   return (
-    <Link className={cn('listing-card', `listing-card--${variant}`, className)} to={to}>
+    <Link className={cn('listing-card', `listing-card--${layout}`, `listing-card--media-${mediaPosition}`, className)} to={to}>
       <div className="listing-card__media">
         {image && !imageFailed ? (
           <img src={image} alt={imageAlt} loading={loading} onError={() => setImageFailed(true)} />
@@ -47,6 +55,12 @@ export function ListingCard({
       </div>
     </Link>
   );
+}
+
+export function ListingCardGrid({ children, columns = 'auto', className, ariaLabel }) {
+  if (!GRID_COLUMNS.includes(columns)) throw new Error('ListingCardGrid: columns must be “auto”, 2, 3 or 4.');
+  const Component = ariaLabel ? 'section' : 'div';
+  return <Component className={cn('listing-card-grid', `listing-card-grid--${columns}`, className)} aria-label={ariaLabel}>{children}</Component>;
 }
 
 export function ListingCardPill({ children, icon, className, title }) {

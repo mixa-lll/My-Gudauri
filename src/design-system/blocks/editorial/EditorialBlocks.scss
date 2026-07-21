@@ -24,6 +24,5 @@
 .ds-article-body img { max-width: 100%; border-radius: var(--radius-md); }
 .ds-article-sources { max-width: var(--content-text); padding-top: var(--space-600); border-top: 1px solid var(--border-subtle); }
 .ds-related-articles { display: grid; gap: var(--space-600); }
-.ds-related-articles > div { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--layout-gutter); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 860px) { .ds-article-toc { position: static; } }

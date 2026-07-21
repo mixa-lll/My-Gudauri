@@ -21,6 +21,7 @@
 .sb-section > header p { max-width: 68ch; margin: 8px 0 0; color: var(--grey-400); }
 .sb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
 .sb-grid--cards { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.sb-card-preview { width: min(100%, 390px); }
 .sb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .sb-inverse-sample { padding: var(--space-600); border-radius: var(--radius-md); background: var(--surface-inverse); }
 .sb-media-sample { min-height: 180px; padding: var(--space-600); border-radius: var(--radius-md); display: flex; align-items: flex-start; background: url('/assets/design-1/hero-gudauri-panorama.jpg') center / cover; }

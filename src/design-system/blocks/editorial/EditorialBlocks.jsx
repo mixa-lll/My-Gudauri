@@ -1,4 +1,4 @@
-import { BackLink, Badge, EditorialCard, MediaPlaceholder, Notice, SectionHeading } from '../../../components';
+import { BackLink, Badge, EditorialCard, ListingCardGrid, MediaPlaceholder, Notice, SectionHeading } from '../../../components';
 import './EditorialBlocks.scss';
 
 export function ArticleHeader({ backLink, category, title, dek, author, publishedAt, readingTime }) {
@@ -26,5 +26,5 @@ export function Sources({ items = [], title = 'Sources' }) {
 }
 
 export function RelatedArticles({ items = [], title = 'Keep reading' }) {
-  return <section className="ds-related-articles"><SectionHeading title={title} size="sm" /><div>{items.map((item) => <EditorialCard item={item} key={item.slug} />)}</div></section>;
+  return <section className="ds-related-articles"><SectionHeading title={title} size="sm" /><ListingCardGrid columns="auto">{items.map((item) => <EditorialCard item={item} key={item.slug} />)}</ListingCardGrid></section>;
 }

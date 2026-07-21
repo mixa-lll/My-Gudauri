@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
+import { Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
 import { getDestination } from '../../data/destinations';
 import { getInstructors } from '../../services/instructorsApi';
 import './DestinationCatalogPage.scss';
@@ -322,9 +322,9 @@ export function DestinationCatalogPage({ section: sectionProp }) {
             ) : status === 'error' ? (
               <p role="alert">Instructors are temporarily unavailable. Please try again later.</p>
             ) : displayedItems.length ? (
-              <div className="destination-grid">
+              <ListingCardGrid className="destination-grid" columns={3} ariaLabel={`${config.title} results`}>
                 {displayedItems.map((item) => <DestinationCard item={item} section={section} key={item.slug} />)}
-              </div>
+              </ListingCardGrid>
             ) : (
               <div className="destination-empty-state">
                 <p>No offers match these filters yet.</p>

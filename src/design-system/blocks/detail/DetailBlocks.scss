@@ -22,7 +22,7 @@
 .ds-prose > :first-child { margin-top: 0; }
 .ds-prose > :last-child { margin-bottom: 0; }
 .ds-additional-details { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-600); }
-.ds-reviews, .ds-related-listings { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--layout-gutter); }
+.ds-reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--layout-gutter); }
 .ds-reviews article { padding: var(--space-600); }
 .ds-reviews blockquote { margin: 0; color: var(--text-primary); font: var(--fw-regular) var(--type-body-large-size) / var(--type-body-large-line) var(--font-body); }
 .ds-reviews footer { margin-top: var(--space-500); display: grid; gap: var(--space-200); color: var(--text-secondary); }

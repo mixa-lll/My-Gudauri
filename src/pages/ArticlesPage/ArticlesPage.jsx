@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CatalogCategoryTabs, CatalogHero, Container, ListingCard, ListingCardAction, ListingCardPill, SiteFooter, SiteNavbar } from '../../design-system';
+import { CatalogCategoryTabs, CatalogHero, Container, EditorialCard, ListingCardGrid, SiteFooter, SiteNavbar } from '../../design-system';
 import { ARTICLES } from '../../data/destinations';
 import './ArticlesPage.scss';
 
@@ -47,36 +47,21 @@ export function ArticlesPage() {
             label="Article topics"
           />
 
-          <ListingCard
+          <EditorialCard
             className="featured-article"
-            variant="featured"
-            to={`/articles/${featured.slug}`}
-            image={featured.image}
-            imageAlt={featured.title}
-            title={featured.title}
-            description={featured.excerpt}
+            item={featured}
+            layout="featured"
             headingLevel={2}
             loading="eager"
-            mediaTop={<ListingCardPill>{featured.category}</ListingCardPill>}
-            footer={<ListingCardAction>Read article</ListingCardAction>}
           />
 
           <section className="articles-list" aria-labelledby="latest-articles-title">
             <div className="articles-list__heading"><h2 id="latest-articles-title">Latest guides</h2><span>{filteredArticles.length} articles</span></div>
-            <div className="articles-grid">
+            <ListingCardGrid className="articles-grid" columns={3}>
               {articles.map((article) => (
-                <ListingCard
-                  to={`/articles/${article.slug}`}
-                  image={article.image}
-                  imageAlt={article.title}
-                  title={article.title}
-                  description={article.excerpt}
-                  mediaTop={<ListingCardPill>{article.category}</ListingCardPill>}
-                  footer={<ListingCardAction>{article.readTime}</ListingCardAction>}
-                  key={article.slug}
-                />
+                <EditorialCard item={article} key={article.slug} />
               ))}
-            </div>
+            </ListingCardGrid>
           </section>
         </Container>
       </main>

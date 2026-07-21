@@ -1,4 +1,4 @@
-import { ActivityCard, Badge, Button, EditorialCard, InstructorCard, Notice, Price, Rating, RentalCard, SectionHeading, Surface, TransferCard } from '../../../components';
+import { ActivityCard, Badge, Button, EditorialCard, InstructorCard, ListingCardGrid, Notice, Price, Rating, RentalCard, SectionHeading, StayCard, Surface, TransferCard } from '../../../components';
 import './DetailBlocks.scss';
 
 export function ObjectHero({ variant = 'split', breadcrumbs, title, description, media, badges = [], titleId }) {
@@ -30,11 +30,11 @@ export function DetailBookingSteps({ title = 'How booking works', items = [] }) 
   return <section className="ds-detail-section"><SectionHeading title={title} size="sm" /><ol className="ds-detail-steps">{items.map((item, index) => <li key={item.title}><Badge tone="inverse">{index + 1}</Badge><div><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol></section>;
 }
 
-const RELATED_CARDS = { activity: ActivityCard, instructor: InstructorCard, rental: RentalCard, transfer: TransferCard, editorial: EditorialCard };
+const RELATED_CARDS = { activity: ActivityCard, instructor: InstructorCard, rental: RentalCard, stay: StayCard, transfer: TransferCard, editorial: EditorialCard };
 export function RelatedListings({ title = 'You may also like', items = [], cardType = 'activity' }) {
   const Card = RELATED_CARDS[cardType];
   if (!Card) throw new Error(`RelatedListings: unregistered card type “${cardType}”.`);
-  return <section className="ds-detail-section"><SectionHeading title={title} size="sm" /><div className="ds-related-listings">{items.map((item) => <Card key={item.slug} item={item} instructor={cardType === 'instructor' ? item : undefined} />)}</div></section>;
+  return <section className="ds-detail-section"><SectionHeading title={title} size="sm" /><ListingCardGrid className="ds-related-listings" columns="auto">{items.map((item) => <Card key={item.slug} item={item} />)}</ListingCardGrid></section>;
 }
 
 export function StickyBookingWidget({ price, suffix, availability, actionLabel = 'Request booking', onAction, secondaryAction }) {

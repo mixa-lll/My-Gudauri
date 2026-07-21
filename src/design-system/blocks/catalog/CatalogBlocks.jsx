@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
-import { ActivityCard, CatalogCategoryTabs, EditorialCard, InstructorCard, RentalCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
+import { ActivityCard, CatalogCategoryTabs, EditorialCard, InstructorCard, ListingCardGrid, RentalCard, StayCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
 import './CatalogBlocks.scss';
 
 export function CatalogHero({ kicker, title, description, align = 'center', titleId }) {
@@ -54,15 +54,15 @@ export function FilterToolbar({ kicker = 'Selection options', title = 'Refine re
   return <section className="ds-filter-toolbar" aria-label={ariaLabel}><div className="ds-filter-toolbar__main"><SectionHeading size="sm" kicker={kicker} title={title} titleId={titleId} /><div className="ds-filter-toolbar__controls">{controls}{actions ? <div className="ds-filter-toolbar__actions">{actions}</div> : null}</div></div><ResultCount count={resultCount} label={resultLabel} eyebrow={resultEyebrow} /></section>;
 }
 
-const CARD_TYPES = { activity: ActivityCard, instructor: InstructorCard, rental: RentalCard, transfer: TransferCard, editorial: EditorialCard };
+const CARD_TYPES = { activity: ActivityCard, instructor: InstructorCard, rental: RentalCard, stay: StayCard, transfer: TransferCard, editorial: EditorialCard };
 
-export function ListingGrid({ items = [], cardType = 'activity', state = 'ready', emptyAction, onRetry, ariaLabel = 'Catalog results' }) {
+export function ListingGrid({ items = [], cardType = 'activity', columns = 'auto', state = 'ready', emptyAction, onRetry, ariaLabel = 'Catalog results' }) {
   if (state === 'loading') return <LoadingState title="Loading results" description="The catalog will update as soon as the data is ready." />;
   if (state === 'error') return <ErrorState title="Results are unavailable" description="Check your connection and try again." action={<Button variant="secondary" onClick={onRetry}>Try again</Button>} />;
   if (!items.length) return <EmptyState title="No matching results" description="Try removing one or more filters." action={emptyAction} />;
   const Card = CARD_TYPES[cardType];
   if (!Card) throw new Error(`ListingGrid: unregistered card type “${cardType}”.`);
-  return <section className="ds-listing-grid" aria-label={ariaLabel}>{items.map((item) => <Card item={item} instructor={cardType === 'instructor' ? item : undefined} key={item.slug} />)}</section>;
+  return <ListingCardGrid className="ds-listing-grid" columns={columns} ariaLabel={ariaLabel}>{items.map((item) => <Card item={item} key={item.slug} />)}</ListingCardGrid>;
 }
 
 export function BenefitCard({ icon, title, description }) {
