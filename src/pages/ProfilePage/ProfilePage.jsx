@@ -3,9 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import {
   BackLink,
   Badge,
-  BookingSteps,
   BookingWidget,
   FaqAccordion,
+  InstructorCertifications,
   InstructorObjectPattern,
   ObjectDescription,
   ObjectDetailPageTemplate,
@@ -20,12 +20,6 @@ import {
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructor, getInstructors } from '../../services/instructorsApi';
 import './ProfilePage.scss';
-
-const BOOKING_STEPS = [
-  { title: 'Send your lesson request', description: 'Choose the date, duration, group size and your current level.' },
-  { title: 'We confirm availability', description: 'A local manager checks the instructor schedule and final lesson details.' },
-  { title: 'Receive the confirmation', description: 'Get the meeting point and a secure payment link after everything is agreed.' },
-];
 
 export function ProfilePage() {
   const { slug } = useParams();
@@ -115,9 +109,8 @@ export function ProfilePage() {
   const content = <InstructorObjectPattern
     mainTags={<ObjectMainTags items={facts} />}
     objectDescription={<ObjectDescription kicker={instructor.tagline} title="About the instructor" tags={instructor.tags} tagsLabel="Lesson focus">{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
-    additionalSections={[{ type: 'certifications', items: instructor.certifications.map((item) => ({ title: item.title, description: item.level })) }]}
+    certifications={<InstructorCertifications items={instructor.certifications} />}
     reviews={<ObjectReviews rating={{ value: instructor.rating, label: `${instructor.reviews} reviews` }} reviews={reviews} />}
-    bookingSteps={<BookingSteps context="object" items={BOOKING_STEPS} />}
     faqSection={<FaqAccordion kicker="Good to know" title="Common questions" items={FAQ_ITEMS} />}
     bookingWidget={<BookingWidget category="instructor" price={instructor.pricing.hourlyRateGel} availability={instructor.availability} />}
     relatedListings={<ObjectRelatedListings cardType="instructor" title="More instructors" items={related} />}

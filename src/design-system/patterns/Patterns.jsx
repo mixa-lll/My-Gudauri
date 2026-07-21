@@ -1,4 +1,5 @@
 import { RegisteredAdditionalSections } from '../blocks/detail/DetailBlocks';
+import { InstructorBookingSteps } from '../blocks/detail/instructor/InstructorDetailBlocks';
 import './Patterns.scss';
 
 export function CatalogDiscovery({ categoryTabs, filterToolbar, listingGrid, pagination }) {
@@ -27,17 +28,19 @@ export function EditorialReading({ header, media, tableOfContents, body, sources
   return <section className="ds-pattern ds-pattern--editorial-reading" aria-label="Editorial reading">{header}{media}<div className="ds-pattern__reading-layout">{tableOfContents}<div>{body}{sources}</div></div>{related}</section>;
 }
 
-function ObjectPatternFrame({ category, mainTags, objectDescription, additionalSections = [], reviews, bookingSteps, relatedListings, faqSection, bookingWidget }) {
+function ObjectPatternFrame({ category, mainTags, objectDescription, categorySection, additionalSections = [], reviews, bookingSteps, relatedListings, faqSection, bookingWidget }) {
   return <section className={`ds-pattern ds-object-pattern ds-object-pattern--${category}`} aria-label={`${category} details`}>
     <div className="ds-object-pattern__layout">
-      <div className="ds-object-pattern__flow">{mainTags}{objectDescription}<RegisteredAdditionalSections sections={additionalSections} />{reviews}{bookingSteps}{faqSection}</div>
+      <div className="ds-object-pattern__flow">{mainTags}{objectDescription}{categorySection}<RegisteredAdditionalSections sections={additionalSections} />{reviews}{bookingSteps}{faqSection}</div>
       {bookingWidget ? <div className="ds-object-pattern__booking">{bookingWidget}</div> : null}
     </div>
     {relatedListings ? <div className="ds-object-pattern__related">{relatedListings}</div> : null}
   </section>;
 }
 
-export const InstructorObjectPattern = (props) => <ObjectPatternFrame category="instructor" {...props} />;
+export function InstructorObjectPattern({ certifications, ...props }) {
+  return <ObjectPatternFrame {...props} category="instructor" categorySection={certifications} bookingSteps={<InstructorBookingSteps />} />;
+}
 export const ActivityObjectPattern = (props) => <ObjectPatternFrame category="activity" {...props} />;
 export const RentalObjectPattern = (props) => <ObjectPatternFrame category="rental" {...props} />;
 export const TransferObjectPattern = (props) => <ObjectPatternFrame category="transfer" {...props} />;
@@ -50,5 +53,6 @@ export const PATTERN_CONTRACTS = {
   searchFlow: { task: 'Move from a broad query to a useful destination.', sequence: ['SearchHero', 'Suggestions', 'Feedback', 'Results'], states: ['idle', 'loading', 'empty', 'error', 'ready'], interaction: 'Suggestions populate the same query model as typed search.', mobile: 'Single input/action stack and compact suggestions.', accessibility: 'Search landmark, meaningful status announcements, no focus theft.', variations: ['global', 'catalog'] },
   emptyAndErrorResults: { task: 'Recover from a result set that cannot currently be shown.', sequence: ['StateMessage', 'RecoveryAction', 'Optional alternatives'], states: ['loading', 'empty', 'error', 'ready'], interaction: 'Retry preserves the current query and filters.', mobile: 'Actions become full width.', accessibility: 'Errors use alert; loading and empty states use status.', variations: ['compact', 'page'] },
   editorialReading: { task: 'Read, navigate and continue from a long-form article.', sequence: ['ArticleHeader', 'ArticleMedia', 'TableOfContents', 'ArticleBody', 'Sources', 'RelatedArticles'], states: ['loading', 'error', 'ready'], interaction: 'TOC anchors use stable heading IDs and visible focus.', mobile: 'TOC becomes inline; text measure and heading hierarchy remain stable.', accessibility: 'Sequential headings, descriptive media, labelled external links.', variations: ['guide', 'news', 'story'] },
-  objectDetail: { task: 'Understand a concrete offer, compare its facts and submit a category-aware request.', sequence: ['ObjectMainTags', 'ObjectDescription (includes tags)', 'RegisteredAdditionalSections?', 'ObjectReviews?', 'BookingSteps?', 'FaqAccordion?', 'BookingWidget?', 'ObjectRelatedListings?'], states: ['ready', 'unavailable'], interaction: 'The booking widget starts beside the first main tags and remains available while reading; mobile summary expands into the complete request form.', mobile: 'Four main tags become a 2×2 grid; content becomes one column; booking becomes a fixed bottom disclosure.', accessibility: 'Section headings begin at H2, description tags have an accessible label, review disclosure exposes aria-expanded, form controls keep visible labels and the mobile widget is keyboard operable.', variations: ['instructor', 'activity', 'rental', 'transfer', 'stay'] }
+  objectDetail: { task: 'Understand a concrete offer, compare its facts and submit a category-aware request.', sequence: ['ObjectMainTags', 'ObjectDescription (includes tags)', 'CategorySection?', 'RegisteredAdditionalSections?', 'ObjectReviews?', 'CategoryBookingSteps?', 'FaqAccordion?', 'BookingWidget?', 'ObjectRelatedListings?'], states: ['ready', 'unavailable'], interaction: 'The booking widget starts beside the first main tags and remains available while reading; mobile summary expands into the complete request form.', mobile: 'Four main tags become a 2×2 grid; content becomes one column; booking becomes a fixed bottom disclosure.', accessibility: 'Section headings begin at H2, description tags have an accessible label, review disclosure exposes aria-expanded, form controls keep visible labels and the mobile widget is keyboard operable.', variations: ['instructor', 'activity', 'rental', 'transfer', 'stay'] },
+  instructorObject: { task: 'Assess one instructor and understand the fixed lesson-booking process.', sequence: ['ObjectMainTags', 'ObjectDescription', 'InstructorCertifications?', 'ObjectReviews?', 'InstructorBookingSteps', 'FaqAccordion?', 'BookingWidget', 'ObjectRelatedListings?'], states: ['ready', 'unavailable'], interaction: 'Certification files open in a new tab; booking steps are category-owned and identical for every instructor.', mobile: 'Certification cards and booking steps become one column; sticky booking becomes a bottom disclosure.', accessibility: 'Certificate previews have descriptive alternatives and explicit links; headings remain sequential.' }
 };

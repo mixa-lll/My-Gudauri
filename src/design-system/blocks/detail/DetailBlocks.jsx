@@ -144,13 +144,12 @@ function SpecificSection({ type, kicker = 'What to expect', title, description, 
   return <ObjectSection className={`ds-specific-section ds-specific-section--${type}`} kicker={kicker} title={title} description={description} titleId={titleId}>{notice ? <Notice tone={type === 'safety' ? 'warning' : 'info'}>{notice}</Notice> : null}<ul>{items.map((item) => <li key={item.title ?? item}>{typeof item === 'string' ? item : <><strong>{item.title}</strong>{item.description ? <p>{item.description}</p> : null}</>}</li>)}</ul></ObjectSection>;
 }
 
-export const CertificationsSection = (props) => <SpecificSection type="certifications" title="Certifications" {...props} />;
 export const RouteProgram = (props) => <SpecificSection type="route" title="Route program" {...props} />;
 export const IncludedServices = (props) => <SpecificSection type="included" title="Included services" {...props} />;
 export const EquipmentList = (props) => <SpecificSection type="equipment" title="Equipment" {...props} />;
 export const SafetyRequirements = (props) => <SpecificSection type="safety" title="Safety requirements" {...props} />;
 
-export const ADDITIONAL_SECTION_REGISTRY = { certifications: CertificationsSection, routeProgram: RouteProgram, includedServices: IncludedServices, equipmentList: EquipmentList, safetyRequirements: SafetyRequirements };
+export const ADDITIONAL_SECTION_REGISTRY = { routeProgram: RouteProgram, includedServices: IncludedServices, equipmentList: EquipmentList, safetyRequirements: SafetyRequirements };
 
 export function RegisteredAdditionalSections({ sections = [] }) {
   return <>{sections.map((section, index) => { const Component = ADDITIONAL_SECTION_REGISTRY[section.type]; if (!Component) throw new Error(`Object detail: unregistered additional section “${section.type}”.`); return <Component key={section.id ?? `${section.type}-${index}`} {...section} />; })}</>;
