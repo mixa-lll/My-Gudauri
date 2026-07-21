@@ -1,7 +1,7 @@
 import { BackLink, MediaPlaceholder, ObjectHero } from '../../design-system';
 import { defineComposition } from '../../design-system/architecture/registry';
 
-const common = { breadcrumbs: <BackLink to="/instructors">Back to instructors</BackLink>, title: 'Build confidence on the mountain', description: 'A focused lesson with a verified local instructor.', badges: ['Ski', 'Beginner friendly'] };
+const common = { breadcrumbs: <BackLink to="/instructors">Back to instructors</BackLink>, title: 'Build confidence on the mountain', description: 'A focused lesson with a verified local instructor.', badges: ['Ski', 'Snowboard'], rating: { value: 4.9, reviewsLabel: '60 reviews', href: '#reviews' } };
 
 export default { title: 'Blocks/Detail/Object Hero', component: ObjectHero, tags: ['autodocs'], parameters: { composition: defineComposition({ root: 'ObjectHero' }) } };
 export const Split = { args: { ...common, variant: 'split', media: <MediaPlaceholder label="Instructor on the mountain" /> } };

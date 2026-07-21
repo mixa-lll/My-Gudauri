@@ -23,24 +23,29 @@ import {
 } from '../../../components';
 import './DetailBlocks.scss';
 
-function ObjectSection({ kicker, title, description, actions, children, className = '', titleId }) {
-  return <section className={`ds-detail-section ${className}`} aria-labelledby={titleId}>
+function ObjectSection({ id, kicker, title, description, actions, children, className = '', titleId }) {
+  return <section id={id} className={`ds-detail-section ${className}`} aria-labelledby={titleId}>
     <SectionHeading kicker={kicker} title={title} description={description} actions={actions} size="sm" titleId={titleId} />
     {children}
   </section>;
 }
 
-export function ObjectHero({ variant = 'split', breadcrumbs, title, description, media, badges = [], titleId }) {
+export function ObjectHero({ variant = 'split', breadcrumbs, title, description, media, badges = [], rating, titleId }) {
   if (!['split', 'centered', 'media-first'].includes(variant)) throw new Error(`ObjectHero: unknown variant “${variant}”.`);
   return <section className={`ds-object-hero ds-object-hero--${variant} ${media ? 'ds-object-hero--with-media' : 'ds-object-hero--without-media'}`}>
     {breadcrumbs ? <div className="ds-object-hero__back">{breadcrumbs}</div> : null}
-    <div className="ds-object-hero__content"><div className="ds-object-hero__badges">{badges.map((badge) => <Badge key={badge}>{badge}</Badge>)}</div><SectionHeading headingLevel="h1" size="display" align={variant === 'centered' ? 'center' : 'start'} title={title} titleId={titleId} description={description} /></div>
+    <div className="ds-object-hero__content">
+      <div className="ds-object-hero__badges">{badges.map((badge) => <Badge key={badge}>{badge}</Badge>)}</div>
+      <SectionHeading headingLevel="h1" size="display" align={variant === 'centered' ? 'center' : 'start'} title={title} titleId={titleId} description={description} />
+      {rating ? <div className="ds-object-hero__rating"><Rating rating={rating.value} />{rating.href ? <a href={rating.href}>{rating.reviewsLabel}</a> : <span>{rating.reviewsLabel}</span>}</div> : null}
+    </div>
     {media ? <div className="ds-object-hero__media">{media}</div> : null}
   </section>;
 }
 
 export function MainTag({ label, value }) {
-  return <div className="ds-main-tag"><dt>{label}</dt><dd><span>{value}</span></dd></div>;
+  const values = Array.isArray(value) ? value : [value];
+  return <div className="ds-main-tag"><dt>{label}</dt><dd>{values.filter(Boolean).map((item) => <Badge size="sm" key={item}>{item}</Badge>)}</dd></div>;
 }
 
 export function ObjectMainTags({ items = [], ariaLabel = 'Key details' }) {
@@ -51,7 +56,7 @@ export function ObjectDescription({ kicker = 'Good to know', title = 'About this
   const titleId = useId();
   return <ObjectSection className="ds-description-section" kicker={kicker} title={title} description={description} titleId={titleId}>
     <div className="ds-prose">{children}</div>
-    {tags.length ? <div className="ds-description-section__tags" aria-label={tagsLabel}>{tags.map((item) => <Badge key={item}>{item}</Badge>)}</div> : null}
+    {tags.length ? <div className="ds-description-section__tags" aria-label={tagsLabel}>{tags.map((item) => <Badge className="ds-description-section__tag" key={item}>{item}</Badge>)}</div> : null}
   </ObjectSection>;
 }
 
@@ -63,12 +68,12 @@ export function ReviewCard({ author, text, meta, rating = 5, verified = false, a
   </Surface>;
 }
 
-export function ObjectReviews({ kicker = 'Guest experience', title = 'Reviews', description, rating, reviews = [], initialVisible = 4 }) {
+export function ObjectReviews({ id = 'reviews', kicker = 'Guest experience', title = 'Reviews', description, rating, reviews = [], initialVisible = 4 }) {
   const titleId = useId();
   const [expanded, setExpanded] = useState(false);
   const visibleReviews = expanded ? reviews : reviews.slice(0, initialVisible);
   const toggle = reviews.length > initialVisible ? <Button variant="secondary" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded}>{expanded ? 'Show fewer reviews' : `All reviews (${reviews.length})`}</Button> : null;
-  return <ObjectSection kicker={kicker} title={title} description={description} actions={rating ? <Rating rating={rating.value} reviews={rating.label} /> : null} titleId={titleId}>
+  return <ObjectSection id={id} kicker={kicker} title={title} description={description} actions={rating ? <Rating rating={rating.value} reviews={rating.label} /> : null} titleId={titleId}>
     <div className="ds-reviews">{visibleReviews.map((review) => <ReviewCard key={review.id ?? `${review.author}-${review.text}`} {...review} />)}</div>
     {toggle ? <div className="ds-detail-section__footer">{toggle}</div> : null}
   </ObjectSection>;

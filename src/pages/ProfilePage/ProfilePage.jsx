@@ -81,10 +81,10 @@ export function ProfilePage() {
   const sportNames = instructor.sports.map((sport) => sport.name);
   const languageCodes = instructor.languages.map((language) => language.code);
   const facts = [
-    { label: 'Specialization', value: sportNames.join(' · ') },
-    { label: 'Languages', value: languageCodes.join(' · ') },
-    { label: 'Experience', value: `${instructor.experienceYears}+ years` },
-    { label: 'Certificate', value: instructor.certificate },
+    { label: 'Specialization', value: sportNames },
+    { label: 'Languages', value: languageCodes },
+    { label: 'Experience', value: [`${instructor.experienceYears}+ years`] },
+    { label: 'Certificate', value: [instructor.certificate] },
   ];
   const reviews = (instructor.reviewsList ?? []).map((review, index) => ({
     id: `${review.author}-${index}`,
@@ -99,9 +99,10 @@ export function ProfilePage() {
   const hero = <ObjectHero
     variant="split"
     breadcrumbs={<BackLink to="/instructors">Back to instructors</BackLink>}
-    badges={[...sportNames, instructor.role]}
+    badges={sportNames}
     title={instructor.name}
     description={instructor.intro}
+    rating={{ value: instructor.rating, reviewsLabel: `${instructor.reviews} reviews`, href: '#reviews' }}
     media={<div className="profile-object-media">
       <img src={instructor.heroImage} alt={instructor.heroImageAlt} loading="eager" />
       <Badge className="profile-object-media__availability" mediaOverlay>{instructor.availability}</Badge>

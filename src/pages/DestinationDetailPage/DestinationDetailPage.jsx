@@ -8,6 +8,7 @@ import {
   ObjectDescription,
   ObjectMainTags,
   ObjectRelatedListings,
+  ObjectReviews,
   FaqAccordion,
   MediaPlaceholder,
   ObjectDetailPageTemplate,
@@ -49,19 +50,22 @@ export function DestinationDetailPage() {
   const numericPrice = Number.parseFloat(String(item.price).replace(/[^0-9.,]/g, '').replace(',', '.')) || undefined;
   const related = config.items.filter((candidate) => candidate.slug !== item.slug).slice(0, 3).map((candidate) => ({ ...candidate, title: candidate.name }));
 
+  const facts = item.facts.map(([label, value]) => ({ label, value: String(value).split(/\s*·\s*/).filter(Boolean) }));
   const hero = <ObjectHero
     variant="centered"
     breadcrumbs={<BackLink to={`/${section}`}>Back to {config.navTitle.toLowerCase()}</BackLink>}
-    badges={[item.category, config.navTitle]}
+    badges={[item.category]}
     title={item.name}
     description={item.description}
+    rating={{ value: item.rating, reviewsLabel: item.reviews, href: '#reviews' }}
     media={item.image ? <img src={item.image} alt={`${item.name} in Gudauri`} /> : <MediaPlaceholder label={item.name} />}
   />;
 
   const content = <Pattern
-    mainTags={<ObjectMainTags items={item.facts.map(([label, value]) => ({ label, value }))} />}
+    mainTags={<ObjectMainTags items={facts} />}
     objectDescription={<ObjectDescription kicker="About the offer" title="What to expect" tags={item.tags} tagsLabel="Useful details"><p>{item.description}</p></ObjectDescription>}
     additionalSections={[{ type: 'includedServices', kicker: 'Included essentials', title: 'What is included', items: item.included }]}
+    reviews={<ObjectReviews rating={{ value: item.rating, label: item.reviews }} reviews={[]} />}
     bookingSteps={<BookingSteps context="object" items={BOOKING_STEPS} />}
     relatedListings={<ObjectRelatedListings cardType={cardType} items={related} />}
     faqSection={<FaqAccordion items={config.faq} title="Common questions" kicker="Good to know" />}
