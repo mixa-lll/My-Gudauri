@@ -4,6 +4,7 @@ import {
   Badge,
   Button,
   DateField,
+  Dialog,
   EditorialCard,
   FormField,
   Input,
@@ -60,22 +61,55 @@ export function ObjectDescription({ kicker = 'Good to know', title = 'About this
   </ObjectSection>;
 }
 
-export function ReviewCard({ author, text, meta, rating = 5, verified = false, avatar }) {
-  return <Surface as="article" className="ds-review-card" padding="md">
-    <header className="ds-review-card__author">{avatar ? <img src={avatar} alt="" /> : <span aria-hidden="true">{author?.charAt(0)}</span>}<div><strong>{author}</strong>{meta ? <small>{meta}</small> : null}</div></header>
-    <div className="ds-review-card__proof"><Rating rating={rating} />{verified ? <Badge tone="success">Verified booking</Badge> : null}</div>
-    <blockquote>{text}</blockquote>
-  </Surface>;
+function ReviewAvatar({ avatar, author }) {
+  const [failed, setFailed] = useState(false);
+  const initials = String(author ?? '?').split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase();
+  return avatar && !failed
+    ? <img src={avatar} alt="" onError={() => setFailed(true)} />
+    : <span aria-hidden="true">{initials || '?'}</span>;
+}
+
+function shortenedReview(text, limit) {
+  if (text.length <= limit) return text;
+  const fragment = text.slice(0, limit);
+  const lastSpace = fragment.lastIndexOf(' ');
+  return `${fragment.slice(0, lastSpace > limit * .65 ? lastSpace : limit).trim()}…`;
+}
+
+export function ReviewCard({ author, text = '', meta, dateLabel, contextLabel, rating = 5, avatar, truncate = true, previewLength = 220, variant = 'preview' }) {
+  const textId = useId();
+  const [expanded, setExpanded] = useState(false);
+  const canTruncate = truncate && text.length > previewLength;
+  const isCollapsed = canTruncate && !expanded;
+  return <article className={`ds-review-card ds-review-card--${variant}`}>
+    <header className="ds-review-card__author"><ReviewAvatar avatar={avatar} author={author} /><strong>{author}</strong></header>
+    <div className="ds-review-card__proof"><Rating rating={rating} />{dateLabel ? <span>· {dateLabel}</span> : null}{contextLabel ? <span>· {contextLabel}</span> : null}{!dateLabel && !contextLabel && meta ? <span>· {meta}</span> : null}</div>
+    <blockquote id={textId}>{isCollapsed ? shortenedReview(text, previewLength) : text}</blockquote>
+    {canTruncate ? <Button className="ds-review-card__more" variant="link" aria-expanded={expanded} aria-controls={textId} onClick={() => setExpanded((value) => !value)}>{expanded ? 'Show less' : 'Show more'}</Button> : null}
+  </article>;
+}
+
+function reviewCountLabel(count) {
+  return `${count} ${count === 1 ? 'review' : 'reviews'}`;
 }
 
 export function ObjectReviews({ id = 'reviews', kicker = 'Guest experience', title = 'Reviews', description, rating, reviews = [], initialVisible = 4 }) {
   const titleId = useId();
-  const [expanded, setExpanded] = useState(false);
-  const visibleReviews = expanded ? reviews : reviews.slice(0, initialVisible);
-  const toggle = reviews.length > initialVisible ? <Button variant="secondary" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded}>{expanded ? 'Show fewer reviews' : `All reviews (${reviews.length})`}</Button> : null;
+  const visibleReviews = reviews.slice(0, initialVisible);
+  const countLabel = reviewCountLabel(reviews.length);
+  const allReviews = reviews.length ? <Dialog
+    size="lg"
+    className="ds-reviews-dialog"
+    bodyClassName="ds-reviews-dialog__body"
+    trigger={<Button variant="secondary" size="lg">Show all {countLabel}</Button>}
+    title={countLabel}
+    description={rating?.value ? `${rating.value} average rating` : undefined}
+  >
+    <div className="ds-reviews-dialog__list">{reviews.map((review) => <ReviewCard key={review.id ?? `${review.author}-${review.text}`} {...review} truncate={false} variant="dialog" />)}</div>
+  </Dialog> : null;
   return <ObjectSection id={id} kicker={kicker} title={title} description={description} actions={rating ? <Rating rating={rating.value} reviews={rating.label} /> : null} titleId={titleId}>
-    <div className="ds-reviews">{visibleReviews.map((review) => <ReviewCard key={review.id ?? `${review.author}-${review.text}`} {...review} />)}</div>
-    {toggle ? <div className="ds-detail-section__footer">{toggle}</div> : null}
+    {visibleReviews.length ? <div className="ds-reviews">{visibleReviews.map((review) => <ReviewCard key={review.id ?? `${review.author}-${review.text}`} {...review} />)}</div> : <p className="ds-reviews__empty">No reviews yet.</p>}
+    {allReviews ? <div className="ds-detail-section__footer">{allReviews}</div> : null}
   </ObjectSection>;
 }
 

@@ -44,12 +44,14 @@
 .ui-pagination .is-current, .ui-pagination [aria-current='page'] { background: var(--action-primary); color: var(--text-inverse); }
 .ui-pagination .is-current:hover, .ui-pagination [aria-current='page']:hover { background: var(--action-primary-hover); }
 .ui-dialog__overlay { position: fixed; z-index: var(--z-overlay); inset: 0; background: var(--surface-overlay); animation: dialog-fade var(--motion-duration-base) var(--motion-ease-enter); }
-.ui-dialog__content { position: fixed; z-index: var(--z-dialog); top: 50%; left: 50%; width: min(calc(100vw - 32px), 620px); max-height: calc(100dvh - 32px); overflow: auto; padding: var(--space-900); border-radius: var(--radius-dialog); background: var(--surface-card); box-shadow: var(--shadow-float); transform: translate(-50%, -50%); }
+.ui-dialog__content { position: fixed; z-index: var(--z-dialog); top: 50%; left: 50%; width: min(calc(100vw - 32px), 620px); max-height: calc(100dvh - 32px); overflow: auto; padding: var(--space-900); border-radius: var(--radius-dialog); background: var(--surface-card); box-shadow: var(--shadow-float); animation: dialog-enter var(--motion-duration-base) var(--motion-ease-standard); transform: translate(-50%, -50%); }
+.ui-dialog__content--lg { width: min(calc(100vw - 32px), 960px); }
 .ui-dialog__content h2 { margin: 0; color: var(--text-primary); font: var(--fw-bold) var(--type-subsection-title-size) / 1.1 var(--font-heading); }
 .ui-dialog__content header p { margin: var(--space-200) 0 0; color: var(--text-secondary); }
 .ui-dialog__body { margin-block: var(--space-600); }
 .ui-dialog__content footer { display: flex; justify-content: flex-end; gap: var(--space-300); }
 .ui-dialog__close.ui-button { position: absolute; top: var(--space-400); right: var(--space-400); width: var(--control-height-sm); min-height: var(--control-height-sm); padding: 0; border-radius: var(--radius-full); background: var(--surface-subtle); font-size: var(--type-body-large-size); }
 @keyframes dialog-fade { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .ui-skeleton::after, .ui-dialog__overlay { animation: none; } }
+@keyframes dialog-enter { from { opacity: 0; transform: translate(-50%, calc(-50% + var(--space-200))) scale(.99); } }
+@media (prefers-reduced-motion: reduce) { .ui-skeleton::after, .ui-dialog__overlay, .ui-dialog__content { animation: none; } }
 @media (max-width: 640px) { .ui-state--compact { grid-template-columns: auto 1fr; } .ui-state--compact > :last-child { grid-column: 1 / -1; } .ui-pagination ol { display: none; } }

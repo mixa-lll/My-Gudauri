@@ -32,14 +32,22 @@
 .ds-description-section__tags { max-width: var(--content-text); }
 .ds-description-section__tag { min-height: var(--control-height-sm); padding-inline: var(--space-400); font-size: var(--type-body-small-size); }
 
-.ds-reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--layout-gutter); }
-.ds-review-card { min-width: 0; display: grid; gap: var(--space-400); }
+.ds-reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(var(--space-700), 6vw, var(--space-1000)); row-gap: clamp(var(--space-800), 6vw, var(--space-1200)); }
+.ds-review-card { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-300); background: transparent; }
 .ds-review-card__author { display: flex; align-items: center; gap: var(--space-300); }
-.ds-review-card__author > img, .ds-review-card__author > span { width: var(--control-height-md); height: var(--control-height-md); border-radius: 50%; object-fit: cover; display: grid; place-items: center; background: var(--surface-subtle); color: var(--text-secondary); }
-.ds-review-card__author div { min-width: 0; display: grid; gap: var(--space-150); }
-.ds-review-card__author small { color: var(--text-secondary); }
-.ds-review-card__proof { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-300); }
-.ds-review-card blockquote { margin: 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-large-size) / var(--type-body-large-line) var(--font-body); }
+.ds-review-card__author > img, .ds-review-card__author > span { width: var(--control-height-lg); height: var(--control-height-lg); flex: none; border-radius: var(--radius-full); object-fit: cover; display: grid; place-items: center; background: var(--surface-page); color: var(--text-secondary); font: var(--fw-semibold) var(--type-label-size) / 1 var(--font-body); }
+.ds-review-card__author strong { color: var(--text-primary); font: var(--fw-semibold) var(--type-body-size) / var(--type-body-line) var(--font-body); }
+.ds-review-card__proof { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-150); color: var(--text-secondary); font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+.ds-review-card blockquote { margin: 0; color: var(--text-primary); font: var(--fw-regular) var(--type-body-size) / var(--type-body-line) var(--font-body); }
+.ds-review-card__more.ui-button { width: fit-content; justify-content: flex-start; }
+.ds-reviews__empty { margin: 0; color: var(--text-secondary); }
+.ds-reviews-dialog.ui-dialog__content { max-height: min(calc(100dvh - 32px), 860px); overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.ds-reviews-dialog > header { padding-right: var(--control-height-lg); }
+.ds-reviews-dialog__body.ui-dialog__body { min-height: 0; margin: var(--space-600) calc(-1 * var(--space-900)) calc(-1 * var(--space-900)); padding: 0 var(--space-900) var(--space-900); overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.ds-reviews-dialog__list { display: grid; }
+.ds-review-card--dialog { padding-block: var(--space-600); border-bottom: 1px solid var(--border-subtle); }
+.ds-review-card--dialog:first-child { padding-top: 0; }
+.ds-review-card--dialog:last-child { padding-bottom: 0; border-bottom: 0; }
 
 .ds-specific-section strong { margin: 0; color: var(--text-primary); font-weight: var(--fw-bold); }
 .ds-specific-section p { margin: var(--space-200) 0 0; color: var(--text-secondary); }
@@ -75,6 +83,11 @@
   .ds-object-hero__media, .ds-object-hero--media-first .ds-object-hero__media { grid-column: 1; grid-row: 3; min-height: 320px; }
   .ds-object-main-tags { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ds-reviews { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .ds-reviews-dialog.ui-dialog__content { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: var(--space-600); border-radius: var(--radius-md); }
+  .ds-reviews-dialog__body.ui-dialog__body { margin: var(--space-500) calc(-1 * var(--space-600)) calc(-1 * var(--space-600)); padding: 0 var(--space-600) var(--space-600); }
 }
 
 @media (max-width: 440px) {

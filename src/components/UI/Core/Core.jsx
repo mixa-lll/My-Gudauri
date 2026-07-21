@@ -62,14 +62,15 @@ export function Pagination({ page, totalPages, onPageChange, getPageHref, label 
   </nav>;
 }
 
-export function Dialog({ trigger, title, description, children, actions }) {
+export function Dialog({ trigger, title, description, children, actions, size = 'md', className, bodyClassName }) {
+  if (!['md', 'lg'].includes(size)) throw new Error(`Dialog: unsupported size “${size}”.`);
   return <DialogPrimitive.Root>
     <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay className="ui-dialog__overlay" />
-      <DialogPrimitive.Content className="ui-dialog__content">
+      <DialogPrimitive.Content className={cn('ui-dialog__content', `ui-dialog__content--${size}`, className)}>
         <header><DialogPrimitive.Title>{title}</DialogPrimitive.Title>{description ? <DialogPrimitive.Description>{description}</DialogPrimitive.Description> : null}</header>
-        <div className="ui-dialog__body">{children}</div>{actions ? <footer>{actions}</footer> : null}
+        <div className={cn('ui-dialog__body', bodyClassName)}>{children}</div>{actions ? <footer>{actions}</footer> : null}
         <DialogPrimitive.Close asChild><Button className="ui-dialog__close" variant="ghost" aria-label="Close">×</Button></DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>

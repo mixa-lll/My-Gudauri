@@ -84,9 +84,10 @@ export function ProfilePage() {
     id: `${review.author}-${index}`,
     author: review.author,
     text: review.body,
-    meta: `${review.lesson} · ${new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(new Date(review.date))}`,
+    dateLabel: new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' }).format(new Date(review.date)),
+    contextLabel: review.lesson,
     rating: review.rating,
-    verified: true,
+    avatar: review.avatar && !review.avatar.includes('avatars-sprite') ? review.avatar : undefined,
   }));
   const related = relatedInstructors.map((item) => ({ ...item, title: item.name }));
 
