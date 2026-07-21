@@ -1,6 +1,6 @@
 .ui-badge { box-sizing: border-box; min-height: var(--control-height-xs); padding: var(--space-150) var(--space-300); border: 1px solid transparent; border-radius: var(--radius-pill); display: inline-flex; align-items: center; justify-content: center; gap: var(--space-150); color: var(--text-primary); font: var(--fw-medium) var(--type-label-size) / var(--type-label-line) var(--font-body); vertical-align: middle; white-space: nowrap; }
 .ui-badge--sm { min-height: var(--space-600); padding: var(--space-0) var(--space-200); font-size: var(--type-caption-size); line-height: var(--type-caption-line); }
-.ui-badge--neutral { border-color: var(--border-subtle); background: var(--surface-subtle); }
+.ui-badge--neutral { border: 0; background: var(--surface-page); }
 .ui-badge--accent { background: var(--action-accent); color: var(--text-inverse); }
 .ui-badge--success { background: var(--status-success-surface); color: var(--status-success); }
 .ui-badge--warning { background: var(--status-warning-surface); color: var(--status-warning); }

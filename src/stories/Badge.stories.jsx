@@ -4,7 +4,10 @@ import { defineComposition } from '../design-system/architecture/registry';
 export default {
   title: 'Primitives/Badge',
   component: Badge,
-  parameters: { composition: defineComposition({ root: 'Badge' }) },
+  parameters: {
+    composition: defineComposition({ root: 'Badge' }),
+    docs: { description: { component: 'Borderless metadata label. The neutral tone uses the light page surface so dark text remains clear without a redundant outline.' } },
+  },
   args: { children: 'Verified', size: 'md', tone: 'neutral' },
   argTypes: {
     size: { control: 'select', options: ['sm', 'md'] },
