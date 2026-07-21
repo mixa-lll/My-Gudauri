@@ -56,9 +56,9 @@ export function BackLink({ children = 'Back', ...props }) {
 export function Pagination({ page, totalPages, onPageChange, getPageHref, label = 'Pagination' }) {
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
   return <nav className="ui-pagination" aria-label={label}>
-    <Button variant="secondary" size="md" disabled={page <= 1} onClick={() => onPageChange?.(page - 1)}>Previous</Button>
+    <Button variant="ghost" size="md" disabled={page <= 1} onClick={() => onPageChange?.(page - 1)}><span aria-hidden="true">←</span> Previous</Button>
     <ol>{pages.map((item) => <li key={item}>{getPageHref ? <Link href={getPageHref(item)} aria-current={item === page ? 'page' : undefined}>{item}</Link> : <button type="button" className={item === page ? 'is-current' : ''} aria-current={item === page ? 'page' : undefined} onClick={() => onPageChange?.(item)}>{item}</button>}</li>)}</ol>
-    <Button variant="secondary" size="md" disabled={page >= totalPages} onClick={() => onPageChange?.(page + 1)}>Next</Button>
+    <Button variant="ghost" size="md" disabled={page >= totalPages} onClick={() => onPageChange?.(page + 1)}>Next <span aria-hidden="true">→</span></Button>
   </nav>;
 }
 
@@ -70,7 +70,7 @@ export function Dialog({ trigger, title, description, children, actions }) {
       <DialogPrimitive.Content className="ui-dialog__content">
         <header><DialogPrimitive.Title>{title}</DialogPrimitive.Title>{description ? <DialogPrimitive.Description>{description}</DialogPrimitive.Description> : null}</header>
         <div className="ui-dialog__body">{children}</div>{actions ? <footer>{actions}</footer> : null}
-        <DialogPrimitive.Close className="ui-dialog__close" aria-label="Close">×</DialogPrimitive.Close>
+        <DialogPrimitive.Close asChild><Button className="ui-dialog__close" variant="ghost" aria-label="Close">×</Button></DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   </DialogPrimitive.Root>;

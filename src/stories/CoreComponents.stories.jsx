@@ -1,9 +1,11 @@
-import { Button, Breadcrumbs, Dialog, Divider, EmptyState, ErrorState, Link, LoadingState, Notice, Pagination, Skeleton, Surface } from '../design-system';
+import { useState } from 'react';
+import { BackLink, Button, Breadcrumbs, Dialog, Divider, EmptyState, ErrorState, Link, LoadingState, Notice, Pagination, Skeleton, Surface } from '../design-system';
 import { defineComposition } from '../design-system/architecture/registry';
 
-export default { title: 'Components/Content and States', parameters: { controls: { disable: true } } };
+export default { title: 'Components/Content and States', tags: ['autodocs'], parameters: { controls: { disable: true } } };
 const composition = (root) => ({ composition: defineComposition({ root }) });
-export const Navigation = { parameters: composition('NavigationPrimitives'), render: () => <div className="sb-canvas sb-section"><Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Activities', to: '/activities' }, { label: 'Ski lesson' }]} /><Link href="#example">Semantic link</Link><Pagination page={2} totalPages={5} onPageChange={() => {}} /></div> };
+function NavigationPreview() { const [page, setPage] = useState(2); return <div className="sb-canvas sb-section"><Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Activities', to: '/activities' }, { label: 'Ski lesson' }]} /><BackLink href="#activities">Back to activities</BackLink><Link href="#example">Semantic link</Link><Pagination page={page} totalPages={5} onPageChange={setPage} /></div>; }
+export const Navigation = { parameters: composition('NavigationPrimitives'), render: () => <NavigationPreview /> };
 export const SurfacesAndNotices = { parameters: composition('Surface'), render: () => <div className="sb-canvas sb-grid"><Surface><h2>Card surface</h2><Divider /><p>Semantic surface and border tokens.</p></Surface><Notice title="Road conditions" tone="warning">Travel time may increase after heavy snowfall.</Notice><Notice title="Saved" tone="success">Your preferences are stored.</Notice></div> };
 export const AsyncStates = { parameters: composition('AsyncStates'), render: () => <div className="sb-canvas sb-section"><EmptyState title="No activities found" description="Change one or more filters." action={<Button variant="secondary">Clear filters</Button>} /><LoadingState compact description="Updating results" /><ErrorState compact description="The service did not respond." action={<Button variant="secondary">Retry</Button>} /><Skeleton height={120} radius="md" /></div> };
 export const AccessibleDialog = { parameters: composition('Dialog'), render: () => <div className="sb-canvas"><Dialog trigger={<Button>Open dialog</Button>} title="Request details" description="Focus is trapped and restored by Radix Dialog." actions={<Button>Continue</Button>}><p>Dialog content uses semantic surface, spacing and focus tokens.</p></Dialog></div> };

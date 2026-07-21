@@ -8,7 +8,7 @@ export function AccordionItem({ question, answer, open, onToggle, id }) {
   return <article className={cn('ui-accordion__item', open && 'is-open')}>
     <h3>
       <button id={triggerId} type="button" aria-expanded={open} aria-controls={panelId} onClick={onToggle}>
-        <span className="ui-accordion__icon" aria-hidden="true" /><span>{question}</span>
+        <span>{question}</span><span className="ui-accordion__icon" aria-hidden="true" />
       </button>
     </h3>
     <div id={panelId} className="ui-accordion__panel" aria-labelledby={triggerId} role="region" hidden={!open}><div>{answer}</div></div>
