@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 import { MediaPlaceholder } from '../MediaPlaceholder/MediaPlaceholder';
 import { Badge } from '../UI/Badge/Badge';
+import { StarRating } from '../UI/StarRating/StarRating';
 import './ListingCard.scss';
 
 const CARD_LAYOUTS = ['vertical', 'horizontal', 'featured'];
@@ -73,10 +74,10 @@ export function ListingCardPill({ children, icon, className, title }) {
 
 export function ListingCardRating({ rating, reviews }) {
   return (
-    <span className="listing-card__rating">
-      <b aria-hidden="true">★</b>
-      <strong>{rating}</strong>
-      {reviews && <small>{reviews}</small>}
+    <span className="listing-card__rating" role="img" aria-label={`${rating} out of 5 stars${reviews ? `, ${reviews}` : ''}`}>
+      <StarRating value={rating} decorative />
+      <strong aria-hidden="true">{rating}</strong>
+      {reviews && <small aria-hidden="true">{reviews}</small>}
     </span>
   );
 }

@@ -17,6 +17,7 @@ import {
   RentalCard,
   SectionHeading,
   Select,
+  StarRating,
   StayCard,
   Surface,
   Textarea,
@@ -83,7 +84,7 @@ export function ReviewCard({ author, text = '', meta, dateLabel, contextLabel, r
   const isCollapsed = canTruncate && !expanded;
   return <article className={`ds-review-card ds-review-card--${variant}`}>
     <header className="ds-review-card__author"><ReviewAvatar avatar={avatar} author={author} /><strong>{author}</strong></header>
-    <div className="ds-review-card__proof"><Rating rating={rating} />{dateLabel ? <span>· {dateLabel}</span> : null}{contextLabel ? <span>· {contextLabel}</span> : null}{!dateLabel && !contextLabel && meta ? <span>· {meta}</span> : null}</div>
+    <div className="ds-review-card__proof"><StarRating value={rating} ariaLabel={`${rating} out of 5 stars`} />{dateLabel ? <span>· {dateLabel}</span> : null}{contextLabel ? <span>· {contextLabel}</span> : null}{!dateLabel && !contextLabel && meta ? <span>· {meta}</span> : null}</div>
     <blockquote id={textId}>{isCollapsed ? shortenedReview(text, previewLength) : text}</blockquote>
     {canTruncate ? <Button className="ds-review-card__more" variant="link" aria-expanded={expanded} aria-controls={textId} onClick={() => setExpanded((value) => !value)}>{expanded ? 'Show less' : 'Show more'}</Button> : null}
   </article>;

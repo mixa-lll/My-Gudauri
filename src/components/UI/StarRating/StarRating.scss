@@ -1,0 +1,33 @@
+.star-rating {
+  --star-rating-fill: 0%;
+
+  position: relative;
+  width: max-content;
+  display: inline-grid;
+  flex: none;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.star-rating__empty,
+.star-rating__filled {
+  grid-area: 1 / 1;
+}
+
+.star-rating__empty {
+  color: color-mix(in srgb, var(--text-secondary) 38%, transparent);
+}
+
+.star-rating__filled {
+  width: var(--star-rating-fill);
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+.star-rating--sm {
+  font-size: var(--type-caption-size);
+}
+
+.star-rating--md {
+  font-size: var(--type-body-small-size);
+}

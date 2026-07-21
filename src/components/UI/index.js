@@ -7,3 +7,4 @@ export { BackLink, Breadcrumbs, Dialog, Divider, EmptyState, ErrorState, Icon, L
 export { Checkbox, DateField, FieldMessage, FormField, FormSummary, Input, QuantityStepper, Radio, Select, Textarea } from './Forms/Forms';
 export { Accordion, AccordionItem } from './Accordion/Accordion';
 export { SectionHeading } from './SectionHeading/SectionHeading';
+export { StarRating } from './StarRating/StarRating';
