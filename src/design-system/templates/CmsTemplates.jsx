@@ -1,4 +1,3 @@
-import { RegisteredAdditionalSections } from '../blocks/detail/DetailBlocks';
 import './CmsTemplates.scss';
 
 function RequiredSlot({ name, children }) {
@@ -14,10 +13,10 @@ export function CatalogPageTemplate({ navbar, hero, categoryTabs, filterToolbar,
   </div>;
 }
 
-export function ObjectDetailPageTemplate({ navbar, hero, primaryFacts, description, footer, additionalDetails, reviews, bookingSteps, relatedListings, faqSection, bookingWidget, additionalSections = [] }) {
+export function ObjectDetailPageTemplate({ navbar, hero, content, footer }) {
   return <div className="cms-template cms-template--detail">
     <RequiredSlot name="SiteNavbar">{navbar}</RequiredSlot>
-    <main><RequiredSlot name="ObjectHero">{hero}</RequiredSlot><RequiredSlot name="PrimaryFacts">{primaryFacts}</RequiredSlot><div className="cms-template__detail-layout"><div className="cms-template__flow"><RequiredSlot name="DescriptionSection">{description}</RequiredSlot>{additionalDetails}<RegisteredAdditionalSections sections={additionalSections} />{reviews}{bookingSteps}{relatedListings}{faqSection}</div>{bookingWidget ? <aside>{bookingWidget}</aside> : null}</div></main>
+    <main><RequiredSlot name="ObjectHero">{hero}</RequiredSlot><RequiredSlot name="ObjectPattern">{content}</RequiredSlot></main>
     <RequiredSlot name="SiteFooter">{footer}</RequiredSlot>
   </div>;
 }
@@ -45,15 +44,15 @@ export const CMS_TEMPLATE_CONTRACTS = {
   },
   objectDetail: {
     name: 'ObjectDetailPageTemplate',
-    required: ['SiteNavbar', 'ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'SiteFooter'],
-    optional: ['AdditionalDetails', 'ReviewsSection', 'BookingSteps', 'RelatedListings', 'FaqAccordion', 'StickyBookingWidget', 'additionalSections[]'],
-    order: ['SiteNavbar', 'ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'AdditionalDetails?', 'additionalSections[]?', 'ReviewsSection?', 'BookingSteps?', 'RelatedListings?', 'FaqAccordion?', 'SiteFooter'],
+    required: ['SiteNavbar', 'ObjectHero', 'ObjectPattern', 'SiteFooter'],
+    optional: [],
+    order: ['SiteNavbar', 'ObjectHero', 'ObjectPattern', 'SiteFooter'],
     dataSource: 'CMS object model + availability/review services',
-    allowedChildren: ['ObjectHero', 'PrimaryFacts', 'DescriptionSection', 'AdditionalDetails', 'ReviewsSection', 'DetailBookingSteps', 'RelatedListings', 'FaqAccordion', 'StickyBookingWidget', 'CertificationsSection', 'RouteProgram', 'IncludedServices', 'EquipmentList', 'SafetyRequirements'],
+    allowedChildren: ['ObjectHero', 'InstructorObjectPattern', 'ActivityObjectPattern', 'RentalObjectPattern', 'TransferObjectPattern', 'StayObjectPattern'],
     contentLimits: 'Hero title ≤ 72 chars; lead ≤ 240 chars; galleries require descriptive alt text; arbitrary HTML blocks are rejected.',
     responsive: 'Hero and content/sidebar stack below tablet; booking widget becomes a bottom sticky action.',
     states: ['loading', 'not-found', 'error', 'ready', 'unavailable'],
-    variants: ['instructor', 'activity', 'rental', 'transfer']
+    variants: ['instructor', 'activity', 'rental', 'transfer', 'stay']
   },
   editorialArticle: {
     name: 'EditorialArticleTemplate',

@@ -46,9 +46,9 @@ export const DateField = forwardRef(function DateField(props, ref) {
 
 export function QuantityStepper({ value, min = 0, max = Infinity, onChange, label = 'Quantity', disabled = false }) {
   return <div className="ui-quantity" role="group" aria-label={label}>
-    <Button iconOnly variant="secondary" size="md" disabled={disabled || value <= min} onClick={() => onChange(Math.max(min, value - 1))}>Decrease {label}</Button>
+    <Button className="ui-quantity__button" variant="secondary" size="md" aria-label={`Decrease ${label}`} disabled={disabled || value <= min} onClick={() => onChange(Math.max(min, value - 1))}><span aria-hidden="true">−</span></Button>
     <output aria-live="polite">{value}</output>
-    <Button iconOnly variant="secondary" size="md" disabled={disabled || value >= max} onClick={() => onChange(Math.min(max, value + 1))}>Increase {label}</Button>
+    <Button className="ui-quantity__button" variant="secondary" size="md" aria-label={`Increase ${label}`} disabled={disabled || value >= max} onClick={() => onChange(Math.min(max, value + 1))}><span aria-hidden="true">+</span></Button>
   </div>;
 }
 

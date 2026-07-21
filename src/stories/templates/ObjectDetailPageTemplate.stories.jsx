@@ -5,6 +5,7 @@ import { Contract, Slot } from './TemplateStoryParts';
 export default {
   title: 'CMS Templates/Object Detail Page Template',
   component: ObjectDetailPageTemplate,
+  tags: ['autodocs'],
   parameters: { fullscreen: true, controls: { disable: true }, composition: defineComposition({ root: 'ObjectDetailPageTemplate' }) },
 };
 
@@ -15,14 +16,8 @@ export const Default = {
       <ObjectDetailPageTemplate
         navbar={<Slot name="SiteNavbar" />}
         hero={<Slot name="ObjectHero" />}
-        primaryFacts={<Slot name="PrimaryFacts" />}
-        description={<Slot name="DescriptionSection" />}
-        additionalDetails={<Slot name="AdditionalDetails" optional />}
-        reviews={<Slot name="ReviewsSection" optional />}
-        faqSection={<Slot name="FaqAccordion" optional />}
-        bookingWidget={<Slot name="StickyBookingWidget" optional />}
+        content={<Slot name="InstructorObjectPattern" />}
         footer={<Slot name="SiteFooter" />}
-        additionalSections={[]}
       />
     </>
   ),
