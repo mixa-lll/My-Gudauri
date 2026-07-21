@@ -32,7 +32,10 @@
 .ds-description-section__tags { max-width: var(--content-text); }
 .ds-description-section__tag { min-height: var(--control-height-sm); padding-inline: var(--space-400); font-size: var(--type-body-small-size); }
 
-.ds-object-sticky-nav { min-width: 0; min-height: calc(var(--control-height-lg) + var(--space-300)); position: sticky; z-index: var(--z-sticky); top: 0; margin-inline: calc(-1 * var(--space-400)); padding: var(--space-200) var(--space-400); border-block: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; gap: var(--space-500); background: color-mix(in srgb, var(--surface-card) 94%, transparent); box-shadow: var(--shadow-soft); backdrop-filter: blur(16px); }
+.ds-object-sticky-nav__trigger { width: 1px; height: 1px; position: absolute; inset: 0 auto auto 0; pointer-events: none; }
+.ds-object-sticky-nav { min-width: 0; min-height: calc(var(--control-height-lg) + var(--space-300)); position: fixed; z-index: var(--z-sticky); inset: 0 0 auto; border-bottom: 1px solid var(--border-subtle); background: color-mix(in srgb, var(--surface-card) 94%, transparent); box-shadow: var(--shadow-soft); backdrop-filter: blur(16px); opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-100%); transition: opacity var(--motion-duration-base) var(--motion-ease-enter), transform var(--motion-duration-base) var(--motion-ease-enter), visibility 0s linear var(--motion-duration-base); }
+.ds-object-sticky-nav.is-pinned { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); transition-delay: 0s; }
+.ds-object-sticky-nav__inner { width: min(calc(100% - (var(--layout-margin) * 2)), var(--layout-width-detail)); min-height: calc(var(--control-height-lg) + var(--space-300)); margin-inline: auto; padding-block: var(--space-200); display: flex; align-items: center; justify-content: space-between; gap: var(--space-500); }
 .ds-object-sticky-nav__links { min-width: 0; display: flex; align-items: center; gap: var(--space-150); overflow-x: auto; scrollbar-width: none; }
 .ds-object-sticky-nav__links::-webkit-scrollbar { display: none; }
 .ds-object-sticky-nav__links a { min-height: var(--control-height-md); padding-inline: var(--space-400); border-radius: var(--radius-control); display: inline-flex; flex: none; align-items: center; color: var(--text-secondary); font: var(--fw-medium) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); text-decoration: none; white-space: nowrap; transition: color var(--motion-duration-fast) var(--motion-ease-standard), background-color var(--motion-duration-fast) var(--motion-ease-standard); }
@@ -83,7 +86,6 @@
 .ds-specific-section li { padding: var(--space-400); border: 1px solid var(--border-subtle); border-radius: var(--radius-control); background: var(--surface-card); }
 
 @media (max-width: 860px) {
-  .ds-object-sticky-nav { margin-inline: calc(-1 * var(--space-300)); padding-inline: var(--space-300); }
   .ds-object-sticky-nav__booking { display: none; }
   .ds-booking-widget { position: fixed; inset: auto var(--layout-margin) var(--space-300); top: auto; padding: var(--space-300); }
   .ds-booking-widget__mobile-summary { width: 100%; min-height: var(--control-height-lg); padding: 0; border: 0; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: var(--space-300); background: transparent; color: var(--text-primary); text-align: left; cursor: pointer; }
@@ -93,7 +95,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-object-sticky-nav__links a, .ds-object-sticky-nav__booking { transition: none; }
+  .ds-object-sticky-nav, .ds-object-sticky-nav__links a, .ds-object-sticky-nav__booking { transition: none; }
 }
 
 @media (max-width: 760px) {

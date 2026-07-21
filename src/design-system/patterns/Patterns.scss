@@ -6,7 +6,7 @@
 .ds-pattern__reading-layout { display: grid; grid-template-columns: 220px minmax(0, var(--content-text)); justify-content: center; align-items: start; gap: clamp(32px, 6vw, 80px); }
 .ds-pattern__reading-layout > div { display: grid; gap: var(--space-900); }
 @media (max-width: 860px) { .ds-pattern__booking-layout, .ds-pattern__reading-layout { grid-template-columns: 1fr; } }
-.ds-object-pattern { gap: clamp(48px, 7vw, 88px); }
+.ds-object-pattern { position: relative; gap: clamp(48px, 7vw, 88px); }
 .ds-object-pattern__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); align-items: start; gap: clamp(32px, 6vw, 80px); }
 .ds-object-pattern__flow { min-width: 0; display: grid; gap: clamp(48px, 7vw, 88px); }
 .ds-object-pattern__flow > .ds-object-main-tags { grid-template-columns: repeat(4, minmax(0, 1fr)); }

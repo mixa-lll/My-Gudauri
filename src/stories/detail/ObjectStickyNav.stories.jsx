@@ -18,12 +18,12 @@ export default {
   tags: ['autodocs'],
   parameters: {
     composition: defineComposition({ root: 'ObjectStickyNav' }),
-    docs: { description: { component: 'Sticky object-page anchor navigation. The compact desktop CTA appears only after the registered BookingWidget leaves the viewport.' } },
+    docs: { description: { component: 'Viewport-wide fixed object navigation. It is absent before its trigger, appears only after that point crosses the top edge and adds the compact desktop CTA after the BookingWidget leaves the viewport.' } },
   },
 };
 
 export const Default = {
-  render: () => <div style={{ maxWidth: 1180, marginInline: 'auto' }}>
+  render: () => <div style={{ position: 'relative', maxWidth: 1180, marginInline: 'auto' }}>
     <ObjectStickyNav items={items} bookingSummary={{ actionLabel: 'Continue', totalLabel: '240 GEL' }} />
     <DemoSection id="about" title="About" />
     <DemoSection id="reviews" title="Reviews" />
@@ -34,7 +34,7 @@ export const Default = {
 };
 
 export const WithoutPrice = {
-  render: () => <div style={{ maxWidth: 1180, marginInline: 'auto' }}>
+  render: () => <div style={{ position: 'relative', maxWidth: 1180, marginInline: 'auto' }}>
     <ObjectStickyNav items={items} bookingSummary={{ actionLabel: 'Check availability', totalLabel: null }} />
     <DemoSection id="about" title="About" />
     <BookingWidget id="booking-request" category="activity" />

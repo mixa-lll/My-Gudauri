@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ActivityCard,
   Badge,
@@ -134,8 +134,20 @@ function prefersReducedMotion() {
 
 export function ObjectStickyNav({ items = [], bookingTargetId = 'booking-request', bookingSummary }) {
   const validItems = items.filter((item) => item?.href && item?.label);
+  const triggerRef = useRef(null);
   const [activeHref, setActiveHref] = useState(validItems[0]?.href);
+  const [isPinned, setIsPinned] = useState(false);
   const [bookingVisible, setBookingVisible] = useState(true);
+
+  useEffect(() => {
+    const trigger = triggerRef.current;
+    if (!trigger || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsPinned(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    }, { threshold: 0 });
+    observer.observe(trigger);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!validItems.length || typeof IntersectionObserver === 'undefined') return undefined;
@@ -169,15 +181,21 @@ export function ObjectStickyNav({ items = [], bookingTargetId = 'booking-request
   };
 
   if (!validItems.length) return null;
-  return <div className="ds-object-sticky-nav">
-    <nav className="ds-object-sticky-nav__links" aria-label="On this page">
-      {validItems.map((item) => <a href={item.href} key={item.href} aria-current={activeHref === item.href ? 'location' : undefined}>{item.label}</a>)}
-    </nav>
-    <div className={`ds-object-sticky-nav__booking ${bookingVisible ? '' : 'is-visible'}`} aria-hidden={bookingVisible}>
-      {bookingSummary?.totalLabel ? <div><span>Estimated total</span><strong>{bookingSummary.totalLabel}</strong></div> : null}
-      <Button type="button" size="sm" onClick={continueBooking} tabIndex={bookingVisible ? -1 : undefined}>{bookingSummary?.actionLabel ?? 'Continue'}</Button>
+  const compactBookingVisible = isPinned && !bookingVisible;
+  return <>
+    <span ref={triggerRef} className="ds-object-sticky-nav__trigger" aria-hidden="true" />
+    <div className={`ds-object-sticky-nav ${isPinned ? 'is-pinned' : ''}`} aria-hidden={!isPinned}>
+      <div className="ds-object-sticky-nav__inner">
+        <nav className="ds-object-sticky-nav__links" aria-label="On this page">
+          {validItems.map((item) => <a href={item.href} key={item.href} tabIndex={isPinned ? undefined : -1} aria-current={activeHref === item.href ? 'location' : undefined}>{item.label}</a>)}
+        </nav>
+        <div className={`ds-object-sticky-nav__booking ${compactBookingVisible ? 'is-visible' : ''}`} aria-hidden={!compactBookingVisible}>
+          {bookingSummary?.totalLabel ? <div><span>Estimated total</span><strong>{bookingSummary.totalLabel}</strong></div> : null}
+          <Button type="button" size="sm" onClick={continueBooking} tabIndex={compactBookingVisible ? undefined : -1}>{bookingSummary?.actionLabel ?? 'Continue'}</Button>
+        </div>
+      </div>
     </div>
-  </div>;
+  </>;
 }
 
 const BOOKING_PRESETS = {
