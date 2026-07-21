@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
-import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
-import { MediaPlaceholder } from '../../components/MediaPlaceholder/MediaPlaceholder';
-import { Container } from '../../components/UI/Container/Container';
-import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
+import { Container, ContentPageHero, FaqAccordion, MediaPlaceholder, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
 import { ARTICLES } from '../../data/destinations';
 import './AboutGudauriPage.scss';
 
@@ -23,30 +18,29 @@ export function AboutGudauriPage() {
     <div className="about-page">
       <SiteNavbar className="destination-nav-host" />
       <main>
-        <Container className="destination-shell">
-          <section className="about-hero">
-            <SectionHeading
-              className="about-hero__heading"
-              as="h1"
-              size="lg"
+        <Container width="wide">
+          <div className="about-hero">
+            <ContentPageHero
               kicker="Greater Caucasus · Georgia"
-              title={<>About<br />Gudauri</>}
+              title="About Gudauri"
               description="A high-mountain resort with open alpine terrain, broad views and direct road access from Tbilisi."
+              media={(
+                <figure className="about-hero__media">
+                  <img
+                    className="about-hero__image"
+                    src="/assets/about-gudauri/gudauri-main-panorama.jpg"
+                    alt="Wide winter panorama of Gudauri ski slopes, chairlifts and the Greater Caucasus"
+                    width="1652"
+                    height="952"
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <figcaption><span>Gudauri ski area</span><span>View toward the Greater Caucasus</span></figcaption>
+                </figure>
+              )}
             />
-            <figure className="about-hero__media">
-              <img
-                className="about-hero__image"
-                src="/assets/about-gudauri/gudauri-main-panorama.jpg"
-                alt="Wide winter panorama of Gudauri ski slopes, chairlifts and the Greater Caucasus"
-                width="1652"
-                height="952"
-                loading="eager"
-                decoding="async"
-              />
-              <figcaption><span>Gudauri ski area</span><span>View toward the Greater Caucasus</span></figcaption>
-            </figure>
             <div className="about-hero__stats"><span><strong>2,196 m</strong>Village altitude</span><span><strong>3,276 m</strong>Highest lift</span><span><strong>~120 km</strong>From Tbilisi</span></div>
-          </section>
+          </div>
 
           <section className="about-intro">
             <SectionHeading

@@ -2,13 +2,8 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { createPortal } from 'react-dom';
 import { Link, useParams } from 'react-router-dom';
 import legacyPageHtml from '../../../pages/design-3-profile.html?raw';
-import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
-import { LazyInstructorRequestDialog } from '../../components/InstructorRequestDialog/LazyInstructorRequestDialog';
-import { ProfileGallery } from '../../components/ProfileGallery/ProfileGallery';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
-import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
-import { FAQ_ITEMS } from '../../data/faqItems';
-import { getInstructor } from '../../services/instructorsApi';
+import { BackLink, Badge, Container, DestinationCard, ObjectHero, ProfileGallery, SiteFooter, SiteNavbar } from '../../design-system';
+import { getInstructor, getInstructors } from '../../services/instructorsApi';
 import { renderInstructorProfile } from '../../utils/renderInstructorProfile';
 import './ProfileLegacy.scss';
 import './ProfilePage.scss';
@@ -53,8 +48,8 @@ export function ProfilePage() {
   const [status, setStatus] = useState('loading');
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [isRequestOpen, setIsRequestOpen] = useState(false);
-  const [faqMount, setFaqMount] = useState(null);
+  const [relatedInstructors, setRelatedInstructors] = useState([]);
+  const [relatedMount, setRelatedMount] = useState(null);
   const profileRootRef = useRef(null);
   const galleryTriggerRef = useRef(null);
 
@@ -63,11 +58,13 @@ export function ProfilePage() {
     setStatus('loading');
     setGalleryIndex(0);
     setIsGalleryOpen(false);
+    setRelatedInstructors([]);
 
-    getInstructor(slug)
-      .then((data) => {
+    Promise.all([getInstructor(slug), getInstructors().catch(() => [])])
+      .then(([data, instructors]) => {
         if (!active) return;
         setInstructor(data);
+        setRelatedInstructors(instructors.filter((item) => item.slug !== slug).slice(0, 3));
         setStatus(data ? 'ready' : 'not-found');
       })
       .catch(() => {
@@ -89,17 +86,8 @@ export function ProfilePage() {
     requestAnimationFrame(() => galleryTriggerRef.current?.focus({ preventScroll: true }));
   }, []);
 
-  const handleProfileClickCapture = useCallback((event) => {
-    const trigger = event.target.closest?.('.booking-cta-btn');
-    if (!trigger || !event.currentTarget.contains(trigger)) return;
-    event.preventDefault();
-    event.stopPropagation();
-    event.nativeEvent.stopImmediatePropagation();
-    setIsRequestOpen(true);
-  }, []);
-
   useLayoutEffect(() => {
-    setFaqMount(profileRootRef.current?.querySelector('[data-profile-faq-mount]') ?? null);
+    setRelatedMount(profileRootRef.current?.querySelector('[data-profile-related-mount]') ?? null);
   }, [renderedProfile]);
 
   useEffect(() => {
@@ -158,8 +146,34 @@ export function ProfilePage() {
   return (
     <>
       <SiteNavbar />
-      <div ref={profileRootRef} className="legacy-profile-root" onClickCapture={handleProfileClickCapture} dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
-      {faqMount ? createPortal(<FaqAccordion items={FAQ_ITEMS} />, faqMount) : null}
+      <div className="profile-system-hero">
+        <Container width="wide">
+          <ObjectHero
+            variant="split"
+            breadcrumbs={<BackLink to="/instructors">Back to instructors</BackLink>}
+            badges={[...instructor.sports.map((sport) => sport.name), instructor.role]}
+            title={instructor.name}
+            description={instructor.intro}
+            media={(
+              <div className="profile-object-media">
+                <img src={instructor.heroImage} alt={instructor.heroImageAlt} loading="eager" />
+                <Badge className="profile-object-media__availability" mediaOverlay>{instructor.availability || 'Schedule confirmed by manager'}</Badge>
+                <button className="profile-object-media__gallery" type="button" data-profile-gallery-open data-gallery-index="0">
+                  <span><strong>Open gallery</strong><small>{renderedProfile.media.length} photos</small></span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            )}
+          />
+        </Container>
+      </div>
+      <div ref={profileRootRef} className="legacy-profile-root" dangerouslySetInnerHTML={{ __html: renderedProfile.html }} />
+      {relatedMount ? createPortal(
+        relatedInstructors.length
+          ? <div className="profile-related-grid">{relatedInstructors.map((item) => <DestinationCard key={item.slug} item={item} section="instructors" />)}</div>
+          : <p className="profile-empty-state">More instructors will appear here soon.</p>,
+        relatedMount
+      ) : null}
       <SiteFooter />
       <ProfileGallery
         images={renderedProfile.media}
@@ -169,7 +183,6 @@ export function ProfilePage() {
         onClose={closeGallery}
         onIndexChange={setGalleryIndex}
       />
-      <LazyInstructorRequestDialog open={isRequestOpen} onOpenChange={setIsRequestOpen} instructor={instructor} />
     </>
   );
 }

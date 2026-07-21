@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { CONTACT_DETAILS } from '../../data/contactDetails';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
-import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
-import { Container } from '../../components/UI/Container/Container';
+import { Badge, Container, ContentPageHero, SiteFooter, SiteNavbar } from '../../design-system';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './ContactsPage.scss';
 
@@ -29,18 +27,14 @@ export function ContactsPage() {
     <div className="contacts-page">
       <SiteNavbar className="contacts-nav-host" />
       <main>
-        <Container className="contacts-shell">
-          <section className="contacts-hero" aria-labelledby="contacts-title">
-            <div className="contacts-hero__copy">
-              <p className="contacts-kicker">{t('contacts.kicker')}</p>
-              <h1 id="contacts-title">{t('contacts.title')}</h1>
-              <p className="contacts-hero__intro">{t('contacts.intro')}</p>
-            </div>
-            <div className="contacts-hero__status">
-              <span aria-hidden="true" />
-              {t('contacts.status')}
-            </div>
-          </section>
+        <Container width="wide">
+          <ContentPageHero
+            kicker={t('contacts.kicker')}
+            title={t('contacts.title')}
+            titleId="contacts-title"
+            description={t('contacts.intro')}
+            status={<Badge tone="success"><span className="contacts-status-dot" aria-hidden="true" />{t('contacts.status')}</Badge>}
+          />
 
           <section className="contacts-methods" aria-label={t('footer.contact')}>
             <a href={`mailto:${CONTACT_DETAILS.email}`}>

@@ -68,7 +68,7 @@ export function CalculatorBanner() {
 
         <Button
           ref={triggerRef}
-          variant="outline"
+          variant="secondary"
           size="md"
           className="calc-banner__trigger"
           iconLeft="/assets/design-2/calc/btn-calc-left.png"

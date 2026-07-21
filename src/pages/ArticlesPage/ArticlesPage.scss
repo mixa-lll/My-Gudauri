@@ -1,25 +1,10 @@
 .articles-page {
-  width: min(100%, var(--content-width));
+  width: 100%;
   margin-inline: auto;
 }
 
 .articles-page main {
   padding: clamp(50px, 7vw, 100px) 0 clamp(80px, 10vw, 140px);
-}
-
-.articles-header {
-  display: grid;
-  grid-template-columns: 1fr minmax(280px, 0.5fr);
-  gap: 40px;
-  align-items: end;
-}
-
-.articles-header > p {
-  max-width: 44ch;
-  margin: 0 0 7px;
-  color: var(--grey-400);
-  font-size: 16px;
-  line-height: 1.5;
 }
 
 .articles-category-tabs {
@@ -68,10 +53,6 @@
 @media (max-width: 720px) {
   .articles-page main {
     padding-top: 38px;
-  }
-
-  .articles-header {
-    grid-template-columns: 1fr;
   }
 
   .articles-list__heading {

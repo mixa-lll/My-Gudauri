@@ -15,6 +15,12 @@ const INSTRUCTOR_FAQ = [
   }
 ];
 
+const INSTRUCTOR_BOOKING_STEPS = [
+  ['Send your request', 'Share your dates, group and lesson goals.'],
+  ['We check availability', 'A manager finds the best available match.'],
+  ['Confirm before booking', 'You receive the instructor, schedule and final price.']
+];
+
 const BROWSE_FAQ = [
   {
     question: 'How do availability inquiries work?',
@@ -51,6 +57,9 @@ export const DESTINATIONS = {
       ['Real profiles', 'Compare experience, languages, reviews and teaching style.'],
       ['Flexible scheduling', 'Split lesson hours across days in a way that suits you.']
     ],
+    bookingKicker: 'Booking guide',
+    bookingTitle: 'How it works',
+    bookingSteps: INSTRUCTOR_BOOKING_STEPS,
     faq: INSTRUCTOR_FAQ,
     items: INSTRUCTORS
   },

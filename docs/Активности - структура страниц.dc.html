@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<style>
+  *{box-sizing:border-box}body{margin:0;background:#eef2f6;color:#26282b;font-family:'Geist',-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+  .page{padding:40px 44px 64px;max-width:760px}.top{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}.index{font:600 12px ui-monospace,monospace;padding:4px 8px;background:#1a1a1a;color:#fff;border-radius:5px}.title{font-size:22px;font-weight:600;letter-spacing:-.02em}.intro{margin:0 0 24px;font-size:14px;line-height:1.55;color:#5f6469}
+  .panel{background:#fff;border:1px solid #dde3e9;border-radius:20px;padding:22px 26px 24px;margin-bottom:26px}.panel-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}.panel-head strong{font-size:17px}.route{font:12px ui-monospace,monospace;color:#5f6469;background:#eef2f6;border-radius:5px;padding:3px 8px}.caption{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#8a8e88}.note{font-size:12.5px;color:#5f6469;margin:8px 0 14px;line-height:1.5}
+  .legend{display:flex;flex-wrap:wrap;gap:18px 28px;background:#fff;border:1px solid #dde3e9;border-radius:16px;padding:18px 24px;margin-bottom:32px}.legend-col{display:flex;flex-direction:column;gap:9px}.legend-title{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:#8a9099}.legend-items{display:grid;grid-template-columns:auto auto;gap:8px 18px;font-size:12.5px;color:#3d4248}.swatch{display:inline-block;width:26px;height:15px;border-radius:4px;margin-right:7px;vertical-align:-3px}.swatch.template{background:#e9e9e5;border:1px solid #d3d3cc}.swatch.category{background:#d9ecfb;border:1px solid #bcdcf7}.swatch.global{background:#3f403d}.swatch.unique{background:#fff;border:1.5px solid #3f97e0}
+  .fields,.pills{display:flex;flex-wrap:wrap;gap:7px}.field{background:#eaf4fd;border:1px solid #bcdcf7;color:#175a94;border-radius:8px;padding:5px 12px;font-size:12.5px}.field.system{background:#eef2f6;border-color:#d7dde3;color:#8a9099;font:12px ui-monospace,monospace}.field.optional{background:#fff;border-style:dashed}.stack{display:flex;flex-direction:column}.block{border-radius:12px;padding:12px 16px 14px}.block.template{background:#e9e9e5;border:1px solid #d3d3cc}.block.category{background:#d9ecfb;border:1px solid #bcdcf7}.block.global{background:#3f403d}.block.unique{background:#fff;border:1.5px solid #3f97e0}.block-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.block-head strong{font-size:14.5px}.block-head span{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#8a8e88}.block.category .block-head strong{color:#17405f}.block.category .block-head span{color:#5b86a8}.block.global .block-head strong{color:#fff}.block.global .block-head span{color:#b5b6b2}.block.unique .block-head span{color:#3f97e0}.pills{margin-top:10px}.pill{border-radius:999px;padding:4px 12px;font-size:12.5px}.pill.data{background:#3f97e0;color:#fff}.pill.common{background:#cfe6fa;color:#175a94}.pill.input{background:#fff;border:1.5px dashed #3f97e0;color:#175a94;padding:3px 11px}.arrow{text-align:center;color:#aab1b8;font-size:14px;line-height:1;margin:5px 0}.transition{display:flex;flex-direction:column;align-items:center;gap:4px;color:#5f6469;padding:14px 0}.transition b{font-size:26px;line-height:1}.transition span{font-size:12px;text-align:center}.card-demo{background:#eaf4fd;border:1px solid #bcdcf7;border-radius:10px;padding:11px 13px;margin-top:10px}.card-demo strong{font-size:12px;color:#17405f}.side-grid{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:14px}.booking{background:#f4f9fe;border:1px solid #bcdcf7;border-radius:14px;padding:15px 16px 17px;height:max-content}.booking h3{font-size:14px;color:#17405f;margin:0 0 8px}.small{font-size:12px;color:#5b86a8;line-height:1.45}.section-label{font-size:13px;font-weight:700;margin:0 0 10px;color:#3d4248}.optional-box{margin-top:12px;background:#f8fafc;border:1px dashed #b8c4cf;border-radius:12px;padding:12px 14px}.optional-box b{font-size:12.5px}.optional-box p{margin:5px 0 0;font-size:12px;line-height:1.45;color:#687078}@media(max-width:720px){.page{padding:24px 16px}.side-grid{grid-template-columns:1fr}.legend-items{grid-template-columns:1fr}.panel{padding:18px}}
+</style>
+</helmet>
+
+<div class="page">
+  <div class="top"><span class="index">2. Активности</span><span class="title">Структура страниц и данных</span></div>
+  <sc-if value="{{ showAnnotations }}" hint-placeholder-val="{{ true }}">
+    <p class="intro">Два экрана категории: каталог и страница активности. Иерархия состоит только из двух уровней: подкатегория → карточка активности. Все активности находятся в одной базе и используют один состав блоков — по той же логике, что каталог и профили инструкторов. Freeride, Ski Touring, Heliskiing, Mountaineering, Freestyle, Paragliding, Excursions и Mountain Biking меняют только наполнение карточек и страниц.</p>
+  </sc-if>
+
+  <sc-if value="{{ showLegend }}" hint-placeholder-val="{{ true }}">
+    <div class="legend">
+      <div class="legend-col">
+        <div class="legend-title">Типы блоков</div>
+        <div class="legend-items">
+          <div><span class="swatch template"></span>шаблонный — одинаковая вёрстка для всех каталогов</div>
+          <div><span class="swatch category"></span>общий для категории «Активности»</div>
+          <div><span class="swatch global"></span>одинаковый на всех категориях сайта</div>
+          <div><span class="swatch unique"></span>профильный блок активностей</div>
+        </div>
+      </div>
+      <div class="legend-col">
+        <div class="legend-title">Источники данных</div>
+        <div class="pills" style="margin-top:0">
+          <span class="pill common">общие настройки категории</span>
+          <span class="pill data">конкретная активность</span>
+          <span class="pill input">ввод пользователя</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div class="panel">
+    <div class="panel-head"><strong>БД активностей</strong><span class="route">table: activities</span><span class="caption">единая для всех типов</span></div>
+    <sc-if value="{{ showAnnotations }}" hint-placeholder-val="{{ true }}">
+      <div class="note">Одна таблица формирует все карточки и все детальные страницы. Состав полей и блоков фиксированный: для новой подкатегории не создаются отдельная форма, фильтры или шаблон страницы.</div>
+    </sc-if>
+    <p class="section-label">Обязательные общие поля</p>
+    <div class="fields">
+      <span class="field">Название</span><span class="field">Подкатегория</span><span class="field">Обложка</span><span class="field">Галерея</span><span class="field">Краткое описание</span><span class="field">Полное описание</span><span class="field">Регион</span><span class="field">Сезон</span><span class="field">Продолжительность</span><span class="field">Уровень</span><span class="field">Формат</span><span class="field">Размер группы</span><span class="field">Возраст</span><span class="field">Цена и единица цены</span><span class="field">Детали активности</span><span class="field">Отзывы</span><span class="field">Доп. теги</span><span class="field system">slug · id · status</span>
+    </div>
+    <div class="optional-box">
+      <b>«Детали активности» — одно универсальное составное поле</b>
+      <p>Внутри него хранятся программа или маршрут, что включено, требования и экипировка. Если нужно указать набор высоты, время полёта или точки экскурсии, они добавляются в это же содержимое без изменения структуры страницы.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><strong>Каталог</strong><span class="route">/activities</span></div>
+    <div class="stack">
+      <div class="block template"><div class="block-head"><strong>1 · Hero</strong><span>шаблон</span></div><div class="pills"><span class="pill common"><b>H1:</b> Активности</span><span class="pill common">описание категории</span><span class="pill common">сезонный статус</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="block category"><div class="block-head"><strong>2 · Кастомный баннер</strong><span>категория</span></div><div class="pills"><span class="pill common">оффер активностей</span><span class="pill common">изображение</span><span class="pill common">CTA</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="block template"><div class="block-head"><strong>3 · Категории</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Freeride</span><span class="pill data">Ski Touring</span><span class="pill data">Heliskiing</span><span class="pill data">Mountaineering</span><span class="pill data">Freestyle</span><span class="pill data">Paragliding</span><span class="pill data">Excursions</span><span class="pill data">Mountain Biking</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="block template"><div class="block-head"><strong>4 · Фильтры — минимальный фиксированный набор</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Сезон</span><span class="pill data">Продолжительность</span><span class="pill data">Регион</span></div><div class="small" style="margin-top:9px">Один и тот же состав для всей базы. При небольшом количестве карточек блок можно не показывать.</div></div>
+      <div class="arrow">↓</div>
+      <div class="block template">
+        <div class="block-head"><strong>5 · Сетка карточек</strong><span>шаблон</span></div>
+        <div class="card-demo"><strong>Карточка активности</strong><div class="pills"><span class="pill data">Обложка</span><span class="pill data">Название</span><span class="pill data">Категория</span><span class="pill data">Регион</span><span class="pill data">Продолжительность</span><span class="pill data">Уровень</span><span class="pill data">Цена от</span><span class="pill data">Рейтинг</span></div><div class="small" style="margin-top:9px">клик по карточке → открывает страницу активности</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="block global"><div class="block-head"><strong>6 · Почему выбирают My Gudauri</strong><span>все категории</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="block category"><div class="block-head"><strong>7 · Как забронировать активность</strong><span>категория</span></div></div>
+      <div class="arrow">↓</div>
+      <div class="block category"><div class="block-head"><strong>8 · FAQ по активностям</strong><span>категория</span></div></div>
+    </div>
+  </div>
+
+  <div class="transition"><b>↓</b><span>клик по карточке → открывается единая страница активности</span></div>
+
+  <div class="panel">
+    <div class="panel-head"><strong>Страница активности</strong><span class="route">/activities/:slug</span></div>
+    <div class="side-grid">
+      <div class="stack">
+        <div class="block template"><div class="block-head"><strong>1 · Hero</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Обложка / галерея</span><span class="pill data">Название</span><span class="pill data">Категория</span><span class="pill data">Регион</span><span class="pill data">Цена от</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block template"><div class="block-head"><strong>2 · Главные характеристики — 4 пары</strong><span>шаблон</span></div><div class="pills"><span class="pill data"><b>Продолжительность:</b> значение</span><span class="pill data"><b>Уровень:</b> значение</span><span class="pill data"><b>Формат:</b> значение</span><span class="pill data"><b>Сезон:</b> значение</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block template"><div class="block-head"><strong>3 · Описание</strong><span>шаблон</span></div><div class="pills"><span class="pill data">полное описание активности</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block template"><div class="block-head"><strong>4 · Набор доп. тегов</strong><span>шаблон</span></div><div class="pills"><span class="pill data">для новичков</span><span class="pill data">семейное</span><span class="pill data">оборудование включено</span><span class="pill data">трансфер включён</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block unique"><div class="block-head"><strong>5 · Детали активности</strong><span>только у активностей</span></div><div class="pills"><span class="pill data">программа / маршрут</span><span class="pill data">что включено</span><span class="pill data">требования и экипировка</span><span class="pill data">дополнительные сведения</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block template"><div class="block-head"><strong>6 · Отзывы</strong><span>шаблон</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block category"><div class="block-head"><strong>7 · Как забронировать [активности]</strong><span>категория</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="block template"><div class="block-head"><strong>8 · Другие предложения</strong><span>шаблон</span></div></div>
+      </div>
+
+      <div>
+        <div class="booking">
+          <h3>Закреплённое бронирование</h3>
+          <div class="small">Появляется в Hero и остаётся закреплённым при скролле.</div>
+          <div class="pills" style="flex-direction:column;align-items:flex-start"><span class="pill input">Дата</span><span class="pill input">Количество участников</span></div>
+          <div class="small" style="margin-top:11px">Два одинаковых первичных поля для любой активности. Остальные детали менеджер уточняет после отправки заявки.</div>
+        </div>
+        <div class="optional-box">
+          <b>Правило шаблона</b>
+          <p>Состав страницы полностью повторяется у всех активностей. Внутри блока «Детали активности» показываются только заполненные подразделы.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><strong>Принцип единообразия</strong><span class="caption">как у инструкторов</span></div>
+    <div class="note">Подкатегория нужна только для навигации и отбора карточек. Она не меняет шаблон каталога, состав фильтров, карточку, страницу активности или форму заявки.</div>
+    <div class="fields">
+      <span class="field optional">одна БД</span>
+      <span class="field optional">одна карточка</span>
+      <span class="field optional">один detail-шаблон</span>
+      <span class="field optional">один минимальный набор фильтров</span>
+      <span class="field optional">одна форма заявки</span>
+      <span class="field optional">профильные сведения — внутри общего текстового блока</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showLegend&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Схема&quot;},&quot;showAnnotations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Схема&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showLegend: this.props.showLegend ?? true,
+      showAnnotations: this.props.showAnnotations ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>

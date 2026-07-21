@@ -1,0 +1,14 @@
+.ui-accordion { display: grid; gap: var(--space-300); }
+.ui-accordion__item { min-width: 0; padding: 0 clamp(18px, 2vw, 28px); border: 1px solid var(--border-subtle); border-radius: var(--radius-control); background: var(--surface-page); transition: border-color var(--motion-duration-base) var(--motion-ease-standard), background-color var(--motion-duration-base) var(--motion-ease-standard); }
+.ui-accordion__item:hover { border-color: var(--border-default); }
+.ui-accordion__item.is-open { border-color: var(--border-default); background: var(--surface-card); }
+.ui-accordion__item h3 { margin: 0; }
+.ui-accordion__item button { width: 100%; min-height: 68px; padding: 0; border: 0; display: grid; grid-template-columns: 24px 1fr; align-items: center; gap: var(--space-400); background: transparent; color: var(--text-primary); cursor: pointer; font: var(--fw-regular) var(--type-body-size) / var(--type-body-line) var(--font-body); text-align: left; }
+.ui-accordion__item button:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+.ui-accordion__icon { width: 24px; height: 24px; position: relative; }
+.ui-accordion__icon::before, .ui-accordion__icon::after { content: ''; position: absolute; top: 50%; left: 50%; width: 14px; height: 2px; background: currentColor; transform: translate(-50%, -50%); transition: transform var(--motion-duration-base) var(--motion-ease-standard); }
+.ui-accordion__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+.ui-accordion__item.is-open .ui-accordion__icon::after { transform: translate(-50%, -50%) rotate(0deg); }
+.ui-accordion__panel > div { padding: var(--space-200) 0 var(--space-500) 40px; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-size) / var(--type-body-line) var(--font-body); }
+@media (max-width: 520px) { .ui-accordion__item { padding-inline: var(--space-400); } .ui-accordion__panel > div { padding-left: 30px; } }
+@media (prefers-reduced-motion: reduce) { .ui-accordion__item, .ui-accordion__icon::after { transition-duration: 0.01ms !important; } }

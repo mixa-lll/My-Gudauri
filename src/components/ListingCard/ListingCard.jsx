@@ -2,7 +2,7 @@ import { createElement, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 import { MediaPlaceholder } from '../MediaPlaceholder/MediaPlaceholder';
-import { Pill } from '../UI/Pill/Pill';
+import { Badge } from '../UI/Badge/Badge';
 import './ListingCard.scss';
 
 export function ListingCard({
@@ -51,9 +51,9 @@ export function ListingCard({
 
 export function ListingCardPill({ children, icon, className, title }) {
   return (
-    <Pill className={cn('listing-card__pill', className)} size="sm" tone="glass" icon={icon} title={title}>
+    <Badge className={cn('listing-card__pill', className)} size="sm" mediaOverlay icon={icon} title={title}>
       {children}
-    </Pill>
+    </Badge>
   );
 }
 
@@ -79,3 +79,7 @@ export function ListingCardPrice({ price, suffix }) {
 export function ListingCardAction({ children = 'View details' }) {
   return <span className="listing-card__action">{children}<i aria-hidden="true">↗</i></span>;
 }
+
+export const ListingCardFrame = ListingCard;
+export const Rating = ListingCardRating;
+export const Price = ListingCardPrice;

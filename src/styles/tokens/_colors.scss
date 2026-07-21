@@ -11,8 +11,11 @@
   --grey-800: #0e0f0d;
   --grey-white: #ffffff;
 
-  --rad-600: #df4b3f;
-  --rad-100: #f7e4df;
+  --accent-600: #c43f34;
+  --accent-100: #f7e4df;
+  /* Deprecated aliases. Keep until all static prototypes have migrated. */
+  --rad-600: var(--accent-600);
+  --rad-100: var(--accent-100);
   --olive-50: #edf0e6;
   --blue-50: #e9eef2;
   --sand-50: #f2ede4;
@@ -22,4 +25,39 @@
   --danger-700: #9d2e2e;
   --warning-100: #fff1d8;
   --warning-700: #744700;
+
+  /* Semantic color contract. Production components consume these tokens. */
+  --surface-page: var(--grey-50);
+  --surface-card: var(--grey-white);
+  --surface-subtle: var(--grey-100);
+  --surface-overlay: rgba(14, 15, 13, 0.72);
+  --surface-raised: var(--grey-white);
+  --surface-inverse: var(--grey-700);
+  --surface-media-overlay: rgba(255, 255, 255, 0.88);
+  --text-primary: var(--grey-700);
+  --text-secondary: var(--grey-500);
+  --text-inverse: var(--grey-white);
+  --text-disabled: var(--grey-300);
+  --border-subtle: var(--grey-150);
+  --border-default: var(--grey-200);
+  --border-strong: var(--grey-500);
+  --border-media-overlay: rgba(32, 33, 30, 0.12);
+  --action-primary: var(--grey-700);
+  --action-primary-hover: var(--grey-800);
+  --action-primary-pressed: var(--grey-600);
+  --action-secondary: var(--grey-white);
+  --action-secondary-hover: var(--grey-100);
+  --action-secondary-pressed: var(--grey-150);
+  --action-accent: var(--accent-600);
+  --action-disabled: var(--grey-200);
+  --status-success: #377842;
+  --status-success-surface: #e4f2e7;
+  --status-warning: var(--warning-700);
+  --status-warning-surface: var(--warning-100);
+  --status-danger: var(--danger-700);
+  --status-danger-hover: #7f2222;
+  --status-danger-surface: #f8e5e5;
+  --status-info: #35657a;
+  --status-info-surface: var(--blue-50);
+  --focus-ring: #1769e0;
 }

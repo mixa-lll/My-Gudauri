@@ -1,0 +1,34 @@
+.ui-form-field { display: grid; gap: var(--space-200); color: var(--text-primary); }
+.ui-form-field > label { font: var(--fw-medium) var(--type-label-size) / var(--type-label-line) var(--font-body); }
+.ui-control-wrap { position: relative; display: block; }
+.ui-control { box-sizing: border-box; width: 100%; min-height: var(--control-height-lg); padding: 0 var(--space-400); border: 1px solid var(--border-default); border-radius: var(--radius-control); background: var(--surface-card); color: var(--text-primary); font: var(--fw-regular) var(--type-body-size) / var(--type-body-line) var(--font-body); transition: border-color var(--motion-duration-fast) var(--motion-ease-standard), box-shadow var(--motion-duration-fast) var(--motion-ease-standard); }
+.ui-control::placeholder { color: var(--text-disabled); }
+.ui-control:hover { border-color: var(--border-strong); }
+.ui-control:focus { border-color: var(--focus-ring); outline: 0; box-shadow: 0 0 0 var(--focus-ring-width) color-mix(in srgb, var(--focus-ring) 22%, transparent); }
+.ui-control:disabled { cursor: not-allowed; background: var(--grey-100); color: var(--text-disabled); opacity: var(--opacity-disabled); }
+.ui-control[data-field-state='error'] { border-color: var(--status-danger); }
+.ui-control[data-field-state='success'] { border-color: var(--status-success); }
+.ui-textarea { min-height: 124px; padding-block: var(--space-300); resize: vertical; }
+.ui-select { appearance: none; padding-right: 44px; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 19px) 50%, calc(100% - 14px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.ui-control-wrap.is-loading .ui-control { padding-right: 44px; }
+.ui-control-spinner { position: absolute; top: 50%; right: var(--space-400); width: var(--icon-size-sm); height: var(--icon-size-sm); border: 2px solid var(--border-default); border-top-color: var(--text-primary); border-radius: 50%; animation: form-spin .8s linear infinite; transform: translateY(-50%); }
+@keyframes form-spin { to { transform: translateY(-50%) rotate(360deg); } }
+.ui-field-message { margin: 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-caption-size) / var(--type-caption-line) var(--font-body); }
+.ui-field-message--error { color: var(--status-danger); }
+.ui-field-message--success { color: var(--status-success); }
+.ui-choice { position: relative; display: inline-grid; grid-template-columns: 22px 1fr; align-items: start; gap: var(--space-300); color: var(--text-primary); cursor: pointer; }
+.ui-choice input { position: absolute; opacity: 0; pointer-events: none; }
+.ui-choice > span { width: 22px; height: 22px; border: 1px solid var(--border-strong); border-radius: 6px; display: grid; place-items: center; background: var(--surface-card); }
+.ui-choice input:checked + span { border-color: var(--action-primary); background: var(--action-primary); }
+.ui-choice input:checked + span::after { content: '✓'; color: var(--text-inverse); font-size: 14px; }
+.ui-choice input:focus-visible + span { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+.ui-choice input:disabled ~ * { cursor: not-allowed; opacity: var(--opacity-disabled); }
+.ui-choice > b { padding-top: 2px; font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+.ui-choice--radio > span { border-radius: 50%; }
+.ui-choice--radio input:checked + span::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--text-inverse); }
+.ui-quantity { display: inline-grid; grid-template-columns: auto minmax(48px, auto) auto; align-items: center; gap: var(--space-200); }
+.ui-quantity output { text-align: center; font: var(--fw-bold) var(--type-body-size) / 1 var(--font-body); }
+.ui-form-summary { padding: var(--space-400); border: 1px solid var(--status-danger); border-radius: var(--radius-control); color: var(--status-danger); }
+.ui-form-summary h2 { margin: 0; font: var(--fw-bold) var(--type-body-size) / 1.3 var(--font-body); }
+.ui-form-summary ul { margin: var(--space-200) 0 0; padding-left: var(--space-500); }
+@media (prefers-reduced-motion: reduce) { .ui-control-spinner { animation-duration: 1.5s; } }

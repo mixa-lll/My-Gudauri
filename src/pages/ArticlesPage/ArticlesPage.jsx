@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CatalogCategoryTabs } from '../../components/CatalogCategoryTabs/CatalogCategoryTabs';
-import { ListingCard, ListingCardAction, ListingCardPill } from '../../components/ListingCard/ListingCard';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
-import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
-import { Container } from '../../components/UI/Container/Container';
-import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
+import { CatalogCategoryTabs, CatalogHero, Container, ListingCard, ListingCardAction, ListingCardPill, SiteFooter, SiteNavbar } from '../../design-system';
 import { ARTICLES } from '../../data/destinations';
 import './ArticlesPage.scss';
 
@@ -36,11 +31,13 @@ export function ArticlesPage() {
     <div className="articles-page">
       <SiteNavbar className="destination-nav-host" />
       <main>
-        <Container className="destination-shell">
-          <header className="articles-header">
-            <SectionHeading as="h1" size="lg" kicker="Local knowledge" title="Articles" />
-            <p>Practical guides for a smoother mountain trip — written with local experts and updated for the season.</p>
-          </header>
+        <Container width="wide">
+          <CatalogHero
+            align="start"
+            kicker="Local knowledge"
+            title="Articles"
+            description="Practical guides for a smoother mountain trip — written with local experts and updated for the season."
+          />
 
           <CatalogCategoryTabs
             className="articles-category-tabs"

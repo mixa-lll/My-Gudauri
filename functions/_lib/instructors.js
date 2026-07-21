@@ -16,6 +16,8 @@ function mapSummary(row) {
     rating: row.rating,
     reviews: row.review_count,
     experienceYears: row.experience_years,
+    gender: row.gender,
+    certificate: row.certificate_label,
     image: row.card_image_url,
     sports: parseJson(row.disciplines_json),
     languages: parseJson(row.languages_json),
@@ -33,6 +35,8 @@ const SUMMARY_SELECT = `
     i.rating,
     i.review_count,
     i.experience_years,
+    i.gender,
+    i.certificate_label,
     i.card_image_url,
     COALESCE((
       SELECT json_group_array(item.label)
@@ -75,9 +79,10 @@ export async function getInstructor(db, slug) {
   const instructor = await db.prepare(`${SUMMARY_SELECT} WHERE i.status = 'published' AND i.slug = ? LIMIT 1`).bind(slug).first();
   if (!instructor) return null;
 
-  const [aboutResult, tagsResult, mediaResult, reviewsResult] = await db.batch([
+  const [aboutResult, tagsResult, certificationsResult, mediaResult, reviewsResult] = await db.batch([
     db.prepare('SELECT body FROM instructor_about WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT label FROM instructor_tags WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
+    db.prepare('SELECT title, level, file_url FROM instructor_certifications WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT media_type, url, thumbnail_url, alt, is_featured FROM instructor_media WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare("SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position FROM instructor_reviews WHERE instructor_id = ? AND is_published = 1 ORDER BY sort_order, id").bind(instructor.id)
   ]);
@@ -102,6 +107,11 @@ export async function getInstructor(db, slug) {
     certificate: detail.certificate_label,
     about: aboutResult.results.map((item) => item.body),
     tags: tagsResult.results.map((item) => item.label),
+    certifications: certificationsResult.results.map((item) => ({
+      title: item.title,
+      level: item.level,
+      fileUrl: item.file_url
+    })),
     media: mediaResult.results.map((item) => ({
       type: item.media_type,
       src: item.url,

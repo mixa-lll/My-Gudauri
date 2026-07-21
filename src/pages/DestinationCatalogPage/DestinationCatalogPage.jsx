@@ -1,15 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
-import { Navigate, useParams } from 'react-router-dom';
-import { CatalogCategoryTabs } from '../../components/CatalogCategoryTabs/CatalogCategoryTabs';
-import { DestinationCard } from '../../components/DestinationCard/DestinationCard';
-import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
-import { LazyInstructorRequestDialog } from '../../components/InstructorRequestDialog/LazyInstructorRequestDialog';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
-import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
-import { Container } from '../../components/UI/Container/Container';
-import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
 import { getDestination } from '../../data/destinations';
 import { getInstructors } from '../../services/instructorsApi';
 import './DestinationCatalogPage.scss';
@@ -25,7 +18,9 @@ const CATALOG_FILTERS = {
       ['russian', 'Russian', null, null, 'language', 'Language'],
       ['english', 'English', null, null, 'language', 'Language'],
       ['georgian', 'Georgian', null, null, 'language', 'Language'],
-      ['kids', 'Works with children', null, null, 'audience', 'Lessons'],
+      ['male', 'Male', null, null, 'gender', 'Gender'],
+      ['female', 'Female', null, null, 'gender', 'Gender'],
+      ['kids', 'Works with children', null, null, 'specialty', 'Focus'],
       ['first-lessons', 'First lessons', null, null, 'specialty', 'Focus'],
       ['technique', 'Technique', null, null, 'specialty', 'Focus'],
       ['carving', 'Carving', null, null, 'specialty', 'Focus'],
@@ -121,6 +116,8 @@ const INSTRUCTOR_FILTER_MATCHERS = {
   russian: (item) => item.languages?.some((language) => language.code === 'Ru'),
   english: (item) => item.languages?.some((language) => language.code === 'En'),
   georgian: (item) => item.languages?.some((language) => language.code === 'Ge'),
+  male: (item) => item.gender === 'male',
+  female: (item) => item.gender === 'female',
   kids: (item) => item.tags?.some((tag) => /kids|children|family/i.test(tag)),
   'first-lessons': (item) => item.tags?.some((tag) => /first lesson/i.test(tag)),
   technique: (item) => item.tags?.some((tag) => /technique/i.test(tag)),
@@ -208,7 +205,7 @@ function InstructorFilterDropdown({ group, activeFilters, onToggle, onClear }) {
   );
 }
 
-function PricingInfoPopover() {
+function PricingInfoPopover({ steps = [] }) {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -222,9 +219,9 @@ function PricingInfoPopover() {
           </div>
           <p>Instructor profiles do not compete on price. Your final total depends on lesson duration and group size.</p>
           <ol>
-            <li><span>1</span><div><strong>Send your request</strong><p>Share your dates, group and lesson goals.</p></div></li>
-            <li><span>2</span><div><strong>We check availability</strong><p>A manager finds the best available match.</p></div></li>
-            <li><span>3</span><div><strong>Confirm before booking</strong><p>You receive the instructor, schedule and final price.</p></div></li>
+            {steps.map(([title, description], index) => (
+              <li key={title}><span>{index + 1}</span><div><strong>{title}</strong><p>{description}</p></div></li>
+            ))}
           </ol>
           <Popover.Arrow className="instructor-price-popover__arrow" width={14} height={7} />
         </Popover.Content>
@@ -242,7 +239,6 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const [status, setStatus] = useState(section === 'instructors' ? 'loading' : 'ready');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeFilters, setActiveFilters] = useState([]);
-  const [isRequestOpen, setIsRequestOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.add('destination-page-body');
@@ -281,14 +277,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
 
   const categories = useMemo(() => toFilter(filterConfig?.categories ?? []), [filterConfig]);
   const refinements = useMemo(() => toFilter(filterConfig?.refinements ?? []), [filterConfig]);
-  const availableRefinements = useMemo(() => section === 'instructors' ? [
-    ...categories.filter((category) => category.id !== 'all').map((category) => ({
-      ...category,
-      group: 'discipline',
-      groupLabel: 'Discipline'
-    })),
-    ...refinements
-  ] : refinements, [categories, refinements, section]);
+  const availableRefinements = refinements;
   const refinementGroups = useMemo(() => availableRefinements.reduce((groups, filter) => {
     const groupId = filter.group || 'filters';
     const current = groups.find((group) => group.id === groupId);
@@ -297,7 +286,6 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     return groups;
   }, []), [availableRefinements]);
   const categoryItems = useMemo(() => {
-    if (section === 'instructors') return items;
     const category = categories.find((item) => item.id === activeCategory);
     return items.filter((item) => matchesFilter(section, category, item));
   }, [activeCategory, categories, items, section]);
@@ -325,19 +313,15 @@ export function DestinationCatalogPage({ section: sectionProp }) {
       <SiteNavbar className="destination-nav-host" />
 
       <main>
-        <Container className="destination-shell">
-          <section className={`destination-hero ${section === 'instructors' ? 'destination-hero--instructors' : ''}`.trim()} aria-labelledby="destination-title">
-            <div className="destination-hero__copy">
-              <SectionHeading
-                as="h1"
-                size="lg"
-                align="center"
-                kicker={config.kicker}
-                title={config.title}
-                titleId="destination-title"
-                description={config.description}
-              />
-            </div>
+        <Container width="wide">
+          <div className={`destination-hero ${section === 'instructors' ? 'destination-hero--instructors' : ''}`.trim()}>
+            <CatalogHero
+              align="center"
+              kicker={config.kicker}
+              title={config.title}
+              titleId="destination-title"
+              description={config.description}
+            />
             {section === 'instructors' ? (
               <>
                 <section className="instructor-concierge" aria-label="Personal instructor selection">
@@ -346,7 +330,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                     <h2>Tell us your dates and what you need.</h2>
                     <p>We will check availability and suggest an instructor for your language, group and lesson goals.</p>
                   </div>
-                  <button type="button" onClick={() => setIsRequestOpen(true)}>Ask us to choose <span aria-hidden="true">↗</span></button>
+                  <Link to="/instructors/match">Ask us to choose <span aria-hidden="true">↗</span></Link>
                 </section>
                 <section className="instructor-price-note" aria-label="Instructor pricing information">
                   <div className="instructor-price-note__mark" aria-hidden="true">=</div>
@@ -355,7 +339,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                     <strong>One rate for every instructor</strong>
                     <p>Choose by teaching style, language and experience — not by price.</p>
                   </div>
-                  <PricingInfoPopover />
+                  <PricingInfoPopover steps={config.bookingSteps} />
                 </section>
               </>
             ) : (
@@ -365,20 +349,18 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                 <span>{config.startingPrice}</span>
               </section>
             )}
-          </section>
+          </div>
 
           <section className="destination-list" aria-labelledby="destination-list-title">
-            {section !== 'instructors' ? (
-              <CatalogCategoryTabs
-                categories={categoryTabs}
-                activeId={activeCategory}
-                onChange={(categoryId) => {
-                  setActiveCategory(categoryId);
-                  setActiveFilters([]);
-                }}
-                label={`${config.title} categories`}
-              />
-            ) : null}
+            <CatalogCategoryTabs
+              categories={categoryTabs}
+              activeId={activeCategory}
+              onChange={(categoryId) => {
+                setActiveCategory(categoryId);
+                setActiveFilters([]);
+              }}
+              label={section === 'instructors' ? 'Instructor disciplines' : `${config.title} categories`}
+            />
             <div className="destination-toolbar">
               <div>
                 <SectionHeading size="sm" kicker="Selection options" title={section === 'instructors' ? 'Find the right fit' : 'Refine results'} />
@@ -446,6 +428,27 @@ export function DestinationCatalogPage({ section: sectionProp }) {
             </div>
           </section>
 
+          {config.bookingSteps?.length ? (
+            <section className="destination-booking" aria-labelledby="destination-booking-title">
+              <SectionHeading
+                as="h2"
+                size="md"
+                kicker={config.bookingKicker}
+                title={config.bookingTitle}
+                titleId="destination-booking-title"
+              />
+              <div className="destination-booking__grid">
+                {config.bookingSteps.map(([title, description], index) => (
+                  <article key={title}>
+                    <span>{index + 1}</span>
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           <section className="destination-faq">
             <FaqAccordion items={config.faq} />
           </section>
@@ -453,7 +456,6 @@ export function DestinationCatalogPage({ section: sectionProp }) {
       </main>
 
       <SiteFooter />
-      {section === 'instructors' ? <LazyInstructorRequestDialog open={isRequestOpen} onOpenChange={setIsRequestOpen} /> : null}
     </div>
   );
 }

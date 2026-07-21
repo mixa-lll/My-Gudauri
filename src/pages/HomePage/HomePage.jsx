@@ -1,12 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaqAccordion } from '../../components/FaqAccordion/FaqAccordion';
-import { SectionHeading } from '../../components/UI/SectionHeading/SectionHeading';
-import { Pill } from '../../components/UI/Pill/Pill';
-import { InstructorCard } from '../../components/InstructorCard/InstructorCard';
-import { SiteNavbar } from '../../components/SiteNavbar/SiteNavbar';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
-import { HomeHeroSearch } from '../../components/HomeHeroSearch/HomeHeroSearch';
+import { Badge, Container, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
+import { HomeHeroSearch } from '../../components/product';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { INSTRUCTORS } from '../../data/instructors';
 import { HOME_CATEGORIES } from '../../data/siteCategories';
@@ -25,7 +20,7 @@ export function HomePage() {
       <div className="home-page">
         <SiteNavbar className="site-nav-host--hero" />
         <section className="hero-wrap">
-          <div className="container">
+          <Container width="wide">
             <div className="grid-12 hero-grid">
               <div className="hero-inner">
                 <div className="hero-media" aria-hidden="true">
@@ -34,8 +29,8 @@ export function HomePage() {
 
                 <div className="hero-content">
                   <div className="hero-meta-pills" aria-label="Gudauri guide context">
-                    <Pill size="sm" tone="glass">Local guide</Pill>
-                    <Pill size="sm" tone="glass">Winter 2026</Pill>
+                    <Badge size="sm" mediaOverlay>Local guide</Badge>
+                    <Badge size="sm" mediaOverlay>Winter 2026</Badge>
                   </div>
                   <h1 className="hero-title-main">MY GUDAURI</h1>
                   <p className="hero-subtitle">Trusted local services for an effortless mountain stay.</p>
@@ -57,11 +52,11 @@ export function HomePage() {
                 </Link>
               </div>
             </div>
-          </div>
+          </Container>
         </section>
 
         <section className="service-grid-wrap">
-          <div className="container">
+          <Container width="wide">
             <div className="grid-12">
               <div className="service-grid">
               <SectionHeading
@@ -77,18 +72,18 @@ export function HomePage() {
                     {category.image ? <img className={`service-art ${category.homeClass}-art`} src={category.image} alt={category.imageAlt} /> : null}
                     <div className={`tags-row ${category.tagsClass ?? ''}`.trim()}>
                       {category.tags.map((tag) => (
-                        <Pill size="sm" tone={category.hotTags ? 'accent' : 'glass'} key={tag}>{tag}</Pill>
+                        <Badge size="sm" tone={category.hotTags ? 'accent' : 'neutral'} mediaOverlay={!category.hotTags} key={tag}>{tag}</Badge>
                       ))}
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
-          </div>
+          </Container>
         </section>
 
         <section className="instructors-block">
-          <div className="container">
+          <Container width="wide">
             <div className="grid-12 instructors-layout">
               <div className="instructors-heading">
                 <SectionHeading kicker="Verified professionals" title="Find your instructor" />
@@ -110,13 +105,13 @@ export function HomePage() {
                 ))}
               </div>
             </div>
-          </div>
+          </Container>
         </section>
 
         <section className="faq-block">
-          <div className="container">
+          <Container width="wide">
             <FaqAccordion className="faq-layout" items={FAQ_ITEMS} />
-          </div>
+          </Container>
         </section>
 
         <SiteFooter />

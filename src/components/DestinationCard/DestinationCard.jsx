@@ -18,7 +18,7 @@ export function DestinationCard({ item, section, featured = false, className = '
       image={item.image}
       imageAlt={isInstructor ? `${item.name}, instructor in Gudauri` : item.name}
       title={item.name}
-      titleMeta={isInstructor ? <span className="listing-card__verified" title="Profile checked by My Gudauri">Verified</span> : null}
+      titleMeta={isInstructor && item.certificate ? <span className="listing-card__verified" title={item.certificate}>Verified</span> : null}
       description={isInstructor ? instructorFocus : item.description}
       mediaTop={isInstructor ? item.languages.map((language) => (
         <ListingCardPill key={language.code} title={language.name}>{language.code}</ListingCardPill>

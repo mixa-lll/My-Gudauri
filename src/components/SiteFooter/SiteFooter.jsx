@@ -9,7 +9,7 @@ export function SiteFooter() {
 
   return (
     <footer className="site-footer">
-      <Container className="site-footer__container">
+      <Container width="wide">
         <div className="site-footer__top">
           <Link className="site-footer__brand" to="/" aria-label={t('nav.homeLabel')}>
             <span>My</span> Gudauri

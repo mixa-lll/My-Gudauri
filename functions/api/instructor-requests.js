@@ -81,7 +81,7 @@ export async function onRequestPost({ request, env }) {
   if (!requestType || !dateRangeStart || !dateRangeEnd || dateRangeEnd < dateRangeStart) return apiError('Choose a valid lesson date range.', 400);
   if (requestType === 'specific_instructor' && (!instructorSlug || !instructorName || !participantCount || !hasSelectedSlot)) return apiError('Choose the instructor, group and at least one lesson time slot.', 400);
   if (requestType === 'manager_match' && (!languages.length || !activities.length || !pace || !skillLevel || !budget)) return apiError('Please complete your matching preferences.', 400);
-  if (!contactName || !contactPhone || !messenger) return apiError('Please add your name, phone and preferred contact method.', 400);
+  if (!contactName || !contactPhone || !contactEmail || !messenger) return apiError('Please add your name, phone, email and preferred contact method.', 400);
 
   const requestCode = `MG-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
   const legacyDiscipline = activities.includes('Snowboard') && !activities.includes('Ski') ? 'Snowboard' : activities.includes('Ski') && !activities.includes('Snowboard') ? 'Ski' : 'Either';

@@ -1,0 +1,36 @@
+.ds-architecture { box-sizing: border-box; color: #20211e; font: 12px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; min-height: 100%; padding: 12px 16px; }
+.ds-architecture *, .ds-architecture *::before, .ds-architecture *::after { box-sizing: inherit; }
+.ds-architecture__header { align-items: flex-start; display: flex; gap: 16px; justify-content: space-between; margin-bottom: 12px; }
+.ds-architecture__header strong { display: block; font-size: 14px; }
+.ds-architecture__header span { color: #66706a; display: block; margin-top: 2px; }
+.ds-architecture__summary { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.ds-architecture__summary span, .ds-architecture__badge, .ds-architecture__status { background: #edf0ed; border-radius: 999px; color: #435048; padding: 2px 7px; white-space: nowrap; }
+.ds-architecture .is-error { background: #ffe7e2; color: #a52f1c; }
+.ds-architecture .is-warning { background: #fff3d6; color: #8a5b00; }
+.ds-architecture .is-stable { background: #e2f4e7; color: #20753b; }
+.ds-architecture .is-beta { background: #e3efff; color: #235da3; }
+.ds-architecture .is-draft { background: #f1edf9; color: #68459a; }
+.ds-architecture .is-deprecated { background: #fff0dc; color: #995500; }
+.ds-architecture .is-internal { background: #ece8f9; color: #6646a7; }
+.ds-architecture__tabs { border-bottom: 1px solid #dfe4df; display: flex; gap: 4px; margin: 0 -16px 10px; overflow-x: auto; padding: 0 16px; }
+.ds-architecture__tabs button { background: transparent; border: 0; border-bottom: 2px solid transparent; color: #58645d; cursor: pointer; font: inherit; padding: 7px 8px; white-space: nowrap; }
+.ds-architecture__tabs button.is-active { border-color: #295e43; color: #1a402d; font-weight: 700; }
+.ds-architecture__tree { border: 1px solid #e0e5e1; border-radius: 7px; overflow: hidden; }
+.ds-architecture__node { align-items: center; border-bottom: 1px solid #edf0ed; display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px; padding: 6px 8px 6px calc(8px + var(--depth) * 20px); }
+.ds-architecture__node:last-child { border-bottom: 0; }
+.ds-architecture__node.is-violation { background: #fffaf0; }
+.ds-architecture__node-name { font-weight: 700; min-width: 118px; }
+.ds-architecture__node code, .ds-architecture__issues code { color: #69736d; font: 10px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.ds-architecture__node p { color: #59635e; flex: 1 1 230px; margin: 0; }
+.ds-architecture__link { color: #1d6c48; text-decoration: none; }
+.ds-architecture__link:hover { text-decoration: underline; }
+.ds-architecture__empty { background: #f6f7f5; border: 1px dashed #cbd4cd; border-radius: 7px; color: #4f5b54; padding: 16px; }
+.ds-architecture__notice { color: #9b5312; margin: 10px 0 0; }
+.ds-architecture__issues { list-style: none; margin: 0; padding: 0; }
+.ds-architecture__issues li { border-left: 3px solid #d79621; border-bottom: 1px solid #e7ebe7; padding: 8px 10px; }
+.ds-architecture__issues li.is-error { border-left-color: #c4422d; }
+.ds-architecture__issues span { font-size: 10px; margin-right: 7px; text-transform: uppercase; }
+.ds-architecture__issues strong { font-size: 11px; }
+.ds-architecture__issues p { margin: 4px 0; }
+.ds-architecture__footer { color: #6a746e; margin-top: 12px; }
+@media (max-width: 600px) { .ds-architecture { padding: 10px; } .ds-architecture__header { display: block; } .ds-architecture__summary { justify-content: flex-start; margin-top: 8px; } .ds-architecture__tabs { margin-left: -10px; margin-right: -10px; padding-left: 10px; } .ds-architecture__node { align-items: flex-start; padding-left: calc(8px + var(--depth) * 12px); } }

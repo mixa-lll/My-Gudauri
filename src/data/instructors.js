@@ -21,15 +21,15 @@ const CATALOG_DETAILS = {
 };
 
 export const INSTRUCTORS = [
-  ['mikhail', 'Mikhail Andreev', 'Ski & snowboard · 8 years experience', 4.8, 6, 8, '/assets/design-2/card-mikhail.png', ['snowboard', 'ski'], ['Ge', 'En', 'Ru']],
-  ['oleg', 'Oleg Yung', 'Snowboard · Freeride specialist', 4.8, 6, 8, '/assets/design-2/card-oleg.png', ['snowboard'], ['Ge', 'En']],
-  ['alex-red', 'Alex Red', 'Ski · Beginner-friendly lessons', 4.8, 6, 6, '/assets/design-2/card-red-ski.png', ['ski'], ['Ge', 'En']],
-  ['andrey', 'Andrey Gregorev', 'Ski & snowboard · Kids and families', 4.8, 6, 5, '/assets/design-2/card-andrey.png', ['snowboard', 'ski'], ['Ge', 'En']],
-  ['nino', 'Nino Beridze', 'Ski · Technique and confidence', 4.9, 11, 8, '/assets/design-2/card-mikhail.png', ['ski'], ['Ge', 'En', 'Ru']],
-  ['giorgi', 'Giorgi Maisuradze', 'Snowboard · All levels welcome', 4.8, 8, 7, '/assets/design-2/card-oleg.png', ['snowboard'], ['Ge', 'En']],
-  ['levan', 'Levan Kapanadze', 'Ski & snowboard · Private lessons', 4.9, 14, 10, '/assets/design-2/card-red-ski.png', ['ski', 'snowboard'], ['Ge', 'En']],
-  ['mari', 'Mari Gelashvili', 'Ski · First-time and family lessons', 5, 9, 9, '/assets/design-2/card-andrey.png', ['ski'], ['Ge', 'En', 'Ru']]
-].map(([slug, name, description, rating, reviews, experienceYears, image, sports, languages]) => ({
+  ['mikhail', 'Mikhail Andreev', 'Ski & snowboard · 8 years experience', 4.8, 6, 8, '/assets/design-2/card-mikhail.png', ['snowboard', 'ski'], ['Ge', 'En', 'Ru'], 'male'],
+  ['oleg', 'Oleg Yung', 'Snowboard · Freeride specialist', 4.8, 6, 8, '/assets/design-2/card-oleg.png', ['snowboard'], ['Ge', 'En'], 'male'],
+  ['alex-red', 'Alex Red', 'Ski · Beginner-friendly lessons', 4.8, 6, 6, '/assets/design-2/card-red-ski.png', ['ski'], ['Ge', 'En'], 'male'],
+  ['andrey', 'Andrey Gregorev', 'Ski & snowboard · Kids and families', 4.8, 6, 5, '/assets/design-2/card-andrey.png', ['snowboard', 'ski'], ['Ge', 'En'], 'male'],
+  ['nino', 'Nino Beridze', 'Ski · Technique and confidence', 4.9, 11, 8, '/assets/design-2/card-mikhail.png', ['ski'], ['Ge', 'En', 'Ru'], 'female'],
+  ['giorgi', 'Giorgi Maisuradze', 'Snowboard · All levels welcome', 4.8, 8, 7, '/assets/design-2/card-oleg.png', ['snowboard'], ['Ge', 'En'], 'male'],
+  ['levan', 'Levan Kapanadze', 'Ski & snowboard · Private lessons', 4.9, 14, 10, '/assets/design-2/card-red-ski.png', ['ski', 'snowboard'], ['Ge', 'En'], 'male'],
+  ['mari', 'Mari Gelashvili', 'Ski · First-time and family lessons', 5, 9, 9, '/assets/design-2/card-andrey.png', ['ski'], ['Ge', 'En', 'Ru'], 'female']
+].map(([slug, name, description, rating, reviews, experienceYears, image, sports, languages, gender]) => ({
   id: slug,
   slug,
   name,
@@ -38,6 +38,8 @@ export const INSTRUCTORS = [
   reviews,
   experienceYears,
   image,
+  gender,
+  certificate: 'Verified Instructor',
   sports: sports.map((sport) => SPORTS[sport]),
   languages: languages.map((language) => LANGUAGES[language]),
   ...CATALOG_DETAILS[slug]
@@ -68,6 +70,13 @@ export const INSTRUCTOR_DETAILS = Object.fromEntries(INSTRUCTORS.map((instructor
   experienceYears: 6 + (index % 5),
   availability: index % 3 === 0 ? 'Limited availability' : 'Available this week',
   certificate: 'Verified Instructor',
+  certifications: index === 0
+    ? [{
+        title: 'APUL D Snowboard Instructor Licence',
+        level: '50-hour professional qualification · Issued 25 Feb 2025 · Valid until 25 Feb 2028',
+        fileUrl: '/assets/design-3/certificates/mikhail-apul-d.jpg'
+      }]
+    : [{ title: 'Verified Instructor', level: 'Verified for lessons in Gudauri', fileUrl: null }],
   about: [
     `${instructor.name} is a verified local instructor with extensive teaching experience in Gudauri.`,
     'Lessons combine clear explanations, practical exercises and steady progress with safety and comfort as priorities.',

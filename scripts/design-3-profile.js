@@ -1,72 +1,79 @@
 (() => {
-  const card = document.querySelector('.profile-booking-card');
+  const card = document.querySelector('.profile-booking-card[data-booking]');
   if (!card) return;
 
-  const hoursPlus = card.querySelector('[aria-label="Increase hours"]');
-  const hoursMinus = card.querySelector('[aria-label="Decrease hours"]');
-  const peoplePlus = card.querySelector('[aria-label="Increase people"]');
-  const peopleMinus = card.querySelector('[aria-label="Decrease people"]');
-  const hoursValue = card.querySelector('.booking-counter:nth-child(1) .booking-counter-value span');
-  const peopleValue = card.querySelector('.booking-counter:nth-child(2) .booking-counter-value span');
-  const priceLink = card.querySelector('.booking-price-row a');
-  const hoursLabel = card.querySelector('.booking-price-row p:nth-child(3)');
-  const peopleLabel = card.querySelector('.booking-price-row p:nth-child(5)');
-
-  if (!hoursValue || !peopleValue || !priceLink || !hoursLabel || !peopleLabel) return;
-
-  const HOURS_MIN = Number(card.dataset.minHours) || 2;
-  const HOURS_MAX = Number(card.dataset.maxHours) || 12;
-  const HOURS_STEP = Number(card.dataset.hoursStep) || 2;
-  const PEOPLE_MIN = Number(card.dataset.minPeople) || 1;
-  const PEOPLE_MAX = Number(card.dataset.maxPeople) || 10;
-  const HOURLY_RATE_GEL = Number(card.dataset.hourlyRateGel) || 345;
-
-  const calculatePrice = (hours) => Math.round(hours * HOURLY_RATE_GEL);
-
-  let hours = Number(hoursValue.textContent) || 8;
-  let people = Number(peopleValue.textContent) || 2;
+  const counters = Array.from(card.querySelectorAll('[data-counter]'));
+  const hourlyRate = Number(card.dataset.hourlyRateGel) || 345;
+  const formatPrice = (value) => Math.round(value).toLocaleString('en-US').replaceAll(',', ' ');
 
   const sync = () => {
-    hoursValue.textContent = String(hours);
-    peopleValue.textContent = String(people);
+    const readValue = (role) => Number(card.querySelector(`[data-role="${role}"] [data-counter-val]`)?.textContent) || 0;
+    const hours = readValue('hours');
+    const people = readValue('people');
+    const peopleMultiplier = { 1: 1, 2: 1.4, 3: 1.7 }[people] || 1;
+    const peoplePercent = Math.round((peopleMultiplier - 1) * 100);
+    const volumePercent = hours >= 8 ? 15 : hours >= 4 ? 10 : 0;
+    const base = hourlyRate * hours;
+    const withPeople = base * peopleMultiplier;
+    const surcharge = withPeople - base;
+    const discount = withPeople * (volumePercent / 100);
+    const total = withPeople - discount;
 
-    const price = calculatePrice(hours);
-    priceLink.textContent = `${price} gel`;
-    hoursLabel.textContent = `${hours} hour`;
-    peopleLabel.textContent = `${people} people`;
-
-    const toggles = [
-      [hoursPlus, hours >= HOURS_MAX],
-      [hoursMinus, hours <= HOURS_MIN],
-      [peoplePlus, people >= PEOPLE_MAX],
-      [peopleMinus, people <= PEOPLE_MIN]
+    const rows = [
+      `<div class="booking-breakdown-row"><span>${hourlyRate} × ${hours} h</span><span>${formatPrice(base)}</span></div>`
     ];
+    if (surcharge > 0) rows.push(`<div class="booking-breakdown-row"><span>${people} students · +${peoplePercent}%</span><span>+${formatPrice(surcharge)}</span></div>`);
+    if (discount > 0) rows.push(`<div class="booking-breakdown-row"><span>From ${hours} h · −${volumePercent}%</span><span>−${formatPrice(discount)}</span></div>`);
 
-    toggles.forEach(([button, isDisabled]) => {
-      if (!button) return;
-      button.disabled = isDisabled;
-      button.classList.toggle('is-disabled', isDisabled);
+    card.querySelector('[data-booking-breakdown]').innerHTML = rows.join('');
+    card.querySelector('[data-booking-total]').textContent = `${formatPrice(total)} gel`;
+    card.querySelector('[data-booking-hours]').textContent = String(hours);
+    card.querySelector('[data-booking-people]').textContent = String(people);
+
+    counters.forEach((counter) => {
+      const value = Number(counter.querySelector('[data-counter-val]').textContent);
+      const min = Number(counter.dataset.min);
+      const max = Number(counter.dataset.max);
+      const minus = counter.querySelector('[data-counter-btn="minus"]');
+      const plus = counter.querySelector('[data-counter-btn="plus"]');
+      minus.disabled = value <= min;
+      plus.disabled = value >= max;
     });
+
+    card.dataset.currentHours = String(hours);
+    card.dataset.currentPeople = String(people);
+    card.dataset.currentTotal = String(Math.round(total));
   };
 
-  hoursPlus?.addEventListener('click', () => {
-    hours = Math.min(HOURS_MAX, hours + HOURS_STEP);
-    sync();
-  });
+  card.addEventListener('click', (event) => {
+    const control = event.target.closest('[data-counter-btn]');
+    if (control) {
+      const counter = control.closest('[data-counter]');
+      const valueNode = counter.querySelector('[data-counter-val]');
+      const value = Number(valueNode.textContent) || 0;
+      const step = Number(counter.dataset.step) || 1;
+      const min = Number(counter.dataset.min) || 0;
+      const max = Number(counter.dataset.max) || 99;
+      valueNode.textContent = String(control.dataset.counterBtn === 'plus'
+        ? Math.min(max, value + step)
+        : Math.max(min, value - step));
+      sync();
+      return;
+    }
 
-  hoursMinus?.addEventListener('click', () => {
-    hours = Math.max(HOURS_MIN, hours - HOURS_STEP);
-    sync();
-  });
-
-  peoplePlus?.addEventListener('click', () => {
-    people = Math.min(PEOPLE_MAX, people + 1);
-    sync();
-  });
-
-  peopleMinus?.addEventListener('click', () => {
-    people = Math.max(PEOPLE_MIN, people - 1);
-    sync();
+    if (event.target.closest('[data-booking-continue]')) {
+      window.localStorage.setItem('bookingDraftV1', JSON.stringify({
+        instructor: {
+          slug: window.location.pathname.split('/').filter(Boolean).at(-1),
+          name: card.dataset.instructorName,
+          avatar: card.dataset.instructorAvatar
+        },
+        hours: Number(card.dataset.currentHours),
+        participants: Number(card.dataset.currentPeople),
+        priceGel: Number(card.dataset.currentTotal)
+      }));
+      window.location.assign('/booking');
+    }
   });
 
   sync();

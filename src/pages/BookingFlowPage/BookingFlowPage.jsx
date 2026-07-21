@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import { SiteFooter } from '../../components/SiteFooter/SiteFooter';
+import { SiteFooter } from '../../design-system';
 import './BookingFlowPage.scss';
 
 const SLOT_OPTIONS = [
@@ -33,6 +33,7 @@ function normalizeDraft(draftRaw) {
 
     return {
       instructor: {
+        slug: parsed?.instructor?.slug || '',
         name: parsed?.instructor?.name || 'Mikhail Andreev',
         avatar: parsed?.instructor?.avatar || '/assets/design-3/avatar-booking.jpg'
       },
@@ -180,6 +181,7 @@ export function BookingFlowPage() {
     : draft.priceGel;
 
   const isSuccess = submitState.status === 'success';
+  const profilePath = draft.instructor.slug ? `/instructors/${draft.instructor.slug}` : '/instructors';
 
   const updateDay = (dayId, updater) => {
     setDays((prev) => prev.map((day) => (day.id === dayId ? { ...day, ...updater(day) } : day)));
@@ -397,7 +399,7 @@ export function BookingFlowPage() {
       <div className="booking-flow-page__header-line" />
 
       <div className="container booking-flow-page__header">
-        <button className="ui-btn-md" type="button" onClick={() => navigate('/profile')}>
+        <button className="ui-btn-md" type="button" onClick={() => navigate(profilePath)}>
           <img className="ui-btn-md__arrow ui-btn-md__arrow--left" src="/assets/ui-kit/btn-md-arrow-dark.png" alt="" aria-hidden="true" />
           Back
         </button>
@@ -527,7 +529,7 @@ export function BookingFlowPage() {
                       : null}
 
                     <div className="booking-step__actions">
-                      <button className="ui-btn-md ui-btn-md--soft" type="button" onClick={() => navigate('/profile')}>
+                      <button className="ui-btn-md ui-btn-md--soft" type="button" onClick={() => navigate(profilePath)}>
                         <img className="ui-btn-md__arrow ui-btn-md__arrow--left" src="/assets/ui-kit/btn-md-arrow-dark.png" alt="" aria-hidden="true" />
                         Back
                       </button>

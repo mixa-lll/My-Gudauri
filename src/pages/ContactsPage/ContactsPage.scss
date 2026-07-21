@@ -1,28 +1,11 @@
 .contacts-page {
-  width: min(100%, var(--content-width));
+  width: 100%;
   margin-inline: auto;
   background: var(--grey-50);
 }
 
 .contacts-page main {
   padding: 14px 0 clamp(80px, 10vw, 140px);
-}
-
-.contacts-hero {
-  min-height: clamp(500px, 48vw, 690px);
-  padding: clamp(36px, 6vw, 84px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 60px;
-  border-radius: 32px;
-  background:
-    radial-gradient(circle at 87% 18%, rgba(219, 232, 239, 0.88), transparent 31%),
-    linear-gradient(145deg, #ffffff 0%, #f3f3ef 76%);
-}
-
-.contacts-hero__copy {
-  max-width: 980px;
 }
 
 .contacts-kicker {
@@ -35,45 +18,12 @@
   text-transform: uppercase;
 }
 
-.contacts-hero h1 {
-  max-width: 980px;
-  margin: clamp(38px, 7vw, 94px) 0 0;
-  color: var(--grey-700);
-  font: var(--fw-semibold) clamp(58px, 8.5vw, 126px) / 0.86 var(--font-heading);
-  letter-spacing: -0.075em;
-}
-
-.contacts-hero__intro {
-  max-width: 620px;
-  margin: clamp(34px, 5vw, 64px) 0 0 auto;
-  color: var(--grey-500);
-  font-size: clamp(16px, 1.4vw, 19px);
-  line-height: 1.55;
-}
-
-.contacts-hero__status {
-  width: max-content;
-  max-width: 100%;
-  min-height: 38px;
-  padding: 0 15px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  border: 1px solid rgba(32, 33, 30, 0.08);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--grey-500);
-  font-size: 12px;
-  font-weight: var(--fw-medium);
-}
-
-.contacts-hero__status span {
-  width: 7px;
-  height: 7px;
+.contacts-status-dot {
+  width: var(--space-200);
+  height: var(--space-200);
   flex: 0 0 auto;
-  border-radius: 50%;
-  background: #6da76f;
-  box-shadow: 0 0 0 4px rgba(109, 167, 111, 0.13);
+  border-radius: var(--radius-full);
+  background: var(--status-success);
 }
 
 .contacts-methods {
@@ -336,21 +286,6 @@
 @media (max-width: 620px) {
   .contacts-page main {
     padding-top: 12px;
-  }
-
-  .contacts-hero {
-    min-height: 540px;
-    padding: 28px 22px;
-    border-radius: 24px;
-  }
-
-  .contacts-hero h1 {
-    margin-top: 60px;
-    font-size: clamp(51px, 16vw, 72px);
-  }
-
-  .contacts-hero__intro {
-    margin-left: 0;
   }
 
   .contacts-methods > a,

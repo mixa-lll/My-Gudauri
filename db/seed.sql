@@ -1,5 +1,6 @@
 PRAGMA foreign_keys = ON;
 
+DELETE FROM instructor_certifications;
 DELETE FROM instructor_reviews;
 DELETE FROM instructor_media;
 DELETE FROM instructor_tags;
@@ -22,16 +23,16 @@ INSERT INTO languages (code, name) VALUES
 INSERT INTO instructors (
   slug, status, display_name, card_description, tagline, intro, card_image_url,
   hero_image_url, hero_image_alt, booking_avatar_url, experience_years, rating,
-  review_count, availability_label, certificate_label, hourly_rate_gel, sort_order
+  review_count, availability_label, certificate_label, gender, hourly_rate_gel, sort_order
 ) VALUES
-  ('mikhail', 'published', 'Mikhail Andreev', 'Ski & snowboard · 8 years experience', 'Private lessons in Gudauri', 'Calm, technique-focused coaching for first turns, confident carving and freeride preparation.', '/assets/design-2/card-mikhail.png', '/assets/design-3/hero-main.png', 'Mikhail Andreev on a ski slope', '/assets/design-3/avatar-booking.jpg', 8, 4.8, 6, 'Available this week', 'Verified Instructor', 345, 10),
-  ('oleg', 'published', 'Oleg Yung', 'Snowboard · Freeride specialist', 'Freeride and snowboard lessons', 'Mountain-focused coaching for riders who want stronger technique, control and confidence away from groomed pistes.', '/assets/design-2/card-oleg.png', '/assets/design-2/card-oleg.png', 'Oleg Yung snowboarding in Gudauri', '/assets/design-2/card-oleg.png', 7, 4.8, 6, 'Available this week', 'Verified Instructor', 345, 20),
-  ('alex-red', 'published', 'Alex Red', 'Ski · Beginner-friendly lessons', 'Friendly ski lessons in Gudauri', 'Clear and supportive lessons for first-time skiers and guests building confidence on blue slopes.', '/assets/design-2/card-red-ski.png', '/assets/design-2/card-red-ski.png', 'Alex Red skiing in Gudauri', '/assets/design-2/card-red-ski.png', 6, 4.8, 6, 'Available this week', 'Verified Instructor', 345, 30),
-  ('andrey', 'published', 'Andrey Gregorev', 'Ski & snowboard · Kids and families', 'Family lessons in Gudauri', 'Patient ski and snowboard coaching designed around children, parents and mixed-level family groups.', '/assets/design-2/card-andrey.png', '/assets/design-2/card-andrey.png', 'Andrey Gregorev teaching in Gudauri', '/assets/design-2/card-andrey.png', 9, 4.8, 6, 'Limited availability', 'Verified Instructor', 345, 40),
-  ('nino', 'published', 'Nino Beridze', 'Ski · Technique and confidence', 'Technique-focused ski coaching', 'Structured lessons for guests who want smoother turns, better balance and more confidence across the mountain.', '/assets/design-2/card-mikhail.png', '/assets/design-3/hero-main.png', 'Nino Beridze on a Gudauri ski slope', '/assets/design-3/avatar-booking.jpg', 8, 4.9, 11, 'Available this week', 'Verified Instructor', 345, 50),
-  ('giorgi', 'published', 'Giorgi Maisuradze', 'Snowboard · All levels welcome', 'Snowboard lessons for every level', 'Progressive snowboard coaching from first turns to confident riding on steeper Gudauri terrain.', '/assets/design-2/card-oleg.png', '/assets/design-2/card-oleg.png', 'Giorgi Maisuradze snowboarding in Gudauri', '/assets/design-2/card-oleg.png', 6, 4.8, 8, 'Available this week', 'Verified Instructor', 345, 60),
-  ('levan', 'published', 'Levan Kapanadze', 'Ski & snowboard · Private lessons', 'Private mountain coaching', 'Flexible private lessons shaped around your pace, goals and preferred mix of ski or snowboard practice.', '/assets/design-2/card-red-ski.png', '/assets/design-2/card-red-ski.png', 'Levan Kapanadze teaching in Gudauri', '/assets/design-2/card-red-ski.png', 10, 4.9, 14, 'Limited availability', 'Verified Instructor', 345, 70),
-  ('mari', 'published', 'Mari Gelashvili', 'Ski · First-time and family lessons', 'Relaxed ski lessons for families', 'Warm, confidence-building instruction for beginners, children and families discovering Gudauri together.', '/assets/design-2/card-andrey.png', '/assets/design-2/card-andrey.png', 'Mari Gelashvili teaching a ski lesson', '/assets/design-2/card-andrey.png', 7, 5.0, 9, 'Available this week', 'Verified Instructor', 345, 80);
+  ('mikhail', 'published', 'Mikhail Andreev', 'Ski & snowboard · 8 years experience', 'Private lessons in Gudauri', 'Calm, technique-focused coaching for first turns, confident carving and freeride preparation.', '/assets/design-2/card-mikhail.png', '/assets/design-3/hero-main.png', 'Mikhail Andreev on a ski slope', '/assets/design-3/avatar-booking.jpg', 8, 4.8, 6, 'Available this week', 'Verified Instructor', 'male', 345, 10),
+  ('oleg', 'published', 'Oleg Yung', 'Snowboard · Freeride specialist', 'Freeride and snowboard lessons', 'Mountain-focused coaching for riders who want stronger technique, control and confidence away from groomed pistes.', '/assets/design-2/card-oleg.png', '/assets/design-2/card-oleg.png', 'Oleg Yung snowboarding in Gudauri', '/assets/design-2/card-oleg.png', 7, 4.8, 6, 'Available this week', 'Verified Instructor', 'male', 345, 20),
+  ('alex-red', 'published', 'Alex Red', 'Ski · Beginner-friendly lessons', 'Friendly ski lessons in Gudauri', 'Clear and supportive lessons for first-time skiers and guests building confidence on blue slopes.', '/assets/design-2/card-red-ski.png', '/assets/design-2/card-red-ski.png', 'Alex Red skiing in Gudauri', '/assets/design-2/card-red-ski.png', 6, 4.8, 6, 'Available this week', 'Verified Instructor', 'male', 345, 30),
+  ('andrey', 'published', 'Andrey Gregorev', 'Ski & snowboard · Kids and families', 'Family lessons in Gudauri', 'Patient ski and snowboard coaching designed around children, parents and mixed-level family groups.', '/assets/design-2/card-andrey.png', '/assets/design-2/card-andrey.png', 'Andrey Gregorev teaching in Gudauri', '/assets/design-2/card-andrey.png', 9, 4.8, 6, 'Limited availability', 'Verified Instructor', 'male', 345, 40),
+  ('nino', 'published', 'Nino Beridze', 'Ski · Technique and confidence', 'Technique-focused ski coaching', 'Structured lessons for guests who want smoother turns, better balance and more confidence across the mountain.', '/assets/design-2/card-mikhail.png', '/assets/design-3/hero-main.png', 'Nino Beridze on a Gudauri ski slope', '/assets/design-3/avatar-booking.jpg', 8, 4.9, 11, 'Available this week', 'Verified Instructor', 'female', 345, 50),
+  ('giorgi', 'published', 'Giorgi Maisuradze', 'Snowboard · All levels welcome', 'Snowboard lessons for every level', 'Progressive snowboard coaching from first turns to confident riding on steeper Gudauri terrain.', '/assets/design-2/card-oleg.png', '/assets/design-2/card-oleg.png', 'Giorgi Maisuradze snowboarding in Gudauri', '/assets/design-2/card-oleg.png', 6, 4.8, 8, 'Available this week', 'Verified Instructor', 'male', 345, 60),
+  ('levan', 'published', 'Levan Kapanadze', 'Ski & snowboard · Private lessons', 'Private mountain coaching', 'Flexible private lessons shaped around your pace, goals and preferred mix of ski or snowboard practice.', '/assets/design-2/card-red-ski.png', '/assets/design-2/card-red-ski.png', 'Levan Kapanadze teaching in Gudauri', '/assets/design-2/card-red-ski.png', 10, 4.9, 14, 'Limited availability', 'Verified Instructor', 'male', 345, 70),
+  ('mari', 'published', 'Mari Gelashvili', 'Ski · First-time and family lessons', 'Relaxed ski lessons for families', 'Warm, confidence-building instruction for beginners, children and families discovering Gudauri together.', '/assets/design-2/card-andrey.png', '/assets/design-2/card-andrey.png', 'Mari Gelashvili teaching a ski lesson', '/assets/design-2/card-andrey.png', 7, 5.0, 9, 'Available this week', 'Verified Instructor', 'female', 345, 80);
 
 INSERT INTO instructor_disciplines (instructor_id, discipline_id, sort_order)
 SELECT i.id, d.id, 1 FROM instructors i JOIN disciplines d ON d.slug = 'snowboard' WHERE i.slug IN ('mikhail', 'oleg', 'andrey', 'giorgi', 'levan');
@@ -68,6 +69,12 @@ INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'First
 INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Kids & families', 11 FROM instructors WHERE slug IN ('andrey', 'mari');
 INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Kids lessons', 11 FROM instructors WHERE slug IN ('alex-red', 'giorgi');
 INSERT INTO instructor_tags (instructor_id, label, sort_order) SELECT id, 'Freestyle', 12 FROM instructors WHERE slug = 'giorgi';
+
+INSERT INTO instructor_certifications (instructor_id, title, level, sort_order)
+SELECT id, certificate_label, 'Verified for lessons in Gudauri', 0 FROM instructors WHERE slug <> 'mikhail';
+INSERT INTO instructor_certifications (instructor_id, title, level, file_url, sort_order)
+SELECT id, 'APUL D Snowboard Instructor Licence', '50-hour professional qualification · Issued 25 Feb 2025 · Valid until 25 Feb 2028', '/assets/design-3/certificates/mikhail-apul-d.jpg', 0
+FROM instructors WHERE slug = 'mikhail';
 
 INSERT INTO instructor_media (instructor_id, media_type, url, alt, sort_order, is_featured)
 SELECT id, 'image', '/assets/design-3/hero-main.png', 'Instructor on a Gudauri ski slope', 0, 1 FROM instructors WHERE slug = 'mikhail';

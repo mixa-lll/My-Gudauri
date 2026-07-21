@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
-import { Pill } from '../UI/Pill/Pill';
+import { FilterChip } from '../../design-system';
 import { ARTICLES, DESTINATIONS } from '../../data/destinations';
 import './HomeHeroSearch.scss';
 
@@ -197,16 +197,14 @@ export function HomeHeroSearch() {
       </div>
       <div className="home-hero-search__quick" aria-label="Popular searches">
         {QUICK_SEARCHES.map((suggestion) => (
-          <Pill
-            as="button"
+          <FilterChip
             size="sm"
-            tone="glass"
             type="button"
             onClick={() => { setQuery(suggestion); setIsOpen(true); inputRef.current?.focus(); }}
             key={suggestion}
           >
             {suggestion}
-          </Pill>
+          </FilterChip>
         ))}
       </div>
 

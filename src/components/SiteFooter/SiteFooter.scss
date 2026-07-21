@@ -8,10 +8,6 @@
   color: var(--grey-white);
 }
 
-.site-footer__container {
-  width: min(var(--content-width), 100%);
-}
-
 .site-footer__top {
   padding-bottom: clamp(46px, 7vw, 88px);
   display: grid;

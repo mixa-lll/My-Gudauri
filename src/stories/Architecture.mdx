@@ -1,0 +1,54 @@
+import { Meta, Title, Description } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Architecture" />
+
+<Title>Architecture</Title>
+
+<Description>
+The architecture catalog is an intentionally static map of public composition. It is sourced from the typed registry and each story’s `parameters.composition`; it never inspects React internals.
+</Description>
+
+## Layers
+
+| Layer | May compose |
+| --- | --- |
+| Primitive | primitives |
+| Component | primitives |
+| Block | components, primitives |
+| Pattern | blocks, components, primitives |
+| Template | patterns, blocks, components, primitives |
+
+Pages consume the public `src/design-system` barrel. Product pages are isolated under Product Stories and are never classified as reusable templates. `internal` entries document implementation detail; `deprecated` entries remain visible only for migration and include a replacement and removal date.
+
+## Statuses
+
+`draft` → `beta` → `stable` is the maturity path. `deprecated` forbids new usage. `internal` is not a public API.
+
+## CMS constraints
+
+Only Catalog Page, Object Detail Page and Editorial Article are currently confirmed templates. Home, Contacts, About and unique campaigns remain product compositions. A Wizard template is intentionally absent until Booking and Instructor Match share one implemented step contract.
+
+## Registering a component
+
+Add an entry to `src/design-system/architecture/registry.ts`. Give it an id, layer, status, source path, description and story id when one exists. Add children only where the public composition is stable.
+
+Then add metadata to a relevant existing story:
+
+```js
+parameters: {
+  composition: defineComposition({ root: 'ComponentId' })
+}
+```
+
+The registry and story metadata are the source of truth. The `Composition` panel reads their direct or full tree and exposes Storybook/Docs links. Its `Rendered only` view is intentionally disabled because this project uses portals, fragments and page-local blocks; no production-only attributes or React internals are introduced.
+
+## Design QA
+
+`Design QA` reports unregistered nodes, missing or broken story links, invalid layer dependencies, deprecated usage, registry mismatches, incomplete metadata, public-export gaps and direct imports that bypass the public barrels. Refresh the derived import report with:
+
+```bash
+npm run architecture:report
+npm run architecture:check
+```
+
+The first command writes the generated static import report. The second type-checks the registry and confirms that the report is current. There is no project ESLint or Stylelint configuration yet, so token linting is intentionally deferred rather than introducing a second lint stack.

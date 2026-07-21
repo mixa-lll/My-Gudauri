@@ -11,6 +11,12 @@
     "build": "npm run design:sync && vite build && npm run copy:assets",
     "copy:assets": "node scripts/copy-static-assets.mjs",
     "preview": "vite preview",
+    "architecture:report": "node scripts/generate-design-architecture-report.mjs",
+    "architecture:check": "tsc -p tsconfig.architecture.json --noEmit && node scripts/generate-design-architecture-report.mjs --check",
+    "prestorybook": "npm run architecture:report",
+    "storybook": "storybook dev -p 6006",
+    "prebuild-storybook": "npm run architecture:report",
+    "build-storybook": "storybook build",
     "db:migrate:local": "wrangler d1 migrations apply my-gudauri-cms --local",
     "db:migrate:remote": "wrangler d1 migrations apply my-gudauri-cms --remote",
     "db:seed:local": "wrangler d1 execute my-gudauri-cms --local --file ./db/seed.sql",
@@ -27,7 +33,12 @@
     "react-router-dom": "^6.30.4"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.5.2",
+    "@storybook/addon-docs": "^10.5.2",
+    "@storybook/react-vite": "^10.5.2",
     "sass": "^1.93.2",
+    "storybook": "^10.5.2",
+    "typescript": "^5.9.3",
     "vite": "^5.4.19",
     "wrangler": "^4.110.0"
   }

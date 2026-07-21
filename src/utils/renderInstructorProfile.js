@@ -72,10 +72,56 @@ function buildReviews(document, instructor) {
   }));
 }
 
+function buildCertifications(document, instructor) {
+  const grid = document.querySelector('.profile-certifications-grid');
+  const certifications = instructor.certifications?.length
+    ? instructor.certifications
+    : instructor.certificate
+      ? [{ title: instructor.certificate }]
+      : [];
+
+  if (!certifications.length) {
+    grid.replaceChildren(createElement(document, 'p', 'profile-empty-state', 'Certification details are being updated.'));
+    return;
+  }
+
+  grid.replaceChildren(...certifications.map((certification) => {
+    const card = createElement(document, certification.fileUrl ? 'a' : 'article', 'profile-certification-card');
+    if (certification.fileUrl) {
+      card.href = certification.fileUrl;
+      card.target = '_blank';
+      card.rel = 'noreferrer';
+    }
+
+    const preview = certification.fileUrl
+      ? createElement(document, 'img', 'profile-certification-card__preview')
+      : createElement(document, 'span', 'profile-certification-card__icon', '✓');
+    preview.setAttribute('aria-hidden', 'true');
+    if (certification.fileUrl) preview.src = certification.fileUrl;
+    const copy = createElement(document, 'span', 'profile-certification-card__copy');
+    copy.append(createElement(document, 'strong', '', certification.title));
+    if (certification.level) copy.append(createElement(document, 'small', '', certification.level));
+    if (certification.fileUrl) copy.append(createElement(document, 'span', 'profile-certification-card__link', 'View certificate'));
+    card.append(preview, copy);
+    return card;
+  }));
+}
+
 function buildMedia(document, instructor) {
-  const media = instructor.media?.length
+  const allMedia = instructor.media?.length
     ? instructor.media
     : [{ type: 'image', src: instructor.heroImage, thumbnail: instructor.heroImage, alt: instructor.heroImageAlt, featured: true }];
+  const media = allMedia.filter((item) => item.type !== 'video');
+  const introVideo = allMedia.find((item) => item.type === 'video');
+
+  const videoLink = document.querySelector('.profile-video-intro');
+  if (introVideo) {
+    videoLink.href = introVideo.src;
+    videoLink.target = '_blank';
+    videoLink.rel = 'noreferrer';
+  } else {
+    videoLink.remove();
+  }
 
   const thumbs = document.querySelector('.profile-gallery-trigger__thumbs');
   thumbs.replaceChildren(...media.slice(0, 3).map((item) => {
@@ -87,19 +133,6 @@ function buildMedia(document, instructor) {
 
   const galleryMeta = document.querySelector('.profile-gallery-trigger small');
   galleryMeta.textContent = `${media.length} ${media.length === 1 ? 'photo' : 'photos'}`;
-
-  const grid = document.querySelector('.media-grid');
-  grid.replaceChildren(...media.slice(1, 6).map((item, index) => {
-    const button = createElement(document, 'button', `media-card media-${index + 1}`);
-    button.type = 'button';
-    button.dataset.profileGalleryOpen = '';
-    button.dataset.galleryIndex = String(index + 1);
-    const image = createElement(document, 'img');
-    image.src = item.thumbnail || item.src;
-    image.alt = item.alt;
-    button.append(image);
-    return button;
-  }));
 
   return media;
 }
@@ -128,19 +161,13 @@ export function renderInstructorProfile(template, instructor) {
   document.querySelector('.profile-rating-main > img').alt = `${instructor.rating} stars`;
   document.querySelector('.profile-rating-main a').textContent = `${instructor.reviews} reviews`;
 
-  const introParagraphs = document.querySelectorAll('.profile-hero-intro > p');
-  introParagraphs[0].textContent = instructor.tagline;
-  introParagraphs[1].textContent = instructor.intro;
-  const stats = document.querySelectorAll('.profile-hero-intro dl > div');
-  stats[0].querySelector('dt').textContent = `${instructor.experienceYears}+`;
-  stats[1].querySelector('dt').textContent = String(instructor.languages.length);
-  stats[2].querySelector('dt').textContent = Number(instructor.rating).toFixed(1);
+  document.querySelector('.profile-hero-intro > p').textContent = instructor.intro;
 
   const hero = document.querySelector('.profile-hero-photo');
   hero.src = instructor.heroImage;
   hero.alt = instructor.heroImageAlt;
   const availability = document.querySelector('.profile-availability');
-  availability.lastChild.textContent = 'Schedule confirmed by manager';
+  availability.lastChild.textContent = instructor.availability || 'Schedule confirmed by manager';
 
   const factBottoms = document.querySelectorAll('.profile-facts .fact-bottom');
   buildPills(document, factBottoms[0], sports);
@@ -151,13 +178,15 @@ export function renderInstructorProfile(template, instructor) {
   factBottoms[3].querySelector('.fact-pill').textContent = instructor.certificate;
 
   const aboutCopy = document.querySelector('.about-copy');
-  aboutCopy.replaceChildren(...instructor.about.map((paragraph) => createElement(document, 'p', '', paragraph)));
+  aboutCopy.replaceChildren(...(instructor.about ?? []).map((paragraph) => createElement(document, 'p', '', paragraph)));
   const aboutTags = document.querySelector('.about-tags');
-  aboutTags.replaceChildren(...instructor.tags.map((tag) => {
+  aboutTags.replaceChildren(...(instructor.tags ?? []).map((tag) => {
     const pill = createElement(document, 'span', 'about-tag ui-pill-lg');
     pill.append(createElement(document, 'i'), document.createTextNode(tag));
     return pill;
   }));
+
+  buildCertifications(document, instructor);
 
   const summary = document.querySelectorAll('.reviews-summary__value');
   summary[0].textContent = Number(instructor.rating).toFixed(1);
@@ -176,12 +205,23 @@ export function renderInstructorProfile(template, instructor) {
   Object.entries(instructor.pricing).forEach(([key, value]) => {
     booking.dataset[key] = String(value);
   });
+  booking.querySelector('[data-booking-rate]').textContent = instructor.pricing.hourlyRateGel;
   const bookingAvatar = booking.querySelector('.booking-avatar');
   bookingAvatar.src = instructor.bookingAvatar;
   bookingAvatar.alt = instructor.name;
-  booking.querySelector('.booking-head h3').textContent = instructor.name;
-  booking.querySelector('.booking-counter:nth-child(1) .booking-counter-value span').textContent = instructor.pricing.defaultHours;
-  booking.querySelector('.booking-counter:nth-child(2) .booking-counter-value span').textContent = instructor.pricing.defaultPeople;
+
+  const hoursCounter = booking.querySelector('[data-counter][data-role="hours"]');
+  hoursCounter.dataset.min = instructor.pricing.minHours;
+  hoursCounter.dataset.max = instructor.pricing.maxHours;
+  hoursCounter.dataset.step = instructor.pricing.hoursStep;
+  hoursCounter.querySelector('[data-counter-val]').textContent = instructor.pricing.defaultHours;
+
+  const peopleCounter = booking.querySelector('[data-counter][data-role="people"]');
+  peopleCounter.dataset.min = instructor.pricing.minPeople;
+  peopleCounter.dataset.max = Math.min(instructor.pricing.maxPeople, 3);
+  peopleCounter.querySelector('[data-counter-val]').textContent = Math.min(instructor.pricing.defaultPeople, 3);
+
+  document.querySelector('.profile-hero')?.remove();
 
   return { html: document.body.innerHTML, media };
 }

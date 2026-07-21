@@ -1,8 +1,18 @@
 :root {
-  --content-width: 1388px;
-  --content-inner: 1388px;
-  --layout-margin: clamp(18px, 3vw, 48px);
+  /* Named page-width roles. Containers add responsive page margins around them. */
+  --layout-width-wide: 1440px;
+  --layout-width-detail: 1180px;
+  --layout-width-article: 1040px;
+  --layout-width-text: 720px;
+  --content-width: var(--layout-width-wide);
+  --content-inner: var(--layout-width-wide);
+  --content-text: var(--layout-width-text);
+  --content-narrow: var(--layout-width-detail);
+  --layout-margin: clamp(16px, 3vw, 56px);
   --layout-gutter: clamp(12px, 1.4vw, 20px);
+  --breakpoint-mobile: 480px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1120px;
 
   --pill-sm-w: 10px;
   --pill-sm-h: 28px;
@@ -21,4 +31,28 @@
   --motion-duration-base: 200ms;
   --motion-duration-slow: 250ms;
   --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+  --z-base: 0;
+  --z-sticky: 20;
+  --z-dropdown: 40;
+  --z-overlay: 60;
+  --z-dialog: 70;
+  --z-toast: 80;
+  --opacity-disabled: 0.48;
+  --opacity-muted: 0.72;
+  --opacity-overlay: 0.72;
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  --control-height-xs: 28px;
+  --control-height-sm: 36px;
+  --control-height-md: 44px;
+  --control-height-lg: 52px;
+  --media-landscape: 4 / 3;
+  --media-wide: 16 / 9;
+  --media-portrait: 3 / 4;
+  --media-square: 1 / 1;
 }

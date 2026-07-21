@@ -8,6 +8,7 @@ function lazyPage(importPage, exportName) {
 
 const HomePage = lazyPage(() => import('../pages/HomePage/HomePage'), 'HomePage');
 const ProfilePage = lazyPage(() => import('../pages/ProfilePage/ProfilePage'), 'ProfilePage');
+const InstructorMatchPage = lazyPage(() => import('../pages/InstructorMatchPage/InstructorMatchPage'), 'InstructorMatchPage');
 const BookingFlowPage = lazyPage(() => import('../pages/BookingFlowPage/BookingFlowPage'), 'BookingFlowPage');
 const AdminPage = lazyPage(() => import('../pages/AdminPage/AdminPage'), 'AdminPage');
 const DestinationCatalogPage = lazyPage(() => import('../pages/DestinationCatalogPage/DestinationCatalogPage'), 'DestinationCatalogPage');
@@ -23,6 +24,7 @@ export default function App() {
       <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/instructors" element={<DestinationCatalogPage section="instructors" />} />
+      <Route path="/instructors/match" element={<InstructorMatchPage />} />
       <Route path="/instructors/:slug" element={<ProfilePage />} />
       <Route path="/profile" element={<Navigate to="/instructors/mikhail" replace />} />
       <Route path="/booking" element={<BookingFlowPage />} />
