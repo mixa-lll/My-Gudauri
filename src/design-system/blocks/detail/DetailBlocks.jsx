@@ -40,24 +40,19 @@ export function ObjectHero({ variant = 'split', breadcrumbs, title, description,
 }
 
 export function MainTag({ label, value }) {
-  return <div className="ds-main-tag"><dt>{label}</dt><dd>{value}</dd></div>;
+  return <div className="ds-main-tag"><dt>{label}</dt><dd><span>{value}</span></dd></div>;
 }
 
-export function PrimaryFacts({ items = [] }) {
-  return <dl className="ds-primary-facts">{items.slice(0, 4).map((item) => <MainTag key={item.label} {...item} />)}</dl>;
+export function ObjectMainTags({ items = [], ariaLabel = 'Key details' }) {
+  return <dl className="ds-object-main-tags" aria-label={ariaLabel}>{items.slice(0, 4).map((item) => <MainTag key={item.label} {...item} />)}</dl>;
 }
 
-export function DescriptionSection({ kicker = 'Good to know', title = 'About this offer', description, children }) {
+export function ObjectDescription({ kicker = 'Good to know', title = 'About this offer', description, children }) {
   const titleId = useId();
   return <ObjectSection className="ds-description-section" kicker={kicker} title={title} description={description} titleId={titleId}><div className="ds-prose">{children}</div></ObjectSection>;
 }
 
-export function AdditionalDetails({ kicker = 'At a glance', title = 'Details', description, items = [] }) {
-  const titleId = useId();
-  return <ObjectSection kicker={kicker} title={title} description={description} titleId={titleId}><dl className="ds-additional-details">{items.map((item) => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl></ObjectSection>;
-}
-
-export function SecondaryTags({ kicker = 'More details', title = 'Features', description, items = [] }) {
+export function ObjectTagCloud({ kicker = 'More details', title = 'Features', description, items = [] }) {
   const titleId = useId();
   return <ObjectSection kicker={kicker} title={title} description={description} titleId={titleId}><div className="ds-secondary-tags" aria-label={title}>{items.map((item) => <Badge key={item}>{item}</Badge>)}</div></ObjectSection>;
 }
@@ -70,7 +65,7 @@ export function ReviewCard({ author, text, meta, rating = 5, verified = false, a
   </Surface>;
 }
 
-export function ReviewsSection({ kicker = 'Guest experience', title = 'Reviews', description, rating, reviews = [], initialVisible = 4 }) {
+export function ObjectReviews({ kicker = 'Guest experience', title = 'Reviews', description, rating, reviews = [], initialVisible = 4 }) {
   const titleId = useId();
   const [expanded, setExpanded] = useState(false);
   const visibleReviews = expanded ? reviews : reviews.slice(0, initialVisible);
@@ -81,18 +76,20 @@ export function ReviewsSection({ kicker = 'Guest experience', title = 'Reviews',
   </ObjectSection>;
 }
 
-export function DetailBookingSteps({ kicker = 'Simple and clear', title = 'How booking works', description, items = [] }) {
-  const titleId = useId();
-  return <ObjectSection kicker={kicker} title={title} description={description} titleId={titleId}><ol className="ds-detail-steps">{items.map((item, index) => <li key={item.title}><Badge tone="inverse">{index + 1}</Badge><div><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol></ObjectSection>;
-}
-
 const RELATED_CARDS = { activity: ActivityCard, instructor: InstructorCard, rental: RentalCard, stay: StayCard, transfer: TransferCard, editorial: EditorialCard };
-export function RelatedListings({ kicker = 'You may also like', title = 'More from this category', description, items = [], cardType = 'activity' }) {
+export function ObjectRelatedListings({ kicker = 'You may also like', title = 'More from this category', description, items = [], cardType = 'activity' }) {
   const titleId = useId();
   const Card = RELATED_CARDS[cardType];
-  if (!Card) throw new Error(`RelatedListings: unregistered card type “${cardType}”.`);
-  return <ObjectSection kicker={kicker} title={title} description={description} titleId={titleId}><ListingCardGrid className="ds-related-listings" columns="auto">{items.map((item) => <Card key={item.slug} item={item} />)}</ListingCardGrid></ObjectSection>;
+  if (!Card) throw new Error(`ObjectRelatedListings: unregistered card type “${cardType}”.`);
+  return <ObjectSection className="ds-object-related-listings" kicker={kicker} title={title} description={description} titleId={titleId}><ListingCardGrid className="ds-related-listings" columns={3}>{items.map((item) => <Card key={item.slug} item={item} />)}</ListingCardGrid></ObjectSection>;
 }
+
+// Compatibility aliases. New compositions use the object-anatomy names above.
+export const PrimaryFacts = ObjectMainTags;
+export const DescriptionSection = ObjectDescription;
+export const SecondaryTags = ObjectTagCloud;
+export const ReviewsSection = ObjectReviews;
+export const RelatedListings = ObjectRelatedListings;
 
 const BOOKING_PRESETS = {
   instructor: { label: 'Private lesson from', units: [{ id: 'duration', label: 'Hours', min: 1, max: 8, initial: 2 }, { id: 'participants', label: 'People', min: 1, max: 8, initial: 1 }], select: { id: 'level', label: 'Level', options: ['First time', 'Beginner', 'Intermediate', 'Advanced'] }, multiplier: (values) => values.duration },

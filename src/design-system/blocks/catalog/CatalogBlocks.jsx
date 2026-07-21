@@ -73,12 +73,13 @@ export function BenefitsSection({ kicker = 'Why book here', title, description, 
   return <section className="ds-section"><SectionHeading kicker={kicker} title={title} description={description} size="md" /><div className="ds-benefits-grid">{items.map((item) => <BenefitCard key={item.title} {...item} />)}</div></section>;
 }
 
-export function BookingStep({ number, title, description }) {
-  return <article className="ds-booking-step"><Badge tone="inverse">{number}</Badge><h3>{title}</h3><p>{description}</p></article>;
+export function BookingStep({ number, title, description, context = 'catalog' }) {
+  return <article className={`ds-booking-step ds-booking-step--${context}`}><Badge tone="inverse">{number}</Badge><h3>{title}</h3><p>{description}</p></article>;
 }
 
-export function BookingSteps({ title = 'How booking works', items = [] }) {
-  return <section className="ds-section"><SectionHeading title={title} size="md" /><ol className="ds-booking-steps">{items.map((item, index) => <li key={item.title}><BookingStep number={index + 1} {...item} /></li>)}</ol></section>;
+export function BookingSteps({ kicker = 'Simple and clear', title = 'How booking works', description, items = [], context = 'catalog' }) {
+  if (!['catalog', 'object'].includes(context)) throw new Error(`BookingSteps: unsupported context “${context}”.`);
+  return <section className={`ds-section ds-booking-steps-section ds-booking-steps-section--${context}`}><SectionHeading kicker={kicker} title={title} description={description} size={context === 'object' ? 'sm' : 'md'} /><ol className={`ds-booking-steps ds-booking-steps--${context}`}>{items.map((item, index) => <li key={item.title}><BookingStep number={index + 1} context={context} {...item} /></li>)}</ol></section>;
 }
 
 function PromoFrame({ kind, eyebrow, title, description, media, action }) {

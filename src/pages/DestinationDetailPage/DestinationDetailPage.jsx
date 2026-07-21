@@ -3,16 +3,17 @@ import { Link, useParams } from 'react-router-dom';
 import {
   ActivityObjectPattern,
   BackLink,
+  BookingSteps,
   BookingWidget,
-  DescriptionSection,
+  ObjectDescription,
+  ObjectMainTags,
+  ObjectRelatedListings,
+  ObjectTagCloud,
   FaqAccordion,
   MediaPlaceholder,
   ObjectDetailPageTemplate,
   ObjectHero,
-  PrimaryFacts,
-  RelatedListings,
   RentalObjectPattern,
-  SecondaryTags,
   SiteFooter,
   SiteNavbar,
   StayObjectPattern,
@@ -24,6 +25,11 @@ import './DestinationDetailPage.scss';
 const OBJECT_PATTERNS = { rental: RentalObjectPattern, transfers: TransferObjectPattern, stays: StayObjectPattern };
 const CARD_TYPES = { rental: 'rental', transfers: 'transfer', stays: 'stay' };
 const BOOKING_CATEGORIES = { rental: 'rental', transfers: 'transfer', stays: 'stay' };
+const BOOKING_STEPS = [
+  { title: 'Send your request', description: 'Choose the date, group details and the format that suits you.' },
+  { title: 'We check the details', description: 'A local manager confirms availability and the final price.' },
+  { title: 'Receive confirmation', description: 'Get the meeting details and a secure payment link.' },
+];
 
 export function DestinationDetailPage() {
   const { section, slug } = useParams();
@@ -54,11 +60,12 @@ export function DestinationDetailPage() {
   />;
 
   const content = <Pattern
-    primaryFacts={<PrimaryFacts items={item.facts.map(([label, value]) => ({ label, value }))} />}
-    description={<DescriptionSection kicker="About the offer" title="What to expect"><p>{item.description}</p></DescriptionSection>}
-    secondaryTags={<SecondaryTags kicker="At a glance" title="Useful details" items={item.tags} />}
+    mainTags={<ObjectMainTags items={item.facts.map(([label, value]) => ({ label, value }))} />}
+    objectDescription={<ObjectDescription kicker="About the offer" title="What to expect"><p>{item.description}</p></ObjectDescription>}
+    tagCloud={<ObjectTagCloud kicker="At a glance" title="Useful details" items={item.tags} />}
     additionalSections={[{ type: 'includedServices', kicker: 'Included essentials', title: 'What is included', items: item.included }]}
-    relatedListings={<RelatedListings cardType={cardType} items={related} />}
+    bookingSteps={<BookingSteps context="object" items={BOOKING_STEPS} />}
+    relatedListings={<ObjectRelatedListings cardType={cardType} items={related} />}
     faqSection={<FaqAccordion items={config.faq} title="Common questions" kicker="Good to know" />}
     bookingWidget={<BookingWidget category={bookingCategory} price={numericPrice} availability="Request availability" />}
   />;

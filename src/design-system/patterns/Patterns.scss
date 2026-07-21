@@ -10,4 +10,5 @@
 .ds-object-pattern__layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); align-items: start; gap: clamp(32px, 6vw, 80px); }
 .ds-object-pattern__flow { min-width: 0; display: grid; gap: clamp(48px, 7vw, 88px); }
 .ds-object-pattern__booking { min-width: 0; align-self: stretch; }
+.ds-object-pattern__related { width: 100%; min-width: 0; }
 @media (max-width: 860px) { .ds-object-pattern__layout { grid-template-columns: 1fr; } .ds-object-pattern__booking { min-height: 0; } }

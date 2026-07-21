@@ -44,6 +44,10 @@
 .ds-benefit-card p, .ds-booking-step p { margin: 0; color: var(--text-secondary); line-height: var(--type-body-line); }
 .ds-booking-steps { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--layout-gutter); list-style: none; }
 .ds-booking-step { padding-top: var(--space-400); border-top: 1px solid var(--border-default); }
+.ds-booking-steps-section { display: grid; gap: var(--space-600); }
+.ds-booking-steps--object { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ds-booking-step--object { min-height: 180px; padding: var(--space-400); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); background: transparent; }
+@media (max-width: 760px) { .ds-booking-steps--object { grid-template-columns: 1fr; } }
 .ds-promo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .6fr); gap: var(--space-900); background: var(--surface-card); }
 .ds-promo--rate { background: var(--accent-100); }
 .ds-promo--safety { background: var(--warning-100); }

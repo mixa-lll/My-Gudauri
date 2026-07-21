@@ -13,10 +13,11 @@
 .ds-object-hero--media-first .ds-object-hero__media { grid-column: 1; grid-row: 2; }
 .ds-object-hero--media-first .ds-object-hero__content { grid-column: 2; grid-row: 2; }
 
-.ds-primary-facts { margin: 0; padding: var(--space-500) 0; border-block: 1px solid var(--border-subtle); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-400); }
-.ds-main-tag, .ds-additional-details div { display: grid; gap: var(--space-200); }
-.ds-main-tag dt, .ds-additional-details dt { color: var(--text-secondary); font: var(--fw-medium) var(--type-caption-size) / 1.2 var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
-.ds-main-tag dd, .ds-additional-details dd { margin: 0; color: var(--text-primary); font-weight: var(--fw-medium); }
+.ds-object-main-tags { margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--layout-gutter); }
+.ds-main-tag { min-width: 0; min-height: 116px; padding: var(--space-400); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: var(--space-400); background: transparent; }
+.ds-main-tag dt { color: var(--text-secondary); font: var(--fw-medium) var(--type-caption-size) / 1.2 var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
+.ds-main-tag dd { max-width: 100%; margin: 0; color: var(--text-primary); font-weight: var(--fw-medium); }
+.ds-main-tag dd span { max-width: 100%; min-height: var(--control-height-sm); padding: 0 var(--space-300); border-radius: var(--radius-pill); display: inline-flex; align-items: center; background: var(--surface-subtle); overflow-wrap: anywhere; }
 
 .ds-detail-section { display: grid; gap: var(--space-600); }
 .ds-detail-section > .section-heading { width: 100%; }
@@ -25,7 +26,6 @@
 .ds-prose { max-width: var(--content-text); color: var(--text-secondary); font: var(--fw-regular) var(--type-body-large-size) / var(--type-body-large-line) var(--font-body); }
 .ds-prose > :first-child { margin-top: 0; }
 .ds-prose > :last-child { margin-bottom: 0; }
-.ds-additional-details { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-600); }
 
 .ds-reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--layout-gutter); }
 .ds-review-card { min-width: 0; display: grid; gap: var(--space-400); }
@@ -36,10 +36,8 @@
 .ds-review-card__proof { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-300); }
 .ds-review-card blockquote { margin: 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-large-size) / var(--type-body-large-line) var(--font-body); }
 
-.ds-detail-steps { margin: 0; padding: 0; display: grid; gap: var(--space-300); list-style: none; }
-.ds-detail-steps li { padding: var(--space-400) 0; border-top: 1px solid var(--border-subtle); display: grid; grid-template-columns: auto 1fr; gap: var(--space-400); }
-.ds-detail-steps h3, .ds-specific-section strong { margin: 0; color: var(--text-primary); font-weight: var(--fw-bold); }
-.ds-detail-steps p, .ds-specific-section p { margin: var(--space-200) 0 0; color: var(--text-secondary); }
+.ds-specific-section strong { margin: 0; color: var(--text-primary); font-weight: var(--fw-bold); }
+.ds-specific-section p { margin: var(--space-200) 0 0; color: var(--text-secondary); }
 
 .ds-booking-widget { position: sticky; z-index: var(--z-sticky); top: var(--space-600); display: grid; gap: var(--space-500); box-shadow: var(--shadow-float); }
 .ds-booking-widget__mobile-summary { display: none; }
@@ -70,6 +68,10 @@
   .ds-object-hero__back { grid-column: 1; grid-row: 1; }
   .ds-object-hero__content, .ds-object-hero--media-first .ds-object-hero__content { grid-column: 1; grid-row: 2; }
   .ds-object-hero__media, .ds-object-hero--media-first .ds-object-hero__media { grid-column: 1; grid-row: 3; min-height: 320px; }
-  .ds-primary-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-object-main-tags { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ds-reviews { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 440px) {
+  .ds-object-main-tags { grid-template-columns: 1fr; }
 }
