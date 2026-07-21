@@ -14,6 +14,7 @@ export function InstructorBookingSteps() {
 }
 
 export function InstructorCertifications({
+  id = 'certifications',
   kicker = 'Professional qualifications',
   title = 'Certifications',
   description,
@@ -22,7 +23,7 @@ export function InstructorCertifications({
   const titleId = useId();
   if (!items.length) return null;
 
-  return <section className="ds-instructor-certifications" aria-labelledby={titleId}>
+  return <section id={id} className="ds-instructor-certifications" aria-labelledby={titleId}>
     <SectionHeading kicker={kicker} title={title} titleId={titleId} description={description} size="sm" />
     <ul className="ds-instructor-certifications__grid">
       {items.map((item, index) => {

@@ -77,9 +77,9 @@ export function BookingStep({ number, title, description, context = 'catalog' })
   return <article className={`ds-booking-step ds-booking-step--${context}`}><Badge tone="inverse">{number}</Badge><h3>{title}</h3><p>{description}</p></article>;
 }
 
-export function BookingSteps({ kicker = 'Simple and clear', title = 'How booking works', description, items = [], context = 'catalog' }) {
+export function BookingSteps({ id, kicker = 'Simple and clear', title = 'How booking works', description, items = [], context = 'catalog' }) {
   if (!['catalog', 'object'].includes(context)) throw new Error(`BookingSteps: unsupported context “${context}”.`);
-  return <section className={`ds-section ds-booking-steps-section ds-booking-steps-section--${context}`}><SectionHeading kicker={kicker} title={title} description={description} size={context === 'object' ? 'sm' : 'md'} /><ol className={`ds-booking-steps ds-booking-steps--${context}`}>{items.map((item, index) => <li key={item.title}><BookingStep number={index + 1} context={context} {...item} /></li>)}</ol></section>;
+  return <section id={id ?? (context === 'object' ? 'booking-process' : undefined)} className={`ds-section ds-booking-steps-section ds-booking-steps-section--${context}`}><SectionHeading kicker={kicker} title={title} description={description} size={context === 'object' ? 'sm' : 'md'} /><ol className={`ds-booking-steps ds-booking-steps--${context}`}>{items.map((item, index) => <li key={item.title}><BookingStep number={index + 1} context={context} {...item} /></li>)}</ol></section>;
 }
 
 function PromoFrame({ kind, eyebrow, title, description, media, action }) {

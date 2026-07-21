@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import {
   ActivityCard,
   Badge,
@@ -54,9 +54,9 @@ export function ObjectMainTags({ items = [], ariaLabel = 'Key details' }) {
   return <dl className="ds-object-main-tags" aria-label={ariaLabel}>{items.slice(0, 4).map((item) => <MainTag key={item.label} {...item} />)}</dl>;
 }
 
-export function ObjectDescription({ kicker = 'Good to know', title = 'About this offer', description, children, tags = [], tagsLabel = 'Key features' }) {
+export function ObjectDescription({ id = 'about', kicker = 'Good to know', title = 'About this offer', description, children, tags = [], tagsLabel = 'Key features' }) {
   const titleId = useId();
-  return <ObjectSection className="ds-description-section" kicker={kicker} title={title} description={description} titleId={titleId}>
+  return <ObjectSection id={id} className="ds-description-section" kicker={kicker} title={title} description={description} titleId={titleId}>
     <div className="ds-prose">{children}</div>
     {tags.length ? <div className="ds-description-section__tags" aria-label={tagsLabel}>{tags.map((item) => <Badge className="ds-description-section__tag" key={item}>{item}</Badge>)}</div> : null}
   </ObjectSection>;
@@ -128,6 +128,58 @@ export const DescriptionSection = ObjectDescription;
 export const ReviewsSection = ObjectReviews;
 export const RelatedListings = ObjectRelatedListings;
 
+function prefersReducedMotion() {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+}
+
+export function ObjectStickyNav({ items = [], bookingTargetId = 'booking-request', bookingSummary }) {
+  const validItems = items.filter((item) => item?.href && item?.label);
+  const [activeHref, setActiveHref] = useState(validItems[0]?.href);
+  const [bookingVisible, setBookingVisible] = useState(true);
+
+  useEffect(() => {
+    if (!validItems.length || typeof IntersectionObserver === 'undefined') return undefined;
+    const sections = validItems.map((item) => document.querySelector(item.href)).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setActiveHref(`#${visible[0].target.id}`);
+    }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .2, .6] });
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [validItems.map((item) => item.href).join('|')]);
+
+  useEffect(() => {
+    const target = document.getElementById(bookingTargetId);
+    if (!target || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(([entry]) => setBookingVisible(entry.isIntersecting), { threshold: .05 });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [bookingTargetId]);
+
+  const continueBooking = () => {
+    const target = document.getElementById(bookingTargetId);
+    const form = target?.querySelector('form');
+    if (!target) return;
+    if (!form || !form.checkValidity()) {
+      target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+      if (form) window.setTimeout(() => form.querySelector(':invalid')?.focus({ preventScroll: true }), prefersReducedMotion() ? 0 : 220);
+      return;
+    }
+    form.requestSubmit();
+  };
+
+  if (!validItems.length) return null;
+  return <div className="ds-object-sticky-nav">
+    <nav className="ds-object-sticky-nav__links" aria-label="On this page">
+      {validItems.map((item) => <a href={item.href} key={item.href} aria-current={activeHref === item.href ? 'location' : undefined}>{item.label}</a>)}
+    </nav>
+    <div className={`ds-object-sticky-nav__booking ${bookingVisible ? '' : 'is-visible'}`} aria-hidden={bookingVisible}>
+      {bookingSummary?.totalLabel ? <div><span>Estimated total</span><strong>{bookingSummary.totalLabel}</strong></div> : null}
+      <Button type="button" size="sm" onClick={continueBooking} tabIndex={bookingVisible ? -1 : undefined}>{bookingSummary?.actionLabel ?? 'Continue'}</Button>
+    </div>
+  </div>;
+}
+
 const BOOKING_PRESETS = {
   instructor: { label: 'Private lesson from', units: [{ id: 'duration', label: 'Hours', min: 1, max: 8, initial: 2 }, { id: 'participants', label: 'People', min: 1, max: 8, initial: 1 }], select: { id: 'level', label: 'Level', options: ['First time', 'Beginner', 'Intermediate', 'Advanced'] }, multiplier: (values) => values.duration },
   activity: { label: 'Activity from', units: [{ id: 'participants', label: 'People', min: 1, max: 12, initial: 1 }], select: { id: 'duration', label: 'Duration', options: ['Half day', 'Full day'] }, multiplier: (values) => values.participants },
@@ -140,27 +192,32 @@ function initialBookingValues(preset, defaults = {}) {
   return { ...Object.fromEntries(preset.units.map((unit) => [unit.id, unit.initial])), date: '', name: '', phone: '', comment: '', [preset.select?.id]: preset.select?.options[0], [preset.textField?.id]: '', ...defaults };
 }
 
-export function BookingWidget({ category = 'instructor', price, currency = 'GEL', availability, actionLabel = 'Continue', defaultValues, onValuesChange, onSubmit }) {
+export function BookingWidget({ id = 'booking-request', category = 'instructor', price, currency = 'GEL', availability, actionLabel = 'Continue', defaultValues, onValuesChange, onSummaryChange, onSubmit }) {
   const preset = BOOKING_PRESETS[category];
   if (!preset) throw new Error(`BookingWidget: unsupported category “${category}”.`);
   const [values, setValues] = useState(() => initialBookingValues(preset, defaultValues));
   const [expanded, setExpanded] = useState(false);
   const numericPrice = Number.parseFloat(String(price).replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
   const total = useMemo(() => numericPrice * preset.multiplier(values), [numericPrice, preset, values]);
+  const ready = Boolean(values.date && values.name.trim() && values.phone.trim() && (!preset.textField || values[preset.textField.id]?.trim()));
   const update = (id, value) => setValues((current) => { const next = { ...current, [id]: value }; onValuesChange?.(next); return next; });
   const submit = (event) => { event.preventDefault(); onSubmit?.({ category, values, total }); };
 
-  return <Surface as="aside" className={`ds-booking-widget ${expanded ? 'is-expanded' : ''}`} padding="md" aria-label="Booking request">
+  useEffect(() => {
+    onSummaryChange?.({ actionLabel, ready, totalLabel: numericPrice ? `${total} ${currency}` : null });
+  }, [actionLabel, currency, numericPrice, onSummaryChange, ready, total]);
+
+  return <Surface as="aside" id={id} className={`ds-booking-widget ${expanded ? 'is-expanded' : ''}`} padding="md" aria-label="Booking request">
     <button type="button" className="ds-booking-widget__mobile-summary" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}><span>{preset.label}</span><strong>{numericPrice ? `${numericPrice} ${currency}` : 'On request'}</strong><span aria-hidden="true">{expanded ? '−' : '+'}</span></button>
     <form className="ds-booking-widget__form" onSubmit={submit}>
       <div className="ds-booking-widget__head"><div><small>{preset.label}</small>{numericPrice ? <Price price={`${numericPrice} ${currency}`} /> : <strong>On request</strong>}</div>{availability ? <Badge tone="success">{availability}</Badge> : null}</div>
       <div className="ds-booking-widget__fields">
-        <FormField label="Preferred date"><DateField value={values.date} onChange={(event) => update('date', event.target.value)} /></FormField>
+        <FormField label="Preferred date" required><DateField required value={values.date} onChange={(event) => update('date', event.target.value)} /></FormField>
         {preset.units.map((unit) => <div className="ds-booking-widget__stepper" key={unit.id}><span>{unit.label}</span><QuantityStepper label={unit.label} value={values[unit.id]} min={unit.min} max={unit.max} onChange={(value) => update(unit.id, value)} /></div>)}
         {preset.select ? <FormField label={preset.select.label}><Select value={values[preset.select.id]} onChange={(event) => update(preset.select.id, event.target.value)}>{preset.select.options.map((option) => <option key={option}>{option}</option>)}</Select></FormField> : null}
-        {preset.textField ? <FormField label={preset.textField.label}><Input value={values[preset.textField.id]} placeholder={preset.textField.placeholder} onChange={(event) => update(preset.textField.id, event.target.value)} /></FormField> : null}
-        <FormField label="Name" required><Input autoComplete="name" value={values.name} onChange={(event) => update('name', event.target.value)} /></FormField>
-        <FormField label="Phone or messenger" required><Input autoComplete="tel" value={values.phone} onChange={(event) => update('phone', event.target.value)} /></FormField>
+        {preset.textField ? <FormField label={preset.textField.label} required><Input required value={values[preset.textField.id]} placeholder={preset.textField.placeholder} onChange={(event) => update(preset.textField.id, event.target.value)} /></FormField> : null}
+        <FormField label="Name" required><Input required autoComplete="name" value={values.name} onChange={(event) => update('name', event.target.value)} /></FormField>
+        <FormField label="Phone or messenger" required><Input required autoComplete="tel" value={values.phone} onChange={(event) => update('phone', event.target.value)} /></FormField>
         <FormField label="Comment"><Textarea value={values.comment} onChange={(event) => update('comment', event.target.value)} /></FormField>
       </div>
       <div className="ds-booking-widget__total"><span>Estimated total</span><strong>{numericPrice ? `${total} ${currency}` : 'On request'}</strong></div>

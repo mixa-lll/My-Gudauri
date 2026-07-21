@@ -11,6 +11,7 @@ export {
   ObjectMainTags,
   ObjectRelatedListings,
   ObjectReviews,
+  ObjectStickyNav,
   ReviewCard,
   RouteProgram,
   SafetyRequirements,
