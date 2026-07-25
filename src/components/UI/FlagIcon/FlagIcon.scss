@@ -1,0 +1,31 @@
+.flag-icon {
+  display: block;
+  flex: none;
+  clip-path: circle(50%);
+}
+
+.flag-icon__ring {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 0.8;
+}
+
+.flag-icon--xs {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.flag-icon--sm {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+}
+
+.flag-icon--md {
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+}
+
+.flag-icon--lg {
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
+}

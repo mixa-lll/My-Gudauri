@@ -1,6 +1,7 @@
 export { SiteNavbar } from './SiteNavbar/SiteNavbar';
 export { SiteFooter } from './SiteFooter/SiteFooter';
 export { FaqAccordion } from './FaqAccordion/FaqAccordion';
+export { LanguageSwitcher } from './LanguageSwitcher/LanguageSwitcher';
 export { CategoryTab, CatalogCategoryTabs } from './CatalogCategoryTabs/CatalogCategoryTabs';
 export { DestinationCard } from './DestinationCard/DestinationCard';
 export { MediaPlaceholder } from './MediaPlaceholder/MediaPlaceholder';

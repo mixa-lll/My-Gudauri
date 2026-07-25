@@ -8,3 +8,4 @@ export { Checkbox, DateField, DateRangeCalendar, FieldMessage, FormField, FormSu
 export { Accordion, AccordionItem } from './Accordion/Accordion';
 export { SectionHeading } from './SectionHeading/SectionHeading';
 export { StarRating } from './StarRating/StarRating';
+export { FlagIcon } from './FlagIcon/FlagIcon';

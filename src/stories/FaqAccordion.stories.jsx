@@ -1,12 +1,12 @@
 import { FaqAccordion } from '../design-system';
-import { FAQ_ITEMS } from '../data/faqItems';
+import { en } from '../i18n/locales/en';
 import { defineComposition } from '../design-system/architecture/registry';
 
 const meta = {
   title: 'Blocks/Global/FAQ Section',
   component: FaqAccordion,
   tags: ['autodocs'],
-  args: { items: FAQ_ITEMS, initialOpen: 0, kicker: 'Frequently asked questions', title: 'FAQ' },
+  args: { items: en.faq.items, initialOpen: 0, kicker: 'Frequently asked questions', title: 'FAQ' },
   parameters: { composition: defineComposition({ root: 'FaqAccordion' }) }
 };
 

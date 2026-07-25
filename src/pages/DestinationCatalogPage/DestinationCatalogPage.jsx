@@ -3,120 +3,132 @@ import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, SiteFooter, SiteNavbar } from '../../design-system';
 import { getDestination } from '../../data/destinations';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { ACTIVITY_GROUP_LABELS, getActivities } from '../../services/activitiesApi';
 import { getInstructors } from '../../services/instructorsApi';
 import './DestinationCatalogPage.scss';
 
 const CATALOG_FILTERS = {
   instructors: {
-    categories: [
-      ['all', 'All instructors', 'Verified local professionals'],
-      ['ski', 'Ski', 'Piste and technique lessons'],
-      ['snowboard', 'Snowboard', 'Technique and all-mountain lessons']
-    ],
+    categories: [['all'], ['ski'], ['snowboard']],
     refinements: [
-      ['russian', 'Russian', null, null, 'language', 'Language'],
-      ['english', 'English', null, null, 'language', 'Language'],
-      ['georgian', 'Georgian', null, null, 'language', 'Language'],
-      ['male', 'Male', null, null, 'gender', 'Gender'],
-      ['female', 'Female', null, null, 'gender', 'Gender'],
-      ['kids', 'Works with children', null, null, 'specialty', 'Focus'],
-      ['first-lessons', 'First lessons', null, null, 'specialty', 'Focus'],
-      ['technique', 'Technique', null, null, 'specialty', 'Focus'],
-      ['carving', 'Carving', null, null, 'specialty', 'Focus'],
-      ['freeride', 'Freeride', null, null, 'specialty', 'Focus'],
-      ['freestyle', 'Freestyle', null, null, 'specialty', 'Focus']
+      ['russian', 'language'],
+      ['english', 'language'],
+      ['georgian', 'language'],
+      ['male', 'gender'],
+      ['female', 'gender'],
+      ['kids', 'specialty'],
+      ['first-lessons', 'specialty'],
+      ['technique', 'specialty'],
+      ['carving', 'specialty'],
+      ['freeride', 'specialty'],
+      ['freestyle', 'specialty']
     ]
   },
   rental: {
     categories: [
-      ['all', 'All equipment', 'Everything for a day on snow'],
-      ['ski', 'Ski sets', 'Piste, powder and kids', ['performance-ski-set', 'freeride-ski-set', 'kids-ski-set']],
-      ['snowboard', 'Snowboard', 'All-mountain setup', ['snowboard-set']],
-      ['safety', 'Safety & extras', 'Protection and avalanche gear', ['avalanche-set', 'premium-helmet-goggles']]
+      ['all'],
+      ['ski', ['performance-ski-set', 'freeride-ski-set', 'kids-ski-set']],
+      ['snowboard', ['snowboard-set']],
+      ['safety', ['avalanche-set', 'premium-helmet-goggles']]
     ],
     refinements: [
-      ['all-levels', 'All levels', null, ['snowboard-set', 'kids-ski-set', 'premium-helmet-goggles'], 'level', 'Level'],
-      ['advanced', 'Advanced', null, ['performance-ski-set', 'freeride-ski-set', 'avalanche-set'], 'level', 'Level'],
-      ['kids', 'For children', null, ['kids-ski-set'], 'audience', 'Audience']
+      ['all-levels', 'level', ['snowboard-set', 'kids-ski-set', 'premium-helmet-goggles']],
+      ['advanced', 'level', ['performance-ski-set', 'freeride-ski-set', 'avalanche-set']],
+      ['kids', 'audience', ['kids-ski-set']]
     ]
   },
   transfers: {
     categories: [
-      ['all', 'All routes', 'Airport and regional transfers'],
-      ['tbilisi', 'Tbilisi ↔ Gudauri', 'Airport and city pickup', ['tbilisi-airport-gudauri', 'tbilisi-minivan-gudauri']],
-      ['kutaisi', 'Kutaisi ↔ Gudauri', 'Private airport transfer', ['kutaisi-gudauri']],
-      ['regional', 'Regional routes', 'Batumi, Kazbegi and Vladikavkaz', ['batumi-gudauri', 'kazbegi-gudauri', 'vladikavkaz-gudauri']]
+      ['all'],
+      ['tbilisi', ['tbilisi-airport-gudauri', 'tbilisi-minivan-gudauri']],
+      ['kutaisi', ['kutaisi-gudauri']],
+      ['regional', ['batumi-gudauri', 'kazbegi-gudauri', 'vladikavkaz-gudauri']]
     ],
     refinements: [
-      ['airport', 'Airport pickup', null, ['tbilisi-airport-gudauri', 'kutaisi-gudauri', 'vladikavkaz-gudauri'], 'pickup', 'Pickup'],
-      ['groups', 'For groups', null, ['tbilisi-minivan-gudauri', 'vladikavkaz-gudauri'], 'group', 'Group'],
-      ['four-by-four', 'Winter 4×4', null, ['kazbegi-gudauri'], 'vehicle', 'Vehicle']
+      ['airport', 'pickup', ['tbilisi-airport-gudauri', 'kutaisi-gudauri', 'vladikavkaz-gudauri']],
+      ['groups', 'group', ['tbilisi-minivan-gudauri', 'vladikavkaz-gudauri']],
+      ['four-by-four', 'vehicle', ['kazbegi-gudauri']]
     ]
   },
   services: {
     categories: [
-      ['all', 'All services', 'Local help for your stay'],
-      ['photo', 'Photo & video', 'Memories from the mountain', ['mountain-photo-session', 'ski-video-reel']],
-      ['care', 'Childcare & wellness', 'Time for the whole group', ['evening-nanny', 'sports-massage']],
-      ['hosting', 'Dining & events', 'Private moments, well planned', ['private-chef', 'event-decor']]
+      ['all'],
+      ['photo', ['mountain-photo-session', 'ski-video-reel']],
+      ['care', ['evening-nanny', 'sports-massage']],
+      ['hosting', ['private-chef', 'event-decor']]
     ],
     refinements: [
-      ['at-your-stay', 'At your stay', null, ['evening-nanny', 'sports-massage', 'private-chef'], 'location', 'Location'],
-      ['family', 'For families', null, ['mountain-photo-session', 'evening-nanny', 'private-chef'], 'audience', 'Audience'],
-      ['custom', 'Custom plan', null, ['private-chef', 'event-decor'], 'format', 'Format']
+      ['at-your-stay', 'location', ['evening-nanny', 'sports-massage', 'private-chef']],
+      ['family', 'audience', ['mountain-photo-session', 'evening-nanny', 'private-chef']],
+      ['custom', 'format', ['private-chef', 'event-decor']]
     ]
   },
   stays: {
     categories: [
-      ['all', 'All stays', 'Apartments, hotels and chalets'],
-      ['apartments', 'Apartments', 'Independent stays in Gudauri', ['four-seasons-loft', 'neo-family-apartment', 'atrium-ski-in', 'loft-long-stay']],
-      ['chalets', 'Chalets', 'Space for groups and families', ['panorama-chalet']],
-      ['hotels', 'Hotels', 'A room with useful services', ['twins-view-room']]
+      ['all'],
+      ['apartments', ['four-seasons-loft', 'neo-family-apartment', 'atrium-ski-in', 'loft-long-stay']],
+      ['chalets', ['panorama-chalet']],
+      ['hotels', ['twins-view-room']]
     ],
     refinements: [
-      ['ski-in', 'Ski-in / ski-out', null, ['four-seasons-loft', 'atrium-ski-in'], 'access', 'Access'],
-      ['family', 'Family stays', null, ['neo-family-apartment', 'panorama-chalet'], 'guests', 'Guests'],
-      ['two-guests', 'For two guests', null, ['twins-view-room', 'loft-long-stay'], 'guests', 'Guests']
+      ['ski-in', 'access', ['four-seasons-loft', 'atrium-ski-in']],
+      ['family', 'guests', ['neo-family-apartment', 'panorama-chalet']],
+      ['two-guests', 'guests', ['twins-view-room', 'loft-long-stay']]
     ]
   },
   places: {
     categories: [
-      ['all', 'All places', 'Eat, recharge and explore'],
-      ['food', 'Restaurants & cafés', 'Meals and good coffee', ['drunk-cherry', 'platforma-cafe']],
-      ['bars', 'Bars', 'Après-ski and late evenings', ['black-dog-bar']],
-      ['wellness', 'Spa & useful', 'Recovery and essentials', ['gudauri-lodge-spa', 'smart-market', 'friendship-monument']]
+      ['all'],
+      ['food', ['drunk-cherry', 'platforma-cafe']],
+      ['bars', ['black-dog-bar']],
+      ['wellness', ['gudauri-lodge-spa', 'smart-market', 'friendship-monument']]
     ],
     refinements: [
-      ['late', 'Open late', null, ['drunk-cherry', 'black-dog-bar'], 'hours', 'Hours'],
-      ['new-gudauri', 'New Gudauri', null, ['drunk-cherry', 'black-dog-bar', 'platforma-cafe'], 'location', 'Location'],
-      ['bookable', 'Book ahead', null, ['drunk-cherry', 'gudauri-lodge-spa'], 'booking', 'Booking']
+      ['late', 'hours', ['drunk-cherry', 'black-dog-bar']],
+      ['new-gudauri', 'location', ['drunk-cherry', 'black-dog-bar', 'platforma-cafe']],
+      ['bookable', 'booking', ['drunk-cherry', 'gudauri-lodge-spa']]
     ]
   }
 };
 
-function toFilter(items) {
-  return items.map(([id, label, description, slugs, group, groupLabel]) => ({ id, label, description, slugs, group, groupLabel }));
+function toCategoryFilters(section, items, t) {
+  return items.map(([id, slugs]) => ({
+    id,
+    slugs,
+    label: t(`catalog.${section}.categories.${id}.label`),
+    description: t(`catalog.${section}.categories.${id}.description`)
+  }));
 }
 
-function activityFilters(items) {
-  const options = (field, group, groupLabel) => [...new Set(items.map((item) => item[field]).filter(Boolean))].map((value) => ({
+function toRefinementFilters(section, items, t) {
+  return items.map(([id, group, slugs]) => ({
+    id,
+    slugs,
+    group,
+    label: t(`catalog.${section}.refinements.${id}`),
+    groupLabel: t(`catalog.groups.${group}`)
+  }));
+}
+
+function activityFilters(items, t) {
+  const options = (field, group) => [...new Set(items.map((item) => item[field]).filter(Boolean))].map((value) => ({
     id: `${field}:${value}`,
     label: value,
     field,
     value,
     group,
-    groupLabel
+    groupLabel: group ? t(`catalog.groups.${group}`) : undefined
   }));
   return {
     categories: [
-      { id: 'all', label: 'All adventures', description: 'Every way to explore Gudauri' },
+      { id: 'all', label: t('catalog.activities.categories.all.label'), description: t('catalog.activities.categories.all.description') },
       ...options('catalogGroup').map((item) => ({ ...item, label: ACTIVITY_GROUP_LABELS[item.value] || item.value }))
     ],
     refinements: [
-      ...options('skillLevel', 'level', 'Level'),
-      ...options('durationGroup', 'duration', 'Duration'),
-      ...options('format', 'format', 'Format')
+      ...options('skillLevel', 'level'),
+      ...options('durationGroup', 'duration'),
+      ...options('format', 'format')
     ]
   };
 }
@@ -160,22 +172,22 @@ function matchesActiveRefinements(section, refinements, activeFilters, item) {
   return Object.values(grouped).every((filters) => filters.some((filter) => matchesFilter(section, filter, item)));
 }
 
-function PricingInfoPopover({ steps = [] }) {
+function PricingInfoPopover({ steps = [], t }) {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <button className="instructor-price-note__help" type="button" aria-label="How instructor pricing works">?</button>
+        <button className="instructor-price-note__help" type="button" aria-label={t('catalog.instructors.pricing.helpLabel')}>?</button>
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Content className="instructor-price-popover" align="end" sideOffset={10} collisionPadding={12}>
           <div className="instructor-price-popover__heading">
-            <div><span>Booking guide</span><h3>How it works</h3></div>
-            <Popover.Close aria-label="Close pricing guide">×</Popover.Close>
+            <div><span>{t('catalog.instructors.bookingKicker')}</span><h3>{t('catalog.instructors.bookingTitle')}</h3></div>
+            <Popover.Close aria-label={t('catalog.instructors.pricing.closeLabel')}>×</Popover.Close>
           </div>
-          <p>Instructor profiles do not compete on price. Your final total depends on lesson duration and group size.</p>
+          <p>{t('catalog.instructors.pricing.note')}</p>
           <ol>
-            {steps.map(([title, description], index) => (
-              <li key={title}><span>{index + 1}</span><div><strong>{title}</strong><p>{description}</p></div></li>
+            {steps.map((step, index) => (
+              <li key={step.title}><span>{index + 1}</span><div><strong>{step.title}</strong><p>{step.description}</p></div></li>
             ))}
           </ol>
           <Popover.Arrow className="instructor-price-popover__arrow" width={14} height={7} />
@@ -187,8 +199,10 @@ function PricingInfoPopover({ steps = [] }) {
 
 export function DestinationCatalogPage({ section: sectionProp }) {
   const params = useParams();
+  const { t, tList } = useLanguage();
   const section = sectionProp ?? params.section;
   const config = getDestination(section);
+  const sectionTitle = t(`categories.${section}.title`);
   const filterConfig = CATALOG_FILTERS[section];
   const apiBacked = section === 'instructors' || section === 'activities';
   const [items, setItems] = useState(apiBacked ? [] : (config?.items ?? []));
@@ -204,7 +218,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   useEffect(() => {
     setActiveCategory('all');
     setActiveFilters([]);
-    if (config) document.title = `${config.title} — My Gudauri`;
+    if (config) document.title = `${sectionTitle} — My Gudauri`;
 
     if (!apiBacked) {
       setItems(config?.items ?? []);
@@ -230,19 +244,25 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     return () => {
       active = false;
     };
-  }, [apiBacked, config, section]);
+  }, [apiBacked, config, section, sectionTitle]);
 
-  const dynamicActivityFilters = useMemo(() => section === 'activities' ? activityFilters(items) : null, [items, section]);
-  const categories = useMemo(() => dynamicActivityFilters?.categories ?? toFilter(filterConfig?.categories ?? []), [dynamicActivityFilters, filterConfig]);
-  const refinements = useMemo(() => dynamicActivityFilters?.refinements ?? toFilter(filterConfig?.refinements ?? []), [dynamicActivityFilters, filterConfig]);
+  const dynamicActivityFilters = useMemo(() => section === 'activities' ? activityFilters(items, t) : null, [items, section, t]);
+  const categories = useMemo(
+    () => dynamicActivityFilters?.categories ?? toCategoryFilters(section, filterConfig?.categories ?? [], t),
+    [dynamicActivityFilters, filterConfig, section, t]
+  );
+  const refinements = useMemo(
+    () => dynamicActivityFilters?.refinements ?? toRefinementFilters(section, filterConfig?.refinements ?? [], t),
+    [dynamicActivityFilters, filterConfig, section, t]
+  );
   const availableRefinements = refinements;
   const refinementGroups = useMemo(() => availableRefinements.reduce((groups, filter) => {
     const groupId = filter.group || 'filters';
     const current = groups.find((group) => group.id === groupId);
     if (current) current.filters.push(filter);
-    else groups.push({ id: groupId, label: filter.groupLabel || 'Filters', filters: [filter] });
+    else groups.push({ id: groupId, label: filter.groupLabel || t('catalog.groups.filters'), filters: [filter] });
     return groups;
-  }, []), [availableRefinements]);
+  }, []), [availableRefinements, t]);
   const categoryItems = useMemo(() => {
     const category = categories.find((item) => item.id === activeCategory);
     return items.filter((item) => matchesFilter(section, category, item));
@@ -255,6 +275,8 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     ...category,
     count: items.filter((item) => matchesFilter(section, category, item)).length
   })), [categories, items, section]);
+
+  const bookingSteps = tList(`catalog.${section}.bookingSteps`, { optional: true });
 
   if (!config) return <Navigate to="/" replace />;
 
@@ -275,36 +297,36 @@ export function DestinationCatalogPage({ section: sectionProp }) {
           <div className={`destination-hero ${section === 'instructors' ? 'destination-hero--instructors' : ''}`.trim()}>
             <CatalogHero
               align="center"
-              kicker={config.kicker}
-              title={config.title}
+              kicker={t(`catalog.${section}.kicker`)}
+              title={sectionTitle}
               titleId="destination-title"
-              description={config.description}
+              description={t(`catalog.${section}.description`)}
             />
             {section === 'instructors' ? (
               <>
-                <section className="instructor-concierge" aria-label="Personal instructor selection">
+                <section className="instructor-concierge" aria-label={t('catalog.instructors.concierge.ariaLabel')}>
                   <div className="instructor-concierge__copy">
-                    <span>Personal matching</span>
-                    <h2>Tell us your dates and what you need.</h2>
-                    <p>We will check availability and suggest an instructor for your language, group and lesson goals.</p>
+                    <span>{t('catalog.instructors.concierge.kicker')}</span>
+                    <h2>{t('catalog.instructors.concierge.title')}</h2>
+                    <p>{t('catalog.instructors.concierge.text')}</p>
                   </div>
-                  <Link to="/instructors/match">Ask us to choose <span aria-hidden="true">↗</span></Link>
+                  <Link to="/instructors/match">{t('catalog.instructors.concierge.action')} <span aria-hidden="true">↗</span></Link>
                 </section>
-                <section className="instructor-price-note" aria-label="Instructor pricing information">
+                <section className="instructor-price-note" aria-label={t('catalog.instructors.pricing.ariaLabel')}>
                   <div className="instructor-price-note__mark" aria-hidden="true">=</div>
                   <div>
-                    <span>Simple pricing</span>
-                    <strong>One rate for every instructor</strong>
-                    <p>Choose by teaching style, language and experience — not by price.</p>
+                    <span>{t('catalog.instructors.pricing.kicker')}</span>
+                    <strong>{t('catalog.instructors.pricing.title')}</strong>
+                    <p>{t('catalog.instructors.pricing.text')}</p>
                   </div>
-                  <PricingInfoPopover steps={config.bookingSteps} />
+                  <PricingInfoPopover steps={bookingSteps} t={t} />
                 </section>
               </>
             ) : (
-              <section className="destination-promise" aria-label="Service promise">
+              <section className="destination-promise" aria-label={t('catalog.common.promiseLabel')}>
                 <div className="destination-promise__icon" aria-hidden="true">i</div>
-                <div><strong>{config.promise}</strong><p>{config.promiseNote}</p></div>
-                <span>{config.startingPrice}</span>
+                <div><strong>{t(`catalog.${section}.promise`)}</strong><p>{t(`catalog.${section}.promiseNote`)}</p></div>
+                <span>{t(`catalog.${section}.startingPrice`)}</span>
               </section>
             )}
           </div>
@@ -318,56 +340,56 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                 setActiveCategory(categoryId);
                 setActiveFilters([]);
               }}
-              label={section === 'instructors' ? 'Instructor disciplines' : `${config.title} categories`}
+              label={section === 'instructors' ? t('catalog.instructors.disciplinesLabel') : t('catalog.common.categoriesLabel', { title: sectionTitle })}
             />
             <FilterToolbar
-              title={section === 'instructors' ? 'Find the right fit' : 'Refine results'}
+              title={section === 'instructors' ? t('catalog.instructors.filtersTitle') : t('catalog.common.filtersTitle')}
               titleId="destination-list-title"
-              ariaLabel={`${config.title} filters`}
+              ariaLabel={t('catalog.common.filtersAriaLabel', { title: sectionTitle })}
               resultCount={status === 'loading' ? '…' : displayedItems.length}
-              resultLabel={section === 'instructors' && displayedItems.length === 1 ? 'instructor' : (section === 'activities' && displayedItems.length === 1 ? 'experience' : config.countLabel)}
+              resultLabel={displayedItems.length === 1 ? t(`catalog.${section}.countLabelOne`) : t(`catalog.${section}.countLabel`)}
               controls={refinementGroups.map((group) => (
                 <FilterControl id={`${section}-${group.id}`} label={group.label} options={group.filters} selectedValues={activeFilters} onToggle={toggleFilter} onClear={clearFilters} key={group.id} />
               ))}
-              actions={activeFilters.length ? <Button variant="link" onClick={() => setActiveFilters([])}>Clear all</Button> : null}
+              actions={activeFilters.length ? <Button variant="link" onClick={() => setActiveFilters([])}>{t('catalog.common.clearAll')}</Button> : null}
             />
 
             {status === 'loading' ? (
-              <div className="destination-empty-state"><p>Loading {config.countLabel}…</p></div>
+              <div className="destination-empty-state"><p>{t('catalog.common.loading', { items: t(`catalog.${section}.countLabel`) })}</p></div>
             ) : status === 'error' ? (
-              <p role="alert">{section === 'activities' ? 'Activities' : 'Instructors'} are temporarily unavailable. Please try again later.</p>
+              <p role="alert">{t('catalog.common.error', { items: sectionTitle })}</p>
             ) : displayedItems.length ? (
-              <ListingCardGrid className="destination-grid" columns={3} ariaLabel={`${config.title} results`}>
+              <ListingCardGrid className="destination-grid" columns={3} ariaLabel={t('catalog.common.resultsAriaLabel', { title: sectionTitle })}>
                 {displayedItems.map((item) => <DestinationCard item={item} section={section} key={item.slug} />)}
               </ListingCardGrid>
             ) : (
               <div className="destination-empty-state">
-                <p>No offers match these filters yet.</p>
-                <button type="button" onClick={() => { setActiveCategory('all'); setActiveFilters([]); }}>Show all offers</button>
+                <p>{t('catalog.common.empty')}</p>
+                <button type="button" onClick={() => { setActiveCategory('all'); setActiveFilters([]); }}>{t('catalog.common.showAll')}</button>
               </div>
             )}
           </section>
 
           <div className="destination-benefits">
             <BenefitsSection
-              kicker="Why My Gudauri"
-              title={config.benefitsTitle}
-              items={config.benefits.map(([title, description], index) => ({ icon: String(index + 1).padStart(2, '0'), title, description }))}
+              kicker={t('catalog.common.benefitsKicker')}
+              title={t(`catalog.${section}.benefitsTitle`)}
+              items={tList(`catalog.${section}.benefits`).map((benefit, index) => ({ icon: String(index + 1).padStart(2, '0'), ...benefit }))}
             />
           </div>
 
-          {config.bookingSteps?.length ? (
+          {bookingSteps.length ? (
             <div className="destination-booking">
               <BookingSteps
-                kicker={config.bookingKicker}
-                title={config.bookingTitle}
-                items={config.bookingSteps.map(([title, description]) => ({ title, description }))}
+                kicker={t(`catalog.${section}.bookingKicker`)}
+                title={t(`catalog.${section}.bookingTitle`)}
+                items={bookingSteps}
               />
             </div>
           ) : null}
 
           <section className="destination-faq">
-            <FaqAccordion items={config.faq} />
+            <FaqAccordion items={tList(`catalog.${section}.faq`)} />
           </section>
         </Container>
       </main>

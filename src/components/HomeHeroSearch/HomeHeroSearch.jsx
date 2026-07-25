@@ -3,35 +3,25 @@ import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import { FilterChip } from '../../design-system';
 import { ARTICLES, DESTINATIONS } from '../../data/destinations';
+import { useLanguage } from '../../i18n/LanguageContext';
 import './HomeHeroSearch.scss';
 
-const QUICK_SEARCHES = ['Ski instructor', 'Freeride', 'Transfer from Tbilisi', 'Apartments'];
-
-const SECTION_LABELS = {
-  instructors: 'Instructors',
-  activities: 'Activities',
-  rental: 'Rental',
-  transfers: 'Transfers',
-  services: 'Services',
-  stays: 'Stays',
-  places: 'Places'
-};
-
-function createSearchIndex() {
+function createSearchIndex(t) {
+  const sectionLabel = (slug) => t(`categories.${slug}.title`);
   const sections = Object.values(DESTINATIONS).flatMap((section) => [
     {
       id: `section-${section.slug}`,
-      title: section.title,
-      detail: section.description,
-      type: 'Section',
+      title: sectionLabel(section.slug),
+      detail: t(`catalog.${section.slug}.description`),
+      type: t('search.sectionType'),
       to: `/${section.slug}`,
-      keywords: [section.title, section.navTitle, section.kicker, ...(section.tabs ?? [])]
+      keywords: [sectionLabel(section.slug), t(`catalog.${section.slug}.kicker`)]
     },
     ...section.items.map((item) => ({
       id: `${section.slug}-${item.slug}`,
       title: item.name,
-      detail: `${SECTION_LABELS[section.slug]} · ${item.category ?? item.description}`,
-      type: SECTION_LABELS[section.slug],
+      detail: `${sectionLabel(section.slug)} · ${item.category ?? item.description}`,
+      type: sectionLabel(section.slug),
       to: `/${section.slug}/${item.slug}`,
       keywords: [
         item.name,
@@ -51,14 +41,12 @@ function createSearchIndex() {
       id: `article-${article.slug}`,
       title: article.title,
       detail: article.category,
-      type: 'Article',
+      type: t('search.articleType'),
       to: `/articles/${article.slug}`,
       keywords: [article.title, article.category, article.excerpt]
     }))
   ];
 }
-
-const SEARCH_INDEX = createSearchIndex();
 
 function scoreResult(item, query) {
   const title = item.title.toLowerCase();
@@ -71,6 +59,7 @@ function scoreResult(item, query) {
 
 export function HomeHeroSearch() {
   const navigate = useNavigate();
+  const { language, t, tList } = useLanguage();
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -79,16 +68,18 @@ export function HomeHeroSearch() {
   const inputRef = useRef(null);
   const panelRef = useRef(null);
 
+  const searchIndex = useMemo(() => createSearchIndex(t), [language, t]);
+
   const results = useMemo(() => {
     const normalized = query.trim();
     if (!normalized) return [];
-    return SEARCH_INDEX
+    return searchIndex
       .map((item) => ({ item, score: scoreResult(item, normalized) }))
       .filter(({ score }) => score >= 0)
       .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title))
       .slice(0, 6)
       .map(({ item }) => item);
-  }, [query]);
+  }, [query, searchIndex]);
 
   const updatePosition = () => {
     const rect = searchRef.current?.getBoundingClientRect();
@@ -170,7 +161,7 @@ export function HomeHeroSearch() {
 
   return (
     <div className="home-hero-search" ref={searchRef}>
-      <label className="home-hero-search__label" htmlFor="home-global-search">Find your Gudauri</label>
+      <label className="home-hero-search__label" htmlFor="home-global-search">{t('search.label')}</label>
       <div className="home-hero-search__field">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m20 20-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
         <input
@@ -179,7 +170,7 @@ export function HomeHeroSearch() {
           value={query}
           type="search"
           autoComplete="off"
-          placeholder="Find instructors, stays, transfers, places…"
+          placeholder={t('search.placeholder')}
           role="combobox"
           aria-autocomplete="list"
           aria-expanded={Boolean(shouldShowPanel)}
@@ -192,11 +183,11 @@ export function HomeHeroSearch() {
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
         />
-        {query && <button type="button" onClick={() => { setQuery(''); inputRef.current?.focus(); }} aria-label="Clear search">×</button>}
+        {query && <button type="button" onClick={() => { setQuery(''); inputRef.current?.focus(); }} aria-label={t('search.clear')}>×</button>}
         <kbd>⌘ K</kbd>
       </div>
-      <div className="home-hero-search__quick" aria-label="Popular searches">
-        {QUICK_SEARCHES.map((suggestion) => (
+      <div className="home-hero-search__quick" aria-label={t('search.popular')}>
+        {tList('search.quick').map((suggestion) => (
           <FilterChip
             size="sm"
             type="button"
@@ -209,10 +200,10 @@ export function HomeHeroSearch() {
       </div>
 
       {shouldShowPanel && createPortal(
-        <section className="home-search-results" ref={panelRef} id="home-global-search-results" role="listbox" aria-label="Search results" style={position}>
+        <section className="home-search-results" ref={panelRef} id="home-global-search-results" role="listbox" aria-label={t('search.resultsLabel')} style={position}>
           {results.length ? (
             <>
-              <p>Matching everything in My Gudauri</p>
+              <p>{t('search.matching')}</p>
               {results.map((result, index) => (
                 <Link
                   className={index === activeIndex ? 'is-active' : ''}
@@ -230,7 +221,7 @@ export function HomeHeroSearch() {
               ))}
             </>
           ) : (
-            <div className="home-search-results__empty"><strong>Nothing found yet</strong><span>Try “ski”, “transfer”, “restaurant” or “apartment”.</span></div>
+            <div className="home-search-results__empty"><strong>{t('search.emptyTitle')}</strong><span>{t('search.emptyHint')}</span></div>
           )}
         </section>,
         document.body

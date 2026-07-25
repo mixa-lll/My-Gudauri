@@ -18,13 +18,14 @@ import {
   SiteNavbar,
 } from '../../design-system';
 import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
-import { FAQ_ITEMS } from '../../data/faqItems';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructor, getInstructors } from '../../services/instructorsApi';
 import './ProfilePage.scss';
 
 export function ProfilePage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [instructor, setInstructor] = useState(null);
   const [status, setStatus] = useState('loading');
   const [galleryIndex, setGalleryIndex] = useState(0);
@@ -66,8 +67,8 @@ export function ProfilePage() {
   }, []);
 
   if (status === 'loading') return <main className="profile-data-state">Loading instructor…</main>;
-  if (status === 'not-found') return <main className="profile-data-state"><h1>Instructor not found</h1><Link to="/instructors">Back to instructors</Link></main>;
-  if (status === 'error' || !instructor) return <main className="profile-data-state"><h1>Profile is temporarily unavailable</h1><p>Please try again later.</p></main>;
+  if (status === 'not-found') return <main className="profile-data-state"><h1>{t('instructor.notFound')}</h1><Link to="/instructors">{t('instructor.backToList')}</Link></main>;
+  if (status === 'error' || !instructor) return <main className="profile-data-state"><h1>{t('instructor.unavailable')}</h1><p>{t('object.unavailableText')}</p></main>;
 
   const openGallery = () => {
     galleryTriggerRef.current = document.activeElement;
@@ -77,9 +78,9 @@ export function ProfilePage() {
   const sportNames = instructor.sports.map((sport) => sport.name);
   const languageCodes = instructor.languages.map((language) => language.code);
   const facts = [
-    { label: 'Specialization', value: sportNames },
-    { label: 'Languages', value: languageCodes },
-    { label: 'Experience', value: [`${instructor.experienceYears}+ years`] },
+    { label: t('instructor.specialization'), value: sportNames },
+    { label: t('instructor.languages'), value: languageCodes },
+    { label: t('instructor.experience'), value: [t('instructor.experienceValue', { years: instructor.experienceYears })] },
   ];
   const reviews = (instructor.reviewsList ?? []).map((review, index) => ({
     id: `${review.author}-${index}`,
@@ -94,7 +95,7 @@ export function ProfilePage() {
   const bookingDefinition = getBookingFlowDefinition('instructors');
   const bookingOffer = createBookingOffer({
     definition: bookingDefinition,
-    object: { id: `instructor:${instructor.id ?? instructor.slug}`, slug: instructor.slug, name: instructor.name, typeLabel: 'Private instructor', image: instructor.bookingAvatar },
+    object: { id: `instructor:${instructor.id ?? instructor.slug}`, slug: instructor.slug, name: instructor.name, typeLabel: t('instructor.typeLabel'), image: instructor.bookingAvatar },
     basePrice: instructor.pricing.hourlyRateGel,
     availability: instructor.availability,
     constraints: {
@@ -109,7 +110,7 @@ export function ProfilePage() {
 
   const hero = <ObjectHero
     variant="split"
-    breadcrumbs={<BackLink to="/instructors">Back to instructors</BackLink>}
+    breadcrumbs={<BackLink to="/instructors">{t('instructor.backToList')}</BackLink>}
     badges={sportNames}
     title={instructor.name}
     description={instructor.intro}
@@ -118,19 +119,19 @@ export function ProfilePage() {
       <img src={instructor.heroImage} alt={instructor.heroImageAlt} loading="eager" />
       <Badge className="profile-object-media__availability" mediaOverlay>{instructor.availability}</Badge>
       <button ref={galleryTriggerRef} className="profile-object-media__gallery" type="button" onClick={openGallery}>
-        <span><strong>Open gallery</strong><small>{gallery.length} photos</small></span><span aria-hidden="true">↗</span>
+        <span><strong>{t('object.openGallery')}</strong><small>{gallery.length} {t('object.photos')}</small></span><span aria-hidden="true">↗</span>
       </button>
     </div>}
   />;
 
   const content = <InstructorObjectPattern
     mainTags={<ObjectMainTags items={facts} />}
-    objectDescription={<ObjectDescription kicker={instructor.tagline} title="About the instructor" tags={instructor.tags} tagsLabel="Lesson focus">{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
+    objectDescription={<ObjectDescription kicker={instructor.tagline} title={t('instructor.aboutTitle')} tags={instructor.tags} tagsLabel={t('instructor.tagsLabel')}>{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
     certifications={<InstructorCertifications items={instructor.certifications} />}
     reviews={<ObjectReviews rating={{ value: instructor.rating, label: `${instructor.reviews} reviews` }} reviews={reviews} />}
-    faqSection={<FaqAccordion variant="object" kicker="Good to know" title="Common questions" items={FAQ_ITEMS} />}
+    faqSection={<FaqAccordion variant="object" />}
     bookingWidget={<BookingConfigurator
-      title="Configure your lesson"
+      title={t('instructor.configureTitle')}
       priceLabel={bookingDefinition.priceLabel}
       object={bookingOffer.object}
       fields={resolveEntryFields(bookingDefinition, bookingOffer)}
@@ -142,11 +143,11 @@ export function ProfilePage() {
       estimate={(answers) => estimateBookingTotal(bookingDefinition, bookingOffer, answers)}
       onContinue={startBooking}
     />}
-    relatedListings={<ObjectRelatedListings cardType="instructor" title="More instructors" items={related} />}
+    relatedListings={<ObjectRelatedListings cardType="instructor" title={t('instructor.related')} items={related} />}
   />;
 
   return <>
     <ObjectDetailPageTemplate navbar={<SiteNavbar />} hero={hero} content={content} footer={<SiteFooter />} />
-    <ObjectMediaGallery images={gallery} index={galleryIndex} objectName={instructor.name} objectLabel="Instructor media" isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
+    <ObjectMediaGallery images={gallery} index={galleryIndex} objectName={instructor.name} objectLabel={t('instructor.galleryLabel')} isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
   </>;
 }

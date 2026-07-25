@@ -19,14 +19,9 @@ import {
 } from '../../design-system';
 import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { getDestination } from '../../data/destinations';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { getActivities, getActivity } from '../../services/activitiesApi';
 import './ActivityPage.scss';
-
-const BOOKING_STEPS = [
-  { title: 'Send your request', description: 'Choose your date, group size and preferred activity format.' },
-  { title: 'We check conditions', description: 'A local manager confirms timing, guide availability and weather details.' },
-  { title: 'Receive confirmation', description: 'Get your meeting point and final activity details before payment.' },
-];
 
 const REVIEW_DATE_FORMATTER = new Intl.DateTimeFormat('en', { month: 'long', year: 'numeric' });
 
@@ -46,6 +41,7 @@ export function ActivityPage() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const galleryTriggerRef = useRef(null);
   const category = getDestination('activities');
+  const { t, tList } = useLanguage();
 
   useEffect(() => {
     let active = true;
@@ -76,8 +72,8 @@ export function ActivityPage() {
   }, []);
 
   if (status === 'loading') return <main className="activity-data-state">Loading activity…</main>;
-  if (status === 'not-found') return <main className="activity-data-state"><h1>Activity not found</h1><Link to="/activities">Back to activities</Link></main>;
-  if (status === 'error' || !activity) return <main className="activity-data-state"><h1>Activity is temporarily unavailable</h1><p>Please try again later.</p></main>;
+  if (status === 'not-found') return <main className="activity-data-state"><h1>{t('activity.notFound')}</h1><Link to="/activities">{t('activity.backToList')}</Link></main>;
+  if (status === 'error' || !activity) return <main className="activity-data-state"><h1>{t('activity.unavailable')}</h1><p>{t('object.unavailableText')}</p></main>;
 
   const facts = activity.facts
     .filter((item) => item.label.toLowerCase() !== 'elevation change')
@@ -102,7 +98,7 @@ export function ActivityPage() {
     object: { id: `activity:${activity.id ?? activity.slug}`, slug: activity.slug, name: activity.name, typeLabel: activity.category, image: activity.image },
     basePrice: activity.priceAmount,
     currency: activity.currency,
-    availability: 'Request availability',
+    availability: t('object.requestAvailability'),
   });
   const startBooking = (answers) => {
     saveBookingDraft(createBookingDraft({ definition: bookingDefinition, offer: bookingOffer, answers }));
@@ -116,13 +112,13 @@ export function ActivityPage() {
   const heroMedia = activity.heroImage ? <div className="activity-object-media">
     <img src={activity.heroImage} alt={activity.heroImageAlt} loading="eager" />
     {gallery.length ? <button ref={galleryTriggerRef} className="activity-object-media__gallery" type="button" onClick={openGallery}>
-      <span><strong>Open gallery</strong><small>{gallery.length} {gallery.length === 1 ? 'photo' : 'photos'}</small></span><span aria-hidden="true">↗</span>
+      <span><strong>{t('object.openGallery')}</strong><small>{gallery.length} {t(gallery.length === 1 ? 'object.photo' : 'object.photos')}</small></span><span aria-hidden="true">↗</span>
     </button> : null}
   </div> : <MediaPlaceholder label={activity.name} kind="activity" />;
 
   const hero = <ObjectHero
     variant="centered"
-    breadcrumbs={<BackLink to="/activities">Back to activities</BackLink>}
+    breadcrumbs={<BackLink to="/activities">{t('activity.backToList')}</BackLink>}
     badges={[activity.category]}
     title={activity.name}
     description={activity.description}
@@ -131,16 +127,16 @@ export function ActivityPage() {
   />;
   const content = <ActivityObjectPattern
     mainTags={<ObjectMainTags items={facts} />}
-    objectDescription={<ObjectDescription kicker="About the activity" title="What to expect" tags={activity.tags} tagsLabel="Useful details"><p>{activity.description}</p></ObjectDescription>}
+    objectDescription={<ObjectDescription kicker={t('activity.aboutKicker')} title={t('object.aboutTitle')} tags={activity.tags} tagsLabel={t('object.tagsLabel')}><p>{activity.description}</p></ObjectDescription>}
     additionalSections={[
-      ...(activity.schedule?.length ? [{ type: 'activitySchedule', kicker: 'Plan your day', title: 'Schedule', items: activity.schedule }] : []),
-      ...(activity.included?.length || activity.excluded?.length ? [{ type: 'includedServices', kicker: 'Booking details', title: 'Included and not included', includedItems: activity.included, excludedItems: activity.excluded }] : []),
-      ...(activity.equipment?.length ? [{ type: 'equipmentList', kicker: 'Pack for the day', title: 'What to bring', items: activity.equipment }] : [])
+      ...(activity.schedule?.length ? [{ type: 'activitySchedule', kicker: t('activity.scheduleKicker'), title: t('activity.scheduleTitle'), items: activity.schedule }] : []),
+      ...(activity.included?.length || activity.excluded?.length ? [{ type: 'includedServices', kicker: t('activity.bookingDetailsKicker'), title: t('activity.includedTitle'), includedItems: activity.included, excludedItems: activity.excluded }] : []),
+      ...(activity.equipment?.length ? [{ type: 'equipmentList', kicker: t('activity.packKicker'), title: t('activity.packTitle'), items: activity.equipment }] : [])
     ]}
-    reviews={<ObjectReviews kicker="Guest experience" title="Reviews" rating={{ value: activity.rating, label: activity.reviews }} reviews={reviews} />}
-    bookingSteps={<BookingSteps context="object" items={BOOKING_STEPS} />}
-    faqSection={<FaqAccordion variant="object" kicker="Good to know" title="Common questions" items={category?.faq ?? []} />}
-    relatedListings={<ObjectRelatedListings cardType="activity" title="More activities" items={related} />}
+    reviews={<ObjectReviews kicker={t('activity.reviewsKicker')} title={t('activity.reviewsTitle')} rating={{ value: activity.rating, label: activity.reviews }} reviews={reviews} />}
+    bookingSteps={<BookingSteps context="object" items={tList('activity.bookingSteps')} />}
+    faqSection={<FaqAccordion variant="object" items={tList('catalog.activities.faq')} />}
+    relatedListings={<ObjectRelatedListings cardType="activity" title={t('activity.related')} items={related} />}
     bookingWidget={<BookingConfigurator
       title={bookingDefinition.title}
       priceLabel={bookingDefinition.priceLabel}
@@ -151,13 +147,13 @@ export function ActivityPage() {
       entryNote={bookingDefinition.entryNote}
       confirmationText={bookingDefinition.confirmationText}
       estimate={(answers) => estimateBookingTotal(bookingDefinition, bookingOffer, answers)}
-      actionLabel="Continue request"
+      actionLabel={t('object.continueRequest')}
       onContinue={startBooking}
     />}
   />;
 
   return <>
     <div className="activity-detail"><ObjectDetailPageTemplate navbar={<SiteNavbar />} hero={hero} content={content} footer={<SiteFooter />} /></div>
-    <ObjectMediaGallery images={gallery} index={galleryIndex} objectName={activity.name} objectLabel="Activity media" isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
+    <ObjectMediaGallery images={gallery} index={galleryIndex} objectName={activity.name} objectLabel={t('activity.galleryLabel')} isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
   </>;
 }

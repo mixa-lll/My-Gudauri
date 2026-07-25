@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Container, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
 import { HomeHeroSearch } from '../../components/product';
-import { FAQ_ITEMS } from '../../data/faqItems';
 import { HOME_CATEGORIES } from '../../data/siteCategories';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructors } from '../../services/instructorsApi';
 import './HomePage.scss';
 
 export function HomePage() {
+  const { t, tList } = useLanguage();
   const [instructors, setInstructors] = useState([]);
 
   useEffect(() => {
@@ -42,12 +43,12 @@ export function HomePage() {
                 </div>
 
                 <div className="hero-content">
-                  <div className="hero-meta-pills" aria-label="Gudauri guide context">
-                    <Badge size="sm" mediaOverlay>Local guide</Badge>
-                    <Badge size="sm" mediaOverlay>Winter 2026</Badge>
+                  <div className="hero-meta-pills" aria-label={t('home.heroContextLabel')}>
+                    <Badge size="sm" mediaOverlay>{t('home.heroBadgeLocal')}</Badge>
+                    <Badge size="sm" mediaOverlay>{t('home.heroBadgeSeason')}</Badge>
                   </div>
                   <h1 className="hero-title-main">MY GUDAURI</h1>
-                  <p className="hero-subtitle">Trusted local services for an effortless mountain stay.</p>
+                  <p className="hero-subtitle">{t('home.heroSubtitle')}</p>
                   <HomeHeroSearch />
                 </div>
 
@@ -59,8 +60,8 @@ export function HomePage() {
                     </svg>
                   </span>
                   <span className="hero-about-link__copy">
-                    <strong>About Gudauri</strong>
-                    <small>Resort map &amp; guide</small>
+                    <strong>{t('home.aboutLinkTitle')}</strong>
+                    <small>{t('home.aboutLinkNote')}</small>
                   </span>
                   <span className="hero-about-link__arrow" aria-hidden="true">↗</span>
                 </Link>
@@ -75,17 +76,17 @@ export function HomePage() {
               <div className="service-grid">
               <SectionHeading
                 className="service-grid-intro"
-                kicker="Gudauri essentials"
-                title={<>Everything you need,<br /><span>in one place.</span></>}
-                description="Plan less. Ski more. Choose verified people and services with clear details and local support."
+                kicker={t('home.essentialsKicker')}
+                title={<>{t('home.essentialsTitleLead')}<br /><span>{t('home.essentialsTitleAccent')}</span></>}
+                description={t('home.essentialsDescription')}
               />
                 {HOME_CATEGORIES.map((category) => (
                   <Link className={`service-card ${category.homeClass}`} to={category.href} key={category.slug}>
-                    <h2>{category.title}</h2>
-                    <p>{category.description}</p>
-                    {category.image ? <img className={`service-art ${category.homeClass}-art`} src={category.image} alt={category.imageAlt} /> : null}
+                    <h2>{t(`categories.${category.slug}.title`)}</h2>
+                    <p>{t(`categories.${category.slug}.description`)}</p>
+                    {category.image ? <img className={`service-art ${category.homeClass}-art`} src={category.image} alt={t(`categories.${category.slug}.imageAlt`)} /> : null}
                     <div className={`tags-row ${category.tagsClass ?? ''}`.trim()}>
-                      {category.tags.map((tag) => (
+                      {tList(`categories.${category.slug}.tags`).map((tag) => (
                         <Badge size="sm" tone={category.hotTags ? 'accent' : 'neutral'} mediaOverlay={!category.hotTags} key={tag}>{tag}</Badge>
                       ))}
                     </div>
@@ -100,16 +101,14 @@ export function HomePage() {
           <Container width="wide">
             <div className="grid-12 instructors-layout">
               <div className="instructors-heading">
-                <SectionHeading kicker="Verified professionals" title="Find your instructor" />
+                <SectionHeading kicker={t('home.instructorsKicker')} title={t('home.instructorsTitle')} />
               </div>
 
               <div className="instructors-grid">
                 <article className="cta-card">
-                  <p>
-                    Compare experience, languages and real guest reviews to find the right teaching style for you.
-                  </p>
+                  <p>{t('home.instructorsIntro')}</p>
                   <Link className="outline-btn ui-btn-md" to="/instructors">
-                    Show all instructors
+                    {t('home.instructorsAction')}
                     <img className="ui-btn-md__arrow" src="/assets/ui-kit/btn-md-arrow-dark.png" alt="" aria-hidden="true" />
                   </Link>
                 </article>
@@ -124,7 +123,7 @@ export function HomePage() {
 
         <section className="faq-block">
           <Container width="wide">
-            <FaqAccordion className="faq-layout" items={FAQ_ITEMS} />
+            <FaqAccordion className="faq-layout" />
           </Container>
         </section>
 
