@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><style>
+body{margin:0;background:#eceae7;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:#2a78d6}a:hover{color:#1a5cb0}
+.dv-turn{padding:40px 44px 32px;scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 18px}.dv-tid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font-size:16px;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:14px;color:rgba(0,0,0,.6);max-width:820px}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font-size:14px;color:rgba(0,0,0,.55);max-width:900px;line-height:1.6}
+.mtx-sub{font-size:14px;color:rgba(0,0,0,.55);margin:0 0 26px;max-width:900px;line-height:1.55}
+.wf{color:#4a4a4a;font-size:13px}
+.r{display:flex;align-items:center}.c{display:flex;flex-direction:column}
+.box{border:none;border-radius:4px;background:#e4e2df}.ph{border:none;border-radius:4px;background:#d4d2ce}.ln{height:8px;border-radius:3px;background:#d0cecb}.lnd{height:8px;border-radius:3px;background:#a9a7a3}
+.btn{display:flex;align-items:center;justify-content:center;background:#6b6966;color:#f4f3f1;border-radius:6px;font-size:14px;padding:8px 16px;white-space:nowrap}
+.btnp{display:flex;align-items:center;justify-content:center;background:#2b2a28;color:#f4f3f1;border-radius:6px;font-size:14px;padding:9px 18px;white-space:nowrap}
+.bo{display:flex;align-items:center;justify-content:center;border:1.5px solid #cbc9c5;border-radius:6px;font-size:13px;padding:7px 14px;background:#f4f3f1;color:#5a5855;white-space:nowrap}
+.pill{border:none;border-radius:99px;padding:3px 12px;font-size:12.5px;background:#dcdad7;color:#5a5855;white-space:nowrap}
+.tag{background:#d8d6d2;border-radius:3px;padding:3px 9px;font-size:11.5px;color:#6a6864;white-space:nowrap}
+.mut{color:#8f8d89;font-size:13px}.note{font-size:12.5px;color:#8a8884;font-style:italic;line-height:1.5}
+.h1{font-size:26px;line-height:1.15;color:#333;font-weight:600}.h2{font-size:17px;color:#3d3d3d;font-weight:600}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#9a9895;font-weight:600}
+.star{color:#c8734f;font-size:12.5px;white-space:nowrap}
+/* admin shell */
+.sb{width:158px;flex:none;background:#e6e4e1;border-right:1px solid #d6d4d0;padding:14px 10px;display:flex;flex-direction:column;gap:3px}
+.sbi{display:flex;align-items:center;gap:9px;padding:8px 11px;font-size:13.5px;color:#5a5855;border-radius:7px;white-space:nowrap}
+.sbi.on{background:#2b2a28;color:#f4f3f1}
+.sbi .dot{width:6px;height:6px;border-radius:50%;background:#b6b3ae;flex:none}
+.sbsub{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 20px;padding-left:9px;border-left:1.5px solid #d3d1cd}
+.sbsi{padding:5px 8px;font-size:12.5px;color:#7d7a74;border-radius:5px;white-space:nowrap}
+.sbsi.on{background:#d8d6d2;color:#2b2a28}
+.topbar{display:flex;align-items:center;gap:12px;padding:12px 20px;background:#f4f3f1;border-bottom:1px solid #e0ded9}
+.cattab{padding:7px 13px;border-radius:99px;font-size:13px;background:#e8e6e2;color:#5a5855;white-space:nowrap;border:1.5px solid transparent}
+.cattab.on{background:#2b2a28;color:#f4f3f1;border-color:#2b2a28}
+/* form */
+.fld{display:flex;flex-direction:column;gap:5px}
+.flab{font-size:11.5px;color:#8f8d89}
+.req{color:#c05;font-size:11px}
+.inp{background:#fff;border:1px solid #d3d1cd;border-radius:6px;min-height:32px;display:flex;align-items:center;padding:0 11px;font-size:13px;color:#7d7a74}
+.ta{background:#fff;border:1px solid #d3d1cd;border-radius:6px;padding:9px 11px;font-size:13px;color:#7d7a74;line-height:1.5}
+.chipadd{border:1.5px dashed #cbc9c5;border-radius:99px;padding:3px 12px;font-size:12.5px;color:#8f8d89;background:transparent;white-space:nowrap}
+.chip{border-radius:99px;padding:3px 10px 3px 12px;font-size:12.5px;background:#e0ded9;color:#4a4a4a;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip .x{color:#a9a7a3;font-size:13px}
+.seg{display:inline-flex;background:#e4e2df;border-radius:99px;padding:3px;gap:2px}
+.segi{padding:6px 14px;border-radius:99px;font-size:13px;color:#6a6864;white-space:nowrap}
+.segi.on{background:#fff;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.tglrow{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.tgl{width:34px;height:19px;border-radius:99px;background:#cbc9c5;position:relative;flex:none}
+.tgl.on{background:#2b2a28}.tgl i{position:absolute;top:2px;width:15px;height:15px;border-radius:50%;background:#fff;left:2px}.tgl.on i{left:17px}
+.thead{display:flex;padding:9px 14px;font-size:11.5px;color:#9a9895;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e6e4e1;background:#f8f7f5}
+.trow{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid #eceae5;font-size:13px}
+.badge{font-size:11px;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.b-pub{background:#dfece0;color:#3f7a4c}.b-draft{background:#ece7d8;color:#8a7a3c}
+/* section with letter tag */
+.sec{display:flex;flex-direction:column;gap:12px;border-top:1px solid #eceae5;padding-top:15px}
+.sechd{display:flex;align-items:center;gap:9px}
+.ltag{width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:5px;background:#c8734f;color:#fff;font:600 11px/1 ui-monospace,monospace}
+.goesto{margin-left:auto;font-size:11px;color:#a09d98;white-space:nowrap}
+.goesto b{color:#c8734f;font-weight:600}
+.autobar{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:8px;background:#f2efe9;border:1px dashed #d8d3ca}
+/* phone frame */
+.phone{width:230px;flex:none;align-self:center;background:#1a1a1a;border-radius:30px;padding:8px;box-shadow:0 12px 34px rgba(0,0,0,.16)}
+.phone-scr{background:#f4f3f1;border-radius:23px;overflow:hidden;position:relative}
+.phone-notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:56px;height:5px;border-radius:99px;background:rgba(0,0,0,.28);z-index:3}
+.phone-body{max-height:420px;overflow:hidden;position:relative}
+.phone-body::after{content:'';position:absolute;left:0;right:0;bottom:0;height:44px;background:linear-gradient(transparent,#f4f3f1);pointer-events:none}
+.mp-hero{position:relative;height:196px;background:#cdcbc7;display:flex;flex-direction:column;justify-content:space-between;padding:14px 12px}
+.mp-hero .glass{align-self:flex-start;background:rgba(255,255,255,.82);backdrop-filter:blur(6px);border-radius:99px;padding:3px 9px;font-size:10px;color:#4a4a4a}
+.mp-name{font-family:'Paytone One',Impact,sans-serif;font-size:26px;line-height:.9;color:#fff;text-transform:uppercase;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.mp-sec{padding:13px 12px;background:#f4f3f1}
+.mp-facts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mp-fact{background:#fff;border:1px solid #eceae5;border-radius:12px;padding:9px}
+.mp-card{background:#fff;border:1px solid #eceae5;border-radius:14px;padding:11px}
+.mp-h{font-size:12px;color:#2b2a28;font-weight:600}
+.mp-eye{font-size:8.5px;text-transform:uppercase;letter-spacing:.09em;color:#a09d98;font-weight:600}
+.conn{color:#c8734f;font-family:ui-monospace,monospace;font-size:11px;font-weight:600}
+</style></helmet>
+
+<section class="dv-turn" id="t1" data-screen-label="Админка — вайрфреймы">
+<div class="dv-thd"><span class="dv-tid">Админка</span><span class="dv-tname">CMS — добавление инструктора с живым превью и точным соответствием странице</span></div>
+<p class="mtx-sub">Отдельная страница под доступом администратора (<b>/admin</b>). Скелет стандартной CMS: слева разделы, сверху переключатель категорий, в центре — работа с контентом. Главный сценарий — <b>завести карточку</b> и <b>сразу видеть результат</b>. Поля редактора собраны <b>один-в-один по блокам реальной страницы инструктора</b> (из прототипа): ничего лишнего и ничего не потеряно — каждое поле помечено буквой <span class="ltag" style="display:inline-flex;vertical-align:middle">A</span> и попадает в одноимённый блок страницы. Ниже: <a href="#1a">1a</a> оболочка и каталог, <a href="#1b">1b</a> редактор + превью (карточка / мобильная страница), <a href="#1c">1c</a> карта соответствия «поле → блок страницы».</p>
+<div class="dv-opts">
+
+<!-- ============ 1a — ОБОЛОЧКА + КАТАЛОГ ============ -->
+<div class="dv-opt" id="1a" data-screen-label="1a Оболочка админки и каталог"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Оболочка и каталог — куда попадаешь, переключатель категорий, список объектов</div>
+<div class="dv-card wf" style="width:760px;display:flex;min-height:520px">
+  <div class="sb">
+    <div class="r" style="gap:6px;padding:4px 11px 12px"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c8734f">.</span></span></div>
+    <span class="eyebrow" style="padding:0 11px 4px">Управление</span>
+    <div class="sbi on"><span class="dot" style="background:#f4f3f1"></span>Контент</div>
+    <div class="sbsub">
+      <div class="sbsi on">Инструкторы</div>
+      <div class="sbsi">Активности</div>
+      <div class="sbsi">Прокат</div>
+      <div class="sbsi">Трансфер</div>
+      <div class="sbsi">Туры</div>
+      <div class="sbsi">Услуги</div>
+      <div class="sbsi">Места</div>
+      <div class="sbsi">Недвижимость</div>
+    </div>
+    <div class="sbi"><span class="dot"></span>Заявки <span class="badge b-draft" style="margin-left:auto">7</span></div>
+    <div class="sbi"><span class="dot"></span>Отзывы</div>
+    <div class="sbi"><span class="dot"></span>Статьи</div>
+    <div style="flex:1"></div>
+    <div class="sbi"><span class="dot"></span>Настройки</div>
+    <div class="r" style="gap:8px;padding:9px 11px;border-top:1px solid #d6d4d0;margin-top:6px"><div class="ph" style="width:26px;height:26px;border-radius:50%;flex:none"></div><div class="c" style="gap:1px"><span style="font-size:12.5px">Оператор</span><span class="mut" style="font-size:10.5px">admin</span></div></div>
+  </div>
+  <div class="c" style="flex:1">
+    <div class="topbar" style="gap:7px;flex-wrap:wrap">
+      <span class="cattab on">Инструкторы <span style="opacity:.6">12</span></span>
+      <span class="cattab">Активности <span style="opacity:.55">8</span></span>
+      <span class="cattab">Прокат <span style="opacity:.55">5</span></span>
+      <span class="cattab">Трансфер</span>
+      <span class="cattab">Туры</span>
+      <span class="cattab">Места</span>
+    </div>
+    <div class="r" style="justify-content:space-between;padding:16px 20px 12px;gap:12px">
+      <div class="c" style="gap:3px"><span class="h1" style="font-size:22px">Инструкторы</span><span class="mut" style="font-size:12.5px">12 объектов · 10 опубликовано · 2 черновика</span></div>
+      <a href="#1b" class="btnp" style="text-decoration:none">+ Добавить инструктора</a>
+    </div>
+    <div class="r" style="gap:10px;padding:0 20px 14px">
+      <div class="inp" style="flex:1;color:#a9a7a3">Поиск по имени…</div>
+      <div class="bo">Дисциплина ▾</div>
+      <div class="bo">Статус ▾</div>
+    </div>
+    <div style="margin:0 20px;border:1px solid #e6e4e1;border-radius:8px;overflow:hidden">
+      <div class="thead"><span style="width:34px"></span><span style="flex:1">Имя</span><span style="width:150px">Специализация</span><span style="width:70px">Статус</span><span style="width:64px">Изменён</span><span style="width:20px"></span></div>
+      <div class="trow"><span style="width:34px"><span class="ph" style="width:26px;height:26px;border-radius:5px;display:block"></span></span><span style="flex:1">Михаил Андреев</span><span style="width:150px"><span class="tag">Дети</span> <span class="tag">Карвинг</span></span><span style="width:70px"><span class="badge b-pub">Опубл.</span></span><span style="width:64px" class="mut">2 дн</span><span style="width:20px;color:#b6b3ae">⋯</span></div>
+      <div class="trow"><span style="width:34px"><span class="ph" style="width:26px;height:26px;border-radius:5px;display:block"></span></span><span style="flex:1">Олег Юнг</span><span style="width:150px"><span class="tag">Фрирайд</span></span><span style="width:70px"><span class="badge b-pub">Опубл.</span></span><span style="width:64px" class="mut">5 дн</span><span style="width:20px;color:#b6b3ae">⋯</span></div>
+      <div class="trow" style="background:#faf9f7"><span style="width:34px"><span class="ph" style="width:26px;height:26px;border-radius:5px;display:block;background:#dcdad7"></span></span><span style="flex:1">Нина Барамидзе <span class="mut" style="font-size:11px">— нет фото</span></span><span style="width:150px"><span class="tag">Дети</span> <span class="tag">Группа</span></span><span style="width:70px"><span class="badge b-draft">Черновик</span></span><span style="width:64px" class="mut">сейчас</span><span style="width:20px;color:#b6b3ae">⋯</span></div>
+      <div class="trow"><span style="width:34px"><span class="ph" style="width:26px;height:26px;border-radius:5px;display:block"></span></span><span style="flex:1">Андрей Григорьев</span><span style="width:150px"><span class="tag">Семья</span> <span class="tag">Новички</span></span><span style="width:70px"><span class="badge b-pub">Опубл.</span></span><span style="width:64px" class="mut">1 нед</span><span style="width:20px;color:#b6b3ae">⋯</span></div>
+      <div class="trow" style="border-bottom:none"><span style="width:34px"><span class="ph" style="width:26px;height:26px;border-radius:5px;display:block"></span></span><span style="flex:1">Давид Кипиани</span><span style="width:150px"><span class="tag">Фристайл</span></span><span style="width:70px"><span class="badge b-pub">Опубл.</span></span><span style="width:64px" class="mut">1 нед</span><span style="width:20px;color:#b6b3ae">⋯</span></div>
+    </div>
+    <span class="note" style="padding:12px 20px 18px">Один экран для любой категории — сверху переключаешь, набор колонок и полей подставляется под категорию. «Строка ⋯» → редактировать · дублировать · снять с публикации · удалить.</span>
+  </div>
+</div>
+<span class="note" style="max-width:760px">Клик по «+ Добавить» или по строке открывает редактор <a href="#1b">1b</a>.</span>
+</div>
+
+<!-- ============ 1b — РЕДАКТОР + ЖИВОЕ ПРЕВЬЮ ============ -->
+<div class="dv-opt" id="1b" data-screen-label="1b Редактор с живым превью"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Редактор — слева поля (по блокам реальной страницы), справа превью: карточка или мобильная страница</div>
+<div class="dv-card wf" style="width:960px;display:flex;flex-direction:column">
+  <div class="r" style="justify-content:space-between;padding:12px 18px;border-bottom:1px solid #e6e4e1;background:#f4f3f1;gap:12px">
+    <div class="r" style="gap:9px"><span class="mut" style="font-size:12.5px">← Инструкторы /</span><span style="font-size:14px;color:#2b2a28">Новый инструктор</span><span class="badge b-draft">Черновик</span></div>
+    <div class="r" style="gap:9px"><span class="mut" style="font-size:11.5px">Сохранено ✓</span><div class="bo">Смотреть на сайте ↗</div><div class="btnp">Опубликовать</div></div>
+  </div>
+
+  <div class="r" style="align-items:stretch">
+    <!-- LEFT: FORM mapped to page blocks -->
+    <div class="c" style="flex:1;padding:18px;gap:16px;border-right:1px solid #e6e4e1;min-width:0">
+      <div class="fld"><span class="flab">Категория объекта</span><div class="r" style="gap:8px"><div class="inp" style="flex:1;color:#2b2a28">Инструктор</div><span class="mut" style="font-size:11.5px;align-self:center">поля меняются под категорию</span></div></div>
+
+      <!-- A -->
+      <div class="sec" style="border-top:none;padding-top:0">
+        <div class="sechd"><span class="ltag">A</span><span class="eyebrow">Основное</span><span class="goesto">→ <b>шапка страницы</b> + карточка</span></div>
+        <div class="r" style="gap:14px;align-items:flex-start">
+          <div class="c" style="gap:5px;flex:none"><span class="flab">Главное фото <span class="req">*</span></span><div class="ph c" style="width:88px;height:106px;align-items:center;justify-content:center;gap:5px;border:1.5px dashed #c4c2be;background:#efeeeb"><span style="font-size:20px;color:#b6b3ae">↑</span><span class="mut" style="font-size:10.5px;text-align:center">перетащи<br>файл</span></div></div>
+          <div class="c" style="gap:11px;flex:1">
+            <div class="fld"><span class="flab">Имя (как на сайте) <span class="req">*</span></span><div class="inp" style="color:#2b2a28">Михаил Андреев</div></div>
+            <div class="fld"><span class="flab">Дисциплины <span class="req">*</span></span><div class="r" style="gap:7px;flex-wrap:wrap"><span class="pill" style="background:#2b2a28;color:#f4f3f1">Лыжи</span><span class="pill" style="background:#2b2a28;color:#f4f3f1">Сноуборд</span><span class="pill">Фрирайд</span><span class="chipadd">+</span></div></div>
+          </div>
+        </div>
+        <div class="fld"><span class="flab">Короткое интро (1–2 строки под именем)</span><div class="ta" style="min-height:38px">Спокойное обучение с упором на технику: первые повороты и уверенный карвинг.</div></div>
+        <div class="tglrow" style="padding:0"><span style="font-size:13px">Плашка «Свободен на этой неделе»</span><span class="tgl on"><i></i></span></div>
+      </div>
+
+      <!-- B -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">B</span><span class="eyebrow">Факты</span><span class="goesto">→ <b>4 плашки</b> + мини-статистика</span></div>
+        <div class="r" style="gap:10px">
+          <div class="fld" style="flex:1"><span class="flab">Стаж, лет</span><div class="inp" style="color:#2b2a28">5</div></div>
+          <div class="fld" style="flex:1"><span class="flab">Сертификат / квалификация</span><div class="inp" style="color:#2b2a28">Проверенный инструктор</div></div>
+        </div>
+        <div class="fld"><span class="flab">Языки</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="chip">Ge <span class="x">×</span></span><span class="chip">En <span class="x">×</span></span><span class="chip">Ru <span class="x">×</span></span><span class="chipadd">+ язык</span></div></div>
+        <div class="note">Специализация, язык, стаж и сертификат складываются в 4 плашки-факта автоматически — отдельно их вводить не нужно.</div>
+      </div>
+
+      <!-- C -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">C</span><span class="eyebrow">Об инструкторе</span><span class="goesto">→ блок <b>About</b> + теги</span></div>
+        <div class="fld"><span class="flab">Текст профиля (абзацы)</span><div class="ta" style="min-height:64px">Сертифицированный инструктор с 8-летним опытом в Гудаури. Работаю со взрослыми и подростками…</div></div>
+        <div class="fld"><span class="flab">Теги-специализации</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="chip">Новички <span class="x">×</span></span><span class="chip">Дети <span class="x">×</span></span><span class="chip">Карвинг <span class="x">×</span></span><span class="chip">Уверенность <span class="x">×</span></span><span class="chipadd">+ тег</span></div></div>
+      </div>
+
+      <!-- D -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">D</span><span class="eyebrow">Форматы занятий</span><span class="goesto">→ блок <b>Lesson formats</b></span></div>
+        <div class="c" style="gap:6px">
+          <div class="r" style="gap:8px"><div class="inp" style="flex:1;color:#2b2a28">Частный урок</div><div class="inp" style="width:160px;color:#7d7a74">1–3 гостя · любой уровень</div><span style="color:#b6b3ae">×</span></div>
+          <div class="r" style="gap:8px"><div class="inp" style="flex:1;color:#2b2a28">Дети и семьи</div><div class="inp" style="width:160px;color:#7d7a74">возраст в заявке</div><span style="color:#b6b3ae">×</span></div>
+          <span class="chipadd" style="align-self:flex-start">+ добавить формат</span>
+        </div>
+      </div>
+
+      <!-- E -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">E</span><span class="eyebrow">Что входит</span><span class="goesto">→ блок <b>What to expect</b></span></div>
+        <div class="r" style="gap:24px">
+          <div class="fld" style="flex:1"><span class="flab">Включено</span><div class="r" style="gap:5px;flex-wrap:wrap"><span class="chip">Урок <span class="x">×</span></span><span class="chip">Разбор техники <span class="x">×</span></span><span class="chipadd">+</span></div></div>
+          <div class="fld" style="flex:1"><span class="flab">Отдельно</span><div class="r" style="gap:5px;flex-wrap:wrap"><span class="chip">Прокат <span class="x">×</span></span><span class="chip">Ски-пасс <span class="x">×</span></span><span class="chipadd">+</span></div></div>
+        </div>
+      </div>
+
+      <!-- F -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">F</span><span class="eyebrow">Место встречи</span><span class="goesto">→ блок <b>Meeting point</b></span></div>
+        <div class="fld"><span class="flab">Точка сбора</span><div class="inp" style="color:#2b2a28">Нижняя станция подъёмника Gudauri 1</div></div>
+        <div class="ph" style="height:64px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#8a8884">поставить точку на карте</div>
+      </div>
+
+      <!-- G -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">G</span><span class="eyebrow">Правила занятий</span><span class="goesto">→ блок <b>Lesson rules</b></span></div>
+        <div class="c" style="gap:6px">
+          <div class="r" style="gap:8px"><div class="inp" style="width:88px;color:#2b2a28">Время</div><div class="inp" style="flex:1;color:#7d7a74">приходите заранее…</div><span style="color:#b6b3ae">×</span></div>
+          <div class="r" style="gap:8px"><div class="inp" style="width:88px;color:#2b2a28">Погода</div><div class="inp" style="flex:1;color:#7d7a74">маршрут под условия…</div><span style="color:#b6b3ae">×</span></div>
+          <span class="chipadd" style="align-self:flex-start">+ правило</span>
+          <span class="note">Есть готовый набор правил по умолчанию — можно оставить как есть.</span>
+        </div>
+      </div>
+
+      <!-- H -->
+      <div class="sec">
+        <div class="sechd"><span class="ltag">H</span><span class="eyebrow">Медиа / галерея</span><span class="goesto">→ блок <b>Media</b> + галерея в шапке</span></div>
+        <div class="r" style="gap:6px;flex-wrap:wrap">
+          <div class="ph" style="width:56px;height:56px;border-radius:8px"></div>
+          <div class="ph" style="width:56px;height:56px;border-radius:8px"></div>
+          <div class="ph" style="width:56px;height:56px;border-radius:8px"></div>
+          <div class="ph c" style="width:56px;height:56px;border-radius:8px;align-items:center;justify-content:center;border:1.5px dashed #c4c2be;background:#efeeeb;color:#b6b3ae;font-size:20px">+</div>
+        </div>
+      </div>
+
+      <!-- auto / fixed -->
+      <div class="sec">
+        <div class="sechd"><span class="eyebrow">Заполняется автоматически</span></div>
+        <div class="autobar"><span class="star">★</span><div class="c" style="gap:1px"><span style="font-size:12.5px;color:#4a4a4a">Рейтинг и отзывы</span><span class="mut" style="font-size:11px">блок Reviews — собирается из подтверждённых заявок, вручную не вводится</span></div></div>
+        <div class="autobar"><span style="color:#c8734f;font-weight:600">=</span><div class="c" style="gap:1px"><span style="font-size:12.5px;color:#4a4a4a">Единый тариф 345 gel/час</span><span class="mut" style="font-size:11px">карточка бронирования — общий для всех, задаётся в «Настройках»</span></div></div>
+      </div>
+
+      <div class="c" style="gap:2px;border-top:1px solid #eceae5;padding-top:8px">
+        <div class="tglrow"><span style="font-size:13px">Показывать в каталоге</span><span class="tgl on"><i></i></span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: LIVE PREVIEW -->
+    <div class="c" style="width:300px;flex:none;background:#f0efec;padding:16px 14px 20px;gap:12px">
+      <div class="r" style="justify-content:space-between;align-items:center"><span class="eyebrow">Живое превью</span><div class="seg"><span class="segi">Карточка</span><span class="segi on">Страница</span></div></div>
+
+      <!-- MOBILE PAGE PREVIEW -->
+      <div class="phone">
+        <div class="phone-scr">
+          <div class="phone-notch"></div>
+          <div class="phone-body">
+            <!-- A hero -->
+            <div class="mp-hero">
+              <span class="conn" style="position:absolute;top:8px;right:9px;background:#fff;border-radius:5px;padding:1px 5px">A</span>
+              <span class="glass">● Свободен на этой неделе</span>
+              <div class="c" style="gap:6px">
+                <div class="r" style="gap:4px"><span class="tag" style="background:rgba(255,255,255,.85)">Лыжи</span><span class="tag" style="background:rgba(255,255,255,.85)">Сноуборд</span></div>
+                <span class="mp-name">Михаил<br>Андреев</span>
+                <span class="glass" style="background:rgba(255,255,255,.9)"><span class="star">★</span> 4.8 · 6 отзывов</span>
+              </div>
+            </div>
+            <!-- B facts -->
+            <div class="mp-sec">
+              <div class="r" style="gap:6px;margin-bottom:7px"><span class="mp-eye">Факты</span><span class="conn">B</span></div>
+              <div class="mp-facts">
+                <div class="mp-fact"><span class="mp-eye">Специализация</span><div class="r" style="gap:4px;margin-top:6px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span></div></div>
+                <div class="mp-fact"><span class="mp-eye">Язык</span><div class="r" style="gap:4px;margin-top:6px"><span class="tag">Ge</span><span class="tag">En</span><span class="tag">Ru</span></div></div>
+                <div class="mp-fact"><span class="mp-eye">Опыт</span><div class="r" style="gap:4px;margin-top:6px"><span class="tag">5+ лет</span></div></div>
+                <div class="mp-fact"><span class="mp-eye">Сертификат</span><div class="r" style="gap:4px;margin-top:6px"><span class="tag">Проверен</span></div></div>
+              </div>
+            </div>
+            <!-- C about -->
+            <div class="mp-sec" style="padding-top:0">
+              <div class="mp-card">
+                <div class="r" style="gap:6px;margin-bottom:7px"><span class="mp-eye">Об инструкторе</span><span class="conn">C</span></div>
+                <div class="ln" style="width:100%"></div><div class="ln" style="width:94%;margin-top:5px"></div><div class="ln" style="width:70%;margin-top:5px"></div>
+                <div class="r" style="gap:5px;flex-wrap:wrap;margin-top:9px"><span class="chip" style="padding:3px 10px">Новички</span><span class="chip" style="padding:3px 10px">Дети</span><span class="chip" style="padding:3px 10px">Карвинг</span></div>
+              </div>
+            </div>
+            <!-- D formats -->
+            <div class="mp-sec" style="padding-top:0">
+              <div class="mp-card">
+                <div class="r" style="gap:6px;margin-bottom:8px"><span class="mp-eye">Форматы занятий</span><span class="conn">D</span></div>
+                <div class="r" style="justify-content:space-between;padding:8px;background:#f6f5f2;border-radius:9px;margin-bottom:5px"><span class="mp-h">Частный урок</span><span class="tag">1–3 гостя</span></div>
+                <div class="r" style="justify-content:space-between;padding:8px;background:#f6f5f2;border-radius:9px"><span class="mp-h">Дети и семьи</span><span class="tag">возраст в заявке</span></div>
+              </div>
+            </div>
+            <!-- E included -->
+            <div class="mp-sec" style="padding-top:0">
+              <div class="mp-card">
+                <div class="r" style="gap:6px;margin-bottom:8px"><span class="mp-eye">Что входит</span><span class="conn">E</span></div>
+                <span class="mp-eye">Включено</span><div class="r" style="gap:4px;margin:5px 0 8px"><span class="chip" style="padding:3px 9px">Урок</span><span class="chip" style="padding:3px 9px">Разбор техники</span></div>
+                <span class="mp-eye">Отдельно</span><div class="r" style="gap:4px;margin-top:5px"><span class="chip" style="padding:3px 9px">Прокат</span><span class="chip" style="padding:3px 9px">Ски-пасс</span></div>
+              </div>
+            </div>
+            <!-- booking bar -->
+            <div class="mp-sec" style="padding-top:0">
+              <div class="mp-card" style="background:#2b2a28">
+                <div class="r" style="justify-content:space-between;align-items:flex-end"><div class="c" style="gap:2px"><span style="font-size:9px;color:#a9a7a3;text-transform:uppercase;letter-spacing:.08em">Единый тариф</span><span style="font-size:15px;color:#fff">345 gel / час</span></div><span class="conn" style="color:#e8a07f">=</span></div>
+                <div class="btn" style="margin-top:9px;padding:9px;background:#c8734f">Отправить заявку</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="note" style="text-align:center">Превью «Страница» = мобильная версия профиля. Скроллится внутри рамки. Так гость увидит объект на телефоне — где 80%+ трафика.</span>
+      <div class="c" style="gap:6px;background:#fff;border-radius:8px;padding:11px 12px">
+        <span class="eyebrow" style="margin-bottom:2px">Готовность к публикации</span>
+        <div class="r" style="gap:7px;font-size:12px;color:#4a4a4a"><span style="color:#3f7a4c">✓</span> A · Фото, имя, дисциплины</div>
+        <div class="r" style="gap:7px;font-size:12px;color:#4a4a4a"><span style="color:#3f7a4c">✓</span> B · C · Факты и описание</div>
+        <div class="r" style="gap:7px;font-size:12px;color:#8a7a3c"><span>○</span> F · Точка на карте не задана</div>
+      </div>
+    </div>
+  </div>
+</div>
+<span class="note" style="max-width:960px">Переключатель «Карточка / Страница»: <b>Карточка</b> — как объект в каталоге; <b>Страница</b> — полноразмерный профиль в мобильной рамке (страница большая, поэтому показываем её как телефон — компактно и реалистично). Полную десктоп-версию открывает «Смотреть на сайте ↗».</span>
+</div>
+
+<!-- ============ 1c — КАРТА СООТВЕТСТВИЯ ============ -->
+<div class="dv-opt" id="1c" data-screen-label="1c Карта соответствия и публикация"><div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Соответствие «поле в админке → блок на странице» + окно публикации</div>
+
+<div class="dv-card wf" style="width:820px;padding:20px;display:flex;flex-direction:column;gap:14px">
+  <div class="c" style="gap:3px"><span class="h2">Что заполняешь → куда попадает</span><span class="mut" style="font-size:12.5px">Поля редактора и блоки реальной страницы инструктора связаны один-в-один. Нет полей, которым некуда деться, и нет блоков без источника.</span></div>
+  <div class="r" style="gap:16px;align-items:stretch;flex-wrap:wrap">
+    <!-- admin side -->
+    <div class="c" style="flex:1;min-width:300px;gap:7px">
+      <span class="eyebrow">Секции редактора (админка)</span>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">A</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Основное</span><span class="mut" style="font-size:11px">фото · имя · дисциплины · интро · доступность</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">B</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Факты</span><span class="mut" style="font-size:11px">стаж · сертификат · языки</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">C</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Об инструкторе</span><span class="mut" style="font-size:11px">текст профиля · теги</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">D</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Форматы занятий</span><span class="mut" style="font-size:11px">название + условие</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">E</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Что входит</span><span class="mut" style="font-size:11px">включено · отдельно</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">F</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Место встречи</span><span class="mut" style="font-size:11px">точка сбора · карта</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">G</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Правила занятий</span><span class="mut" style="font-size:11px">до 3 пунктов</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f6f5f2;border-radius:9px"><span class="ltag">H</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Медиа / галерея</span><span class="mut" style="font-size:11px">фото и видео</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f2efe9;border-radius:9px;border:1px dashed #d8d3ca"><span class="star">★</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Рейтинг · тариф</span><span class="mut" style="font-size:11px">авто из заявок · единый тариф из «Настроек»</span></div></div>
+    </div>
+
+    <!-- connectors -->
+    <div class="c" style="justify-content:space-around;align-items:center;flex:none;padding:26px 0"><span class="conn">A→</span><span class="conn">B→</span><span class="conn">C→</span><span class="conn">D→</span><span class="conn">E→</span><span class="conn">F→</span><span class="conn">G→</span><span class="conn">H→</span><span class="conn" style="color:#a09d98">★→</span></div>
+
+    <!-- page side -->
+    <div class="c" style="flex:1;min-width:300px;gap:7px">
+      <span class="eyebrow">Блоки страницы инструктора (сайт)</span>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">A</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Шапка профиля</span><span class="mut" style="font-size:11px">фото, имя, бейджи, рейтинг, интро</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">B</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">4 плашки-факта</span><span class="mut" style="font-size:11px">Specialization · Language · Experience · Certificate</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">C</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">About + теги</span><span class="mut" style="font-size:11px">текст и плашки-специализации</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">D</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Lesson formats</span><span class="mut" style="font-size:11px">карточки форматов</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">E</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">What to expect</span><span class="mut" style="font-size:11px">включено / отдельно</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">F</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Meeting point</span><span class="mut" style="font-size:11px">текст + карта</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">G</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Lesson rules</span><span class="mut" style="font-size:11px">карточки правил</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#efeef4;border-radius:9px"><span class="ltag">H</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Media</span><span class="mut" style="font-size:11px">сетка фото + галерея в шапке</span></div></div>
+      <div class="r" style="gap:9px;padding:10px 12px;background:#f2efe9;border-radius:9px;border:1px dashed #d8d3ca"><span class="star">★</span><div class="c" style="gap:1px"><span style="font-size:13px;color:#2b2a28">Reviews · Booking</span><span class="mut" style="font-size:11px">отзывы + карточка бронирования 345 gel</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="r" style="gap:18px;align-items:flex-start;flex-wrap:wrap;margin-top:18px">
+  <!-- publish dialog -->
+  <div class="c" style="gap:8px">
+  <span class="mut" style="font-size:12px">Публикация — что проверяем перед выходом на сайт</span>
+  <div class="dv-card wf" style="width:290px;padding:16px;display:flex;flex-direction:column;gap:12px">
+    <span class="h2" style="font-size:16px">Опубликовать инструктора?</span>
+    <div class="c" style="gap:8px">
+      <div class="r" style="gap:8px;font-size:13px;color:#4a4a4a"><span style="color:#3f7a4c">✓</span> A · B · C — обязательные заполнены</div>
+      <div class="r" style="gap:8px;font-size:13px;color:#4a4a4a"><span style="color:#3f7a4c">✓</span> Главное фото загружено</div>
+      <div class="r" style="gap:8px;font-size:13px;color:#8a7a3c"><span>!</span> F · Точка на карте не задана</div>
+    </div>
+    <div class="box c" style="padding:10px 12px;gap:4px;border-radius:8px"><span class="flab">Виден в каталоге</span><div class="r" style="justify-content:space-between"><span style="font-size:13px">Сразу после публикации</span><span class="tgl on"><i></i></span></div></div>
+    <div class="r" style="gap:9px"><div class="bo" style="flex:1">Отмена</div><div class="btnp" style="flex:1">Опубликовать</div></div>
+    <span class="note">Предупреждения (жёлтые) не блокируют — только подсказывают.</span>
+  </div>
+  </div>
+
+  <!-- generalization note -->
+  <div class="c" style="gap:8px">
+  <span class="mut" style="font-size:12px">Так же для других категорий</span>
+  <div class="dv-card wf" style="width:290px;padding:16px;display:flex;flex-direction:column;gap:11px">
+    <span class="eyebrow">Одна раскладка — разные поля</span>
+    <div class="c" style="gap:9px">
+      <div class="c" style="gap:4px"><span style="font-size:13px;color:#2b2a28">Активность</span><div class="r" style="gap:5px;flex-wrap:wrap"><span class="tag">Тип</span><span class="tag">Длит.</span><span class="tag">Сложность</span><span class="tag">Цена</span><span class="tag">Что взять</span></div></div>
+      <div class="c" style="gap:4px"><span style="font-size:13px;color:#2b2a28">Прокат</span><div class="r" style="gap:5px;flex-wrap:wrap"><span class="tag">Комплект</span><span class="tag">Размеры</span><span class="tag">Цена/день</span><span class="tag">Залог</span></div></div>
+      <div class="c" style="gap:4px"><span style="font-size:13px;color:#2b2a28">Трансфер</span><div class="r" style="gap:5px;flex-wrap:wrap"><span class="tag">Маршрут</span><span class="tag">Мест</span><span class="tag">Авто</span><span class="tag">Цена</span></div></div>
+    </div>
+    <span class="note">Каждая категория = своя схема полей. Редактор, превью-карточка и мобильная страница — общие. Добавить категорию = описать поля, а не строить экран.</span>
+  </div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Дальше можно: «раскрой редактор для Активностей / Проката» · «покажи экран Заявок» · «сделай <a class="dv-oid" href="#1b">1b</a> интерактивным — печатаешь слева, мобильное превью меняется» · «добавь вход в админку и права доступа»</p>
+</section>
+</x-dc>
+</body>
+</html>

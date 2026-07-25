@@ -17,10 +17,18 @@
 .ds-object-hero--media-first .ds-object-hero__media { grid-column: 1; grid-row: 2; }
 .ds-object-hero--media-first .ds-object-hero__content { grid-column: 2; grid-row: 2; }
 
-.ds-object-main-tags { margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--layout-gutter); }
-.ds-main-tag { min-width: 0; min-height: 116px; padding: var(--space-400); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: var(--space-400); background: transparent; }
-.ds-main-tag dt { color: var(--text-secondary); font: var(--fw-medium) var(--type-caption-size) / 1.2 var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
-.ds-main-tag dd { max-width: 100%; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-150); color: var(--text-primary); font-weight: var(--fw-medium); }
+.ds-object-main-tags { margin: 0; overflow: hidden; border: 1px solid var(--border-subtle); border-radius: var(--radius-card); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--border-subtle); }
+.ds-main-tag { min-width: 0; min-height: 132px; padding: var(--space-600); border-left: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: var(--space-500); background: var(--surface-card); }
+.ds-main-tag:first-child { border-left: 0; }
+.ds-main-tag dt { order: 2; color: var(--text-secondary); font: var(--fw-medium) var(--type-caption-size) / var(--type-caption-line) var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
+.ds-main-tag dd { max-width: 100%; margin: 0; order: 1; color: var(--text-primary); font: var(--fw-medium) var(--type-body-large-size) / var(--type-body-large-line) var(--font-heading); letter-spacing: -.035em; overflow-wrap: anywhere; }
+.ds-difficulty-scale { --difficulty-color: var(--status-success); display: inline-flex; align-items: center; gap: var(--space-200); color: var(--difficulty-color); }
+.ds-difficulty-scale--2 { --difficulty-color: var(--status-info); }
+.ds-difficulty-scale--3 { --difficulty-color: var(--status-warning); }
+.ds-difficulty-scale--4 { --difficulty-color: var(--action-accent); }
+.ds-difficulty-scale--5 { --difficulty-color: var(--status-danger); }
+.ds-difficulty-scale > span { width: var(--space-300); height: var(--space-300); border: 1px solid var(--border-default); border-radius: var(--radius-full); background: var(--surface-subtle); }
+.ds-difficulty-scale > span.is-active { border-color: currentColor; background: currentColor; }
 
 .ds-detail-section { display: grid; gap: var(--space-600); }
 .ds-detail-section > .section-heading { width: 100%; }
@@ -47,7 +55,7 @@
 .ds-object-sticky-nav__booking > div { min-width: 0; display: grid; gap: 0; text-align: right; }
 .ds-object-sticky-nav__booking span { color: var(--text-secondary); font: var(--fw-regular) var(--type-caption-size) / var(--type-caption-line) var(--font-body); }
 .ds-object-sticky-nav__booking strong { color: var(--text-primary); font: var(--fw-bold) var(--type-body-size) / var(--type-body-line) var(--font-heading); }
-.ds-detail-section, .ds-instructor-certifications, .ds-booking-steps-section, .faq, .ds-booking-widget { scroll-margin-top: calc(var(--control-height-lg) + var(--space-700)); }
+.ds-detail-section, .ds-instructor-certifications, .ds-booking-steps-section, .faq, .ds-booking-widget { scroll-margin-top: var(--layout-object-sticky-offset); }
 
 .ds-reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(var(--space-700), 6vw, var(--space-1000)); row-gap: clamp(var(--space-800), 6vw, var(--space-1200)); }
 .ds-review-card { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-300); background: transparent; }
@@ -69,7 +77,7 @@
 .ds-specific-section strong { margin: 0; color: var(--text-primary); font-weight: var(--fw-bold); }
 .ds-specific-section p { margin: var(--space-200) 0 0; color: var(--text-secondary); }
 
-.ds-booking-widget { position: sticky; z-index: calc(var(--z-sticky) - 1); top: calc(var(--control-height-lg) + var(--space-700)); display: grid; gap: var(--space-500); box-shadow: var(--shadow-float); }
+.ds-booking-widget { position: sticky; z-index: calc(var(--z-sticky) - 1); top: var(--layout-object-sticky-offset); display: grid; gap: var(--space-500); box-shadow: var(--shadow-float); }
 .ds-booking-widget__mobile-summary { display: none; }
 .ds-booking-widget__form { display: grid; gap: var(--space-500); }
 .ds-booking-widget__head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-300); }
@@ -84,6 +92,46 @@
 
 .ds-specific-section ul { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-300); list-style: none; }
 .ds-specific-section li { padding: var(--space-400); border: 1px solid var(--border-subtle); border-radius: var(--radius-control); background: var(--surface-card); }
+
+.ds-activity-schedule ol { --schedule-time-column: calc(var(--control-height-lg) + var(--space-800)); max-width: var(--content-text); margin: 0; padding: var(--space-200) 0; position: relative; display: grid; list-style: none; }
+.ds-activity-schedule ol::before { width: 1px; position: absolute; top: calc(var(--space-500) + (var(--control-height-md) / 2)); bottom: calc(var(--space-500) + (var(--control-height-md) / 2)); left: calc(var(--schedule-time-column) + var(--space-400) + (var(--control-height-md) / 2)); background: var(--border-default); content: ''; }
+.ds-activity-schedule li { min-height: calc(var(--control-height-lg) + var(--space-700)); padding-block: var(--space-500); position: relative; display: grid; grid-template-columns: var(--schedule-time-column) var(--control-height-md) minmax(0, 1fr); align-items: start; gap: var(--space-400); }
+.ds-activity-schedule time { padding-top: var(--space-200); color: var(--text-primary); font: var(--fw-semibold) var(--type-body-large-size) / 1 var(--font-heading); letter-spacing: -.02em; }
+.ds-activity-schedule__marker { width: var(--control-height-md); height: var(--control-height-md); position: relative; z-index: 1; border-radius: var(--radius-full); outline: var(--space-150) solid var(--surface-card); display: grid; place-items: center; background: var(--surface-subtle); color: var(--action-accent); font: var(--fw-bold) var(--type-caption-size) / 1 var(--font-body); letter-spacing: .08em; }
+.ds-activity-schedule__item { min-width: 0; padding: var(--space-100) 0 var(--space-500); border-bottom: 1px solid var(--border-subtle); }
+.ds-activity-schedule li:last-child .ds-activity-schedule__item { border-bottom: 0; }
+.ds-activity-schedule strong, .ds-route-map strong, .ds-equipment-list strong, .ds-inclusions-section strong { color: var(--text-primary); font-weight: var(--fw-bold); }
+.ds-activity-schedule p, .ds-route-map p, .ds-equipment-list p, .ds-inclusions-section p { margin: var(--space-150) 0 0; color: var(--text-secondary); }
+.ds-activity-schedule strong { color: var(--text-primary); font: var(--fw-semibold) var(--type-body-large-size) / var(--type-body-large-line) var(--font-heading); letter-spacing: -.01em; }
+.ds-activity-schedule p { max-width: 48ch; margin-top: var(--space-200); color: var(--text-secondary); }
+
+.ds-inclusions-section__grid { max-width: var(--content-text); display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: clamp(var(--space-700), 5vw, var(--space-1000)); }
+.ds-inclusions-section__column { min-width: 0; }
+.ds-inclusions-section__column--excluded { padding-left: var(--space-700); border-left: 1px solid var(--border-subtle); }
+.ds-inclusions-section h3 { margin: 0; color: var(--text-primary); font: var(--fw-semibold) var(--type-body-large-size) / var(--type-body-large-line) var(--font-heading); }
+.ds-inclusions-section ul { margin: var(--space-500) 0 0; padding: 0; display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-300); list-style: none; }
+.ds-inclusions-section li { max-width: 100%; display: grid; gap: var(--space-150); }
+.ds-inclusions-section__badge.ui-badge { min-height: var(--control-height-md); padding: var(--space-200) var(--space-400); justify-content: flex-start; gap: var(--space-200); white-space: normal; text-align: left; }
+.ds-inclusions-section__badge-marker { color: var(--status-success); font-weight: var(--fw-bold); }
+.ds-inclusions-section__badge--excluded .ds-inclusions-section__badge-marker { color: var(--status-danger); }
+.ds-inclusions-section li > p { max-width: 34ch; margin: 0; padding-inline: var(--space-400); color: var(--text-secondary); font: var(--fw-regular) var(--type-caption-size) / var(--type-caption-line) var(--font-body); }
+.ds-inclusions-section__empty { margin-bottom: 0; font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+
+.ds-equipment-list ul { max-width: var(--content-text); margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(var(--space-600), 6vw, var(--space-1000)); list-style: none; }
+.ds-equipment-list li { min-width: 0; padding: var(--space-400) 0; border-top: 1px solid var(--border-subtle); display: grid; grid-template-columns: minmax(var(--control-height-sm), auto) 1fr; align-items: start; gap: var(--space-300); }
+.ds-equipment-list__number { padding-top: var(--space-100); color: var(--action-primary); font: var(--fw-bold) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); letter-spacing: .08em; }
+.ds-equipment-list__note { max-width: var(--content-text); margin-bottom: 0; padding: var(--space-300) 0 0 var(--space-400); border-left: var(--space-100) solid var(--action-primary); font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+
+.ds-route-map__panel { max-width: var(--content-text); padding: var(--space-500); display: grid; gap: var(--space-500); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); background: var(--surface-card); }
+.ds-route-map dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-400); }
+.ds-route-map dl div { padding: var(--space-300); border-radius: var(--radius-control); background: var(--surface-subtle); }
+.ds-route-map dt { color: var(--text-secondary); font: var(--fw-medium) var(--type-caption-size) / var(--type-caption-line) var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
+.ds-route-map dd { margin: var(--space-150) 0 0; color: var(--text-primary); font-weight: var(--fw-semibold); }
+.ds-route-map ol { margin: 0; padding: 0; display: grid; gap: var(--space-300); list-style: none; }
+.ds-route-map li { display: grid; grid-template-columns: var(--control-height-md) 1fr; gap: var(--space-300); align-items: start; }
+.ds-route-map li > span { width: var(--control-height-md); height: var(--control-height-md); display: grid; place-items: center; border-radius: var(--radius-full); background: var(--action-primary); color: var(--text-inverse); font: var(--fw-bold) var(--type-caption-size) / 1 var(--font-body); }
+.ds-route-map__link { width: fit-content; min-height: var(--control-height-md); display: inline-flex; align-items: center; gap: var(--space-150); color: var(--action-primary); font-weight: var(--fw-semibold); text-underline-offset: var(--space-100); }
+.ds-route-map__link:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); border-radius: var(--radius-xs); }
 
 @media (max-width: 860px) {
   .ds-object-sticky-nav__booking { display: none; }
@@ -103,8 +151,12 @@
   .ds-object-hero__back { grid-column: 1; grid-row: 1; }
   .ds-object-hero__content, .ds-object-hero--media-first .ds-object-hero__content { grid-column: 1; grid-row: 2; }
   .ds-object-hero__media, .ds-object-hero--media-first .ds-object-hero__media { grid-column: 1; grid-row: 3; min-height: 320px; }
-  .ds-object-main-tags { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ds-main-tag { min-height: 104px; padding: var(--space-400); gap: var(--space-300); }
+  .ds-main-tag dd { font-size: var(--type-body-size); line-height: var(--type-body-line); }
   .ds-reviews { grid-template-columns: 1fr; }
+  .ds-route-map dl { grid-template-columns: 1fr; }
+  .ds-inclusions-section__grid, .ds-equipment-list ul { grid-template-columns: 1fr; }
+  .ds-inclusions-section__column--excluded { padding: var(--space-700) 0 0; border-top: 1px solid var(--border-subtle); border-left: 0; }
 }
 
 @media (max-width: 640px) {
@@ -113,5 +165,12 @@
 }
 
 @media (max-width: 440px) {
-  .ds-object-main-tags { grid-template-columns: 1fr; }
+  .ds-main-tag { padding-inline: var(--space-300); }
+  .ds-main-tag dt { font-size: var(--type-caption-size); }
+  .ds-activity-schedule ol { --schedule-time-column: calc(var(--control-height-sm) + var(--space-500)); }
+  .ds-activity-schedule ol::before { top: calc(var(--space-500) + (var(--control-height-sm) / 2)); bottom: calc(var(--space-500) + (var(--control-height-sm) / 2)); left: calc(var(--schedule-time-column) + var(--space-200) + (var(--control-height-sm) / 2)); }
+  .ds-activity-schedule li { grid-template-columns: var(--schedule-time-column) var(--control-height-sm) minmax(0, 1fr); gap: var(--space-200); }
+  .ds-activity-schedule__marker { width: var(--control-height-sm); height: var(--control-height-sm); }
+  .ds-activity-schedule time { font-size: var(--type-body-size); }
+  .ds-activity-schedule strong { font-size: var(--type-body-size); line-height: var(--type-body-line); }
 }

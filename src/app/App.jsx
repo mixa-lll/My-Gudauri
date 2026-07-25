@@ -13,6 +13,7 @@ const BookingFlowPage = lazyPage(() => import('../pages/BookingFlowPage/BookingF
 const AdminPage = lazyPage(() => import('../pages/AdminPage/AdminPage'), 'AdminPage');
 const DestinationCatalogPage = lazyPage(() => import('../pages/DestinationCatalogPage/DestinationCatalogPage'), 'DestinationCatalogPage');
 const DestinationDetailPage = lazyPage(() => import('../pages/DestinationDetailPage/DestinationDetailPage'), 'DestinationDetailPage');
+const ActivityPage = lazyPage(() => import('../pages/ActivityPage/ActivityPage'), 'ActivityPage');
 const ArticlesPage = lazyPage(() => import('../pages/ArticlesPage/ArticlesPage'), 'ArticlesPage');
 const ArticleDetailPage = lazyPage(() => import('../pages/ArticleDetailPage/ArticleDetailPage'), 'ArticleDetailPage');
 const AboutGudauriPage = lazyPage(() => import('../pages/AboutGudauriPage/AboutGudauriPage'), 'AboutGudauriPage');
@@ -26,8 +27,11 @@ export default function App() {
       <Route path="/instructors" element={<DestinationCatalogPage section="instructors" />} />
       <Route path="/instructors/match" element={<InstructorMatchPage />} />
       <Route path="/instructors/:slug" element={<ProfilePage />} />
+      <Route path="/activities" element={<DestinationCatalogPage section="activities" />} />
+      <Route path="/activities/:slug" element={<ActivityPage />} />
       <Route path="/profile" element={<Navigate to="/instructors/mikhail" replace />} />
       <Route path="/booking" element={<BookingFlowPage />} />
+      <Route path="/booking/:category/:slug" element={<BookingFlowPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/articles" element={<ArticlesPage />} />
       <Route path="/articles/:slug" element={<ArticleDetailPage />} />

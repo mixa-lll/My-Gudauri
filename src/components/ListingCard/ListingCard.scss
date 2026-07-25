@@ -4,9 +4,10 @@
   padding: var(--space-200);
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid transparent;
   border-radius: var(--radius-card);
   background: var(--surface-card);
+  box-shadow: var(--shadow-soft);
   color: var(--text-primary);
   text-decoration: none;
   transition:
@@ -16,7 +17,7 @@
 }
 
 .listing-card:hover {
-  border-color: var(--border-default);
+  border-color: transparent;
   box-shadow: var(--shadow-card);
   transform: translateY(calc(-1 * var(--space-100)));
 }
@@ -134,7 +135,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-350);
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid color-mix(in srgb, var(--status-info) 12%, transparent);
 }
 
 .listing-card__rating,

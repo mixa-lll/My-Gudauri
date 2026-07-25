@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<style>
+body{margin:0;background:#eceae7;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#1a1a1a}
+a{color:#2a78d6}a:hover{color:#1a5cb0}
+.dv-turn{padding:40px 44px 32px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px}.dv-tname{font-size:16px;color:#1a1a1a}
+.mtx-sub{font-size:14px;color:rgba(0,0,0,.55);margin:0 0 26px;max-width:900px;line-height:1.5}
+.dv-opts{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:14px;color:rgba(0,0,0,.6);max-width:1080px}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-card{background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.wf{color:#4a4a4a;font-size:13px}
+.nav{display:flex;align-items:center;gap:16px;padding:11px 20px;background:#e2e0dd;border-bottom:1px solid #d3d1cd}
+.box{border:none;border-radius:5px;background:#e6e4e1}.ph{border:none;border-radius:5px;background:#d6d4d0}
+.ln{height:8px;border-radius:3px;background:#d4d2ce}.lnd{height:8px;border-radius:3px;background:#a9a7a3}
+.btn{display:flex;align-items:center;justify-content:center;background:#2b2a28;color:#f4f3f1;border-radius:8px;font-size:13px;padding:9px 18px;white-space:nowrap}
+.bo{display:flex;align-items:center;justify-content:center;border:1.5px solid #cbc9c5;border-radius:8px;font-size:12.5px;padding:8px 15px;background:#fff;color:#5a5855;white-space:nowrap}
+.pill{border:none;border-radius:99px;padding:4px 13px;font-size:12px;background:#e0dedb;color:#5a5855;white-space:nowrap}
+.tag{background:#dcdad6;border-radius:4px;padding:3px 9px;font-size:11px;color:#6a6864;white-space:nowrap}
+.mut{color:#8f8d89;font-size:12px}.note{font-size:11.5px;color:#8a8884;font-style:italic;line-height:1.5}
+.r{display:flex;align-items:center}.c{display:flex;flex-direction:column}
+.h1{font-size:22px;color:#1a1a1a;font-weight:600}.h2{font-size:15px;color:#2b2a28;font-weight:600}
+.acc{display:flex;justify-content:space-between;align-items:center;border-radius:9px;padding:12px 15px;font-size:13.5px;background:#f0eeeb;color:#3d3d3d}
+.sect{border:1.5px solid #e4e2df;border-radius:11px;padding:16px}
+.calc{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11.5px;border-radius:6px;color:#5a5855}
+.calc.on{background:#2b2a28;color:#f4f3f1;font-weight:600}
+.calc.anchor{border:1.5px solid #2b2a28;color:#2b2a28;font-weight:600}
+.calfull .calc{aspect-ratio:auto;height:44px;font-size:13px}
+.slot{flex:1;text-align:center;padding:7px 3px;border-radius:6px;font-size:11px;border:1.5px solid #dcdad7;background:#efedea;color:#6a6864;white-space:nowrap}
+.slot.on{background:#2b2a28;color:#f4f3f1;border-color:#2b2a28;font-weight:600}
+.seg{display:flex;gap:4px;border:1.5px solid #dcdad7;border-radius:8px;padding:3px}
+.seg > span{flex:1;text-align:center;padding:6px;font-size:11.5px;color:#6a6864;border-radius:5px}
+.seg > span.on{background:#2b2a28;color:#f4f3f1;font-weight:600}
+.field{border:1.5px solid #dcdad7;border-radius:8px;padding:10px 12px;font-size:12.5px;color:#a4a29e;background:#fff}
+.lbl{font-size:11px;color:#8a8884;margin-bottom:5px}
+.rail{width:190px;flex:none;border:1.5px solid #e4e2df;border-radius:11px;padding:14px}
+.rbox{background:#f0eeeb;border-radius:8px;padding:9px 11px}
+.cap{position:absolute;font-size:11px;color:#b34;font-style:italic;background:#fff;border:1px dashed #d8a;border-radius:6px;padding:4px 8px;line-height:1.35;max-width:150px}
+</style>
+</helmet>
+
+<section class="dv-turn">
+<div class="dv-thd"><span class="dv-tid">Вариант 2</span><span class="dv-tname">Подбор оператором — заявка менеджеру до контакта (инструктор не выбран)</span></div>
+<p class="mtx-sub">Тот же движок, но инструктор ещё не выбран — оператор подберёт его сам. Даты работают в облегчённом режиме: сначала <b>только календарь</b>, время добавляется по желанию кнопкой «+ Указать время». Добавляются два шага: <b>Компания</b> (кто едет) и <b>Что интересно</b> (теги/темп/бюджет). В сводке вместо конкретного инструктора — «подберём», цена — «уточнит оператор». Экраны — <a href="#O1a">O1a</a> даты по умолчанию, <a href="#O1">O1</a> время раскрыто, <a href="#O2">O2</a> компания, <a href="#O3">O3</a> что интересно, <a href="#O4">O4</a> контакты, <a href="#O5">O5</a> отправлено.</p>
+<div class="dv-opts">
+
+<!-- ================= O0 — DATES COLLAPSED (default) ================= -->
+<div class="dv-opt" id="O1a" data-screen-label="O1a Подбор · даты (по умолчанию)"><div class="dv-olabel"><a class="dv-oid" href="#O1a">O1a</a>Шаг 1 · по умолчанию — только календарь, время скрыто</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Request a lesson — <b>we'll match an instructor</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="sect">
+<div class="h2" style="margin-bottom:3px">1. When would you like to go?</div>
+<div class="mut" style="margin-bottom:14px">Выберите предпочтительные дни. Точное время можно не указывать — оператор подскажет слоты и погоду.</div>
+<div class="calfull" style="width:100%">
+<div class="r" style="justify-content:space-between;margin-bottom:8px"><span class="mut">‹</span><span style="font-size:13px;color:#333">March 2026</span><span class="mut">›</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px"><span class="mut" style="text-align:center;font-size:10px">Mo</span><span class="mut" style="text-align:center;font-size:10px">Tu</span><span class="mut" style="text-align:center;font-size:10px">We</span><span class="mut" style="text-align:center;font-size:10px">Th</span><span class="mut" style="text-align:center;font-size:10px">Fr</span><span class="mut" style="text-align:center;font-size:10px">Sa</span><span class="mut" style="text-align:center;font-size:10px">Su</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"><span></span><span></span><span></span><span></span><span></span><span></span><span class="calc">1</span><span class="calc">2</span><span class="calc">3</span><span class="calc">4</span><span class="calc">5</span><span class="calc">6</span><span class="calc">7</span><span class="calc">8</span><span class="calc">9</span><span class="calc">10</span><span class="calc">11</span><span class="calc">12</span><span class="calc">13</span><span class="calc on">14</span><span class="calc on">15</span><span class="calc on">16</span><span class="calc">17</span><span class="calc">18</span><span class="calc">19</span><span class="calc">20</span><span class="calc">21</span><span class="calc">22</span><span class="calc">23</span><span class="calc">24</span><span class="calc">25</span><span class="calc">26</span><span class="calc">27</span><span class="calc">28</span><span class="calc">29</span><span class="calc">30</span><span class="calc">31</span></div>
+<div class="mut" style="text-align:center;margin-top:9px">14–16 March · 3 days</div>
+</div>
+<div style="border-top:1px solid #eceae7;margin-top:14px;padding-top:14px"><span class="bo" style="border-style:dashed;border-color:#cbc9c5;color:#5a5855;padding:10px 16px">+ Указать время <span class="mut" style="margin-left:4px">(необязательно)</span></span></div>
+<span class="note" style="display:block;margin-top:12px;color:#b34">▸ Стартовый вид: календарь + одна кнопка. Слоты появляются только по тапу на неё (см. <a href="#O1">O1</a>).</span>
+<div class="r" style="justify-content:flex-end;margin-top:16px"><span class="btn">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">2. Company</span></div>
+<div class="acc"><span class="h2">3. What are you into</span></div>
+<div class="acc"><span class="h2">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div><span class="mut" style="font-size:10px;letter-spacing:.08em">ВАША ЗАЯВКА</span></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">14–16 March</span><span class="mut" style="font-size:11px">время не указано</span></div>
+<div class="rbox r" style="justify-content:space-between"><span class="mut">People</span><span style="font-size:13px">—</span></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:12px;color:#a8a6a2">Цена появится после часов и участников</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= O1 — DATES ================= -->
+<div class="dv-opt" id="O1" data-screen-label="O1 Подбор · даты"><div class="dv-olabel"><a class="dv-oid" href="#O1">O1</a>Шаг 1 · время раскрыто — слоты по дням (необязательно)</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Request a lesson — <b>we'll match an instructor</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="sect">
+<div class="h2" style="margin-bottom:3px">1. When would you like to go?</div>
+<div class="mut" style="margin-bottom:14px">Выберите предпочтительные дни. Точное время можно не указывать — оператор подскажет слоты и погоду.</div>
+<div class="c" style="gap:14px;align-items:stretch">
+<div class="calfull" style="width:100%">
+<div class="r" style="justify-content:space-between;margin-bottom:8px"><span class="mut">‹</span><span style="font-size:13px;color:#333">March 2026</span><span class="mut">›</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px"><span class="mut" style="text-align:center;font-size:10px">Mo</span><span class="mut" style="text-align:center;font-size:10px">Tu</span><span class="mut" style="text-align:center;font-size:10px">We</span><span class="mut" style="text-align:center;font-size:10px">Th</span><span class="mut" style="text-align:center;font-size:10px">Fr</span><span class="mut" style="text-align:center;font-size:10px">Sa</span><span class="mut" style="text-align:center;font-size:10px">Su</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"><span></span><span></span><span></span><span></span><span></span><span></span><span class="calc">1</span><span class="calc">2</span><span class="calc">3</span><span class="calc">4</span><span class="calc">5</span><span class="calc">6</span><span class="calc">7</span><span class="calc">8</span><span class="calc">9</span><span class="calc">10</span><span class="calc">11</span><span class="calc">12</span><span class="calc">13</span><span class="calc on">14</span><span class="calc on">15</span><span class="calc on">16</span><span class="calc">17</span><span class="calc">18</span><span class="calc">19</span><span class="calc">20</span><span class="calc">21</span><span class="calc">22</span><span class="calc">23</span><span class="calc">24</span><span class="calc">25</span><span class="calc">26</span><span class="calc">27</span><span class="calc">28</span><span class="calc">29</span><span class="calc">30</span><span class="calc">31</span></div>
+<div class="mut" style="text-align:center;margin-top:9px">14–16 March · 3 days</div>
+</div>
+<div class="c" style="width:100%;gap:10px;min-width:0;border-top:1px solid #eceae7;padding-top:14px">
+<div class="r" style="justify-content:space-between;align-items:center"><span style="font-size:12.5px;color:#2b2a28">Время на каждый день <span class="mut">(необязательно)</span></span><span class="bo" style="border-color:#d8a;color:#b34;padding:6px 12px;font-size:12px">− свернуть</span></div>
+<div class="r" style="gap:5px;padding:0 8px"><span class="mut" style="width:78px;flex:none"></span><span class="mut" style="flex:1;text-align:center;font-size:10px">slot 1·2h</span><span class="mut" style="flex:1;text-align:center;font-size:10px">slot 2·2h</span><span class="mut" style="flex:1;text-align:center;font-size:10px">slot 3·2h</span></div>
+<div style="border:1.5px solid #eae8e5;border-radius:9px;padding:9px;display:flex;align-items:center;gap:7px"><div class="c" style="width:78px;flex:none"><div class="r" style="gap:5px"><span class="mut">✕</span><span style="font-size:12.5px;color:#2b2a28">Day 1</span></div><span class="mut" style="font-size:10px;margin-left:14px">14.03.26</span></div><div class="r" style="flex:1;gap:5px"><span class="slot on">10–12</span><span class="slot">12:30–14:30</span><span class="slot">15–17</span></div></div>
+<div style="border:1.5px solid #eae8e5;border-radius:9px;padding:9px;display:flex;align-items:center;gap:7px"><div class="c" style="width:78px;flex:none"><div class="r" style="gap:5px"><span class="mut">✕</span><span style="font-size:12.5px;color:#2b2a28">Day 2</span></div><span class="mut" style="font-size:10px;margin-left:14px">15.03.26</span></div><div class="r" style="flex:1;gap:5px"><span class="slot on">10–12</span><span class="slot on">12:30–14:30</span><span class="slot">15–17</span></div></div>
+<div style="border:1.5px solid #eae8e5;border-radius:9px;padding:9px;display:flex;align-items:center;gap:7px"><div class="c" style="width:78px;flex:none"><div class="r" style="gap:5px"><span class="mut">✕</span><span style="font-size:12.5px;color:#2b2a28">Day 3</span></div><span class="mut" style="font-size:10px;margin-left:14px">16.03.26</span></div><div class="r" style="flex:1;gap:5px"><span class="slot on">10–12</span><span class="slot">12:30–14:30</span><span class="slot">15–17</span></div></div>
+<span class="note">▸ По умолчанию блок слотов скрыт — виден только календарь + кнопка «+ Указать время (необязательно)». По тапу раскрывается это. Слот тапом добавить/убрать, ✕ — убрать день.</span>
+</div>
+</div>
+<div class="r" style="justify-content:flex-end;margin-top:16px"><span class="btn">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">2. Company</span></div>
+<div class="acc"><span class="h2">3. What are you into</span></div>
+<div class="acc"><span class="h2">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div><span class="mut" style="font-size:10px;letter-spacing:.08em">ВАША ЗАЯВКА</span></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">14–16 March</span><span style="font-size:13px;color:#2b2a28">8 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span class="mut">People</span><span style="font-size:13px">—</span></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:12px;color:#a8a6a2">Цена появится после часов и участников</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= O2 — COMPANY ================= -->
+<div class="dv-opt" id="O2" data-screen-label="O2 Подбор · компания"><div class="dv-olabel"><a class="dv-oid" href="#O2">O2</a>Шаг 2 · компания — кто едет и сколько</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Request a lesson — <b>we'll match an instructor</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="acc"><span class="h2">1. Dates &amp; time</span><div class="r" style="gap:12px"><span class="mut">14–16 March · 8 hours</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="sect">
+<div class="h2" style="margin-bottom:14px">2. Company</div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Who's coming</span><div class="seg"><span class="on">Family</span><span>Friends</span><span>Solo</span></div></div>
+<div class="r" style="gap:12px;margin-bottom:14px">
+<div class="c" style="flex:1"><span class="lbl">Participants</span><div class="field r" style="justify-content:space-between;color:#2b2a28"><span>3</span><span class="mut" style="font-size:14px">−   +</span></div></div>
+<div class="c" style="flex:1"><span class="lbl">Kids under 12</span><div class="field r" style="justify-content:space-between;color:#2b2a28"><span>1</span><span class="mut" style="font-size:14px">−   +</span></div></div>
+</div>
+<div class="c"><span class="lbl">Languages the instructor should speak</span><div class="r" style="gap:8px"><span class="slot on" style="flex:none;padding:8px 16px;border-radius:99px">Русский</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">English</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">ქართული</span></div></div>
+<div class="r" style="justify-content:space-between;margin-top:16px"><span class="bo">← Back</span><span class="btn">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">3. What are you into</span></div>
+<div class="acc"><span class="h2">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div><span class="mut" style="font-size:10px;letter-spacing:.08em">ВАША ЗАЯВКА</span></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">14–16 March</span><span style="font-size:13px;color:#2b2a28">8 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">Family · 3</span><span class="mut" style="font-size:11px">1 kid</span></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:20px;color:#1a1a1a;border-bottom:2px solid #1a1a1a">847 gel</span> <span class="mut" style="font-size:10px;margin-left:4px">for 8 hours</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= O3 — INTERESTS ================= -->
+<div class="dv-opt" id="O3" data-screen-label="O3 Подбор · что интересно"><div class="dv-olabel"><a class="dv-oid" href="#O3">O3</a>Шаг 3 · что интересно — короткий опрос для подбора</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Request a lesson — <b>we'll match an instructor</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="acc"><span class="h2">1. Dates &amp; time</span><div class="r" style="gap:12px"><span class="mut">14–16 March · 8 hours</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="acc"><span class="h2">2. Company</span><div class="r" style="gap:12px"><span class="mut">Family · 3 people</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="sect">
+<div class="h2" style="margin-bottom:3px">3. What are you into</div>
+<div class="mut" style="margin-bottom:14px">Отмечайте что хочется — оператор подберёт инструктора и программу под это.</div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Activity</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="slot on" style="flex:none;padding:7px 14px;border-radius:99px">Зимние виды</span><span class="slot" style="flex:none;padding:7px 14px;border-radius:99px">Экскурсии</span><span class="slot" style="flex:none;padding:7px 14px;border-radius:99px">Фрирайд</span><span class="slot" style="flex:none;padding:7px 14px;border-radius:99px">Сноуборд</span></div></div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Pace</span><div class="seg" style="max-width:340px"><span>Спокойно</span><span class="on">Средне</span><span>Адреналин</span></div></div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Skill level (average)</span><div class="seg" style="max-width:340px"><span class="on">Beginner</span><span>Intermediate</span><span>Advanced</span></div></div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Budget per person</span><div class="seg" style="max-width:340px"><span>эконом</span><span class="on">средний</span><span>премиум</span></div></div>
+<div class="c"><span class="lbl">Anything else (goals, kids, equipment)</span><div class="field" style="height:40px">2 новичка + ребёнок, нужен прокат</div></div>
+<div class="r" style="justify-content:space-between;margin-top:16px"><span class="bo">← Back</span><span class="btn">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div><span class="mut" style="font-size:10px;letter-spacing:.08em">ВАША ЗАЯВКА</span></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">14–16 March</span><span style="font-size:13px;color:#2b2a28">8 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">Family · 3</span><span class="mut" style="font-size:11px">1 kid</span></div>
+<div class="rbox c" style="gap:4px"><span class="mut" style="font-size:10px">Пожелания</span><div class="r" style="gap:5px;flex-wrap:wrap"><span class="tag">Зимние</span><span class="tag">Средне</span><span class="tag">Beginner</span></div></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:20px;color:#1a1a1a;border-bottom:2px solid #1a1a1a">847 gel</span> <span class="mut" style="font-size:10px;margin-left:4px">for 8 hours</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= O4 — CONTACT ================= -->
+<div class="dv-opt" id="O4" data-screen-label="O4 Подбор · контакты"><div class="dv-olabel"><a class="dv-oid" href="#O4">O4</a>Шаг 4 · контакты — куда ответит оператор</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Request a lesson — <b>we'll match an instructor</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="acc"><span class="h2">1. Dates &amp; time</span><div class="r" style="gap:12px"><span class="mut">14–16 March · 8 hours</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="acc"><span class="h2">2. Company</span><div class="r" style="gap:12px"><span class="mut">Family · 3 people</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="acc"><span class="h2">3. What are you into</span><div class="r" style="gap:12px"><span class="mut">Зимние · Средне · Beginner</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="sect">
+<div class="h2" style="margin-bottom:14px">4. Contact details</div>
+<div class="c" style="margin-bottom:12px"><span class="lbl">Contact name</span><div class="field">Adam</div></div>
+<div class="r" style="gap:12px;margin-bottom:12px"><div class="c" style="flex:1"><span class="lbl">Phone number</span><div class="field">+7 916 121 06 06</div></div><div class="c" style="flex:1"><span class="lbl">Email — confirmation goes here</span><div class="field">adam@email.com</div></div></div>
+<div class="c"><span class="lbl">Preferred messenger</span><div class="r" style="gap:8px"><span class="slot on" style="flex:none;padding:8px 16px;border-radius:99px">WhatsApp</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">Telegram</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">Viber</span></div></div>
+<span class="note" style="margin-top:12px">Оплата после подтверждения. Оператор ответит в течение часа — подтвердит инструктора, погоду и место.</span>
+<div class="r" style="justify-content:space-between;margin-top:16px"><span class="bo">← Back</span><span class="btn" style="background:#c33">Send request →</span></div>
+</div>
+</div>
+<div class="rail">
+<div><span class="mut" style="font-size:10px;letter-spacing:.08em">ВАША ЗАЯВКА</span></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">14–16 March</span><span style="font-size:13px;color:#2b2a28">8 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">Family · 3</span><span class="mut" style="font-size:11px">1 kid</span></div>
+<div class="c" style="gap:5px;border:1.5px solid #eae8e5;border-radius:8px;padding:9px 11px;font-size:11.5px"><div class="r" style="justify-content:space-between"><span class="mut">Name</span><span>Adam</span></div><div class="r" style="justify-content:space-between"><span class="mut">Phone</span><span>+7 916…</span></div><div class="r" style="justify-content:space-between"><span class="mut">Messenger</span><span>WhatsApp</span></div></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:20px;color:#1a1a1a;border-bottom:2px solid #1a1a1a">847 gel</span> <span class="mut" style="font-size:10px;margin-left:4px">for 8 hours</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= O5 — CONFIRMATION ================= -->
+<div class="dv-opt" id="O5" data-screen-label="O5 Подбор · отправлено"><div class="dv-olabel"><a class="dv-oid" href="#O5">O5</a>Заявка отправлена · оператор подберёт и свяжется</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Request a lesson — <b>we'll match an instructor</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:0;min-width:0">
+<div class="sect" style="border-color:#bcdcc0">
+<div class="r" style="width:34px;height:34px;border-radius:8px;background:#dcefe0;color:#3a8f4a;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px">✓</div>
+<div class="h1" style="margin-bottom:16px">Заявка отправлена</div>
+<span class="lbl">Request ID</span>
+<div class="r" style="gap:10px;margin:2px 0 6px"><span style="font-size:22px;color:#1a1a1a">MG-51043</span><span class="bo" style="padding:3px 8px">⧉</span></div>
+<span class="note" style="margin-bottom:18px;display:block">*Сохраните номер заявки — пригодится при обращении в поддержку.</span>
+<div style="border-left:3px solid #c33;padding-left:14px"><div class="h2" style="margin-bottom:6px">Что дальше</div><div class="c" style="gap:5px;font-size:12.5px;color:#5a5855"><span>1. Оператор подберёт инструктора и программу под ваш запрос</span><span>2. Свяжется в течение часа, подтвердит погоду и место в группе</span><span>3. Пришлёт защищённую ссылку на предоплату</span></div></div>
+</div>
+</div>
+<div class="rail">
+<div class="r" style="gap:9px;padding-bottom:12px;border-bottom:1px solid #eceae7"><span class="ph" style="width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#8f8d89;font-size:15px">?</span><div class="c"><span class="mut" style="font-size:10px">Instructor</span><span style="font-size:13px;color:#2b2a28">Подбирается</span></div></div>
+<div class="c" style="gap:5px;padding-top:12px"><span class="mut" style="font-weight:600">Preferred days</span>
+<div class="rbox c" style="gap:5px"><div class="r" style="justify-content:space-between;font-size:12.5px"><span class="mut">14.03.26</span><span>2h</span></div><div class="r" style="justify-content:space-between;font-size:12.5px"><span class="mut">15.03.26</span><span>4h</span></div><div class="r" style="justify-content:space-between;font-size:12.5px"><span class="mut">16.03.26</span><span>2h</span></div></div>
+<span class="mut" style="font-weight:600;margin-top:8px">Company</span>
+<div class="c" style="gap:5px;font-size:11.5px"><div class="r" style="justify-content:space-between"><span class="mut">Who</span><span>Family · 3</span></div><div class="r" style="justify-content:space-between"><span class="mut">Interests</span><span>Зимние, Средне</span></div><div class="r" style="justify-content:space-between"><span class="mut">Contact</span><span>Adam</span></div><div class="r" style="justify-content:space-between"><span class="mut">Messenger</span><span>WhatsApp</span></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="dv-turn">
+<div class="dv-thd"><span class="dv-tid">Вариант 1</span><span class="dv-tname">Конкретный инструктор — «Book a lesson» (переработанный шаг с датами)</span></div>
+<p class="mtx-sub">Схематичный прогон всех экранов заявки на конкретного инструктора (компактная версия — без пожеланий/тегов). Ключевая переработка — <b>шаг 1</b>: выбираешь <b>диапазон дат</b> в календаре (первый → последний день), каждый день превращается в строку, и в строке ты тапаешь нужные <b>слоты</b> (3 слота × 2ч). Шаг 2 теперь — <b>группа целиком одним блоком</b> (сколько взрослых/детей, уровень, язык), без формы на каждого человека. Экраны — <a href="#B1">B1</a> пустой шаг 1, <a href="#B2">B2</a> даты выбраны, <a href="#B3">B3</a> кто занимается, <a href="#B4">B4</a> контакты, <a href="#B5">B5</a> отправлено.</p>
+<div class="dv-opts">
+
+<!-- ================= B1 — STEP 1 EMPTY ================= -->
+<div class="dv-opt" id="B1" data-screen-label="B1 Шаг 1 — пусто"><div class="dv-olabel"><a class="dv-oid" href="#B1">B1</a>Шаг 1 · календарь, дата ещё не выбрана</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Book a lesson with <b>Mikhail Andreev</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<!-- main -->
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="sect">
+<div class="h2" style="margin-bottom:3px">1. Choose a convenient date and time</div>
+<div class="mut" style="margin-bottom:14px">Pick the first and last day — each day becomes a row with 3 time-slots.</div>
+<div class="c" style="gap:14px;align-items:stretch">
+<div class="calfull" style="width:100%">
+<div class="r" style="justify-content:space-between;margin-bottom:8px"><span class="mut">‹</span><span style="font-size:13px;color:#333">March 2026</span><span class="mut">›</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px"><span class="mut" style="text-align:center;font-size:10px">Mo</span><span class="mut" style="text-align:center;font-size:10px">Tu</span><span class="mut" style="text-align:center;font-size:10px">We</span><span class="mut" style="text-align:center;font-size:10px">Th</span><span class="mut" style="text-align:center;font-size:10px">Fr</span><span class="mut" style="text-align:center;font-size:10px">Sa</span><span class="mut" style="text-align:center;font-size:10px">Su</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"><span></span><span></span><span></span><span></span><span></span><span></span><span class="calc">1</span><span class="calc">2</span><span class="calc">3</span><span class="calc">4</span><span class="calc">5</span><span class="calc">6</span><span class="calc">7</span><span class="calc">8</span><span class="calc">9</span><span class="calc">10</span><span class="calc">11</span><span class="calc">12</span><span class="calc">13</span><span class="calc">14</span><span class="calc">15</span><span class="calc">16</span><span class="calc">17</span><span class="calc">18</span><span class="calc">19</span><span class="calc">20</span><span class="calc">21</span><span class="calc">22</span><span class="calc">23</span><span class="calc">24</span><span class="calc">25</span><span class="calc">26</span><span class="calc">27</span><span class="calc">28</span><span class="calc">29</span><span class="calc">30</span><span class="calc">31</span></div>
+</div>
+<div style="flex:1;min-height:150px;border:1.5px dashed #d8d6d2;border-radius:9px;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px"><span class="mut" style="line-height:1.5">Select a start and end date<br>to add day rows here</span></div>
+</div>
+<div class="r" style="justify-content:flex-end;margin-top:16px"><span class="btn" style="opacity:.45">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">2. Кто будет заниматься</span></div>
+<div class="acc"><span class="h2">3. Contact details</span></div>
+</div>
+<!-- rail -->
+<div class="rail">
+<div class="r" style="gap:9px;padding-bottom:12px;border-bottom:1px solid #eceae7"><span class="ph" style="width:34px;height:34px;border-radius:50%"></span><div class="c"><span class="mut" style="font-size:10px">Instructor</span><span style="font-size:14px;color:#2b2a28">Mikhail Andreev</span></div></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span class="mut">Dates</span><span style="font-size:13px">—</span></div>
+<div class="rbox r" style="justify-content:space-between"><span class="mut">People</span><span style="font-size:13px">—</span></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:18px;color:#8f8d89;border-bottom:2px solid #d4d2ce">— gel</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= B2 — STEP 1 FILLED (KEY) ================= -->
+<div class="dv-opt" id="B2" data-screen-label="B2 Шаг 1 — даты выбраны"><div class="dv-olabel"><a class="dv-oid" href="#B2">B2</a>Шаг 1 · диапазон выбран → строки по дням со слотами <b>(ключевой экран)</b></div>
+<div class="dv-card wf" style="width:1080px;position:relative">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Book a lesson with <b>Mikhail Andreev</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="sect">
+<div class="h2" style="margin-bottom:3px">1. Choose a convenient date and time</div>
+<div class="mut" style="margin-bottom:14px">Range selected — tap the slots you want per day.</div>
+<div class="c" style="gap:14px;align-items:stretch">
+<div class="calfull" style="width:100%">
+<div class="r" style="justify-content:space-between;margin-bottom:8px"><span class="mut">‹</span><span style="font-size:13px;color:#333">March 2026</span><span class="mut">›</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px"><span class="mut" style="text-align:center;font-size:10px">Mo</span><span class="mut" style="text-align:center;font-size:10px">Tu</span><span class="mut" style="text-align:center;font-size:10px">We</span><span class="mut" style="text-align:center;font-size:10px">Th</span><span class="mut" style="text-align:center;font-size:10px">Fr</span><span class="mut" style="text-align:center;font-size:10px">Sa</span><span class="mut" style="text-align:center;font-size:10px">Su</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"><span></span><span></span><span></span><span></span><span></span><span></span><span class="calc">1</span><span class="calc">2</span><span class="calc">3</span><span class="calc">4</span><span class="calc">5</span><span class="calc">6</span><span class="calc">7</span><span class="calc">8</span><span class="calc">9</span><span class="calc on">10</span><span class="calc on">11</span><span class="calc">12</span><span class="calc">13</span><span class="calc">14</span><span class="calc">15</span><span class="calc">16</span><span class="calc">17</span><span class="calc">18</span><span class="calc">19</span><span class="calc">20</span><span class="calc">21</span><span class="calc">22</span><span class="calc">23</span><span class="calc">24</span><span class="calc">25</span><span class="calc">26</span><span class="calc">27</span><span class="calc">28</span><span class="calc">29</span><span class="calc">30</span><span class="calc">31</span></div>
+<div class="mut" style="text-align:center;margin-top:9px">10–11 March · 2 days</div>
+</div>
+<div class="c" style="width:100%;gap:8px;min-width:0;border-top:1px solid #eceae7;padding-top:14px">
+<div class="r" style="gap:5px;padding:0 8px"><span class="mut" style="width:78px;flex:none"></span><span class="mut" style="flex:1;text-align:center;font-size:10px">slot 1·2h</span><span class="mut" style="flex:1;text-align:center;font-size:10px">slot 2·2h</span><span class="mut" style="flex:1;text-align:center;font-size:10px">slot 3·2h</span></div>
+<div style="border:1.5px solid #eae8e5;border-radius:9px;padding:9px;display:flex;align-items:center;gap:7px"><div class="c" style="width:78px;flex:none"><div class="r" style="gap:5px"><span class="mut">✕</span><span style="font-size:12.5px;color:#2b2a28">Day 1</span></div><span class="mut" style="font-size:10px;margin-left:14px">10.03.26</span></div><div class="r" style="flex:1;gap:5px"><span class="slot on">10–12</span><span class="slot on">12:30–14:30</span><span class="slot">15–17</span></div></div>
+<div style="border:1.5px solid #eae8e5;border-radius:9px;padding:9px;display:flex;align-items:center;gap:7px"><div class="c" style="width:78px;flex:none"><div class="r" style="gap:5px"><span class="mut">✕</span><span style="font-size:12.5px;color:#2b2a28">Day 2</span></div><span class="mut" style="font-size:10px;margin-left:14px">11.03.26</span></div><div class="r" style="flex:1;gap:5px"><span class="slot on">10–12</span><span class="slot">12:30–14:30</span><span class="slot">15–17</span></div></div>
+<span class="note">3 slots a day · 2h each. Consecutive days are fine.</span>
+</div>
+</div>
+<div class="r" style="justify-content:flex-end;margin-top:16px"><span class="btn">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">2. Кто будет заниматься</span></div>
+<div class="acc"><span class="h2">3. Contact details</span></div>
+</div>
+<div class="rail">
+<div class="r" style="gap:9px;padding-bottom:12px;border-bottom:1px solid #eceae7"><span class="ph" style="width:34px;height:34px;border-radius:50%"></span><div class="c"><span class="mut" style="font-size:10px">Instructor</span><span style="font-size:14px;color:#2b2a28">Mikhail Andreev</span></div></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">10, 11 March</span><span style="font-size:13px;color:#2b2a28">6 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span class="mut">People</span><span style="font-size:13px">3</span></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:19px;color:#1a1a1a;border-bottom:2px solid #1a1a1a">647 gel</span></div>
+<span class="mut" style="font-size:10px">for 6 hour &amp; 3 people</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<span class="note" style="max-width:1080px;color:#b34">▸ Диапазон: тап по первому дню → тап по последнему. Каждый день из диапазона появляется строкой ниже, в каждой — 3 слота (2ч), тап переключает. Убрать день — ✕.</span>
+</div>
+
+<!-- ================= B3 — STEP 2 PARTICIPANTS ================= -->
+<div class="dv-opt" id="B3" data-screen-label="B3 Шаг 2 — кто занимается"><div class="dv-olabel"><a class="dv-oid" href="#B3">B3</a>Шаг 2 · кто занимается — группа одним блоком (без формы на каждого)</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Book a lesson with <b>Mikhail Andreev</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="acc"><span class="h2">1. Dates &amp; time</span><div class="r" style="gap:12px"><span class="mut">10, 11 March · 6 hours</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="sect">
+<div class="h2" style="margin-bottom:3px">2. Кто будет заниматься</div>
+<div class="mut" style="margin-bottom:14px">Достаточно общей информации о группе — детально распишем с инструктором.</div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Who's coming</span><div class="seg" style="max-width:340px"><span class="on">Family</span><span>Friends</span><span>Solo</span></div></div>
+<div class="r" style="gap:12px;margin-bottom:14px">
+<div class="c" style="flex:1"><span class="lbl">Adults</span><div class="field r" style="justify-content:space-between;color:#2b2a28"><span>2</span><span class="mut" style="font-size:14px">−   +</span></div></div>
+<div class="c" style="flex:1"><span class="lbl">Kids under 12</span><div class="field r" style="justify-content:space-between;color:#2b2a28"><span>1</span><span class="mut" style="font-size:14px">−   +</span></div></div>
+</div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Уровень группы (в среднем)</span><div class="seg" style="max-width:340px"><span>Beginner</span><span class="on">Mixed</span><span>Advanced</span></div></div>
+<div class="c" style="margin-bottom:14px"><span class="lbl">Язык инструктора</span><div class="r" style="gap:8px"><span class="slot on" style="flex:none;padding:8px 16px;border-radius:99px">Русский</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">English</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">ქართული</span></div></div>
+<div class="c"><span class="lbl">Что-то ещё (цели, прокат, особенности)</span><div class="field" style="height:38px">Ребёнок первый раз, нужен прокат</div></div>
+<div class="r" style="justify-content:space-between;margin-top:16px"><span class="bo">← Back</span><span class="btn">Next →</span></div>
+</div>
+<div class="acc"><span class="h2">3. Contact details</span></div>
+</div>
+<div class="rail">
+<div class="r" style="gap:9px;padding-bottom:12px;border-bottom:1px solid #eceae7"><span class="ph" style="width:34px;height:34px;border-radius:50%"></span><div class="c"><span class="mut" style="font-size:10px">Instructor</span><span style="font-size:14px;color:#2b2a28">Mikhail Andreev</span></div></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">10, 11 March</span><span style="font-size:13px;color:#2b2a28">6 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">Family · 3</span><span class="mut" style="font-size:11px">2 adults + 1 kid</span></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:19px;color:#1a1a1a;border-bottom:2px solid #1a1a1a">647 gel</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= B4 — STEP 3 CONTACT ================= -->
+<div class="dv-opt" id="B4" data-screen-label="B4 Шаг 3 — контакты"><div class="dv-olabel"><a class="dv-oid" href="#B4">B4</a>Шаг 3 · контакты (минимум — кому придёт ответ)</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Book a lesson with <b>Mikhail Andreev</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:11px;min-width:0">
+<div class="acc"><span class="h2">1. Dates &amp; time</span><div class="r" style="gap:12px"><span class="mut">10, 11 March · 6 hours</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="acc"><span class="h2">2. Кто будет заниматься</span><div class="r" style="gap:12px"><span class="mut">Family · 2+1 · Mixed</span><span style="font-size:12px;color:#5a5855;text-decoration:underline">Edit ↗</span></div></div>
+<div class="sect">
+<div class="h2" style="margin-bottom:14px">3. Contact details</div>
+<div class="c" style="margin-bottom:12px"><span class="lbl">Contact name</span><div class="field">Adam</div></div>
+<div class="r" style="gap:12px;margin-bottom:12px"><div class="c" style="flex:1"><span class="lbl">Phone number</span><div class="field">+7 916 121 06 06</div></div><div class="c" style="flex:1"><span class="lbl">Email — confirmation goes here</span><div class="field">adam@email.com</div></div></div>
+<div class="c"><span class="lbl">Preferred messenger</span><div class="r" style="gap:8px"><span class="slot on" style="flex:none;padding:8px 16px;border-radius:99px">WhatsApp</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">Telegram</span><span class="slot" style="flex:none;padding:8px 16px;border-radius:99px">Viber</span></div></div>
+<span class="note" style="margin-top:12px">Payment after confirmation. Operator replies within an hour.</span>
+<div class="r" style="justify-content:space-between;margin-top:16px"><span class="bo">← Back</span><span class="btn" style="background:#c33">Send request →</span></div>
+</div>
+</div>
+<div class="rail">
+<div class="r" style="gap:9px;padding-bottom:12px;border-bottom:1px solid #eceae7"><span class="ph" style="width:34px;height:34px;border-radius:50%"></span><div class="c"><span class="mut" style="font-size:10px">Instructor</span><span style="font-size:14px;color:#2b2a28">Mikhail Andreev</span></div></div>
+<div class="c" style="gap:9px;padding-top:12px">
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">10, 11 March</span><span style="font-size:13px;color:#2b2a28">6 h</span></div>
+<div class="rbox r" style="justify-content:space-between"><span style="font-size:13px;color:#2b2a28">Family · 3</span><span class="mut" style="font-size:11px">2 adults + 1 kid</span></div>
+<div class="c" style="gap:5px;border:1.5px solid #eae8e5;border-radius:8px;padding:9px 11px;font-size:11.5px"><div class="r" style="justify-content:space-between"><span class="mut">Name</span><span>Adam</span></div><div class="r" style="justify-content:space-between"><span class="mut">Phone</span><span>+7 916…</span></div><div class="r" style="justify-content:space-between"><span class="mut">Messenger</span><span>WhatsApp</span></div></div>
+<div class="r" style="align-items:baseline;gap:6px;padding-top:2px"><span style="font-size:19px;color:#1a1a1a;border-bottom:2px solid #1a1a1a">647 gel</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= B5 — CONFIRMATION ================= -->
+<div class="dv-opt" id="B5" data-screen-label="B5 Отправлено"><div class="dv-olabel"><a class="dv-oid" href="#B5">B5</a>Заявка отправлена · request ID + что дальше</div>
+<div class="dv-card wf" style="width:1080px">
+<div class="nav"><span style="font-size:15px;color:#2b2a28">My Gudauri<span style="color:#c33">.</span></span><div style="flex:1"></div><span class="mut">Instructors · Articles · About</span></div>
+<div style="padding:26px 48px">
+<div class="r" style="gap:12px;margin-bottom:16px"><span class="bo" style="border-color:#d8a;color:#b34">← Back</span><span class="h1">Book a lesson with <b>Mikhail Andreev</b></span></div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="c" style="flex:1;gap:0;min-width:0">
+<div class="sect" style="border-color:#bcdcc0">
+<div class="r" style="width:34px;height:34px;border-radius:8px;background:#dcefe0;color:#3a8f4a;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px">✓</div>
+<div class="h1" style="margin-bottom:16px">Your booking request has been sent</div>
+<span class="lbl">Request ID</span>
+<div class="r" style="gap:10px;margin:2px 0 6px"><span style="font-size:22px;color:#1a1a1a">MG-48271</span><span class="bo" style="padding:3px 8px">⧉</span></div>
+<span class="note" style="margin-bottom:18px;display:block">*Please save your request ID — useful if you contact support.</span>
+<div style="border-left:3px solid #c33;padding-left:14px"><div class="h2" style="margin-bottom:6px">What happens next</div><div class="c" style="gap:5px;font-size:12.5px;color:#5a5855"><span>1. We check the instructor's availability</span><span>2. We contact you to confirm the details</span><span>3. You receive a secure payment link</span></div></div>
+</div>
+</div>
+<div class="rail">
+<div class="r" style="gap:9px;padding-bottom:12px;border-bottom:1px solid #eceae7"><span class="ph" style="width:34px;height:34px;border-radius:50%"></span><div class="c"><span class="mut" style="font-size:10px">Instructor</span><span style="font-size:14px;color:#2b2a28">Mikhail Andreev</span></div></div>
+<div class="c" style="gap:5px;padding-top:12px"><span class="mut" style="font-weight:600">Lesson days</span>
+<div class="rbox c" style="gap:5px"><div class="r" style="justify-content:space-between;font-size:12.5px"><span class="mut">10.03.26</span><span>4h</span></div><div class="r" style="justify-content:space-between;font-size:12.5px"><span class="mut">11.03.26</span><span>2h</span></div></div>
+<span class="mut" style="font-weight:600;margin-top:8px">Information</span>
+<div class="c" style="gap:5px;font-size:11.5px"><div class="r" style="justify-content:space-between"><span class="mut">Group</span><span>Family · 3</span></div><div class="r" style="justify-content:space-between"><span class="mut">Contact</span><span>Adam</span></div><div class="r" style="justify-content:space-between"><span class="mut">Phone</span><span>+7 916…</span></div><div class="r" style="justify-content:space-between"><span class="mut">Messenger</span><span>WhatsApp</span></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+</x-dc>
+</body>
+</html>

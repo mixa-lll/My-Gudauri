@@ -430,81 +430,6 @@
   font: var(--fw-semibold) 13px / 1 var(--font-body);
 }
 
-.destination-benefits {
-  padding: clamp(28px, 5vw, 64px);
-  border-radius: 32px;
-  background: var(--grey-white);
-}
-
-.destination-benefits__grid {
-  margin-top: clamp(40px, 6vw, 76px);
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.destination-benefits__grid article {
-  min-height: 220px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  background: var(--grey-50);
-}
-
-.destination-benefits__grid article > span {
-  color: var(--grey-300);
-  font-size: 12px;
-}
-
-.destination-benefits__grid h3 {
-  margin: auto 0 0;
-  font: var(--fw-medium) 22px / 1.1 var(--font-heading);
-  letter-spacing: -0.035em;
-}
-
-.destination-benefits__grid p {
-  margin: 10px 0 0;
-  color: var(--grey-400);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.destination-booking__grid {
-  margin-top: clamp(28px, 4vw, 48px);
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.destination-booking__grid article {
-  min-height: 180px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--grey-150, #e6e6e2);
-  border-radius: 20px;
-  background: var(--grey-white);
-}
-
-.destination-booking__grid article > span {
-  color: var(--grey-300);
-  font-size: 12px;
-}
-
-.destination-booking__grid h3 {
-  margin: auto 0 0;
-  font: var(--fw-medium) 22px / 1.1 var(--font-heading);
-  letter-spacing: -0.035em;
-}
-
-.destination-booking__grid p {
-  margin: 10px 0 0;
-  color: var(--grey-400);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
 .destination-faq {
   padding: 0;
   border-radius: 0;
@@ -513,12 +438,6 @@
 
 .destination-faq .faq__item {
   background: var(--grey-white);
-}
-
-@media (max-width: 1050px) {
-  .destination-benefits__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 820px) {
@@ -555,10 +474,6 @@
     grid-row: 2;
   }
 
-  .destination-benefits__grid,
-  .destination-booking__grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 520px) {

@@ -1,0 +1,7 @@
+/* ============================================================
+   My Gudauri — Webfonts
+   Both families ship from Google Fonts (matching the production site,
+   which loads them the same way). Geist = UI + body, weights 100–900.
+   Paytone One = the single-weight display "decor" voice.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Paytone+One&display=swap');

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/styles.css">
+<link rel="stylesheet" href="mg-proto.css?v=17">
+<style>
+body { margin: 0; background: #eceae7; -webkit-font-smoothing: antialiased; }
+a { color: var(--rad-600); }
+a:hover { color: var(--rad-700); }
+</style>
+</helmet>
+
+<div class="mg-canvas mg-lang-en" id="mgRoot">
+
+<div class="mg-head">
+<h1>My Gudauri <span>— мега-шаблоны категорий · hi-fi</span></h1>
+<p><span data-lang="en">Built from the «Категории» wireframe on the prototype design: <b>1a</b> — shared heading template, <b>1b</b> — catalog mega-template (instructors example), <b>1c</b> — object page mega-template. Filters, FAQ and the booking calculator are live.</span><span data-lang="ru">Собрано по вайрфрейму «Категории» на дизайне прототипа: <b>1a</b> — общий шаблон заголовков, <b>1b</b> — мега-шаблон каталога (пример — инструкторы), <b>1c</b> — мега-шаблон страницы объекта. Фильтры, FAQ и калькулятор брони — рабочие.</span></p>
+<div class="lang-switch"><button data-lang-set="en" class="is-active">EN</button><button data-lang-set="ru">RU</button></div>
+</div>
+
+<!-- ============================== 1a — HEADING TEMPLATE ============================== -->
+<div class="mg-frame" id="1a" style="width:960px">
+<div class="mg-screen-label"><span class="mg-screen-badge">1a</span><span class="mg-screen-name"><span data-lang="en">Heading template</span><span data-lang="ru">Общий шаблон заголовков</span></span><span class="mg-screen-note"><span data-lang="en">Catalog hero · section heading · object page header</span><span data-lang="ru">Hero каталога · заголовок секции · шапка страницы объекта</span></span></div>
+<div class="mg-screen" data-screen-label="Шаблон заголовков" style="padding:44px 48px 52px;display:flex;flex-direction:column;gap:44px">
+
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font:700 11px ui-monospace,monospace;background:var(--grey-100);border-radius:4px;padding:3px 7px;color:var(--grey-500)">A · Hero каталога</span><span style="font-size:12.5px;color:var(--grey-400)">section-heading--lg --center · единственный H1 · кикер + описание категории</span></div>
+<div style="border:1px dashed var(--grey-200);border-radius:16px;padding:36px 32px 30px">
+<header class="section-heading section-heading--lg section-heading--center">
+<p class="section-heading__kicker"><span data-lang="en">Verified local experts</span><span data-lang="ru">Проверенные местные эксперты</span></p>
+<h1 class="section-heading__title"><span data-lang="en">Instructors</span><span data-lang="ru">Инструкторы</span></h1>
+<p class="section-heading__description"><span data-lang="en">Compare teaching styles, languages and experience to find the right instructor for your time in Gudauri.</span><span data-lang="ru">Сравнивайте стиль обучения, языки и опыт, чтобы найти подходящего инструктора.</span></p>
+</header>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;font:500 11.5px ui-monospace,monospace;color:var(--grey-400)">
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">kicker · 13px 600 uppercase +0.08em</span>
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">title · text-h2 · fw 500 · −0.055em</span>
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">description · 16px grey-400 · max 640px</span>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font:700 11px ui-monospace,monospace;background:var(--grey-100);border-radius:4px;padding:3px 7px;color:var(--grey-500)">B · Заголовок секции</span><span style="font-size:12.5px;color:var(--grey-400)">section-heading--md (широкие секции) / --sm (колонки и панели) · всегда слева</span></div>
+<div style="border:1px dashed var(--grey-200);border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:28px">
+<header class="section-heading section-heading--md">
+<p class="section-heading__kicker"><span data-lang="en">Why My Gudauri</span><span data-lang="ru">Почему My Gudauri</span></p>
+<h2 class="section-heading__title"><span data-lang="en">Why choose My Gudauri instructors</span><span data-lang="ru">Почему инструкторы My Gudauri</span></h2>
+</header>
+<header class="section-heading section-heading--sm">
+<p class="section-heading__kicker"><span data-lang="en">Good to know</span><span data-lang="ru">Полезно знать</span></p>
+<h2 class="section-heading__title"><span data-lang="en">Common questions</span><span data-lang="ru">Частые вопросы</span></h2>
+</header>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;font:500 11.5px ui-monospace,monospace;color:var(--grey-400)">
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">--md · text-h4 · секции каталога</span>
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">--sm · text-h5 · блоки профиля и колонки</span>
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">sentence case · без точки</span>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font:700 11px ui-monospace,monospace;background:var(--grey-100);border-radius:4px;padding:3px 7px;color:var(--grey-500)">C · Шапка страницы объекта</span><span style="font-size:12.5px;color:var(--grey-400)">назад → бейджи → H1 (profile-title) → рейтинг · слева, не по центру</span></div>
+<div style="border:1px dashed var(--grey-200);border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+<a class="profile-back-btn" href="#1b">← <span data-lang="en">Back</span><span data-lang="ru">Назад</span></a>
+<div class="profile-badges-row">
+<span class="profile-badge"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span>
+<span class="profile-badge"><img src="assets/design-2/icon-ski.png" alt="">Ski</span>
+<span class="profile-role"><span data-lang="en">Instructor</span><span data-lang="ru">Инструктор</span></span>
+</div>
+<h1 class="profile-title" style="margin:0">Mikhail<br>Andreev</h1>
+<div class="profile-rating-main"><span class="star">★</span>4.8<span class="dot"></span><a href="#1c">6 <span data-lang="en">reviews</span><span data-lang="ru">отзывов</span></a></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;font:500 11.5px ui-monospace,monospace;color:var(--grey-400)">
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">H1 · profile-title · перенос по словам</span>
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">бейджи · profile-badge + profile-role</span>
+<span style="background:var(--grey-50);border:1px solid var(--grey-150);border-radius:999px;padding:3px 10px">★ рейтинг · rad-600 · ссылка на отзывы</span>
+</div>
+</div>
+
+<div style="border-top:1px solid var(--grey-100);padding-top:18px;font-size:12.5px;line-height:1.65;color:var(--grey-400);max-width:760px">
+Правила: sentence case везде; кикер — опционален, всегда uppercase; один H1 на страницу (hero каталога или название объекта); у каждой категории меняется только текст — вёрстка заголовков общая для инструкторов, активностей, проката, трансфера и туров.
+</div>
+</div>
+</div>
+
+<!-- ============================== 1b — CATALOG MEGA-TEMPLATE ============================== -->
+<div class="mg-frame" id="1b">
+<div class="mg-screen-label"><span class="mg-screen-badge">1b</span><span class="mg-screen-name"><span data-lang="en">Catalog mega-template</span><span data-lang="ru">Мега-шаблон каталога</span></span><span class="mg-screen-note"><span data-lang="en">Hero · category banner · tabs · filters · grid · benefits · steps · FAQ</span><span data-lang="ru">Hero · баннер категории · табы · фильтры · сетка · преимущества · шаги · FAQ</span></span></div>
+<div class="mg-screen" data-screen-label="Каталог — мега-шаблон" data-insfilter>
+
+<header class="site-nav-host">
+<div class="site-nav"><div class="site-nav__bar">
+<div class="site-nav__left">
+<a class="site-nav__brand" href="#"><span class="site-nav__brand-muted">My </span>Gudauri</a>
+<nav class="site-nav__links">
+<div style="position:relative">
+<button class="site-nav__trigger" data-mega-trigger type="button"><span data-lang="en">Categories</span><span data-lang="ru">Категории</span><img class="site-nav__chevron" src="assets/navbar/caret-down.png" alt=""></button>
+<div class="megamenu">
+<div class="megamenu__grid">
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-instructors.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Instructors</span><span data-lang="ru">Инструкторы</span></span><span class="megamenu__d"><span data-lang="en">Verified ski &amp; snowboard coaches</span><span data-lang="ru">Проверенные инструкторы</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-activity.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Activities</span><span data-lang="ru">Активности</span></span><span class="megamenu__d"><span data-lang="en">Freeride, tours and adventures</span><span data-lang="ru">Фрирайд, туры и приключения</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-rent.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Rental</span><span data-lang="ru">Прокат</span></span><span class="megamenu__d"><span data-lang="en">Gear for every level and style</span><span data-lang="ru">Снаряжение для любого уровня</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-transfer.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Transfers</span><span data-lang="ru">Трансфер</span></span><span class="megamenu__d"><span data-lang="en">Tbilisi, Kutaisi and regional routes</span><span data-lang="ru">Тбилиси, Кутаиси и маршруты</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-services.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Services</span><span data-lang="ru">Услуги</span></span><span class="megamenu__d"><span data-lang="en">Photo, video, childcare and more</span><span data-lang="ru">Фото, видео, няни и другое</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-places.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Places</span><span data-lang="ru">Места</span></span><span class="megamenu__d"><span data-lang="en">Restaurants, wellness, essentials</span><span data-lang="ru">Рестораны, спа, необходимое</span></span></span></a>
+</div>
+<div class="megamenu__foot"><span><span data-lang="en">Stays and Articles are one click away too.</span><span data-lang="ru">Жильё и статьи — тоже в один клик.</span></span><a href="#"><span data-lang="en">Need help choosing? →</span><span data-lang="ru">Нужна помощь с выбором? →</span></a></div>
+</div>
+</div>
+<a class="site-nav__link" href="#"><span data-lang="en">Articles</span><span data-lang="ru">Статьи</span></a>
+<a class="site-nav__link" href="#"><span data-lang="en">About Gudauri</span><span data-lang="ru">О Гудаури</span></a>
+<a class="site-nav__link" href="#"><span data-lang="en">Support</span><span data-lang="ru">Помощь</span></a>
+</nav>
+</div>
+<div class="site-nav__right">
+<div class="lang-switch"><button data-lang-set="en" class="is-active">EN</button><button data-lang-set="ru">RU</button></div>
+<a class="site-nav__offer" href="#"><span data-lang="en">Offer a service</span><span data-lang="ru">Стать партнёром</span></a>
+</div>
+</div></div>
+</header>
+
+<main class="destination-catalog">
+
+<section class="destination-hero">
+<div class="destination-hero__copy">
+<div style="margin:0 0 12px;text-align:center"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">1 · Hero · шаблон</span></div>
+<header class="section-heading section-heading--lg section-heading--center">
+<p class="section-heading__kicker"><span data-lang="en">Verified local experts</span><span data-lang="ru">Проверенные местные эксперты</span></p>
+<h1 class="section-heading__title"><span data-lang="en">Instructors</span><span data-lang="ru">Инструкторы</span></h1>
+<p class="section-heading__description"><span data-lang="en">Compare teaching styles, languages and experience to find the right instructor for your time in Gudauri.</span><span data-lang="ru">Сравнивайте стиль обучения, языки и опыт, чтобы найти подходящего инструктора для вашей поездки в Гудаури.</span></p>
+</header>
+</div>
+
+<div style="margin:14px 0 -10px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#d9ecfb;border:1px solid #bcdcf7;color:#17405f">2 · кастомный баннер · категория · 1–2 полосы</span></div>
+<section class="instructor-concierge">
+<div class="instructor-concierge__copy">
+<span><span data-lang="en">Personal matching</span><span data-lang="ru">Персональный подбор</span></span>
+<h2><span data-lang="en">Tell us your dates and what you need.</span><span data-lang="ru">Расскажите даты и что вам нужно.</span></h2>
+<p><span data-lang="en">We will check availability and suggest an instructor for your language, group and lesson goals.</span><span data-lang="ru">Мы проверим доступность и предложим инструктора под ваш язык, группу и цели занятий.</span></p>
+</div>
+<button type="button"><span data-lang="en">Ask us to choose</span><span data-lang="ru">Подберите за меня</span> <span aria-hidden="true">↗</span></button>
+</section>
+
+<section class="instructor-price-note">
+<div class="instructor-price-note__mark" aria-hidden="true">=</div>
+<div class="instructor-price-note__body">
+<span><span data-lang="en">Simple pricing</span><span data-lang="ru">Простые цены</span></span>
+<strong><span data-lang="en">One rate for every instructor</span><span data-lang="ru">Единая ставка для всех инструкторов</span></strong>
+<p><span data-lang="en">Choose by teaching style, language and experience — not by price.</span><span data-lang="ru">Выбирайте по стилю, языку и опыту — а не по цене.</span></p>
+</div>
+<button class="instructor-price-note__help" type="button" aria-label="How pricing works">?</button>
+</section>
+</section>
+
+<section class="destination-list">
+<div style="margin:0 0 10px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">3 · подкатегории · шаблон · значения главного поля БД</span></div>
+<div class="catalog-category-tabs" data-ins-cats>
+<div class="catalog-category-tabs__heading">
+<p class="catalog-category-tabs__kicker"><span data-lang="en">Instructor categories</span><span data-lang="ru">Категории инструкторов</span></p>
+<p><span data-lang="en">Choose a direction first, then refine the results below.</span><span data-lang="ru">Сначала выберите направление, затем уточните фильтрами ниже.</span></p>
+</div>
+<div class="catalog-category-tabs__list" role="group">
+<button class="is-active" data-ins-cat="all" type="button"><span><strong><span data-lang="en">All instructors</span><span data-lang="ru">Все инструкторы</span></strong><small><span data-lang="en">Verified local professionals</span><span data-lang="ru">Проверенные специалисты</span></small></span><b data-catcount="all">8</b></button>
+<button data-ins-cat="ski" type="button"><span><strong>Ski</strong><small><span data-lang="en">Piste and technique lessons</span><span data-lang="ru">Трасса и техника</span></small></span><b data-catcount="ski">5</b></button>
+<button data-ins-cat="snowboard" type="button"><span><strong>Snowboard</strong><small><span data-lang="en">Technique and all-mountain</span><span data-lang="ru">Техника и всё-горье</span></small></span><b data-catcount="snowboard">4</b></button>
+</div>
+</div>
+<div style="margin:14px 0 10px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">4 · фильтры · шаблон · набор свой у категории</span></div>
+<div class="destination-toolbar">
+<div>
+<header class="section-heading section-heading--sm">
+<p class="section-heading__kicker"><span data-lang="en">Selection options</span><span data-lang="ru">Параметры подбора</span></p>
+<h2 class="section-heading__title"><span data-lang="en">Find the right fit</span><span data-lang="ru">Найдите подходящего</span></h2>
+</header>
+<div class="instructor-filter-bar">
+<div class="insf-group" data-card-attr="data-langs">
+<button class="instructor-filter-trigger" data-filter-trigger type="button"><span><span data-lang="en">Language</span><span data-lang="ru">Язык</span></span><strong data-insf-badge style="display:none">0</strong><span class="instructor-filter-trigger__chevron"><svg viewBox="0 0 12 8"><path d="m1 1.25 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></span></button>
+<div class="instructor-filter-popover">
+<div class="instructor-filter-popover__header"><div><span><span data-lang="en">Filter by</span><span data-lang="ru">Фильтр</span></span><strong><span data-lang="en">Language</span><span data-lang="ru">Язык</span></strong></div></div>
+<div class="instructor-filter-popover__options">
+<div class="instructor-filter-option" data-insf-option data-val="ru"><span class="lbl"><span data-lang="en">Russian</span><span data-lang="ru">Русский</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+<div class="instructor-filter-option" data-insf-option data-val="en"><span class="lbl"><span data-lang="en">English</span><span data-lang="ru">Английский</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+<div class="instructor-filter-option" data-insf-option data-val="ge"><span class="lbl"><span data-lang="en">Georgian</span><span data-lang="ru">Грузинский</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+</div>
+</div>
+</div>
+<div class="insf-group" data-card-attr="data-audience">
+<button class="instructor-filter-trigger" data-filter-trigger type="button"><span><span data-lang="en">Lessons</span><span data-lang="ru">Занятия</span></span><strong data-insf-badge style="display:none">0</strong><span class="instructor-filter-trigger__chevron"><svg viewBox="0 0 12 8"><path d="m1 1.25 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></span></button>
+<div class="instructor-filter-popover">
+<div class="instructor-filter-popover__header"><div><span><span data-lang="en">Filter by</span><span data-lang="ru">Фильтр</span></span><strong><span data-lang="en">Lessons</span><span data-lang="ru">Занятия</span></strong></div></div>
+<div class="instructor-filter-popover__options">
+<div class="instructor-filter-option" data-insf-option data-val="kids"><span class="lbl"><span data-lang="en">Works with children</span><span data-lang="ru">Работает с детьми</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+</div>
+</div>
+</div>
+<div class="insf-group" data-card-attr="data-focus">
+<button class="instructor-filter-trigger" data-filter-trigger type="button"><span><span data-lang="en">Focus</span><span data-lang="ru">Фокус</span></span><strong data-insf-badge style="display:none">0</strong><span class="instructor-filter-trigger__chevron"><svg viewBox="0 0 12 8"><path d="m1 1.25 5 5 5-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></span></button>
+<div class="instructor-filter-popover">
+<div class="instructor-filter-popover__header"><div><span><span data-lang="en">Filter by</span><span data-lang="ru">Фильтр</span></span><strong><span data-lang="en">Focus</span><span data-lang="ru">Фокус</span></strong></div></div>
+<div class="instructor-filter-popover__options">
+<div class="instructor-filter-option" data-insf-option data-val="first-lessons"><span class="lbl"><span data-lang="en">First lessons</span><span data-lang="ru">Первые уроки</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+<div class="instructor-filter-option" data-insf-option data-val="technique"><span class="lbl"><span data-lang="en">Technique</span><span data-lang="ru">Техника</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+<div class="instructor-filter-option" data-insf-option data-val="carving"><span class="lbl"><span data-lang="en">Carving</span><span data-lang="ru">Карвинг</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+<div class="instructor-filter-option" data-insf-option data-val="freeride"><span class="lbl"><span data-lang="en">Freeride</span><span data-lang="ru">Фрирайд</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+<div class="instructor-filter-option" data-insf-option data-val="freestyle"><span class="lbl"><span data-lang="en">Freestyle</span><span data-lang="ru">Фристайл</span></span><span class="box"><svg viewBox="0 0 12 10"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg></span></div>
+</div>
+</div>
+</div>
+<button class="instructor-filter-clear" data-insf-clear-all type="button" style="display:none"><span data-lang="en">Clear all</span><span data-lang="ru">Сбросить</span></button>
+</div>
+</div>
+<div class="destination-toolbar__count">
+<h2><span data-lang="en">Selected for you</span><span data-lang="ru">Подобрано для вас</span></h2>
+<p><span data-ins-count>8</span> <span data-lang="en" data-ins-en>instructors</span><span data-lang="ru">инструкторов</span></p>
+</div>
+</div>
+
+<div style="margin:14px 0 10px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">5 · сетка карточек · шаблон · клик → /:category/:slug</span></div>
+<div class="destination-grid" data-ins-grid>
+<a class="listing-card" href="#1c" data-ins-card data-disc="snowboard ski" data-langs="ge en ru" data-audience="" data-focus="technique carving">
+<div class="listing-card__media"><img src="assets/design-2/card-mikhail.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span><span class="lc-pill">Ru</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Mikhail Andreev</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Technique · Confidence</span><span data-lang="ru">Техника · Уверенность</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>8+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="snowboard" data-langs="ge en" data-audience="" data-focus="freeride technique">
+<div class="listing-card__media"><img src="assets/design-2/card-oleg.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Oleg Yung</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Freeride · Technique</span><span data-lang="ru">Фрирайд · Техника</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>8+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="ski" data-langs="ge en" data-audience="kids" data-focus="first-lessons technique">
+<div class="listing-card__media"><img src="assets/design-2/card-red-ski.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Alex Red</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">First lessons · Technique</span><span data-lang="ru">Первые уроки · Техника</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>6+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="snowboard ski" data-langs="ge en" data-audience="kids" data-focus="first-lessons">
+<div class="listing-card__media"><img src="assets/design-2/card-andrey.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Andrey Gregorev</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Kids &amp; families · First lessons</span><span data-lang="ru">Дети и семьи · Первые уроки</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>5+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="ski" data-langs="ge en ru" data-audience="" data-focus="technique carving">
+<div class="listing-card__media"><img src="assets/design-2/card-mikhail.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span><span class="lc-pill">Ru</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Nino Beridze</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Technique · Carving</span><span data-lang="ru">Техника · Карвинг</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.9</strong><small>8+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="snowboard" data-langs="ge en" data-audience="kids" data-focus="first-lessons freestyle">
+<div class="listing-card__media"><img src="assets/design-2/card-oleg.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Giorgi Maisuradze</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">First lessons · Freestyle</span><span data-lang="ru">Первые уроки · Фристайл</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>7+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="ski snowboard" data-langs="ge en" data-audience="" data-focus="technique freeride">
+<div class="listing-card__media"><img src="assets/design-2/card-red-ski.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Levan Kapanadze</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Technique · Freeride</span><span data-lang="ru">Техника · Фрирайд</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.9</strong><small>10+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#" data-ins-card data-disc="ski" data-langs="ge en ru" data-audience="kids" data-focus="first-lessons">
+<div class="listing-card__media"><img src="assets/design-2/card-andrey.png" alt="">
+<div class="listing-card__media-top"><span class="lc-pill">Ge</span><span class="lc-pill">En</span><span class="lc-pill">Ru</span></div>
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Mari Gelashvili</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Kids &amp; families · First lessons</span><span data-lang="ru">Дети и семьи · Первые уроки</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>5.0</strong><small>9+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+</div>
+<div class="destination-empty-state mg-hidden" data-ins-empty><span data-lang="en">No instructors match these filters yet.</span><span data-lang="ru">Под эти фильтры пока нет инструкторов.</span></div>
+</section>
+
+<section class="destination-benefits">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#3f403d;color:#fff">6 · почему My Gudauri · все категории</span></div>
+<header class="section-heading section-heading--md">
+<p class="section-heading__kicker"><span data-lang="en">Why My Gudauri</span><span data-lang="ru">Почему My Gudauri</span></p>
+<h2 class="section-heading__title"><span data-lang="en">Why choose My Gudauri instructors</span><span data-lang="ru">Почему инструкторы My Gudauri</span></h2>
+</header>
+<div class="destination-benefits__grid">
+<article><span>01</span><h3><span data-lang="en">Verified professionals</span><span data-lang="ru">Проверенные профессионалы</span></h3><p><span data-lang="en">Every instructor is reviewed before joining the platform.</span><span data-lang="ru">Каждый инструктор проверяется перед появлением на платформе.</span></p></article>
+<article><span>02</span><h3><span data-lang="en">Transparent pricing</span><span data-lang="ru">Прозрачные цены</span></h3><p><span data-lang="en">The same official rate for everyone, with no hidden markups.</span><span data-lang="ru">Единая официальная ставка для всех, без скрытых наценок.</span></p></article>
+<article><span>03</span><h3><span data-lang="en">Real profiles</span><span data-lang="ru">Реальные профили</span></h3><p><span data-lang="en">Compare experience, languages, reviews and teaching style.</span><span data-lang="ru">Сравнивайте опыт, языки, отзывы и стиль обучения.</span></p></article>
+<article><span>04</span><h3><span data-lang="en">Flexible scheduling</span><span data-lang="ru">Гибкое расписание</span></h3><p><span data-lang="en">Split lesson hours across days in a way that suits you.</span><span data-lang="ru">Разбивайте часы занятий по дням так, как вам удобно.</span></p></article>
+</div>
+</section>
+
+<section class="destination-benefits" style="padding-top:0">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#d9ecfb;border:1px solid #bcdcf7;color:#17405f">7 · как забронировать · категория</span></div>
+<header class="section-heading section-heading--md">
+<p class="section-heading__kicker"><span data-lang="en">How it works</span><span data-lang="ru">Как это работает</span></p>
+<h2 class="section-heading__title"><span data-lang="en">How to book a lesson</span><span data-lang="ru">Как забронировать занятие</span></h2>
+</header>
+<div class="profile-rules-grid">
+<article><span>01</span><h3><span data-lang="en">Choose an instructor</span><span data-lang="ru">Выберите инструктора</span></h3><p><span data-lang="en">Compare by discipline, language, experience and guest reviews.</span><span data-lang="ru">Сравните по дисциплине, языку, опыту и отзывам гостей.</span></p></article>
+<article><span>02</span><h3><span data-lang="en">Send a request</span><span data-lang="ru">Отправьте заявку</span></h3><p><span data-lang="en">Pick dates, hours and level — it takes about a minute.</span><span data-lang="ru">Укажите даты, часы и уровень — это займёт около минуты.</span></p></article>
+<article><span>03</span><h3><span data-lang="en">Get confirmation</span><span data-lang="ru">Получите подтверждение</span></h3><p><span data-lang="en">Contact details are shared after confirmation to coordinate your meeting point.</span><span data-lang="ru">Контакты передаются после подтверждения, чтобы согласовать место встречи.</span></p></article>
+</div>
+</section>
+
+<section class="destination-faq">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#d9ecfb;border:1px solid #bcdcf7;color:#17405f">8 · FAQ · категория · 3–6 вопросов</span></div>
+<header class="section-heading section-heading--md" style="margin-bottom:28px">
+<p class="section-heading__kicker"><span data-lang="en">Good to know</span><span data-lang="ru">Полезно знать</span></p>
+<h2 class="section-heading__title"><span data-lang="en">Common questions</span><span data-lang="ru">Частые вопросы</span></h2>
+</header>
+<div class="faq-list">
+<div class="faq-item is-open"><button class="faq-q" data-faq-q><span><span data-lang="en">How does booking work?</span><span data-lang="ru">Как проходит бронирование?</span></span><span class="faq-plus"></span></button><div class="faq-a"><div><p><span data-lang="en">Send a request with your preferred date and details. A local booking manager checks availability before you receive a secure payment link.</span><span data-lang="ru">Отправьте заявку с датой и деталями. Локальный менеджер проверит доступность до того, как вы получите защищённую ссылку на оплату.</span></p></div></div></div>
+<div class="faq-item"><button class="faq-q" data-faq-q><span><span data-lang="en">Is the price final?</span><span data-lang="ru">Цена окончательная?</span></span><span class="faq-plus"></span></button><div class="faq-a"><div><p><span data-lang="en">The price and everything included are shown before payment. If your request needs a custom quote, we will confirm it with you first.</span><span data-lang="ru">Цена и всё, что входит, показываются до оплаты. Если нужна индивидуальная стоимость, мы согласуем её заранее.</span></p></div></div></div>
+<div class="faq-item"><button class="faq-q" data-faq-q><span><span data-lang="en">Can I change or cancel my request?</span><span data-lang="ru">Можно изменить или отменить заявку?</span></span><span class="faq-plus"></span></button><div class="faq-a"><div><p><span data-lang="en">Yes. Contact support with your booking reference and we will explain the options for your specific service.</span><span data-lang="ru">Да. Напишите в поддержку с номером заявки, и мы объясним варианты для вашей услуги.</span></p></div></div></div>
+</div>
+</section>
+
+<div style="height:80px"></div>
+</main>
+
+<footer class="site-footer">
+<div class="site-footer__top">
+<a class="site-footer__brand" href="#"><span>My</span> Gudauri</a>
+<p><span data-lang="en">One trusted local guide for instructors, mountain experiences, stays and everything around Gudauri.</span><span data-lang="ru">Один надёжный локальный гид: инструкторы, горные впечатления, жильё и всё вокруг Гудаури.</span></p>
+</div>
+<div class="site-footer__main">
+<nav class="site-footer__column"><h4><span data-lang="en">Services</span><span data-lang="ru">Сервисы</span></h4><a href="#"><span data-lang="en">Instructors</span><span data-lang="ru">Инструкторы</span></a><a href="#"><span data-lang="en">Activities</span><span data-lang="ru">Активности</span></a><a href="#"><span data-lang="en">Rental</span><span data-lang="ru">Прокат</span></a><a href="#"><span data-lang="en">Transfers</span><span data-lang="ru">Трансфер</span></a></nav>
+<nav class="site-footer__column"><h4><span data-lang="en">Explore</span><span data-lang="ru">Обзор</span></h4><a href="#"><span data-lang="en">Stays</span><span data-lang="ru">Жильё</span></a><a href="#"><span data-lang="en">Places</span><span data-lang="ru">Места</span></a><a href="#"><span data-lang="en">Articles</span><span data-lang="ru">Статьи</span></a><a href="#"><span data-lang="en">About Gudauri</span><span data-lang="ru">О Гудаури</span></a></nav>
+<div class="site-footer__column"><h4><span data-lang="en">Contact</span><span data-lang="ru">Контакты</span></h4><a href="tel:+9951234565">+995 123 45 65</a><a href="mailto:mygudauri@gmail.com">mygudauri@gmail.com</a><p>Gudauri, Georgia</p></div>
+<div class="site-footer__cta"><p><span data-lang="en">Are you a local professional?</span><span data-lang="ru">Вы локальный специалист?</span></p><a href="#"><span data-lang="en">Offer a service</span><span data-lang="ru">Стать партнёром</span> <span aria-hidden="true">↗</span></a></div>
+</div>
+<div class="site-footer__bottom"><p>© 2026 My Gudauri</p><div><a href="#"><span data-lang="en">Support</span><span data-lang="ru">Помощь</span></a><span>Privacy</span><span>Cookies</span></div><p><span data-lang="en">Independent local platform</span><span data-lang="ru">Независимая локальная платформа</span></p></div>
+</footer>
+
+</div>
+</div>
+
+<!-- ============================== 1c — OBJECT PAGE MEGA-TEMPLATE ============================== -->
+<div class="mg-frame" id="1c">
+<div class="mg-screen-label"><span class="mg-screen-badge">1c</span><span class="mg-screen-name"><span data-lang="en">Object page mega-template</span><span data-lang="ru">Мега-шаблон страницы объекта</span></span><span class="mg-screen-note"><span data-lang="en">Hero · facts · about · unique blocks · reviews · sticky booking · related</span><span data-lang="ru">Hero · факты · описание · уникальные блоки · отзывы · sticky-бронь · похожие</span></span></div>
+<div class="mg-screen" data-screen-label="Страница объекта — мега-шаблон">
+
+<header class="site-nav-host">
+<div class="site-nav"><div class="site-nav__bar">
+<div class="site-nav__left">
+<a class="site-nav__brand" href="#"><span class="site-nav__brand-muted">My </span>Gudauri</a>
+<nav class="site-nav__links">
+<div style="position:relative">
+<button class="site-nav__trigger" data-mega-trigger type="button"><span data-lang="en">Categories</span><span data-lang="ru">Категории</span><img class="site-nav__chevron" src="assets/navbar/caret-down.png" alt=""></button>
+<div class="megamenu">
+<div class="megamenu__grid">
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-instructors.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Instructors</span><span data-lang="ru">Инструкторы</span></span><span class="megamenu__d"><span data-lang="en">Verified ski &amp; snowboard coaches</span><span data-lang="ru">Проверенные инструкторы</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-activity.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Activities</span><span data-lang="ru">Активности</span></span><span class="megamenu__d"><span data-lang="en">Freeride, tours and adventures</span><span data-lang="ru">Фрирайд, туры и приключения</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-rent.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Rental</span><span data-lang="ru">Прокат</span></span><span class="megamenu__d"><span data-lang="en">Gear for every level and style</span><span data-lang="ru">Снаряжение для любого уровня</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-transfer.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Transfers</span><span data-lang="ru">Трансфер</span></span><span class="megamenu__d"><span data-lang="en">Tbilisi, Kutaisi and regional routes</span><span data-lang="ru">Тбилиси, Кутаиси и маршруты</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-services.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Services</span><span data-lang="ru">Услуги</span></span><span class="megamenu__d"><span data-lang="en">Photo, video, childcare and more</span><span data-lang="ru">Фото, видео, няни и другое</span></span></span></a>
+<a class="megamenu__item" href="#"><span class="megamenu__ico"><img src="assets/navbar/icon-places.png" alt=""></span><span><span class="megamenu__t"><span data-lang="en">Places</span><span data-lang="ru">Места</span></span><span class="megamenu__d"><span data-lang="en">Restaurants, wellness, essentials</span><span data-lang="ru">Рестораны, спа, необходимое</span></span></span></a>
+</div>
+<div class="megamenu__foot"><span><span data-lang="en">Stays and Articles are one click away too.</span><span data-lang="ru">Жильё и статьи — тоже в один клик.</span></span><a href="#"><span data-lang="en">Need help choosing? →</span><span data-lang="ru">Нужна помощь с выбором? →</span></a></div>
+</div>
+</div>
+<a class="site-nav__link" href="#"><span data-lang="en">Articles</span><span data-lang="ru">Статьи</span></a>
+<a class="site-nav__link" href="#"><span data-lang="en">About Gudauri</span><span data-lang="ru">О Гудаури</span></a>
+<a class="site-nav__link" href="#"><span data-lang="en">Support</span><span data-lang="ru">Помощь</span></a>
+</nav>
+</div>
+<div class="site-nav__right">
+<div class="lang-switch"><button data-lang-set="en" class="is-active">EN</button><button data-lang-set="ru">RU</button></div>
+<a class="site-nav__offer" href="#"><span data-lang="en">Offer a service</span><span data-lang="ru">Стать партнёром</span></a>
+</div>
+</div></div>
+</header>
+
+<main class="pf">
+<div style="margin:20px 0 -8px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">1 · Hero · шаблон · название + фото + главное поле БД + отзывы</span></div>
+<section class="profile-hero">
+<div class="profile-hero-copy">
+<a class="profile-back-btn" href="#1b">← <span data-lang="en">Back</span><span data-lang="ru">Назад</span></a>
+<div class="profile-badges-row">
+<span class="profile-badge"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span>
+<span class="profile-badge"><img src="assets/design-2/icon-ski.png" alt="">Ski</span>
+<span class="profile-role"><span data-lang="en">Instructor</span><span data-lang="ru">Инструктор</span></span>
+</div>
+<h1 class="profile-title">Mikhail<br>Andreev</h1>
+<div class="profile-rating-main"><span class="star">★</span>4.8<span class="dot"></span><a href="#reviews">6 <span data-lang="en">reviews</span><span data-lang="ru">отзывов</span></a></div>
+<div class="profile-hero-intro">
+<p><span data-lang="en">Private lessons in Gudauri</span><span data-lang="ru">Частные уроки в Гудаури</span></p>
+<p><span data-lang="en">Calm, technique-focused coaching for first turns, confident carving and freeride preparation.</span><span data-lang="ru">Спокойное обучение с упором на технику: первые повороты, уверенный карвинг и подготовка к фрирайду.</span></p>
+<dl>
+<div><dt>5+</dt><dd><span data-lang="en">years teaching</span><span data-lang="ru">лет опыта</span></dd></div>
+<div><dt>3</dt><dd><span data-lang="en">languages</span><span data-lang="ru">языка</span></dd></div>
+<div><dt>4.8</dt><dd><span data-lang="en">guest rating</span><span data-lang="ru">рейтинг</span></dd></div>
+</dl>
+</div>
+</div>
+<div class="profile-hero-photo-wrap">
+<img class="profile-hero-photo" src="assets/design-3/hero-main.png" alt="Mikhail Andreev">
+<div class="profile-photo-overlay">
+<span class="profile-availability"><i></i><span data-lang="en">Available this week</span><span data-lang="ru">Свободен на этой неделе</span></span>
+<button class="profile-gallery-trigger" type="button">
+<span class="profile-gallery-trigger__thumbs" aria-hidden="true"><img src="assets/design-3/media-1.jpg" alt=""><img src="assets/design-3/media-2.jpg" alt=""><img src="assets/design-3/media-3.jpg" alt=""></span>
+<span><b><span data-lang="en">Open gallery</span><span data-lang="ru">Галерея</span></b><small>6 <span data-lang="en">photos</span><span data-lang="ru">фото</span></small></span>
+<span class="profile-gallery-trigger__arrow" aria-hidden="true">↗</span>
+</button>
+</div>
+</div>
+</section>
+
+<section class="profile-details">
+<div class="profile-left-col">
+
+<div><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">2 · главные теги · шаблон · 4 главных поля БД</span></div>
+<section class="profile-facts">
+<article class="fact-card"><div class="fact-top"><img src="assets/design-3/icon-specialization.png" alt=""><p><span data-lang="en">Specialization</span><span data-lang="ru">Специализация</span></p></div><div class="fact-bottom"><span class="fact-pill">Snowboard</span><span class="fact-pill">Ski</span></div></article>
+<article class="fact-card"><div class="fact-top"><img src="assets/design-3/icon-language.png" alt=""><p><span data-lang="en">Language</span><span data-lang="ru">Язык</span></p></div><div class="fact-bottom"><span class="fact-pill">Ge</span><span class="fact-pill">En</span><span class="fact-pill">Ru</span></div></article>
+<article class="fact-card"><div class="fact-top"><img src="assets/design-3/icon-experience.png" alt=""><p><span data-lang="en">Experience</span><span data-lang="ru">Опыт</span></p></div><div class="fact-bottom"><span class="fact-pill">5+</span><span class="fact-text"><span data-lang="en">years</span><span data-lang="ru">лет</span></span></div></article>
+<article class="fact-card"><div class="fact-top"><img src="assets/design-3/icon-certificate.png" alt=""><p><span data-lang="en">Certificate</span><span data-lang="ru">Сертификат</span></p></div><div class="fact-bottom"><span class="fact-pill"><span data-lang="en">Verified Instructor</span><span data-lang="ru">Проверенный</span></span></div></article>
+</section>
+
+<section class="profile-about">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">3 · описание · шаблон · текст из БД</span></div>
+<header class="section-heading section-heading--sm"><p class="section-heading__kicker"><span data-lang="en">Trust us</span><span data-lang="ru">О себе</span></p><h2 class="section-heading__title"><span data-lang="en">About</span><span data-lang="ru">Об инструкторе</span></h2></header>
+<div class="about-copy">
+<p><span data-lang="en">I’m a certified ski instructor with over eight years of teaching experience in Gudauri. I work with adults and teenagers who want to feel confident and in control on the mountain, whether it’s their first day on skis or they are refining existing skills.</span><span data-lang="ru">Я сертифицированный инструктор с более чем восьмилетним опытом преподавания в Гудаури. Работаю со взрослыми и подростками, которым важно чувствовать себя уверенно на горе — будь то первый день на лыжах или отработка навыков.</span></p>
+<p><span data-lang="en">My lessons are structured and goal-oriented. I focus on proper technique from the beginning, clear explanations and practical exercises that bring steady improvement.</span><span data-lang="ru">Мои занятия структурированы и нацелены на результат. С самого начала — правильная техника, понятные объяснения и практика, которая даёт устойчивый прогресс.</span></p>
+</div>
+<div style="margin:16px 0 10px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">4 · доп. теги · шаблон · поля-списки БД</span></div>
+<div class="about-tags">
+<span class="about-tag"><i></i><span data-lang="en">Beginners</span><span data-lang="ru">Новички</span></span>
+<span class="about-tag"><i></i><span data-lang="en">Intermediate</span><span data-lang="ru">Средний уровень</span></span>
+<span class="about-tag"><i></i><span data-lang="en">Kids lessons</span><span data-lang="ru">Дети</span></span>
+<span class="about-tag"><i></i><span data-lang="en">Carving</span><span data-lang="ru">Карвинг</span></span>
+<span class="about-tag"><i></i><span data-lang="en">Confidence training</span><span data-lang="ru">Уверенность</span></span>
+</div>
+</section>
+
+<section class="profile-lesson-formats">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#fff;border:1.5px dashed #8a9099;color:#55595e">5 · уникальный блок 1 из 2 · категория</span></div>
+<header class="section-heading section-heading--sm"><p class="section-heading__kicker"><span data-lang="en">Unique block · instructors</span><span data-lang="ru">Уникальный блок · инструкторы</span></p><h2 class="section-heading__title"><span data-lang="en">Lesson formats</span><span data-lang="ru">Форматы занятий</span></h2></header>
+<div class="profile-format-list">
+<article><div><h3><span data-lang="en">Private lesson</span><span data-lang="ru">Частный урок</span></h3><p><span data-lang="en">Focused coaching at your pace</span><span data-lang="ru">Индивидуально, в вашем темпе</span></p></div><span><span data-lang="en">1–3 guests · any level</span><span data-lang="ru">1–3 гостя · любой уровень</span></span></article>
+<article><div><h3><span data-lang="en">Children &amp; families</span><span data-lang="ru">Дети и семьи</span></h3><p><span data-lang="en">A comfortable format for mixed groups</span><span data-lang="ru">Комфортный формат для смешанных групп</span></p></div><span><span data-lang="en">Ages confirmed in the request</span><span data-lang="ru">Возраст уточняется в заявке</span></span></article>
+<article><div><h3><span data-lang="en">Technique session</span><span data-lang="ru">Техническое занятие</span></h3><p><span data-lang="en">Clear exercises for your current goals</span><span data-lang="ru">Понятные упражнения под ваши цели</span></p></div><span><span data-lang="en">First turns to advanced skills</span><span data-lang="ru">От первых поворотов до продвинутого</span></span></article>
+</div>
+</section>
+
+<section class="profile-lesson-details">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#fff;border:1.5px dashed #8a9099;color:#55595e">5 · уникальный блок 2 из 2 · категория</span></div>
+<header class="section-heading section-heading--sm"><p class="section-heading__kicker"><span data-lang="en">Before the lesson</span><span data-lang="ru">Перед занятием</span></p><h2 class="section-heading__title"><span data-lang="en">What to expect</span><span data-lang="ru">Что входит</span></h2></header>
+<div class="profile-inclusion-row"><span><span data-lang="en">Included</span><span data-lang="ru">Входит</span></span><div><i><span data-lang="en">Lesson</span><span data-lang="ru">Урок</span></i><i><span data-lang="en">Technique feedback</span><span data-lang="ru">Разбор техники</span></i><i><span data-lang="en">Route selection</span><span data-lang="ru">Выбор маршрута</span></i></div></div>
+<div class="profile-inclusion-row"><span><span data-lang="en">Arrange separately</span><span data-lang="ru">Отдельно</span></span><div><i><span data-lang="en">Equipment rental</span><span data-lang="ru">Прокат</span></i><i><span data-lang="en">Ski pass</span><span data-lang="ru">Ски-пасс</span></i><i><span data-lang="en">Insurance</span><span data-lang="ru">Страховка</span></i></div></div>
+</section>
+
+<section id="reviews" class="profile-reviews">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">6 · отзывы · шаблон · отзывы из БД объекта</span></div>
+<header class="section-heading section-heading--sm"><p class="section-heading__kicker"><span data-lang="en">Students about the instructor</span><span data-lang="ru">Ученики об инструкторе</span></p><h2 class="section-heading__title"><span data-lang="en">Reviews</span><span data-lang="ru">Отзывы</span></h2></header>
+<div class="reviews-summary"><span class="star">★</span><span class="reviews-summary__value">4.8</span><span class="dot"></span><span class="reviews-summary__value">6 <span data-lang="en">reviews</span><span data-lang="ru">отзывов</span></span></div>
+<div class="reviews-grid">
+<article class="review-card"><div class="review-head"><div class="review-avatar"><img src="assets/design-3/avatar-booking.jpg" alt=""></div><div><h3>Karla Lynn</h3><p><span data-lang="en">2 hour lesson</span><span data-lang="ru">Занятие 2 часа</span></p></div></div><div class="review-meta"><span class="star">★★★★★</span><span class="dot"></span><span><span data-lang="en">August 2025</span><span data-lang="ru">Август 2025</span></span></div><p class="review-text"><span data-lang="en">Mikhail helped me go from complete beginner to confidently skiing blue slopes in just a few days.</span><span data-lang="ru">Михаил помог мне за несколько дней пройти путь от новичка до уверенного катания на синих склонах.</span></p></article>
+<article class="review-card"><div class="review-head"><div class="review-avatar"><img src="assets/design-3/avatar-booking.jpg" alt=""></div><div><h3>Marina Ivanova</h3><p><span data-lang="en">8 hours lesson</span><span data-lang="ru">Занятие 8 часов</span></p></div></div><div class="review-meta"><span class="star">★★★★★</span><span class="dot"></span><span><span data-lang="en">August 2025</span><span data-lang="ru">Август 2025</span></span></div><p class="review-text"><span data-lang="en">Very patient and professional. Every exercise felt adapted to my pace and I saw real progress.</span><span data-lang="ru">Очень терпеливый и профессиональный. Каждое упражнение под мой темп — виден реальный прогресс.</span></p><a href="#"><span data-lang="en">Show more</span><span data-lang="ru">Ещё</span></a></article>
+</div>
+<button class="outline-md-btn" type="button"><img class="left" src="assets/ui-kit/btn-md-arrow-dark.png" alt=""><span data-lang="en">Show all reviews (6)</span><span data-lang="ru">Все отзывы (6)</span><img src="assets/ui-kit/btn-md-arrow-dark.png" alt=""></button>
+</section>
+
+<section class="profile-rules">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#d9ecfb;border:1px solid #bcdcf7;color:#17405f">7 · как забронировать · категория</span></div>
+<header class="section-heading section-heading--sm"><p class="section-heading__kicker"><span data-lang="en">How it works</span><span data-lang="ru">Как это работает</span></p><h2 class="section-heading__title"><span data-lang="en">How to book</span><span data-lang="ru">Как забронировать</span></h2></header>
+<div class="profile-rules-grid">
+<article><span>01</span><h3><span data-lang="en">Send a request</span><span data-lang="ru">Отправьте заявку</span></h3><p><span data-lang="en">Pick dates, hours and your level in the booking widget.</span><span data-lang="ru">Укажите даты, часы и уровень в виджете брони.</span></p></article>
+<article><span>02</span><h3><span data-lang="en">We confirm</span><span data-lang="ru">Мы подтверждаем</span></h3><p><span data-lang="en">The manager checks the instructor’s availability within an hour.</span><span data-lang="ru">Менеджер проверяет доступность инструктора в течение часа.</span></p></article>
+<article><span>03</span><h3><span data-lang="en">Meet on the slope</span><span data-lang="ru">Встреча на склоне</span></h3><p><span data-lang="en">Contacts are shared after confirmation to agree the meeting point.</span><span data-lang="ru">Контакты передаются после подтверждения — согласуете место встречи.</span></p></article>
+</div>
+</section>
+
+<section style="margin-top:8px">
+<div style="margin:0 0 12px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">8 · другие объекты · шаблон · карточки из каталога</span></div>
+<header class="section-heading section-heading--sm"><p class="section-heading__kicker"><span data-lang="en">May also fit</span><span data-lang="ru">Может подойти</span></p><h2 class="section-heading__title"><span data-lang="en">Other instructors</span><span data-lang="ru">Другие инструкторы</span></h2></header>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px">
+<a class="listing-card" href="#">
+<div class="listing-card__media"><img src="assets/design-2/card-oleg.png" alt="">
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Oleg Yung</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Freeride · Technique</span><span data-lang="ru">Фрирайд · Техника</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>8+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#">
+<div class="listing-card__media"><img src="assets/design-2/card-red-ski.png" alt="">
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Alex Red</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">First lessons · Technique</span><span data-lang="ru">Первые уроки · Техника</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>6+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+<a class="listing-card" href="#">
+<div class="listing-card__media"><img src="assets/design-2/card-andrey.png" alt="">
+<div class="listing-card__media-bottom"><span class="lc-pill"><img src="assets/design-2/icon-snow.png" alt="">Snowboard</span><span class="lc-pill"><img src="assets/design-2/icon-ski.png" alt="">Ski</span></div></div>
+<div class="listing-card__body"><div class="listing-card__title-row"><h3 class="listing-card__title">Andrey Gregorev</h3><span class="listing-card__verified"><span data-lang="en">Verified</span><span data-lang="ru">Проверен</span></span></div>
+<p class="listing-card__description"><span data-lang="en">Kids &amp; families · First lessons</span><span data-lang="ru">Дети и семьи · Первые уроки</span></p>
+<div class="listing-card__footer"><span class="listing-card__rating"><b aria-hidden="true">★</b><strong>4.8</strong><small>5+ <span data-lang="en">years</span><span data-lang="ru">лет</span></small></span><span class="listing-card__action"><span data-lang="en">View profile</span><span data-lang="ru">Профиль</span><i aria-hidden="true">↗</i></span></div></div>
+</a>
+</div>
+</section>
+
+</div>
+
+<aside class="profile-booking-wrap">
+<div style="margin:0 0 10px"><span style="display:inline-flex;font:600 10.5px ui-monospace,monospace;letter-spacing:.05em;text-transform:uppercase;border-radius:5px;padding:3px 8px;background:#e9e9e5;border:1px solid #d3d3cc;color:#6c7066">Виджет брони · шаблон · sticky</span></div>
+<div class="profile-booking-card" data-booking>
+<div class="booking-head"><img class="booking-avatar" src="assets/design-3/avatar-booking.jpg" alt=""><div><p><span data-lang="en">Single official rate</span><span data-lang="ru">Единая официальная ставка</span></p><h3>345 gel <span data-lang="en">/ hour</span><span data-lang="ru">/ час</span></h3></div></div>
+<div class="booking-counters">
+<div class="booking-counter" data-counter data-role="hours" data-min="1" data-max="12" data-step="1"><div class="booking-counter-value-inner"><span data-counter-val>8</span><p><span data-lang="en">hours</span><span data-lang="ru">часов</span></p></div><div class="booking-counter-controls"><button class="booking-counter-btn" data-counter-btn="minus" type="button">−</button><button class="booking-counter-btn" data-counter-btn="plus" type="button">+</button></div></div>
+<div class="booking-counter" data-counter data-role="people" data-min="1" data-max="3" data-step="1"><div class="booking-counter-value-inner"><span data-counter-val>2</span><p><span data-lang="en">students</span><span data-lang="ru">ученика</span></p></div><div class="booking-counter-controls"><button class="booking-counter-btn" data-counter-btn="minus" type="button">−</button><button class="booking-counter-btn" data-counter-btn="plus" type="button">+</button></div></div>
+</div>
+<label class="rq-field"><span style="font-size:12px;font-weight:600;color:var(--grey-500)"><span data-lang="en">Dates</span><span data-lang="ru">Даты</span></span><input placeholder="14 – 16 March"></label>
+<label class="rq-field"><span style="font-size:12px;font-weight:600;color:var(--grey-500)"><span data-lang="en">Name</span><span data-lang="ru">Имя</span></span><input placeholder="Anna"></label>
+<label class="rq-field"><span style="font-size:12px;font-weight:600;color:var(--grey-500)"><span data-lang="en">Phone or messenger</span><span data-lang="ru">Телефон / мессенджер</span></span><input placeholder="+995 …"></label>
+<label class="rq-field"><span style="font-size:12px;font-weight:600;color:var(--grey-500)"><span data-lang="en">Comment</span><span data-lang="ru">Комментарий</span></span><textarea placeholder=""></textarea></label>
+<div class="booking-breakdown" data-booking-breakdown></div>
+<div class="booking-total-row"><b data-booking-total>3 284 gel</b><small><span data-lang="en">for</span><span data-lang="ru">за</span> <span data-booking-hours>8</span> <span data-lang="en">h</span><span data-lang="ru">ч</span> · <span data-booking-people>2</span> <span data-lang="en">ppl</span><span data-lang="ru">чел</span></small></div>
+<div class="booking-note-top"><span class="i">⏱</span><p><span data-lang="en">Hours can be split across several days</span><span data-lang="ru">Часы можно разбить на несколько дней</span></p></div>
+<button class="booking-cta-btn" type="button"><span data-lang="en">Continue</span><span data-lang="ru">Продолжить</span></button>
+<div class="booking-note-bottom"><p><span data-lang="en">Pick a date and time — the manager confirms whether the instructor is free, or suggests another.</span><span data-lang="ru">Выберите дату и время — оператор подтвердит, свободен ли инструктор, или предложит другого.</span></p></div>
+</div>
+</aside>
+</section>
+
+<div style="height:80px"></div>
+</main>
+
+<footer class="site-footer">
+<div class="site-footer__top">
+<a class="site-footer__brand" href="#"><span>My</span> Gudauri</a>
+<p><span data-lang="en">One trusted local guide for instructors, mountain experiences, stays and everything around Gudauri.</span><span data-lang="ru">Один надёжный локальный гид: инструкторы, горные впечатления, жильё и всё вокруг Гудаури.</span></p>
+</div>
+<div class="site-footer__main">
+<nav class="site-footer__column"><h4><span data-lang="en">Services</span><span data-lang="ru">Сервисы</span></h4><a href="#"><span data-lang="en">Instructors</span><span data-lang="ru">Инструкторы</span></a><a href="#"><span data-lang="en">Activities</span><span data-lang="ru">Активности</span></a><a href="#"><span data-lang="en">Rental</span><span data-lang="ru">Прокат</span></a><a href="#"><span data-lang="en">Transfers</span><span data-lang="ru">Трансфер</span></a></nav>
+<nav class="site-footer__column"><h4><span data-lang="en">Explore</span><span data-lang="ru">Обзор</span></h4><a href="#"><span data-lang="en">Stays</span><span data-lang="ru">Жильё</span></a><a href="#"><span data-lang="en">Places</span><span data-lang="ru">Места</span></a><a href="#"><span data-lang="en">Articles</span><span data-lang="ru">Статьи</span></a><a href="#"><span data-lang="en">About Gudauri</span><span data-lang="ru">О Гудаури</span></a></nav>
+<div class="site-footer__column"><h4><span data-lang="en">Contact</span><span data-lang="ru">Контакты</span></h4><a href="tel:+9951234565">+995 123 45 65</a><a href="mailto:mygudauri@gmail.com">mygudauri@gmail.com</a><p>Gudauri, Georgia</p></div>
+<div class="site-footer__cta"><p><span data-lang="en">Are you a local professional?</span><span data-lang="ru">Вы локальный специалист?</span></p><a href="#"><span data-lang="en">Offer a service</span><span data-lang="ru">Стать партнёром</span> <span aria-hidden="true">↗</span></a></div>
+</div>
+<div class="site-footer__bottom"><p>© 2026 My Gudauri</p><div><a href="#"><span data-lang="en">Support</span><span data-lang="ru">Помощь</span></a><span>Privacy</span><span>Cookies</span></div><p><span data-lang="en">Independent local platform</span><span data-lang="ru">Независимая локальная платформа</span></p></div>
+</footer>
+
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.getElementById('mgRoot');
+    if (!root) return;
+    this.root = root;
+
+    const closeMega = () => {
+      root.querySelectorAll('.megamenu.is-open').forEach(p => p.classList.remove('is-open'));
+      root.querySelectorAll('[data-mega-trigger].is-open').forEach(t => t.classList.remove('is-open'));
+    };
+
+    root.addEventListener('click', (e) => {
+      const langBtn = e.target.closest('[data-lang-set]');
+      if (langBtn) { this.setLang(langBtn.getAttribute('data-lang-set')); return; }
+
+      const mega = e.target.closest('[data-mega-trigger]');
+      if (mega) {
+        e.preventDefault();
+        const panel = mega.parentElement.querySelector('.megamenu');
+        const open = panel.classList.contains('is-open');
+        closeMega();
+        if (!open) { panel.classList.add('is-open'); mega.classList.add('is-open'); }
+        return;
+      }
+
+      const faq = e.target.closest('[data-faq-q]');
+      if (faq) { faq.closest('.faq-item').classList.toggle('is-open'); return; }
+
+      const insfTrig = e.target.closest('[data-filter-trigger]');
+      if (insfTrig) {
+        e.preventDefault();
+        const group = insfTrig.closest('.insf-group');
+        const open = group.classList.contains('is-open');
+        root.querySelectorAll('.insf-group.is-open').forEach(g => g.classList.remove('is-open'));
+        if (!open) group.classList.add('is-open');
+        return;
+      }
+      const catBtn = e.target.closest('[data-ins-cat]');
+      if (catBtn) {
+        const cats = catBtn.closest('[data-ins-cats]');
+        cats.querySelectorAll('[data-ins-cat]').forEach(b => b.classList.remove('is-active'));
+        catBtn.classList.add('is-active');
+        const scope = catBtn.closest('[data-insfilter]');
+        scope.dataset.insCat = catBtn.getAttribute('data-ins-cat');
+        this.applyInsFilters(scope);
+        return;
+      }
+      const insfOpt = e.target.closest('[data-insf-option]');
+      if (insfOpt) { insfOpt.classList.toggle('is-checked'); this.applyInsFilters(insfOpt.closest('[data-insfilter]')); return; }
+      const insfClear = e.target.closest('[data-insf-clear-all]');
+      if (insfClear) {
+        const scope = insfClear.closest('[data-insfilter]');
+        scope.querySelectorAll('.instructor-filter-option.is-checked').forEach(o => o.classList.remove('is-checked'));
+        this.applyInsFilters(scope);
+        return;
+      }
+      if (!e.target.closest('.insf-group')) root.querySelectorAll('.insf-group.is-open').forEach(g => g.classList.remove('is-open'));
+
+      const cnt = e.target.closest('[data-counter-btn]');
+      if (cnt) { this.counter(cnt); return; }
+
+      if (!e.target.closest('.megamenu') && !e.target.closest('[data-mega-trigger]')) closeMega();
+    });
+
+    this.setLang('en');
+    root.querySelectorAll('[data-insfilter]').forEach(c => this.applyInsFilters(c));
+    root.querySelectorAll('[data-booking]').forEach(c => this.syncBooking(c));
+  }
+
+  applyInsFilters(scope) {
+    if (!scope) return;
+    const active = {};
+    scope.querySelectorAll('.insf-group').forEach(g => {
+      const attr = g.getAttribute('data-card-attr');
+      const vals = Array.from(g.querySelectorAll('.instructor-filter-option.is-checked')).map(o => o.getAttribute('data-val'));
+      const trig = g.querySelector('.instructor-filter-trigger');
+      const badge = g.querySelector('[data-insf-badge]');
+      if (trig) trig.classList.toggle('is-active', vals.length > 0);
+      if (badge) { badge.textContent = vals.length; badge.style.display = vals.length ? '' : 'none'; }
+      if (vals.length) active[attr] = vals;
+    });
+    const keys = Object.keys(active);
+    const cat = scope.dataset.insCat || 'all';
+    let shown = 0;
+    scope.querySelectorAll('[data-ins-card]').forEach(card => {
+      const okCat = cat === 'all' || (card.getAttribute('data-disc') || '').split(' ').includes(cat);
+      const ok = okCat && keys.every(attr => {
+        const cv = (card.getAttribute(attr) || '').split(' ');
+        return active[attr].some(v => cv.includes(v));
+      });
+      card.classList.toggle('is-hidden', !ok);
+      if (ok) shown++;
+    });
+    const cnt = scope.querySelector('[data-ins-count]');
+    if (cnt) cnt.textContent = shown;
+    const en = scope.querySelector('[data-ins-en]');
+    if (en) en.textContent = shown === 1 ? 'instructor' : 'instructors';
+    const clearAll = scope.querySelector('[data-insf-clear-all]');
+    if (clearAll) clearAll.style.display = keys.length ? '' : 'none';
+    const empty = scope.querySelector('[data-ins-empty]');
+    if (empty) empty.classList.toggle('mg-hidden', shown > 0);
+  }
+
+  setLang(lang) {
+    const root = this.root;
+    root.classList.toggle('mg-lang-ru', lang === 'ru');
+    root.classList.toggle('mg-lang-en', lang !== 'ru');
+    root.querySelectorAll('[data-lang-set]').forEach(b => b.classList.toggle('is-active', b.getAttribute('data-lang-set') === lang));
+  }
+
+  counter(btn) {
+    const wrap = btn.closest('[data-counter]');
+    const valEl = wrap.querySelector('[data-counter-val]');
+    let n = parseInt(valEl.textContent, 10) || 0;
+    const step = parseInt(wrap.getAttribute('data-step') || '1', 10);
+    const min = parseInt(wrap.getAttribute('data-min') || '0', 10);
+    const max = parseInt(wrap.getAttribute('data-max') || '99', 10);
+    n = btn.getAttribute('data-counter-btn') === 'plus' ? Math.min(max, n + step) : Math.max(min, n - step);
+    valEl.textContent = n;
+    const card = btn.closest('.profile-booking-card');
+    if (card) this.syncBooking(card);
+  }
+
+  syncBooking(card) {
+    const read = (role) => {
+      const el = card.querySelector(`[data-counter][data-role="${role}"] [data-counter-val]`);
+      return el ? (parseInt(el.textContent, 10) || 0) : 0;
+    };
+    const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    const hours = read('hours'), people = read('people');
+    const partMult = { 1: 1, 2: 1.4, 3: 1.7 }[people] || 1;
+    const partPct = Math.round((partMult - 1) * 100);
+    const volPct = hours >= 8 ? 15 : hours >= 4 ? 10 : 0;
+    const base = 345 * hours;
+    const withPart = base * partMult;
+    const surcharge = withPart - base;
+    const discount = withPart * (volPct / 100);
+    const total = withPart - discount;
+
+    const rows = [];
+    rows.push(`<div class="booking-breakdown-row"><span>345 × ${hours} <span data-lang="en">h</span><span data-lang="ru">ч</span></span><span>${fmt(base)}</span></div>`);
+    if (surcharge > 0) rows.push(`<div class="booking-breakdown-row"><span><span data-lang="en">${people} students · +${partPct}%</span><span data-lang="ru">${people} ученика · +${partPct}%</span></span><span>+${fmt(surcharge)}</span></div>`);
+    if (discount > 0) rows.push(`<div class="booking-breakdown-row"><span><span data-lang="en">From ${hours}h · −${volPct}%</span><span data-lang="ru">от ${hours} ч · −${volPct}%</span></span><span>−${fmt(discount)}</span></div>`);
+    const bd = card.querySelector('[data-booking-breakdown]');
+    if (bd) { bd.innerHTML = rows.join(''); this.setLang(this.root.classList.contains('mg-lang-ru') ? 'ru' : 'en'); }
+    const tot = card.querySelector('[data-booking-total]');
+    if (tot) tot.textContent = fmt(total) + ' gel';
+    const h = card.querySelector('[data-booking-hours]');
+    if (h) h.textContent = hours;
+    const p = card.querySelector('[data-booking-people]');
+    if (p) p.textContent = people;
+  }
+}
+</script>
+</body>
+</html>

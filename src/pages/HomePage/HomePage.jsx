@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Container, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
 import { HomeHeroSearch } from '../../components/product';
 import { FAQ_ITEMS } from '../../data/faqItems';
-import { INSTRUCTORS } from '../../data/instructors';
 import { HOME_CATEGORIES } from '../../data/siteCategories';
+import { getInstructors } from '../../services/instructorsApi';
 import './HomePage.scss';
 
 export function HomePage() {
+  const [instructors, setInstructors] = useState([]);
+
   useEffect(() => {
     document.body.classList.add('home-page-body');
     return () => {
@@ -15,10 +17,22 @@ export function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    getInstructors().then((items) => {
+      if (active) setInstructors(items.slice(0, 3));
+    }).catch(() => {
+      if (active) setInstructors([]);
+    });
+    return () => { active = false; };
+  }, []);
+
   return (
     <>
       <div className="home-page">
-        <SiteNavbar className="site-nav-host--hero" />
+        <div className="home-page__nav-band">
+          <SiteNavbar className="site-nav-host--hero" />
+        </div>
         <section className="hero-wrap">
           <Container width="wide">
             <div className="grid-12 hero-grid">
@@ -100,7 +114,7 @@ export function HomePage() {
                   </Link>
                 </article>
 
-                {INSTRUCTORS.slice(0, 3).map((instructor) => (
+                {instructors.map((instructor) => (
                   <InstructorCard instructor={instructor} key={instructor.id} />
                 ))}
               </div>

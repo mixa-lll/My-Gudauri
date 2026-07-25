@@ -4,7 +4,7 @@ export { FaqAccordion } from './FaqAccordion/FaqAccordion';
 export { CategoryTab, CatalogCategoryTabs } from './CatalogCategoryTabs/CatalogCategoryTabs';
 export { DestinationCard } from './DestinationCard/DestinationCard';
 export { MediaPlaceholder } from './MediaPlaceholder/MediaPlaceholder';
-export { ProfileGallery } from './ProfileGallery/ProfileGallery';
+export { ObjectMediaGallery } from './ProfileGallery/ProfileGallery';
 export { ListingCard, ListingCardAction, ListingCardFrame, ListingCardGrid, ListingCardPill, ListingCardPrice, ListingCardRating, Price, Rating } from './ListingCard/ListingCard';
 export { ActivityCard, EditorialCard, InstructorCard, RentalCard, StayCard, TransferCard } from './ListingCard/TypedListingCards';
 export * from './UI/index';

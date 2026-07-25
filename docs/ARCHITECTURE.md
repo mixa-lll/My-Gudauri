@@ -63,10 +63,20 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 
 ## Transaction and inquiry boundaries
 
-- `instructors` is transactional: catalog → profile → `/booking` → an in-flow success summary with the real request ID and submitted details.
-- `activities`, `rental`, `transfers`, `services`, `stays` and `places` are browse-and-inquiry sections: catalog → detail → email inquiry.
-- Destination details must not link into the instructor booking flow until their own payload, validation and backend persistence exist.
-- There is no standalone `/summary` route. The former page was a hardcoded prototype; the live booking flow owns its request review and success state.
+- `instructors` uses the strict instructor request API and its participant, schedule and contact payload.
+- `activities`, `rental`, `transfers`, `services`, `stays` and `places` use the generic versioned inquiry API and persist the registered flow key, object identity, answers and estimate snapshot.
+- Every object detail page starts with the shared object-identified `BookingConfigurator`; its fields and guidance come from the category contract, and only entry answers are handed to the full request route.
+- `/booking/:category/:slug` resolves the same flow definition as the object page and restores a `BookingDraft` from session storage. Direct instructor URLs can rebuild the draft from the object API.
+- There is no standalone `/summary` route. Review and success are states of the live booking flow.
+
+## Booking contracts
+
+- `src/features/booking/contracts.js` owns `BOOKING_FLOW_REGISTRY`, category mappings, field definitions and pricing-policy selection.
+- `src/features/booking/BookingRequestFlow.jsx` owns `BOOKING_STEP_REGISTRY` and the flow state machine.
+- `BookingOffer` contains object-owned rate, currency, constraints and availability.
+- `BookingDraft` contains the flow/version, object identity, offer snapshot and user answers.
+- Design-system booking blocks are presentation-only and never import feature contracts or backend services.
+- The server treats client totals as estimates and stores them as snapshots, not authoritative payment amounts.
 
 ## CMS collections
 
@@ -82,6 +92,8 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 
 - `GET /api/instructors` — published catalog summaries.
 - `GET /api/instructors/:slug` — full published instructor profile.
+- `POST /api/instructor-requests` — validated instructor lesson request.
+- `POST /api/booking-requests` — validated generic category inquiry using a registered flow/version.
 - Unknown or unpublished slugs return `404`.
 - Public responses are edge-cacheable; errors use `no-store`.
 

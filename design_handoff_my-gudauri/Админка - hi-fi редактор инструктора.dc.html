@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Paytone+One&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+--grey-50:#f6f6f3;--grey-100:#eeeeea;--grey-150:#e5e5df;--grey-200:#d8d8d1;--grey-300:#a3a39b;--grey-400:#77776f;--grey-500:#4d4d47;--grey-600:#20211e;--grey-700:#151612;--grey-800:#0e0f0d;--grey-white:#fff;
+--rad-600:#df4b3f;--rad-700:#c23a2f;--rad-100:#f7e4df;
+--blue-50:#e9eef2;--success-600:#4c9a59;--warning-100:#fff1d8;--warning-700:#744700;
+--border-default:#e5e5df;--border-subtle:#eeeeea;
+--shadow-card:0 1px 0 rgba(24,25,22,.05),0 18px 48px rgba(24,25,22,.06);
+--font-body:Geist,'SF Pro Text',-apple-system,'Segoe UI',sans-serif;--font-decor:'Paytone One',Geist,sans-serif;
+}
+body{margin:0;background:#eceae7;font-family:var(--font-body);-webkit-font-smoothing:antialiased;color:var(--grey-600)}
+a{color:#2a78d6}a:hover{color:#1a5cb0}
+.dv-turn{padding:40px 44px 32px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 18px}.dv-tid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px}.dv-tname{font-size:16px;color:#1a1a1a}
+.mtx-sub{font-size:14px;color:rgba(0,0,0,.55);margin:0 0 26px;max-width:900px;line-height:1.55}.mtx-sub b{color:#333}
+.dv-opts{display:flex;flex-wrap:wrap;gap:30px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.dv-oid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:14px;color:rgba(0,0,0,.6);max-width:1024px}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-card{background:var(--grey-white);border:1px solid rgba(0,0,0,.1);border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.09);overflow:hidden}
+.dv-next{margin:26px 0 0;font-size:14px;color:rgba(0,0,0,.55);max-width:1000px;line-height:1.6}
+.lbl{font-size:12px;color:var(--grey-400)}
+.req{color:var(--rad-600)}
+.inp{background:#fff;border:1px solid var(--grey-200);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--grey-600)}
+.fld{display:flex;flex-direction:column;gap:6px}
+.chip{background:var(--grey-100);border-radius:99px;padding:5px 10px;font-size:13px;color:var(--grey-600);display:inline-flex;gap:5px;align-items:center}
+.chip .x{color:var(--grey-300)}
+.chipadd{border:1.5px dashed var(--grey-200);color:var(--grey-400);border-radius:99px;padding:4px 12px;font-size:13px}
+.card{background:var(--grey-white);border:1px solid var(--border-default);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:15px}
+.numchip{width:24px;height:24px;flex:none;border-radius:7px;background:var(--grey-100);color:var(--grey-500);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center}
+.blocktitle{font-size:15.5px;font-weight:600;color:var(--grey-600);letter-spacing:-.01em}
+.hint{font-size:12px;color:var(--grey-400)}
+.btnf{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 16px;background:var(--rad-600);color:#fff;border-radius:9px;font-size:14px;white-space:nowrap}
+.btnl{display:inline-flex;align-items:center;justify-content:center;height:32px;padding:0 15px;background:#fff;color:var(--grey-600);border:1px solid var(--grey-150);border-radius:9px;font-size:14px;white-space:nowrap}
+.eye{font-size:9px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--grey-300)}
+.ed::-webkit-scrollbar{width:9px}.ed::-webkit-scrollbar-thumb{background:var(--grey-200);border-radius:99px;border:3px solid transparent;background-clip:padding-box}
+.bhd{display:flex;align-items:center;gap:11px}
+.bhd .txt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+/* canvas-side annotations */
+.anno{width:214px;flex:none;display:flex;flex-direction:column;gap:8px;padding-top:150px}
+.anno-h{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-bottom:2px}
+.anno-row{display:flex;gap:9px;align-items:flex-start}
+.anno-n{font:600 11px ui-monospace,monospace;color:rgba(0,0,0,.35);padding-top:1px}
+.anno-name{font-size:13px;color:rgba(0,0,0,.7)}
+.anno-type{font-size:11.5px}
+.t-tmpl{color:#3d6b86}.t-only{color:var(--rad-700);font-weight:600}
+/* заявки */
+.stb{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;border-radius:99px;padding:3px 9px;white-space:nowrap}
+.st-new{background:var(--warning-100);color:var(--warning-700)}
+.st-work{background:var(--blue-50);color:#3d6b86}
+.st-guest{background:var(--grey-100);color:var(--grey-500)}
+.st-pay{background:var(--rad-100);color:var(--rad-700)}
+.st-ok{background:#e3efe4;color:var(--success-600)}
+.st-off{background:var(--grey-100);color:var(--grey-400)}
+.slf{border:1px solid var(--grey-200);background:#fff;border-radius:8px;padding:4px 9px;font-size:12px;color:var(--grey-600);white-space:nowrap}
+.slb{background:var(--grey-100);border-radius:8px;padding:4px 9px;font-size:12px;color:var(--grey-400);white-space:nowrap}
+.slx{background:var(--rad-100);border:1px solid var(--rad-600);border-radius:8px;padding:3px 9px;font-size:12px;color:var(--rad-700);font-weight:600;white-space:nowrap}
+.tlr{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--grey-500)}
+.tlt{width:56px;flex:none;color:var(--grey-300);font-size:12px;padding-top:1px}
+.tld{width:7px;height:7px;border-radius:50%;background:var(--grey-300);flex:none;margin-top:5px}
+/* ревизия полей */
+.arow{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid var(--border-subtle);font-size:13px;color:var(--grey-600);line-height:1.4}
+.arow:last-child{border-bottom:none}
+.ac1{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ac2{width:196px;flex:none;font-size:12.5px;color:var(--grey-400)}
+.ac3{width:132px;flex:none}
+.vk{display:inline-flex;font-size:11px;font-weight:600;border-radius:99px;padding:3px 9px;white-space:nowrap}
+.v-keep{background:#e3efe4;color:var(--success-600)}
+.v-auto{background:var(--blue-50);color:#3d6b86}
+.v-cut{background:var(--rad-100);color:var(--rad-700)}
+.v-add{background:var(--warning-100);color:var(--warning-700)}
+</style>
+</helmet>
+
+<section class="dv-turn">
+<div class="dv-thd"><span class="dv-tid">Ревизия</span><span class="dv-tname">Поля CMS ↔ реальная страница инструктора</span></div>
+<p class="mtx-sub">Сверил редактор <a href="#1a">1a</a> с тем, что на самом деле рендерит <b>/instructors/mikhail</b> (модель данных из репозитория: <code>INSTRUCTOR_DETAILS</code> + <code>db/seed.sql</code>). Вывод: на странице нет ничего лишнего — лишнее <b>в админке</b>. Три поля дублируют друг друга или не существуют на странице, зато не хватает шести, без которых страницу не собрать (галерея, подзаголовок каталога, slug, параметры калькулятора). Разбор — <a href="#4a">4a</a>, пересобранная форма — <a href="#4b">4b</a>.</p>
+<div class="dv-opts">
+
+<!-- ============ 4a — АУДИТ ПОЛЕЙ ============ -->
+<div class="dv-opt" id="4a" data-screen-label="4a Ревизия полей"><div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>Поле за полем: что вводится руками, что считается, что убрать</div>
+<div class="dv-card" style="width:820px;padding:24px 26px;display:flex;flex-direction:column;gap:22px">
+
+  <div style="display:flex;align-items:flex-end;gap:14px">
+    <div style="display:flex;flex-direction:column;gap:3px;flex:1"><span style="font-size:17px;font-weight:600;letter-spacing:-.02em">Что реально показывает страница инструктора</span><span class="hint">Слева — блок на публичной странице, справа — откуда берётся значение</span></div>
+    <div style="display:flex;gap:7px"><span class="vk v-keep">вводить</span><span class="vk v-auto">авто</span><span class="vk v-cut">убрать</span><span class="vk v-add">добавить</span></div>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:0">
+    <span class="eye" style="margin-bottom:7px">Шапка и герой</span>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Имя</b><span class="hint">Mikhail Andreev — h1</span></div><span class="ac2">поле в CMS</span><span class="ac3"><span class="vk v-keep">вводить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Роль + тэглайн</b><span class="hint">«Instructor» / «Private lessons in Gudauri»</span></div><span class="ac2">роль — от категории, тэглайн — поле</span><span class="ac3"><span class="vk v-add">добавить тэглайн</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Подзаголовок каталога</b><span class="hint">«Ski &amp; snowboard · 8 years experience» — в карточке списка</span></div><span class="ac2">собирается из дисциплин + стажа</span><span class="ac3"><span class="vk v-auto">авто</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Главное фото + фото карточки</b><span class="hint">героя и карточку в каталоге кадрируют по-разному — это 2 файла</span></div><span class="ac2">2 загрузки + alt к каждой</span><span class="ac3"><span class="vk v-add">разделить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Короткое интро</b><span class="hint">одна строка над кнопкой брони</span></div><span class="ac2">поле в CMS</span><span class="ac3"><span class="vk v-keep">вводить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Бейдж доступности</b><span class="hint">«Available this week» / «Limited availability»</span></div><span class="ac2">лучше считать из календаря заявок, а не тумблером</span><span class="ac3"><span class="vk v-auto">авто</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Видеовизитка</b><span class="hint">на странице нет ни плеера, ни поля под видео</span></div><span class="ac2">не рендерится нигде</span><span class="ac3"><span class="vk v-cut">убрать</span></span></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:0">
+    <span class="eye" style="margin-bottom:7px">Факты и теги</span>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Дисциплины</b><span class="hint">Snowboard, Ski — иконки в шапке и фильтр каталога</span></div><span class="ac2">справочник, мультивыбор</span><span class="ac3"><span class="vk v-keep">вводить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">«Специализация» отдельным полем</b><span class="hint">в блоке 2 повторяет те же «Сноуборд / Лыжи»</span></div><span class="ac2">дубль дисциплин</span><span class="ac3"><span class="vk v-cut">убрать</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Языки</b><span class="hint">Ge / En / Ru — фильтр и факт в шапке</span></div><span class="ac2">справочник</span><span class="ac3"><span class="vk v-keep">вводить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Стаж, лет</b><span class="hint">8 — участвует в подзаголовке</span></div><span class="ac2">число</span><span class="ac3"><span class="vk v-keep">вводить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Пол</b><span class="hint">в каталоге есть фильтр «инструктор-женщина»</span></div><span class="ac2">селект, в форме отсутствует</span><span class="ac3"><span class="vk v-add">добавить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Теги</b><span class="hint">Technique, Carving, Kids… — один плоский список на странице</span></div><span class="ac2">«главные» и «дополнительные» на странице не различаются</span><span class="ac3"><span class="vk v-cut">слить в один</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Бейдж «Verified Instructor»</b><span class="hint">отдельный селект «Сертификация» в блоке 2</span></div><span class="ac2">следствие проверенного сертификата — не поле</span><span class="ac3"><span class="vk v-cut">убрать</span></span></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:0">
+    <span class="eye" style="margin-bottom:7px">Тело страницы</span>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Об инструкторе</b><span class="hint">3 абзаца</span></div><span class="ac2">текст</span><span class="ac3"><span class="vk v-keep">вводить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Галерея, 6 фото + alt</b><span class="hint">самый большой блок страницы — в форме его нет вообще</span></div><span class="ac2">мультизагрузка, порядок, «в герой»</span><span class="ac3"><span class="vk v-add">добавить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Сертификаты</b><span class="hint">название + строка «50-hour · выдан 25.02.2025 · до 25.02.2028» + скан</span></div><span class="ac2">в форме поле «Год» — страница показывает выдан/действует и файл</span><span class="ac3"><span class="vk v-add">заменить «Год»</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Отзывы</b><span class="hint">автор, «2 hour lesson», оценка, дата, текст</span></div><span class="ac2">из подтверждённых заявок · модерация в разделе «Отзывы»</span><span class="ac3"><span class="vk v-auto">авто</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Рейтинг и число отзывов</b><span class="hint">4.8 · 6 reviews</span></div><span class="ac2">считается</span><span class="ac3"><span class="vk v-auto">авто</span></span></div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:0">
+    <span class="eye" style="margin-bottom:7px">Бронирование и служебное</span>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Тариф 345 ₾/час</b><span class="hint">единый для всех инструкторов</span></div><span class="ac2">настройки платформы</span><span class="ac3"><span class="vk v-auto">авто</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Рамки калькулятора</b><span class="hint">часы 2–12 шагом 2, гостей 1–10, значения по умолчанию</span></div><span class="ac2">по умолчанию общие, переопределение — на инструкторе</span><span class="ac3"><span class="vk v-add">добавить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Slug (адрес страницы)</b><span class="hint">/instructors/<b>mikhail</b></span></div><span class="ac2">генерируется из имени, правится вручную</span><span class="ac3"><span class="vk v-add">добавить</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Статус и позиция в каталоге</b><span class="hint">published / draft, sort_order</span></div><span class="ac2">статус есть, сортировки нет</span><span class="ac3"><span class="vk v-add">добавить порядок</span></span></div>
+    <div class="arow"><div class="ac1"><b style="font-weight:500">Контакты инструктора</b><span class="hint">на странице не публикуются — «shared after booking confirmation»</span></div><span class="ac2">нужны оператору в заявке, но это внутреннее поле</span><span class="ac3"><span class="vk v-add">внутреннее</span></span></div>
+  </section>
+
+  <div style="background:var(--grey-50);border-radius:12px;padding:13px 15px;font-size:12.5px;color:var(--grey-500);line-height:1.55">Итог: <b style="color:var(--grey-600)">−3 поля</b> (видеовизитка, дубль «Специализация», селект «Сертификация»), <b style="color:var(--grey-600)">−1 блок</b> (второй список тегов сливается в один), <b style="color:var(--grey-600)">+6</b> (галерея, тэглайн, slug, пол, рамки калькулятора, порядок в каталоге) и <b style="color:var(--grey-600)">4 значения</b> уходят в автоматику (рейтинг, отзывы, тариф, доступность).</div>
+</div>
+</div>
+
+<!-- ============ 4b — ПЕРЕСОБРАННАЯ ФОРМА ============ -->
+<div class="dv-opt" id="4b" data-screen-label="4b Пересобранная форма"><div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>Форма после ревизии — только то, что действительно есть на странице</div>
+<div class="dv-card" style="width:660px;background:var(--grey-50);padding:22px;display:flex;flex-direction:column;gap:13px">
+
+  <div style="display:flex;align-items:center;gap:10px"><span style="font-size:15px;font-weight:600;color:var(--grey-600)">Инструктор · Михаил Андреев</span><span class="stb st-new">Черновик</span><div style="flex:1"></div><span class="hint">6 блоков вместо 5 + 2 автоблока</span></div>
+
+  <section class="card" style="gap:12px">
+    <div class="bhd"><span class="numchip">1</span><div class="txt"><span class="blocktitle">Основное</span></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="fld"><span class="lbl">Имя <span class="req">*</span></span><div class="inp">Михаил Андреев</div></div>
+      <div class="fld"><span class="lbl">Адрес страницы <span class="req">*</span></span><div class="inp" style="color:var(--grey-500)">/instructors/mikhail</div></div>
+    </div>
+    <div class="fld"><span class="lbl">Тэглайн <span class="hint">— строка под именем в шапке</span></span><div class="inp">Частные уроки в Гудаури</div></div>
+    <div class="fld"><span class="lbl">Короткое интро</span><div class="inp" style="line-height:1.5">Спокойное обучение с упором на технику: первые повороты, уверенный карвинг, подготовка к фрирайду.</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="fld"><span class="lbl">Стаж, лет <span class="req">*</span></span><div class="inp">8</div></div>
+      <div class="fld"><span class="lbl">Пол <span class="hint">— фильтр</span></span><div class="inp" style="display:flex;justify-content:space-between">Мужской <span style="color:var(--grey-300)">▾</span></div></div>
+      <div class="fld"><span class="lbl">Позиция в каталоге</span><div class="inp">10</div></div>
+    </div>
+  </section>
+
+  <section class="card" style="gap:12px">
+    <div class="bhd"><span class="numchip">2</span><div class="txt"><span class="blocktitle">Дисциплины, языки, теги</span></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="fld"><span class="lbl">Дисциплины <span class="req">*</span></span><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Сноуборд <span class="x">×</span></span><span class="chip">Лыжи <span class="x">×</span></span><span class="chipadd">+</span></div></div>
+      <div class="fld"><span class="lbl">Языки <span class="req">*</span></span><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Ge <span class="x">×</span></span><span class="chip">En <span class="x">×</span></span><span class="chip">Ru <span class="x">×</span></span><span class="chipadd">+</span></div></div>
+    </div>
+    <div class="fld"><span class="lbl">Теги <span class="hint">— один список; первые три идут в карточку каталога</span></span><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip" style="background:var(--grey-600);color:#fff">Техника <span class="x" style="opacity:.5">×</span></span><span class="chip" style="background:var(--grey-600);color:#fff">Уверенность <span class="x" style="opacity:.5">×</span></span><span class="chip" style="background:var(--grey-600);color:#fff">Карвинг <span class="x" style="opacity:.5">×</span></span><span class="chip">Новички <span class="x">×</span></span><span class="chip">Дети <span class="x">×</span></span><span class="chipadd">+</span></div></div>
+  </section>
+
+  <section class="card" style="gap:12px">
+    <div class="bhd"><span class="numchip">3</span><div class="txt"><span class="blocktitle">Фото</span></div></div>
+    <div style="display:flex;gap:12px">
+      <div class="fld" style="flex:none"><span class="lbl">В карточку каталога <span class="req">*</span></span><div style="width:92px;height:112px;border-radius:12px;background:var(--grey-200)"></div></div>
+      <div class="fld" style="flex:none"><span class="lbl">Герой страницы <span class="req">*</span></span><div style="width:158px;height:112px;border-radius:12px;background:var(--grey-200)"></div></div>
+      <div class="fld" style="flex:1;min-width:0"><span class="lbl">Галерея <span class="hint">— 5 фото, порядок перетаскиванием</span></span>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+          <div style="aspect-ratio:1;border-radius:9px;background:var(--grey-200)"></div><div style="aspect-ratio:1;border-radius:9px;background:var(--grey-200)"></div><div style="aspect-ratio:1;border-radius:9px;background:var(--grey-200)"></div><div style="aspect-ratio:1;border-radius:9px;background:var(--grey-200)"></div>
+          <div style="aspect-ratio:1;border-radius:9px;background:var(--grey-200)"></div><div style="aspect-ratio:1;border:1.5px dashed var(--grey-200);border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--grey-300);font-size:17px">+</div>
+        </div>
+      </div>
+    </div>
+    <span class="hint">У каждого файла — alt-текст (нужен для SEO и доступности; в текущей форме его нет).</span>
+  </section>
+
+  <section class="card" style="gap:12px">
+    <div class="bhd"><span class="numchip">4</span><div class="txt"><span class="blocktitle">Об инструкторе</span></div></div>
+    <div class="inp" style="line-height:1.6;color:var(--grey-500)">Сертифицированный инструктор с восьмилетним опытом преподавания в Гудаури. Занятия структурированы: правильная техника, понятные объяснения, практика под ваш уровень.</div>
+  </section>
+
+  <section class="card" style="gap:12px">
+    <div class="bhd"><span class="numchip">5</span><div class="txt"><span class="blocktitle">Сертификаты</span><span class="hint">даёт бейдж «Проверенный» автоматически</span></div></div>
+    <div style="display:flex;gap:10px;align-items:flex-end;background:var(--grey-50);border-radius:12px;padding:12px">
+      <div style="width:44px;height:44px;flex:none;border-radius:9px;background:var(--grey-100);display:flex;align-items:center;justify-content:center;color:var(--grey-300)">▤</div>
+      <div class="fld" style="flex:1;min-width:0"><span style="font-size:11px;color:var(--grey-400)">Название <span class="req">*</span></span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">APUL D Snowboard Instructor Licence</div></div>
+      <div class="fld" style="width:104px;flex:none"><span style="font-size:11px;color:var(--grey-400)">Выдан</span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">25.02.2025</div></div>
+      <div class="fld" style="width:104px;flex:none"><span style="font-size:11px;color:var(--grey-400)">Действует до</span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">25.02.2028</div></div>
+    </div>
+    <span style="align-self:flex-start;border:1.5px dashed var(--grey-200);color:var(--grey-500);border-radius:10px;padding:9px 16px;font-size:13px">+ добавить сертификат</span>
+  </section>
+
+  <section class="card" style="gap:12px">
+    <div class="bhd"><span class="numchip">6</span><div class="txt"><span class="blocktitle">Бронирование</span><span class="hint">рамки калькулятора; тариф — общий</span></div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div class="fld"><span class="lbl">Часы, от</span><div class="inp">2</div></div>
+      <div class="fld"><span class="lbl">Часы, до</span><div class="inp">12</div></div>
+      <div class="fld"><span class="lbl">Шаг</span><div class="inp">2</div></div>
+      <div class="fld"><span class="lbl">Гостей, до</span><div class="inp">10</div></div>
+    </div>
+    <div class="fld"><span class="lbl">Контакты для оператора <span class="hint">— не публикуются на сайте</span></span><div class="inp" style="color:var(--grey-500);font-size:13.5px">+995 555 10 20 30 · Telegram @mikhail_g</div></div>
+  </section>
+
+  <section class="card" style="gap:10px;border-style:dashed;background:transparent">
+    <div class="bhd"><span class="numchip" style="background:var(--blue-50);color:#3d6b86">▣</span><div class="txt"><span class="blocktitle">Заполняется системой — только чтение</span></div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="vk v-auto">Рейтинг 4.8</span><span class="vk v-auto">6 отзывов</span><span class="vk v-auto">Тариф 345 ₾/час</span><span class="vk v-auto">Свободен на этой неделе</span><span class="vk v-auto">Подзаголовок каталога</span><span class="vk v-auto">Бейдж «Проверенный»</span>
+    </div>
+    <span class="hint">Доступность считается из подтверждённых заявок — тумблер вручную рассинхронизируется с календарём.</span>
+  </section>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Дальше можно: «примени <a class="dv-oid" href="#4b">4b</a> к экрану <a class="dv-oid" href="#1a">1a</a>» · «такую же ревизию для Активностей и Проката» · «покажи, где в форме валидация и что блокирует публикацию».</p>
+</section>
+
+<section class="dv-turn">
+<div class="dv-thd"><span class="dv-tid">Админка</span><span class="dv-tname">CRM · обработка заявок</span></div>
+<p class="mtx-sub">Собрано по классическому паттерну CRM-инбокса: <b>очередь → карточка → действие по статусу</b>. Оператор разбирает новые заявки из списка <a href="#3a">3a</a>; в карточке <a href="#3b">3b</a> видна вся заявка, гость, оплата и сразу — календарь объекта: свободно → подтверждает и слот блокируется, занято → предлагает другое время <a href="#3c">3c</a>. Дальше ссылка на оплату, её подтверждение — и заявка закреплена. Источник правды — <b>календарь объекта</b>: подтверждённая заявка = занятый слот. Полная статусная модель и состояния оплаты — <a href="#3d">3d</a>.</p>
+<div class="dv-opts">
+
+<!-- ============ 3a — СПИСОК ЗАЯВОК ============ -->
+<div class="dv-opt" id="3a" data-screen-label="3a Список заявок"><div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Очередь заявок — все категории в одном списке, новые сверху</div>
+<div class="dv-card" style="width:1180px;height:720px;display:flex;align-items:stretch">
+  <aside style="width:210px;flex:none;background:var(--grey-white);border-right:1px solid var(--border-default);padding:20px 14px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:baseline;gap:1px;padding:2px 10px 18px;font-family:var(--font-decor);font-size:19px;letter-spacing:-.01em"><span style="color:var(--grey-300)">My</span><span style="color:var(--grey-600)">Gudauri</span></div>
+    <span class="eye" style="padding:0 10px 6px">Управление</span>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Контент</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;font-size:14px;color:#fff;background:var(--grey-600);border-radius:10px;font-weight:500"><span>Заявки</span><span style="font-size:11px;font-weight:600;color:var(--warning-700);background:var(--warning-100);border-radius:99px;padding:2px 8px">2</span></div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Отзывы</div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Настройки</div>
+    <div style="flex:1;min-height:24px"></div>
+    <div style="display:flex;align-items:center;gap:9px;padding:10px;border-top:1px solid var(--border-default)"><div style="width:28px;height:28px;border-radius:50%;background:var(--grey-200);flex:none"></div><div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;color:var(--grey-600)">Оператор</span><span style="font-size:11px;color:var(--grey-400)">admin</span></div></div>
+  </aside>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="flex:none;display:flex;align-items:center;gap:12px;padding:15px 24px 13px;background:var(--grey-white);border-bottom:1px solid var(--border-default)">
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--grey-600)">Заявки</span><span style="font-size:12px;color:var(--grey-400)">24 за 30 дней · 2 новые · 1 ждёт оплаты</span></div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:8px;background:var(--grey-50);border:1px solid var(--grey-200);border-radius:9px;padding:8px 12px;width:230px;color:var(--grey-400);font-size:13px">⌕ Гость, объект, № заявки…</div>
+      <span class="btnl">Экспорт</span>
+    </header>
+    <div style="flex:none;display:flex;align-items:center;gap:7px;padding:11px 24px;background:var(--grey-50);border-bottom:1px solid var(--border-default)">
+      <span style="background:var(--grey-600);color:#fff;border-radius:99px;padding:6px 13px;font-size:12.5px;font-weight:500">Все 24</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500);display:inline-flex;gap:6px;align-items:center">Новые <b style="color:var(--warning-700)">2</b></span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">В работе 1</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Ждёт гостя 1</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Ждёт оплаты 1</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Подтверждены 15</span>
+      <div style="flex:1"></div>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Категория ▾</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Дата занятия ▾</span>
+    </div>
+    <div class="ed" style="flex:1;min-height:0;overflow-y:auto;background:#fff">
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--grey-300);border-bottom:1px solid var(--border-default);position:sticky;top:0;background:var(--grey-50);z-index:1">
+        <span style="flex:1;min-width:0">Гость</span><span style="width:216px">Объект</span><span style="width:112px">Дата занятия</span><span style="width:46px">Гости</span><span style="width:74px">Сумма</span><span style="width:118px">Статус</span><span style="width:66px">Получена</span><span style="width:24px"></span>
+      </div>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none;background:var(--grey-50);box-shadow:inset 3px 0 0 var(--rad-600)">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Елена Соколова</span><span style="font-size:11.5px;color:var(--grey-400)">#1047 · со страницы инструктора</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Михаил Андреев</span><span style="font-size:11px;color:var(--grey-400)">Инструктор · сноуборд</span></span></span>
+        <span style="width:112px">Пн 12 янв, 10:00</span><span style="width:46px;color:var(--grey-500)">2</span><span style="width:74px">690 ₾</span>
+        <span style="width:118px"><span class="stb st-new">Новая</span></span><span style="width:66px;color:var(--grey-400)">12 мин</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Марк Штайнер</span><span style="font-size:11.5px;color:var(--grey-400)">#1046 · со страницы активности</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Хели-ски: Казбек</span><span style="font-size:11px;color:var(--grey-400)">Активность</span></span></span>
+        <span style="width:112px">Ср 14 янв, 08:30</span><span style="width:46px;color:var(--grey-500)">4</span><span style="width:74px">3 600 ₾</span>
+        <span style="width:118px"><span class="stb st-new">Новая</span></span><span style="width:66px;color:var(--grey-400)">1 ч</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Дмитрий Ким</span><span style="font-size:11.5px;color:var(--grey-400)">#1045 · предложено 2 варианта</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Олег Юнг</span><span style="font-size:11px;color:var(--grey-400)">Инструктор · сноуборд</span></span></span>
+        <span style="width:112px">Вт 13 янв, 10:00</span><span style="width:46px;color:var(--grey-500)">1</span><span style="width:74px">690 ₾</span>
+        <span style="width:118px"><span class="stb st-guest">Ждёт гостя</span></span><span style="width:66px;color:var(--grey-400)">4 ч</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Софи Лоран</span><span style="font-size:11.5px;color:var(--grey-400)">#1044 · оператор: admin</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Полёт на параплане</span><span style="font-size:11px;color:var(--grey-400)">Активность</span></span></span>
+        <span style="width:112px">Пн 12 янв, 12:00</span><span style="width:46px;color:var(--grey-500)">2</span><span style="width:74px">700 ₾</span>
+        <span style="width:118px"><span class="stb st-work">В работе</span></span><span style="width:66px;color:var(--grey-400)">6 ч</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Анна Кобахидзе</span><span style="font-size:11.5px;color:var(--grey-400)">#1043 · ссылка отправлена 2 ч назад</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Тбилиси → Гудаури</span><span style="font-size:11px;color:var(--grey-400)">Трансфер</span></span></span>
+        <span style="width:112px">Вс 11 янв, 16:00</span><span style="width:46px;color:var(--grey-500)">3</span><span style="width:74px">260 ₾</span>
+        <span style="width:118px"><span class="stb st-pay">Ждёт оплаты</span></span><span style="width:66px;color:var(--grey-400)">вчера</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Гига Церетели</span><span style="font-size:11.5px;color:var(--grey-400)">#1042 · оплачено онлайн</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Комплект лыжи ×2</span><span style="font-size:11px;color:var(--grey-400)">Прокат · 3 дня</span></span></span>
+        <span style="width:112px">10–12 янв</span><span style="width:46px;color:var(--grey-500)">2</span><span style="width:74px">240 ₾</span>
+        <span style="width:118px"><span class="stb st-ok">Подтверждена</span></span><span style="width:66px;color:var(--grey-400)">вчера</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Ольга Мороз</span><span style="font-size:11.5px;color:var(--grey-400)">#1041 · отзыв запрошен</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Тамара Лежава</span><span style="font-size:11px;color:var(--grey-400)">Инструктор · лыжи</span></span></span>
+        <span style="width:112px">Пт 9 янв, 14:00</span><span style="width:46px;color:var(--grey-500)">1</span><span style="width:74px">690 ₾</span>
+        <span style="width:118px"><span class="stb st-off">Завершена</span></span><span style="width:66px;color:var(--grey-400)">3 дн</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#3b" style="display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:500">Пётр Волков</span><span style="font-size:11.5px;color:var(--grey-400)">#1040 · гость не ответил за 24 ч</span></span>
+        <span style="width:216px;display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:7px;background:var(--grey-200);flex:none"></span><span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>Экскурсия в Казбеги</span><span style="font-size:11px;color:var(--grey-400)">Тур</span></span></span>
+        <span style="width:112px">Чт 8 янв</span><span style="width:46px;color:var(--grey-500)">5</span><span style="width:74px">900 ₾</span>
+        <span style="width:118px"><span class="stb st-off" style="text-decoration:line-through">Отменена</span></span><span style="width:66px;color:var(--grey-400)">4 дн</span><span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ 3b — КАРТОЧКА ЗАЯВКИ ============ -->
+<div class="dv-opt" id="3b" data-screen-label="3b Карточка заявки"><div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Карточка заявки — вся информация + проверка календаря на одном экране</div>
+<div class="dv-card" style="width:1180px;display:flex;align-items:stretch">
+  <aside style="width:210px;flex:none;background:var(--grey-white);border-right:1px solid var(--border-default);padding:20px 14px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:baseline;gap:1px;padding:2px 10px 18px;font-family:var(--font-decor);font-size:19px;letter-spacing:-.01em"><span style="color:var(--grey-300)">My</span><span style="color:var(--grey-600)">Gudauri</span></div>
+    <span class="eye" style="padding:0 10px 6px">Управление</span>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Контент</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;font-size:14px;color:#fff;background:var(--grey-600);border-radius:10px;font-weight:500"><span>Заявки</span><span style="font-size:11px;font-weight:600;color:var(--warning-700);background:var(--warning-100);border-radius:99px;padding:2px 8px">2</span></div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Отзывы</div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Настройки</div>
+    <div style="flex:1;min-height:24px"></div>
+    <div style="display:flex;align-items:center;gap:9px;padding:10px;border-top:1px solid var(--border-default)"><div style="width:28px;height:28px;border-radius:50%;background:var(--grey-200);flex:none"></div><div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;color:var(--grey-600)">Оператор</span><span style="font-size:11px;color:var(--grey-400)">admin</span></div></div>
+  </aside>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="flex:none;display:flex;align-items:center;gap:12px;padding:13px 24px;background:var(--grey-white);border-bottom:1px solid var(--border-default)">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0">
+        <span style="font-size:13px;color:var(--grey-400)">Заявки</span><span style="color:var(--grey-300)">/</span>
+        <span style="font-size:15px;color:var(--grey-600);font-weight:500">#1047 · Елена Соколова</span>
+        <span class="stb st-new">Новая</span>
+      </div>
+      <div style="flex:1"></div>
+      <span class="btnl">Статус: Новая ▾</span>
+      <span class="btnl">Написать гостю</span>
+      <span class="btnl" style="color:#9d2e2e">Отклонить</span>
+    </header>
+    <div style="flex:1;display:flex;gap:14px;padding:20px 24px 26px;background:var(--grey-50);align-items:flex-start">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:13px">
+        <section class="card" style="gap:13px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="blocktitle">Что бронируют</span><a href="#1a" style="font-size:12.5px;text-decoration:none">Открыть карточку ↗</a></div>
+          <div style="display:flex;align-items:center;gap:11px"><span style="width:40px;height:40px;border-radius:9px;background:var(--grey-200);flex:none"></span><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14.5px;font-weight:500">Михаил Андреев</span><span style="font-size:12px;color:var(--grey-400)">Инструктор · частный урок · сноуборд</span></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px 16px">
+            <div class="fld" style="gap:2px"><span class="lbl">Дата</span><span style="font-size:13.5px">Понедельник, 12 января</span></div>
+            <div class="fld" style="gap:2px"><span class="lbl">Время</span><span style="font-size:13.5px">10:00–12:00 · 2 часа</span></div>
+            <div class="fld" style="gap:2px"><span class="lbl">Гости</span><span style="font-size:13.5px">2 взрослых · уровень: новички</span></div>
+            <div class="fld" style="gap:2px"><span class="lbl">Язык занятия</span><span style="font-size:13.5px">Русский</span></div>
+          </div>
+          <div style="background:var(--grey-50);border-radius:10px;padding:10px 13px;font-size:13px;color:var(--grey-500);line-height:1.5">«Первый раз на сноуборде, немного волнуемся. Хотим спокойного инструктора и без спешки.»</div>
+        </section>
+        <section class="card" style="gap:12px">
+          <span class="blocktitle">Гость</span>
+          <div style="display:flex;align-items:center;gap:11px"><span style="width:34px;height:34px;border-radius:50%;background:var(--grey-200);flex:none"></span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:500">Елена Соколова <span class="chip" style="padding:1px 8px;font-size:11px;margin-left:5px">новый гость</span></span><span style="font-size:12.5px;color:var(--grey-400)">+995 599 123 456 · Telegram @elena_sk · elena.sk@gmail.com</span></div>
+            <div style="flex:1"></div><span class="btnl" style="height:28px;font-size:13px">Telegram</span><span class="btnl" style="height:28px;font-size:13px">Позвонить</span></div>
+          <span class="hint">Инструктор получит контакты гостя только после подтверждения оплаты.</span>
+        </section>
+        <section class="card" style="gap:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="blocktitle">Оплата</span><span class="stb st-off">Не выставлена</span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--grey-300)">
+            <span style="display:flex;align-items:center;gap:6px;color:var(--grey-500)"><span class="numchip" style="width:20px;height:20px;font-size:11px">1</span>Ссылка</span><span>—</span>
+            <span style="display:flex;align-items:center;gap:6px"><span class="numchip" style="width:20px;height:20px;font-size:11px;background:var(--grey-50);color:var(--grey-300)">2</span>Отправлена</span><span>—</span>
+            <span style="display:flex;align-items:center;gap:6px"><span class="numchip" style="width:20px;height:20px;font-size:11px;background:var(--grey-50);color:var(--grey-300)">3</span>Оплачена</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--grey-50);border-radius:10px;padding:11px 13px"><span style="font-size:13px;color:var(--grey-500)">Частный урок · 2 ч × 345 ₾</span><span style="font-size:15px;font-weight:600">690 ₾</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span class="btnf" style="opacity:.45">Создать ссылку на оплату</span><span class="hint">станет активна после подтверждения времени</span></div>
+        </section>
+        <section class="card" style="gap:11px">
+          <span class="blocktitle">История</span>
+          <div class="tlr"><span class="tlt">14:02</span><span class="tld"></span><span>Заявка получена — форма на странице инструктора</span></div>
+          <div class="tlr"><span class="tlt">14:02</span><span class="tld"></span><span>Гостю отправлено авто-письмо «заявка принята, ответим в течение часа»</span></div>
+          <div class="tlr" style="color:var(--grey-300)"><span class="tlt">—</span><span class="tld" style="background:transparent;border:1.5px dashed var(--grey-300)"></span><span>каждое действие оператора записывается сюда автоматически</span></div>
+        </section>
+      </div>
+      <div style="width:396px;flex:none;display:flex;flex-direction:column;gap:13px">
+        <section class="card" style="gap:13px;border-color:var(--grey-200)">
+          <div style="display:flex;flex-direction:column;gap:2px"><span class="blocktitle">Проверка доступности</span><span class="hint">Календарь Михаила: уроки, активности и личные блокировки</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:60px;flex:none;font-size:12px;color:var(--grey-400)">Вс 11 янв</span><span class="slb">10:00 урок #1039</span><span class="slf">14:00</span></div>
+            <div style="display:flex;align-items:center;gap:7px;background:var(--grey-50);border-radius:9px;padding:6px 7px;margin:0 -7px"><span style="width:60px;flex:none;font-size:12px;font-weight:600;color:var(--grey-600)">Пн 12 янв</span><span class="slx">10:00 занято</span><span class="slf">13:00</span><span class="slf">15:30</span></div>
+            <div style="display:flex;align-items:center;gap:7px"><span style="width:60px;flex:none;font-size:12px;color:var(--grey-400)">Вт 13 янв</span><span class="slf">10:00</span><span class="slb">14:00 фрирайд-тур</span></div>
+          </div>
+          <div style="display:flex;gap:9px;background:var(--rad-100);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--rad-700);line-height:1.45"><b style="flex:none">!</b><span>Запрошенное время занято: урок #1032, Дмитрий Ким, 10:00–12:00. Свободно рядом: пн 13:00, пн 15:30, вт 10:00.</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="#3c" class="btnf" style="justify-content:center;text-decoration:none">Предложить другое время</a>
+            <span class="btnl" style="justify-content:center;opacity:.45">Подтвердить 12 янв, 10:00 — занято</span>
+          </div>
+          <a href="#1a" style="font-size:12.5px;text-decoration:none;align-self:flex-start">Открыть календарь Михаила ↗</a>
+        </section>
+        <section class="card" style="gap:11px;background:#f3f7f3;border-color:#d9e6da">
+          <span class="eye" style="color:var(--success-600)">Если слот свободен</span>
+          <div style="display:flex;gap:9px;font-size:13px;color:var(--grey-500)"><span style="color:var(--success-600)">✓</span>Слот 12 янв, 10:00–12:00 свободен</div>
+          <span class="btnf" style="justify-content:center;background:var(--success-600)">Подтвердить и закрепить слот</span>
+          <span class="hint">Слот блокируется в календаре, статус → «Ждёт оплаты», гостю уходит подтверждение со ссылкой на оплату.</span>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============ 3c — ПРЕДЛОЖИТЬ ДРУГОЕ ВРЕМЯ ============ -->
+<div class="dv-opt" id="3c" data-screen-label="3c Предложить другое время"><div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>Диалог «Предложить другое время»</div>
+<div class="dv-card" style="width:380px;padding:22px;display:flex;flex-direction:column;gap:14px">
+  <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:18px;font-weight:600;letter-spacing:-.02em">Предложить другое время</span><span class="hint">#1047 · Елена Соколова · Михаил Андреев · было: <s>пн 12 янв, 10:00</s></span></div>
+  <div class="fld"><span class="lbl">Варианты из свободных слотов — до трёх</span>
+    <div style="display:flex;gap:7px;flex-wrap:wrap">
+      <span style="background:var(--grey-600);color:#fff;border-radius:99px;padding:6px 12px;font-size:13px">Пн 13:00–15:00 ×</span>
+      <span style="background:var(--grey-600);color:#fff;border-radius:99px;padding:6px 12px;font-size:13px">Пн 15:30–17:30 ×</span>
+      <span class="slf" style="border-radius:99px;padding:6px 12px;font-size:13px;color:var(--grey-400)">Вт 10:00–12:00</span>
+    </div>
+  </div>
+  <div class="fld"><span class="lbl">Сообщение гостю <span class="hint">— можно править</span></span>
+    <div class="inp" style="line-height:1.55;font-size:13px;color:var(--grey-500)">Здравствуйте, Елена! 10:00 на 12 января у Михаила уже занято. Он может провести урок в понедельник в 13:00 или 15:30 — какой вариант удобен?</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:7px"><span class="lbl" style="flex:none">Канал:</span><span class="chip" style="background:var(--grey-600);color:#fff">Telegram</span><span class="chip">E-mail</span><span class="chip">SMS</span></div>
+  <div style="display:flex;gap:9px"><span class="btnl" style="flex:1;justify-content:center">Отмена</span><span class="btnf" style="flex:1;justify-content:center">Отправить гостю</span></div>
+  <span class="hint">Статус → «Ждёт гостя». Предложенные слоты придерживаются 24 часа; ответ гостя вернёт заявку в работу.</span>
+</div>
+</div>
+
+<!-- ============ 3d — СТАТУСЫ И ОПЛАТА ============ -->
+<div class="dv-opt" id="3d" data-screen-label="3d Статусная модель и оплата"><div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a>Статусная модель + состояния блока оплаты</div>
+<div style="display:flex;flex-direction:column;gap:14px;width:380px">
+<div class="dv-card" style="padding:20px;display:flex;flex-direction:column;gap:10px">
+  <span class="blocktitle" style="margin-bottom:3px">Жизненный цикл заявки</span>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-new" style="width:104px;justify-content:center;flex:none">Новая</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">пришла с сайта — авто. SLA: ответить за 1 час</span></div>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-work" style="width:104px;justify-content:center;flex:none">В работе</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">оператор открыл карточку, проверяет календарь</span></div>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-guest" style="width:104px;justify-content:center;flex:none">Ждёт гостя</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">предложено другое время · ответ возвращает в работу ↩</span></div>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-pay" style="width:104px;justify-content:center;flex:none">Ждёт оплаты</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">время подтверждено, слот заблокирован, ссылка у гостя · 24 ч</span></div>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-ok" style="width:104px;justify-content:center;flex:none">Подтверждена</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">оплата получена; контакты уходят гостю и инструктору</span></div>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-off" style="width:104px;justify-content:center;flex:none">Завершена</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">занятие прошло; гостю — просьба оставить отзыв</span></div>
+  <div style="display:flex;align-items:flex-start;gap:10px"><span class="stb st-off" style="width:104px;justify-content:center;flex:none;text-decoration:line-through">Отменена</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.45">на любом шаге, с причиной; слот сразу освобождается</span></div>
+</div>
+<div class="dv-card" style="padding:20px;display:flex;flex-direction:column;gap:10px">
+  <span class="blocktitle" style="margin-bottom:3px">Блок «Оплата» — три состояния</span>
+  <div style="border:1px solid var(--border-default);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:500">1 · Ссылка создана</span><span style="font-size:12px;color:var(--grey-400)">690 ₾</span></div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="inp" style="flex:1;padding:7px 10px;font-size:12.5px;color:var(--grey-400)">pay.mygudauri.ge/r/1047</span><span class="btnl" style="height:28px;font-size:12.5px">Копировать</span><span class="btnf" style="height:28px;font-size:12.5px">Отправить</span></div>
+  </div>
+  <div style="border:1px solid var(--border-default);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:6px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:500">2 · Отправлена гостю</span><span class="stb st-pay">осталось 21:40</span></div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="hint" style="flex:1">не оплачено за 24 ч → авто-отмена, слот освободится</span><span class="btnl" style="height:28px;font-size:12.5px">Напомнить</span></div>
+  </div>
+  <div style="border:1px solid #d9e6da;background:#f3f7f3;border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:6px">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:500">3 · Оплачено ✓</span><span style="font-size:12px;color:var(--success-600)">690 ₾ · карта, авто</span></div>
+    <div style="display:flex;gap:8px;align-items:center"><span class="hint" style="flex:1">пришло по вебхуку платёжки; для перевода на счёт —</span><span class="btnl" style="height:28px;font-size:12.5px">Подтвердить вручную</span></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ============ 3e — USER FLOW / MIND MAP ============ -->
+<div class="dv-opt" id="3e" data-screen-label="3e Флоу заявки"><div class="dv-olabel"><a class="dv-oid" href="#3e">3e</a>Флоу заявки — путь заявки и развилки решений оператора</div>
+<div class="dv-card" style="width:920px;padding:26px 28px;display:flex;flex-direction:column;gap:0">
+  <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:20px"><span style="font-size:18px;font-weight:600;letter-spacing:-.02em">Как проходит заявка</span><span class="hint">Слева направо — путь. Ромбы = решение оператора. Красное = тупик/возврат, зелёное = успех.</span></div>
+
+  <!-- legend -->
+  <div style="display:flex;gap:16px;margin-bottom:22px;font-size:12px;color:var(--grey-400)">
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:12px;border-radius:3px;background:var(--grey-600)"></span>гость</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:12px;border-radius:3px;background:#fff;border:1px solid var(--grey-200)"></span>оператор</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;background:var(--warning-100);border:1px solid var(--warning-700);transform:rotate(45deg)"></span>развилка</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:22px;height:12px;border-radius:3px;background:#f3f7f3;border:1px solid #d9e6da"></span>успех</span>
+  </div>
+
+  <!-- flow -->
+  <div style="display:flex;flex-direction:column;gap:0;font-size:13px;line-height:1.4">
+
+    <!-- lane: incoming -->
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="width:150px;flex:none;background:var(--grey-600);color:#fff;border-radius:10px;padding:11px 13px;text-align:center">Гость шлёт заявку<br><span style="font-size:11px;opacity:.7">форма на сайте</span></span>
+      <span style="color:var(--grey-300)">→</span>
+      <span style="width:130px;flex:none;background:var(--warning-100);color:var(--warning-700);border-radius:10px;padding:11px 13px;text-align:center;font-weight:600">Новая<br><span style="font-size:11px;font-weight:400">SLA 1 час</span></span>
+      <span style="color:var(--grey-300)">→</span>
+      <span style="flex:1;background:#fff;border:1px solid var(--grey-200);border-radius:10px;padding:11px 13px">Оператор открывает карточку <b>3b</b> — читает: объект, дату/время, гостей, комментарий, гостя <span class="stb st-work" style="margin-left:4px">В работе</span></span>
+    </div>
+
+    <div style="height:14px;margin-left:75px;border-left:2px dashed var(--grey-200)"></div>
+
+    <!-- decision 1: availability -->
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="width:150px;flex:none;text-align:center;font-size:12px;color:var(--grey-400)">перед ответом оператор <b style="color:var(--grey-600)">проверяет календарь</b> объекта</span>
+      <span style="color:var(--grey-300)">→</span>
+      <span style="flex:none;background:var(--warning-100);color:var(--warning-700);border:1px solid var(--warning-700);border-radius:12px;padding:12px 18px;text-align:center;font-weight:600">Слот свободен?</span>
+    </div>
+
+    <!-- branches -->
+    <div style="display:flex;gap:20px;margin:14px 0 0 200px">
+      <!-- YES -->
+      <div style="flex:1;border-left:2px solid #d9e6da;padding-left:16px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:11px;font-weight:600;color:var(--success-600);letter-spacing:.04em">ДА, СВОБОДЕН</span>
+        <span style="background:#f3f7f3;border:1px solid #d9e6da;border-radius:10px;padding:10px 12px">Подтверждает и <b>закрепляет слот</b> — календарь блокируется <span class="stb st-pay" style="margin-top:4px">Ждёт оплаты</span></span>
+        <span style="align-self:center;color:var(--grey-300)">↓</span>
+        <span style="background:#fff;border:1px solid var(--grey-200);border-radius:10px;padding:10px 12px">Создаёт ссылку на оплату → <b>отправляет гостю</b> (24 ч)</span>
+      </div>
+      <!-- NO -->
+      <div style="flex:1;border-left:2px solid var(--rad-100);padding-left:16px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:11px;font-weight:600;color:var(--rad-700);letter-spacing:.04em">НЕТ, ЗАНЯТ</span>
+        <span style="background:var(--rad-100);border:1px solid #eecfca;border-radius:10px;padding:10px 12px">Предлагает <b>другое время</b> 3c — до 3 свободных слотов <span class="stb st-guest" style="margin-top:4px">Ждёт гостя</span></span>
+        <span style="align-self:center;color:var(--grey-300)">↓ ответ гостя</span>
+        <span style="background:#fff;border:1px solid var(--grey-200);border-radius:10px;padding:10px 12px">Согласен → назад к «Подтвердить». Нет → предложить ещё / <span style="color:#9d2e2e">отклонить</span></span>
+      </div>
+    </div>
+
+    <div style="height:16px;margin:0 auto;border-left:2px dashed var(--grey-200)"></div>
+
+    <!-- decision 2: payment -->
+    <div style="display:flex;align-items:center;gap:12px;justify-content:center">
+      <span style="flex:none;background:var(--warning-100);color:var(--warning-700);border:1px solid var(--warning-700);border-radius:12px;padding:12px 18px;text-align:center;font-weight:600">Оплата пришла за 24 ч?</span>
+    </div>
+
+    <div style="display:flex;gap:20px;margin:14px 0 0 0">
+      <div style="flex:1;border-left:2px solid #d9e6da;padding-left:16px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:11px;font-weight:600;color:var(--success-600);letter-spacing:.04em">ДА (авто по вебхуку / вручную)</span>
+        <span style="background:#f3f7f3;border:1px solid #d9e6da;border-radius:10px;padding:10px 12px"><span class="stb st-ok">Подтверждена</span> контакты уходят гостю и инструктору</span>
+        <span style="align-self:center;color:var(--grey-300)">↓ занятие прошло</span>
+        <span style="background:#fff;border:1px solid var(--grey-200);border-radius:10px;padding:10px 12px"><span class="stb st-off">Завершена</span> гостю — запрос отзыва (→ рейтинг инструктора)</span>
+      </div>
+      <div style="flex:1;border-left:2px solid var(--rad-100);padding-left:16px;display:flex;flex-direction:column;gap:9px">
+        <span style="font-size:11px;font-weight:600;color:var(--rad-700);letter-spacing:.04em">НЕТ — просрочка</span>
+        <span style="background:var(--rad-100);border:1px solid #eecfca;border-radius:10px;padding:10px 12px">Напоминание гостю → если тишина: <span class="stb st-off" style="text-decoration:line-through">Отменена</span> <b>слот освобождается</b></span>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:22px;padding-top:16px;border-top:1px solid var(--border-default);display:flex;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:5px"><span class="eye">Пути оператора из карточки в любой момент</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.5">Написать гостю · Сменить статус вручную · Открыть карточку/календарь объекта · Отклонить с причиной · Изменить время/цену</span></div>
+    <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:5px"><span class="eye">Что записывается всегда</span><span style="font-size:12.5px;color:var(--grey-500);line-height:1.5">Любое действие → в «Историю» 3b. Подтверждённый слот → занят в календаре объекта. Отмена/просрочка → слот сразу свободен.</span></div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Дальше можно: «сделай <a class="dv-oid" href="#3b">3b</a> интерактивным» · «календарь инструктора на месяц со всеми заявками» · «шаблоны сообщений гостю» · «дашборд: заявки за неделю, конверсия в оплату».</p>
+</section>
+
+<section class="dv-turn">
+<div class="dv-thd"><span class="dv-tid">Админка</span><span class="dv-tname">CMS · список инструкторов</span></div>
+<p class="mtx-sub">Страница коллекции: все карточки инструкторов строками таблицы с вынесенными важными данными — имя, дисциплины, язык, стаж, рейтинг, статус, дата изменения. По духу как CMS в Webflow, но проще и в стиле дизайн-системы. Клик по строке открывает редактор <a href="#1a">1a</a>. Ниже: <a href="#2a">2a</a> список.</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a" data-screen-label="2a Список инструкторов"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Коллекция «Инструкторы» — таблица карточек</div>
+<div class="dv-card" style="width:1180px;height:720px;display:flex;align-items:stretch">
+
+  <!-- rail (unified) -->
+  <aside style="width:210px;flex:none;background:var(--grey-white);border-right:1px solid var(--border-default);padding:20px 14px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:baseline;gap:1px;padding:2px 10px 18px;font-family:var(--font-decor);font-size:19px;letter-spacing:-.01em"><span style="color:var(--grey-300)">My</span><span style="color:var(--grey-600)">Gudauri</span></div>
+    <span class="eye" style="padding:0 10px 6px">Управление</span>
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;font-size:14px;color:#fff;background:var(--grey-600);border-radius:10px;font-weight:500">Контент</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin:3px 0 8px 12px;padding-left:11px;border-left:1.5px solid var(--border-default)">
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-600);background:var(--grey-100);border-radius:8px;font-weight:500">Инструкторы <span style="font-size:11px;color:var(--grey-400)">12</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Активности <span style="font-size:11px;color:var(--grey-300)">8</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Прокат <span style="font-size:11px;color:var(--grey-300)">5</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Трансфер <span style="font-size:11px;color:var(--grey-300)">4</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Туры <span style="font-size:11px;color:var(--grey-300)">6</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Места <span style="font-size:11px;color:var(--grey-300)">9</span></span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;font-size:14px;color:var(--grey-500)"><span>Заявки</span><span style="font-size:11px;font-weight:600;color:var(--warning-700);background:var(--warning-100);border-radius:99px;padding:2px 8px">7</span></div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Отзывы</div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Настройки</div>
+    <div style="flex:1;min-height:24px"></div>
+    <div style="display:flex;align-items:center;gap:9px;padding:10px;border-top:1px solid var(--border-default)"><div style="width:28px;height:28px;border-radius:50%;background:var(--grey-200);flex:none"></div><div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;color:var(--grey-600)">Оператор</span><span style="font-size:11px;color:var(--grey-400)">admin</span></div></div>
+  </aside>
+
+  <!-- main -->
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <!-- header -->
+    <header style="flex:none;display:flex;align-items:center;gap:12px;padding:15px 24px 13px;background:var(--grey-white);border-bottom:1px solid var(--border-default)">
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--grey-600)">Инструкторы</span><span style="font-size:12px;color:var(--grey-400)">12 объектов · 10 опубликовано · 2 черновика</span></div>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:8px;background:var(--grey-50);border:1px solid var(--grey-200);border-radius:9px;padding:8px 12px;width:210px;color:var(--grey-400);font-size:13px">⌕ Поиск по имени…</div>
+      <span class="btnl">Экспорт</span>
+      <span class="btnf">+ Новый инструктор</span>
+    </header>
+
+    <!-- filter bar -->
+    <div style="flex:none;display:flex;align-items:center;gap:8px;padding:11px 24px;background:var(--grey-50);border-bottom:1px solid var(--border-default)">
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Дисциплина ▾</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Язык ▾</span>
+      <span style="background:#fff;border:1px solid var(--grey-200);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--grey-500)">Статус ▾</span>
+      <div style="flex:1"></div>
+      <span style="font-size:12.5px;color:var(--grey-400)">Сортировка: по изменению ▾</span>
+    </div>
+
+    <!-- table -->
+    <div class="ed" style="flex:1;min-height:0;overflow-y:auto;background:#fff;position:relative">
+      <!-- head -->
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--grey-300);border-bottom:1px solid var(--border-default);position:sticky;top:0;background:var(--grey-50);z-index:1">
+        <span style="flex:1;min-width:0">Имя</span>
+        <span style="width:160px">Дисциплины</span>
+        <span style="width:92px">Язык</span>
+        <span style="width:60px">Стаж</span>
+        <span style="width:74px">Рейтинг</span>
+        <span style="width:104px">Статус</span>
+        <span style="width:74px">Изменён</span>
+        <span style="width:24px"></span>
+      </div>
+      <!-- row action menu (open on Михаил's ⋯) -->
+      <div style="position:absolute;top:52px;right:18px;width:222px;background:#fff;border:1px solid var(--border-default);border-radius:12px;box-shadow:0 18px 44px rgba(24,25,22,.18);padding:6px;z-index:6;display:flex;flex-direction:column;gap:1px;font-size:13.5px">
+        <div style="padding:6px 10px 4px;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--grey-300)">Михаил Андреев</div>
+        <div style="padding:9px 10px;border-radius:8px;color:var(--grey-600);display:flex;justify-content:space-between;align-items:center;background:var(--grey-50)">Редактировать <span style="color:var(--grey-300);font-size:11px">⏎</span></div>
+        <div style="padding:9px 10px;border-radius:8px;color:var(--grey-600)">Открыть на сайте ↗</div>
+        <div style="padding:9px 10px;border-radius:8px;color:var(--grey-600)">Дублировать</div>
+        <div style="padding:9px 10px;border-radius:8px;color:var(--grey-600)">Снять с публикации</div>
+        <div style="padding:9px 10px;border-radius:8px;color:var(--grey-600)">Копировать ссылку</div>
+        <div style="height:1px;background:var(--border-default);margin:4px 6px"></div>
+        <div style="padding:9px 10px;border-radius:8px;color:#9d2e2e">Удалить…</div>
+      </div>
+      <!-- rows -->
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none;background:var(--grey-50);box-shadow:inset 3px 0 0 var(--rad-600)">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Михаил Андреев</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Сноуборд</span><span class="chip" style="padding:2px 8px;font-size:11.5px">Лыжи</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ge En Ru</span>
+        <span style="width:60px;color:var(--grey-500)">8 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.8</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">2 дн</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Олег Юнг</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Сноуборд</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ge Ru</span>
+        <span style="width:60px;color:var(--grey-500)">8 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.8</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">5 дн</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none;background:var(--grey-50)">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-150);flex:none;display:flex;align-items:center;justify-content:center;color:var(--grey-300);font-size:11px">—</span>Нина Барамидзе</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Лыжи</span><span class="chip" style="padding:2px 8px;font-size:11.5px">Сноуборд</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ge En</span>
+        <span style="width:60px;color:var(--grey-500)">7 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.8</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--warning-700)"><span style="width:6px;height:6px;border-radius:50%;background:var(--warning-700)"></span>Черновик</span>
+        <span style="width:74px;color:var(--grey-400)">сейчас</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Андрей Григорьев</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Лыжи</span></span>
+        <span style="width:92px;color:var(--grey-500)">En</span>
+        <span style="width:60px;color:var(--grey-500)">5 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.9</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">1 нед</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Давид Кипиани</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Сноуборд</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ru En</span>
+        <span style="width:60px;color:var(--grey-500)">6 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.9</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">1 нед</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Тамара Лежава</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Лыжи</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ge En</span>
+        <span style="width:60px;color:var(--grey-500)">9 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.8</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">3 дн</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-150);flex:none;display:flex;align-items:center;justify-content:center;color:var(--grey-300);font-size:11px">—</span>Лука Мчедлидзе</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Лыжи</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ge</span>
+        <span style="width:60px;color:var(--grey-500)">4 года</span>
+        <span style="width:74px;color:var(--grey-300)">—</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--warning-700)"><span style="width:6px;height:6px;border-radius:50%;background:var(--warning-700)"></span>Черновик</span>
+        <span style="width:74px;color:var(--grey-400)">2 дн</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Анна Петрова</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Сноуборд</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ru En</span>
+        <span style="width:60px;color:var(--grey-500)">6 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 4.9</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">4 дн</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+      <a href="#1a" style="display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border-subtle);font-size:13.5px;color:var(--grey-600);text-decoration:none">
+        <span style="flex:1;min-width:0;display:flex;align-items:center;gap:11px"><span style="width:30px;height:30px;border-radius:7px;background:var(--grey-200);flex:none"></span>Георгий Табидзе</span>
+        <span style="width:160px;display:flex;gap:5px"><span class="chip" style="padding:2px 8px;font-size:11.5px">Лыжи</span><span class="chip" style="padding:2px 8px;font-size:11.5px">Сноуборд</span></span>
+        <span style="width:92px;color:var(--grey-500)">Ge En Ru</span>
+        <span style="width:60px;color:var(--grey-500)">11 лет</span>
+        <span style="width:74px"><span style="color:var(--rad-600)">★</span> 5.0</span>
+        <span style="width:104px;display:flex;align-items:center;gap:6px;color:var(--success-600)"><span style="width:6px;height:6px;border-radius:50%;background:var(--success-600)"></span>Опубликован</span>
+        <span style="width:74px;color:var(--grey-400)">6 дн</span>
+        <span style="width:24px;color:var(--grey-300)">⋯</span>
+      </a>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<p class="dv-next">Клик по строке → редактор <a class="dv-oid" href="#1a">1a</a>. Дальше можно: «добавь массовые действия (выделение строк)» · «покажи ту же таблицу для Активностей» · «добавь пагинацию».</p>
+</section>
+
+<section class="dv-turn">
+<div class="dv-thd"><span class="dv-tid">Админка</span><span class="dv-tname">CMS · редактор инструктора</span></div>
+<p class="mtx-sub">Технический экран администратора: ввод данных инструктора по блокам. Пометки о типе блока — <b>шаблон</b> (общий для всех категорий) или <b>только у инструкторов</b> — вынесены на поля холста справа, чтобы не засорять сам интерфейс. Ниже: <a href="#1a">1a</a> редактор, <a href="#1b">1b</a> публикация.</p>
+<div class="dv-opts">
+
+<!-- ============ 1a — EDITOR ============ -->
+<div class="dv-opt" id="1a" data-screen-label="1a Редактор инструктора"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Экран редактора инструктора</div>
+<div style="display:flex;gap:20px;align-items:flex-start">
+<div class="dv-card" style="width:1024px;display:flex;align-items:stretch">
+
+  <!-- rail -->
+  <aside style="width:210px;flex:none;background:var(--grey-white);border-right:1px solid var(--border-default);padding:20px 14px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:baseline;gap:1px;padding:2px 10px 18px;font-family:var(--font-decor);font-size:19px;letter-spacing:-.01em"><span style="color:var(--grey-300)">My</span><span style="color:var(--grey-600)">Gudauri</span></div>
+    <span class="eye" style="padding:0 10px 6px">Управление</span>
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 11px;font-size:14px;color:#fff;background:var(--grey-600);border-radius:10px;font-weight:500">Контент</div>
+    <div style="display:flex;flex-direction:column;gap:1px;margin:3px 0 8px 12px;padding-left:11px;border-left:1.5px solid var(--border-default)">
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-600);background:var(--grey-100);border-radius:8px;font-weight:500">Инструкторы <span style="font-size:11px;color:var(--grey-400)">12</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Активности <span style="font-size:11px;color:var(--grey-300)">8</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Прокат <span style="font-size:11px;color:var(--grey-300)">5</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Трансфер <span style="font-size:11px;color:var(--grey-300)">4</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Туры <span style="font-size:11px;color:var(--grey-300)">6</span></span>
+      <span style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;font-size:13px;color:var(--grey-400);border-radius:8px">Места <span style="font-size:11px;color:var(--grey-300)">9</span></span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 11px;font-size:14px;color:var(--grey-500)"><span>Заявки</span><span style="font-size:11px;font-weight:600;color:var(--warning-700);background:var(--warning-100);border-radius:99px;padding:2px 8px">7</span></div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Отзывы</div>
+    <div style="padding:9px 11px;font-size:14px;color:var(--grey-500)">Настройки</div>
+    <div style="flex:1;min-height:24px"></div>
+    <div style="display:flex;align-items:center;gap:9px;padding:10px;border-top:1px solid var(--border-default)"><div style="width:28px;height:28px;border-radius:50%;background:var(--grey-200);flex:none"></div><div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;color:var(--grey-600)">Оператор</span><span style="font-size:11px;color:var(--grey-400)">admin</span></div></div>
+  </aside>
+
+  <!-- main -->
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="flex:none;display:flex;align-items:center;gap:14px;padding:13px 24px;background:var(--grey-white);border-bottom:1px solid var(--border-default)">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0">
+        <span style="font-size:13px;color:var(--grey-400)">Инструкторы</span><span style="color:var(--grey-300)">/</span>
+        <span style="font-size:15px;color:var(--grey-600);font-weight:500">Михаил Андреев</span>
+        <span style="font-size:11px;font-weight:600;color:var(--warning-700);background:var(--warning-100);border-radius:99px;padding:3px 9px">Черновик</span>
+      </div>
+      <div style="flex:1"></div>
+      <span class="btnl">Сохранить</span>
+      <span class="btnf">Опубликовать</span>
+    </header>
+
+    <div class="ed" style="flex:1;min-width:0;background:var(--grey-50);padding:24px 28px 36px">
+      <div style="max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
+
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="lbl">Категория</span>
+          <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--grey-200);border-radius:10px;padding:8px 13px;font-size:14px;color:var(--grey-600)">Инструктор <span style="color:var(--grey-300)">▾</span></div>
+        </div>
+
+        <!-- BLOCK 1 -->
+        <section class="card">
+          <div class="bhd"><span class="numchip">1</span><div class="txt"><span class="blocktitle">Шапка профиля</span></div></div>
+          <div style="display:flex;gap:18px;align-items:flex-start">
+            <div class="fld" style="flex:none"><span class="lbl">Главное фото <span class="req">*</span></span><div style="width:100px;height:120px;border:1.5px dashed var(--grey-200);border-radius:12px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:20px;color:var(--grey-300)">↑</span><span style="font-size:10.5px;color:var(--grey-400)">Загрузить</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:12px;flex:1;min-width:0">
+              <div class="fld"><span class="lbl">Имя <span class="req">*</span></span><div class="inp">Михаил Андреев</div></div>
+              <div class="fld"><span class="lbl">Дисциплины <span class="req">*</span></span><div style="display:flex;gap:7px;flex-wrap:wrap"><span style="background:var(--grey-600);color:#fff;border-radius:99px;padding:5px 11px;font-size:13px;display:inline-flex;gap:6px;align-items:center">Сноуборд <span style="opacity:.5">×</span></span><span style="background:var(--grey-600);color:#fff;border-radius:99px;padding:5px 11px;font-size:13px;display:inline-flex;gap:6px;align-items:center">Лыжи <span style="opacity:.5">×</span></span><span class="chipadd">+</span></div></div>
+            </div>
+          </div>
+          <div class="fld"><span class="lbl">Короткое интро</span><div class="inp" style="line-height:1.5">Спокойное обучение с упором на технику: первые повороты, уверенный карвинг, подготовка к фрирайду.</div></div>
+          <div class="fld" style="max-width:360px"><span class="lbl">Видеовизитка</span><div class="inp" style="font-size:13px;color:var(--grey-500)">youtu.be/mihail-andreev</div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;color:var(--grey-600)">Свободен на этой неделе</span><span style="width:38px;height:22px;border-radius:99px;background:var(--rad-600);position:relative;flex:none"><i style="position:absolute;top:2px;left:18px;width:18px;height:18px;border-radius:50%;background:#fff"></i></span></div>
+        </section>
+
+        <!-- BLOCK 2 -->
+        <section class="card">
+          <div class="bhd"><span class="numchip">2</span><div class="txt"><span class="blocktitle">Главные теги</span></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="fld"><span class="lbl">Специализация <span class="req">*</span></span><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Сноуборд <span class="x">×</span></span><span class="chip">Лыжи <span class="x">×</span></span></div></div>
+            <div class="fld"><span class="lbl">Язык <span class="req">*</span></span><div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">Ge <span class="x">×</span></span><span class="chip">En <span class="x">×</span></span><span class="chip">Ru <span class="x">×</span></span><span class="chipadd">+</span></div></div>
+            <div class="fld"><span class="lbl">Стаж, лет <span class="req">*</span></span><div class="inp">8</div></div>
+            <div class="fld"><span class="lbl">Сертификация</span><div class="inp" style="display:flex;align-items:center;justify-content:space-between">Проверенный <span style="color:var(--grey-300)">▾</span></div></div>
+          </div>
+        </section>
+
+        <!-- BLOCK 3 -->
+        <section class="card">
+          <div class="bhd"><span class="numchip">3</span><div class="txt"><span class="blocktitle">Об инструкторе</span></div></div>
+          <div class="inp" style="line-height:1.6;display:flex;flex-direction:column;gap:10px"><span>Я сертифицированный инструктор с более чем восьмилетним опытом преподавания в Гудаури. Работаю со взрослыми и подростками.</span><span>Мои занятия структурированы и нацелены на результат: правильная техника, понятные объяснения, практика на склоне под ваш уровень.</span></div>
+        </section>
+
+        <!-- BLOCK 4 -->
+        <section class="card">
+          <div class="bhd"><span class="numchip">4</span><div class="txt"><span class="blocktitle">Дополнительные теги</span></div></div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip">Новички <span class="x">×</span></span><span class="chip">Средний уровень <span class="x">×</span></span><span class="chip">Дети <span class="x">×</span></span><span class="chip">Карвинг <span class="x">×</span></span><span class="chip">Уверенность <span class="x">×</span></span><span class="chipadd">+</span></div>
+        </section>
+
+        <!-- BLOCK 5 -->
+        <section class="card">
+          <div class="bhd"><span class="numchip">5</span><div class="txt"><span class="blocktitle">Сертификаты</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:12px;align-items:flex-end;background:var(--grey-50);border-radius:12px;padding:12px"><div style="width:48px;height:48px;flex:none;border-radius:9px;background:var(--grey-100);display:flex;align-items:center;justify-content:center;color:var(--grey-300);font-size:17px;margin-bottom:2px">▤</div><div class="fld" style="flex:1;min-width:0"><span style="font-size:11px;color:var(--grey-400)">Название <span class="req">*</span></span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">ISIA Alpine — Level 2</div></div><div class="fld" style="width:84px;flex:none"><span style="font-size:11px;color:var(--grey-400)">Год</span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">2019</div></div><span style="color:var(--grey-300);font-size:16px;padding-bottom:9px">×</span></div>
+            <div style="display:flex;gap:12px;align-items:flex-end;background:var(--grey-50);border-radius:12px;padding:12px"><div style="width:48px;height:48px;flex:none;border-radius:9px;background:var(--grey-100);display:flex;align-items:center;justify-content:center;color:var(--grey-300);font-size:17px;margin-bottom:2px">▤</div><div class="fld" style="flex:1;min-width:0"><span style="font-size:11px;color:var(--grey-400)">Название <span class="req">*</span></span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">Georgian Ski Federation</div></div><div class="fld" style="width:84px;flex:none"><span style="font-size:11px;color:var(--grey-400)">Год</span><div class="inp" style="padding:8px 11px;font-size:13.5px;border-radius:9px">2016</div></div><span style="color:var(--grey-300);font-size:16px;padding-bottom:9px">×</span></div>
+            <span style="align-self:flex-start;border:1.5px dashed var(--grey-200);color:var(--grey-500);border-radius:10px;padding:9px 16px;font-size:13px">+ добавить сертификат</span>
+          </div>
+        </section>
+
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--grey-400);padding:2px 2px 0"><span style="color:var(--rad-600)">★</span> Рейтинг, отзывы и единый тариф 345 gel/час подставляются автоматически — вручную не вводятся.</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- canvas-side annotations -->
+<div class="anno">
+  <span class="anno-h">Тип блока</span>
+  <div class="anno-row"><span class="anno-n">1</span><div class="fld" style="gap:1px"><span class="anno-name">Шапка профиля</span><span class="anno-type t-tmpl">Шаблон</span></div></div>
+  <div class="anno-row"><span class="anno-n">2</span><div class="fld" style="gap:1px"><span class="anno-name">Главные теги</span><span class="anno-type t-tmpl">Шаблон</span></div></div>
+  <div class="anno-row"><span class="anno-n">3</span><div class="fld" style="gap:1px"><span class="anno-name">Об инструкторе</span><span class="anno-type t-tmpl">Шаблон</span></div></div>
+  <div class="anno-row"><span class="anno-n">4</span><div class="fld" style="gap:1px"><span class="anno-name">Доп. теги</span><span class="anno-type t-tmpl">Шаблон</span></div></div>
+  <div class="anno-row"><span class="anno-n">5</span><div class="fld" style="gap:1px"><span class="anno-name">Сертификаты</span><span class="anno-type t-only">Только у инструкторов</span></div></div>
+</div>
+</div>
+</div>
+
+<!-- ============ 1b — PUBLISH ============ -->
+<div class="dv-opt" id="1b" data-screen-label="1b Публикация"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Публикация</div>
+<div class="dv-card" style="width:340px;padding:22px;display:flex;flex-direction:column;gap:15px">
+  <span style="font-size:18px;font-weight:600;color:var(--grey-600);letter-spacing:-.02em">Опубликовать инструктора?</span>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;gap:9px;font-size:13.5px;color:var(--grey-500)"><span style="color:var(--success-600)">✓</span> Обязательные поля заполнены</div>
+    <div style="display:flex;gap:9px;font-size:13.5px;color:var(--grey-500)"><span style="color:var(--success-600)">✓</span> Главное фото загружено</div>
+    <div style="display:flex;gap:9px;font-size:13.5px;color:var(--grey-500)"><span style="color:var(--warning-700)">!</span> Ссылка на видео не проверена</div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;background:var(--grey-50);border-radius:12px;padding:11px 13px"><span style="font-size:13px;color:var(--grey-600)">Виден в каталоге сразу</span><span style="width:38px;height:22px;border-radius:99px;background:var(--rad-600);position:relative;flex:none"><i style="position:absolute;top:2px;left:18px;width:18px;height:18px;border-radius:50%;background:#fff"></i></span></div>
+  <div style="display:flex;gap:9px"><span class="btnl" style="flex:1;justify-content:center">Отмена</span><span class="btnf" style="flex:1;justify-content:center">Опубликовать</span></div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Дальше можно: «покажи блоки для Активности / Проката» · «сделай <a class="dv-oid" href="#1a">1a</a> интерактивным» · «добавь загрузку и обрезку фото» · «состояния ошибок валидации».</p>
+</section>
+</x-dc>
+</body>
+</html>

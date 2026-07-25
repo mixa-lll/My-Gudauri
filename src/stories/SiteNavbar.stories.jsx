@@ -9,11 +9,11 @@ export default {
 };
 
 export const DesktopClosed = {
-  render: () => <div style={{ minHeight: 360, paddingTop: 24 }}><SiteNavbar /></div>
+  render: () => <div style={{ minHeight: 360, background: 'var(--surface-page)' }}><SiteNavbar /></div>
 };
 
 export const DesktopMenuOpen = {
-  render: () => <div style={{ minHeight: 720, paddingTop: 24 }}><SiteNavbar /></div>,
+  render: () => <div style={{ minHeight: 720, background: 'var(--surface-page)' }}><SiteNavbar /></div>,
   play: async ({ canvasElement }) => {
     await userEvent.click(canvasElement.querySelector('.site-nav__trigger'));
   }

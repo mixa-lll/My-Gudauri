@@ -1,26 +1,18 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import {
   ActivityCard,
   Badge,
   Button,
-  DateField,
   Dialog,
   EditorialCard,
-  FormField,
-  Input,
   InstructorCard,
   ListingCardGrid,
   Notice,
-  Price,
-  QuantityStepper,
   Rating,
   RentalCard,
   SectionHeading,
-  Select,
   StarRating,
   StayCard,
-  Surface,
-  Textarea,
   TransferCard,
 } from '../../../components';
 import './DetailBlocks.scss';
@@ -45,13 +37,23 @@ export function ObjectHero({ variant = 'split', breadcrumbs, title, description,
   </section>;
 }
 
-export function MainTag({ label, value }) {
+function difficultyLevel(value) {
+  const parsed = Number.parseInt(String(Array.isArray(value) ? value[0] : value), 10);
+  return Number.isFinite(parsed) ? Math.min(5, Math.max(1, parsed)) : 1;
+}
+
+export function MainTag({ label, value, display = 'value' }) {
+  if (!['value', 'difficulty'].includes(display)) throw new Error(`MainTag: unknown display “${display}”.`);
   const values = Array.isArray(value) ? value : [value];
-  return <div className="ds-main-tag"><dt>{label}</dt><dd>{values.filter(Boolean).map((item) => <Badge size="sm" key={item}>{item}</Badge>)}</dd></div>;
+  if (display === 'difficulty') {
+    const level = difficultyLevel(value);
+    return <div className="ds-main-tag ds-main-tag--difficulty"><dt>{label}</dt><dd><span className={`ds-difficulty-scale ds-difficulty-scale--${level}`} role="img" aria-label={`Difficulty ${level} out of 5`}>{[1, 2, 3, 4, 5].map((point) => <span className={point <= level ? 'is-active' : ''} aria-hidden="true" key={point} />)}</span></dd></div>;
+  }
+  return <div className="ds-main-tag"><dt>{label}</dt><dd>{values.filter(Boolean).join(' · ')}</dd></div>;
 }
 
 export function ObjectMainTags({ items = [], ariaLabel = 'Key details' }) {
-  return <dl className="ds-object-main-tags" aria-label={ariaLabel}>{items.slice(0, 4).map((item) => <MainTag key={item.label} {...item} />)}</dl>;
+  return <dl className="ds-object-main-tags" aria-label={ariaLabel}>{items.slice(0, 3).map((item) => <MainTag key={item.label} {...item} />)}</dl>;
 }
 
 export function ObjectDescription({ id = 'about', kicker = 'Good to know', title = 'About this offer', description, children, tags = [], tagsLabel = 'Key features' }) {
@@ -198,68 +200,80 @@ export function ObjectStickyNav({ items = [], bookingTargetId = 'booking-request
   </>;
 }
 
-const BOOKING_PRESETS = {
-  instructor: { label: 'Private lesson from', units: [{ id: 'duration', label: 'Hours', min: 1, max: 8, initial: 2 }, { id: 'participants', label: 'People', min: 1, max: 8, initial: 1 }], select: { id: 'level', label: 'Level', options: ['First time', 'Beginner', 'Intermediate', 'Advanced'] }, multiplier: (values) => values.duration },
-  activity: { label: 'Activity from', units: [{ id: 'participants', label: 'People', min: 1, max: 12, initial: 1 }], select: { id: 'duration', label: 'Duration', options: ['Half day', 'Full day'] }, multiplier: (values) => values.participants },
-  rental: { label: 'Rental from', units: [{ id: 'days', label: 'Days', min: 1, max: 14, initial: 1 }], select: { id: 'equipment', label: 'Equipment', options: ['Ski set', 'Snowboard set', 'Clothing'] }, multiplier: (values) => values.days },
-  transfer: { label: 'Transfer from', units: [{ id: 'passengers', label: 'Passengers', min: 1, max: 16, initial: 2 }], textField: { id: 'pickup', label: 'Pickup point', placeholder: 'Tbilisi airport' }, multiplier: () => 1 },
-  stay: { label: 'Stay from', units: [{ id: 'nights', label: 'Nights', min: 1, max: 30, initial: 2 }, { id: 'guests', label: 'Guests', min: 1, max: 12, initial: 2 }], multiplier: (values) => values.nights },
-};
-
-function initialBookingValues(preset, defaults = {}) {
-  return { ...Object.fromEntries(preset.units.map((unit) => [unit.id, unit.initial])), date: '', name: '', phone: '', comment: '', [preset.select?.id]: preset.select?.options[0], [preset.textField?.id]: '', ...defaults };
-}
-
-export function BookingWidget({ id = 'booking-request', category = 'instructor', price, currency = 'GEL', availability, actionLabel = 'Continue', defaultValues, onValuesChange, onSummaryChange, onSubmit }) {
-  const preset = BOOKING_PRESETS[category];
-  if (!preset) throw new Error(`BookingWidget: unsupported category “${category}”.`);
-  const [values, setValues] = useState(() => initialBookingValues(preset, defaultValues));
-  const [expanded, setExpanded] = useState(false);
-  const numericPrice = Number.parseFloat(String(price).replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
-  const total = useMemo(() => numericPrice * preset.multiplier(values), [numericPrice, preset, values]);
-  const ready = Boolean(values.date && values.name.trim() && values.phone.trim() && (!preset.textField || values[preset.textField.id]?.trim()));
-  const update = (id, value) => setValues((current) => { const next = { ...current, [id]: value }; onValuesChange?.(next); return next; });
-  const submit = (event) => { event.preventDefault(); onSubmit?.({ category, values, total }); };
-
-  useEffect(() => {
-    onSummaryChange?.({ actionLabel, ready, totalLabel: numericPrice ? `${total} ${currency}` : null });
-  }, [actionLabel, currency, numericPrice, onSummaryChange, ready, total]);
-
-  return <Surface as="aside" id={id} className={`ds-booking-widget ${expanded ? 'is-expanded' : ''}`} padding="md" aria-label="Booking request">
-    <button type="button" className="ds-booking-widget__mobile-summary" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}><span>{preset.label}</span><strong>{numericPrice ? `${numericPrice} ${currency}` : 'On request'}</strong><span aria-hidden="true">{expanded ? '−' : '+'}</span></button>
-    <form className="ds-booking-widget__form" onSubmit={submit}>
-      <div className="ds-booking-widget__head"><div><small>{preset.label}</small>{numericPrice ? <Price price={`${numericPrice} ${currency}`} /> : <strong>On request</strong>}</div>{availability ? <Badge tone="success">{availability}</Badge> : null}</div>
-      <div className="ds-booking-widget__fields">
-        <FormField label="Preferred date" required><DateField required value={values.date} onChange={(event) => update('date', event.target.value)} /></FormField>
-        {preset.units.map((unit) => <div className="ds-booking-widget__stepper" key={unit.id}><span>{unit.label}</span><QuantityStepper label={unit.label} value={values[unit.id]} min={unit.min} max={unit.max} onChange={(value) => update(unit.id, value)} /></div>)}
-        {preset.select ? <FormField label={preset.select.label}><Select value={values[preset.select.id]} onChange={(event) => update(preset.select.id, event.target.value)}>{preset.select.options.map((option) => <option key={option}>{option}</option>)}</Select></FormField> : null}
-        {preset.textField ? <FormField label={preset.textField.label} required><Input required value={values[preset.textField.id]} placeholder={preset.textField.placeholder} onChange={(event) => update(preset.textField.id, event.target.value)} /></FormField> : null}
-        <FormField label="Name" required><Input required autoComplete="name" value={values.name} onChange={(event) => update('name', event.target.value)} /></FormField>
-        <FormField label="Phone or messenger" required><Input required autoComplete="tel" value={values.phone} onChange={(event) => update('phone', event.target.value)} /></FormField>
-        <FormField label="Comment"><Textarea value={values.comment} onChange={(event) => update('comment', event.target.value)} /></FormField>
-      </div>
-      <div className="ds-booking-widget__total"><span>Estimated total</span><strong>{numericPrice ? `${total} ${currency}` : 'On request'}</strong></div>
-      <Button type="submit" fullWidth>{actionLabel}</Button>
-      <p className="ds-booking-widget__note">No payment now. We confirm availability and final details first.</p>
-    </form>
-  </Surface>;
-}
-
-export function StickyBookingWidget(props) {
-  return <BookingWidget {...props} />;
-}
-
-function SpecificSection({ type, kicker = 'What to expect', title, description, items = [], notice }) {
+function SpecificSection({ id, type, kicker = 'What to expect', title, description, items = [], notice }) {
   const titleId = useId();
-  return <ObjectSection className={`ds-specific-section ds-specific-section--${type}`} kicker={kicker} title={title} description={description} titleId={titleId}>{notice ? <Notice tone={type === 'safety' ? 'warning' : 'info'}>{notice}</Notice> : null}<ul>{items.map((item) => <li key={item.title ?? item}>{typeof item === 'string' ? item : <><strong>{item.title}</strong>{item.description ? <p>{item.description}</p> : null}</>}</li>)}</ul></ObjectSection>;
+  return <ObjectSection id={id ?? type} className={`ds-specific-section ds-specific-section--${type}`} kicker={kicker} title={title} description={description} titleId={titleId}>{notice ? <Notice tone={type === 'safety' ? 'warning' : 'info'}>{notice}</Notice> : null}<ul>{items.map((item) => <li key={item.title ?? item}>{typeof item === 'string' ? item : <><strong>{item.title}</strong>{item.description ? <p>{item.description}</p> : null}</>}</li>)}</ul></ObjectSection>;
 }
 
 export const RouteProgram = (props) => <SpecificSection type="route" title="Route program" {...props} />;
-export const IncludedServices = (props) => <SpecificSection type="included" title="Included services" {...props} />;
-export const EquipmentList = (props) => <SpecificSection type="equipment" title="Equipment" {...props} />;
 export const SafetyRequirements = (props) => <SpecificSection type="safety" title="Safety requirements" {...props} />;
 
-export const ADDITIONAL_SECTION_REGISTRY = { routeProgram: RouteProgram, includedServices: IncludedServices, equipmentList: EquipmentList, safetyRequirements: SafetyRequirements };
+function DetailListItem({ item }) {
+  if (typeof item === 'string') return <span>{item}</span>;
+  return <><strong>{item.title}</strong>{item.description ? <p>{item.description}</p> : null}</>;
+}
+
+function InclusionItem({ item, tone }) {
+  const title = typeof item === 'string' ? item : item.title;
+  const description = typeof item === 'string' ? undefined : item.description;
+  return <>
+    <Badge className={`ds-inclusions-section__badge ds-inclusions-section__badge--${tone}`} size="md" tone={tone === 'included' ? 'success' : 'danger'}>
+      <span className="ds-inclusions-section__badge-marker" aria-hidden="true">{tone === 'included' ? '✓' : '×'}</span>
+      <span>{title}</span>
+    </Badge>
+    {description ? <p>{description}</p> : null}
+  </>;
+}
+
+function InclusionColumn({ tone, title, items, emptyLabel }) {
+  const hasItems = items.length > 0;
+  return <section className={`ds-inclusions-section__column ds-inclusions-section__column--${tone}`} aria-label={title}>
+    <header><h3>{title}</h3></header>
+    {hasItems ? <ul>{items.map((item, index) => <li key={typeof item === 'string' ? item : item.title ?? index}><InclusionItem item={item} tone={tone} /></li>)}</ul> : <p className="ds-inclusions-section__empty">{emptyLabel}</p>}
+  </section>;
+}
+
+export function IncludedServices({ id = 'included', kicker = 'Booking details', title = 'What is included', description, items, includedItems, excludedItems = [], includedLabel = 'Included', excludedLabel = 'Not included', emptyExcludedLabel = 'No exclusions have been specified.' }) {
+  const titleId = useId();
+  const included = includedItems ?? items ?? [];
+  return <ObjectSection id={id} className="ds-inclusions-section" kicker={kicker} title={title} description={description} titleId={titleId}>
+    <div className="ds-inclusions-section__grid">
+      <InclusionColumn tone="included" title={includedLabel} items={included} emptyLabel="Details will be confirmed with your booking." />
+      <InclusionColumn tone="excluded" title={excludedLabel} items={excludedItems} emptyLabel={emptyExcludedLabel} />
+    </div>
+  </ObjectSection>;
+}
+
+export function EquipmentList({ id = 'equipment', kicker = 'Pack for the day', title = 'What to bring', description, items = [], note }) {
+  const titleId = useId();
+  return <ObjectSection id={id} className="ds-equipment-list" kicker={kicker} title={title} description={description} titleId={titleId}>
+    <ul>{items.map((item, index) => <li key={typeof item === 'string' ? item : item.title ?? index}><span className="ds-equipment-list__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div><DetailListItem item={item} /></div></li>)}</ul>
+    {note ? <p className="ds-equipment-list__note">{note}</p> : null}
+  </ObjectSection>;
+}
+
+export function ActivitySchedule({ id = 'schedule', kicker = 'Plan your day', title = 'Schedule', description, items = [] }) {
+  const titleId = useId();
+  return <ObjectSection id={id} className="ds-activity-schedule" kicker={kicker} title={title} description={description} titleId={titleId}>
+    <ol>
+      {items.map((item, index) => <li key={`${item.time ?? index}-${item.title}`}><time dateTime={/^\d{2}:\d{2}$/.test(item.time ?? '') ? item.time : undefined}>{item.time ?? '—'}</time><span className="ds-activity-schedule__marker" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div className="ds-activity-schedule__item"><strong>{item.title}</strong>{item.description ? <p>{item.description}</p> : null}</div></li>)}
+    </ol>
+  </ObjectSection>;
+}
+
+export function RouteMap({ id = 'route-map', kicker = 'Navigation', title = 'Route map', description, start, finish, points = [], mapHref, mapLabel = 'Open map' }) {
+  const titleId = useId();
+  const hasOverview = start || finish || points.length;
+  return <ObjectSection id={id} className="ds-route-map" kicker={kicker} title={title} description={description} titleId={titleId}>
+    <div className="ds-route-map__panel">
+      {hasOverview ? <dl><div><dt>Start</dt><dd>{start || 'On confirmation'}</dd></div><div><dt>Finish</dt><dd>{finish || 'On confirmation'}</dd></div></dl> : null}
+      {points.length ? <ol>{points.map((point, index) => <li key={point.title ?? index}><span>{index + 1}</span><div><strong>{point.title}</strong>{point.description ? <p>{point.description}</p> : null}</div></li>)}</ol> : null}
+      {mapHref ? <a className="ds-route-map__link" href={mapHref} target="_blank" rel="noreferrer">{mapLabel}<span className="visually-hidden"> (opens in a new tab)</span><span aria-hidden="true">↗</span></a> : null}
+    </div>
+  </ObjectSection>;
+}
+
+export const ADDITIONAL_SECTION_REGISTRY = { routeProgram: RouteProgram, activitySchedule: ActivitySchedule, routeMap: RouteMap, includedServices: IncludedServices, equipmentList: EquipmentList, safetyRequirements: SafetyRequirements };
 
 export function RegisteredAdditionalSections({ sections = [] }) {
   return <>{sections.map((section, index) => { const Component = ADDITIONAL_SECTION_REGISTRY[section.type]; if (!Component) throw new Error(`Object detail: unregistered additional section “${section.type}”.`); return <Component key={section.id ?? `${section.type}-${index}`} {...section} />; })}</>;

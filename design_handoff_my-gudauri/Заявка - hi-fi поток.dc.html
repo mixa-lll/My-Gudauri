@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/colors.css">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/typography.css">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/effects.css">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/styles.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eceae7;-webkit-font-smoothing:antialiased;color:var(--grey-600);font-family:var(--font-body)}
+a{color:var(--rad-600);text-decoration:none}a:hover{color:var(--rad-700)}
+.cv{padding:64px 80px 120px;display:flex;flex-direction:column;gap:40px}
+.cv-head h1{margin:0;font-family:var(--font-decor);font-size:34px;line-height:1;color:#20211e}
+.cv-head h1 span{color:#b0aea7}
+.cv-head p{margin:12px 0 0;max-width:760px;color:#6b6b64;font-size:15px;line-height:1.55}
+.row{display:flex;flex-direction:row;align-items:flex-start;gap:56px;width:max-content}
+.frm-wrap{display:flex;flex-direction:column;gap:12px;width:1180px;flex:none}
+.frm-tag{display:flex;align-items:baseline;gap:11px;color:#6b6b64}
+.frm-tag b{font:600 12px/1 ui-monospace,monospace;letter-spacing:.04em;padding:5px 9px;background:var(--grey-600);color:#fff;border-radius:6px}
+.frm-tag em{font-style:normal;font-size:15px;color:#33332e}
+.frm-tag i{font-style:normal;font-size:13px;color:#8f8d86}
+.frm{width:1180px;background:var(--grey-white);border:1px solid var(--grey-150);border-radius:24px;overflow:hidden;box-shadow:0 40px 120px rgba(24,25,22,.10)}
+.nav{display:flex;align-items:center;gap:28px;padding:18px 40px;background:var(--glass-light);border-bottom:1px solid var(--border-subtle)}
+.brand{font-family:var(--font-decor);font-size:22px;letter-spacing:-.01em}
+.brand s{text-decoration:none;color:var(--grey-300)}.brand b{font-weight:400;color:var(--grey-600)}
+.nav-lnk{display:flex;gap:26px;font-size:var(--text-sm);color:var(--grey-400)}
+.body{padding:32px 40px 40px}
+.titlerow{display:flex;align-items:center;gap:16px;margin-bottom:26px}
+.back{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 16px;border:1px solid var(--rad-600);background:transparent;color:var(--rad-600);border-radius:var(--radius-sm);font:400 16px/1 var(--font-body);cursor:pointer}
+.h1{margin:0;font-family:var(--font-heading);font-size:var(--text-h4);line-height:var(--lh-h4);letter-spacing:var(--tracking-heading);font-weight:400;color:var(--grey-600)}
+.h1 b{font-weight:600}
+.layout{display:flex;gap:24px;align-items:flex-start}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--grey-white);border:1px solid var(--border-default);border-radius:var(--radius-lg);box-shadow:var(--shadow-card);padding:28px 30px}
+.sh{font-family:var(--font-heading);font-size:var(--text-h5);line-height:var(--lh-h5);letter-spacing:var(--tracking-tight);font-weight:600;color:var(--grey-600)}
+.sub{color:var(--grey-400);font-size:var(--text-sm);margin-top:6px;margin-bottom:22px;max-width:560px;line-height:1.45}
+.lbl{color:var(--grey-500);font:600 var(--text-sm)/1.2 var(--font-body);margin-bottom:9px;display:block}
+.acc{background:var(--grey-50);border-radius:var(--radius-sm);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.acc-t{font-size:var(--text-md);font-weight:500;color:var(--grey-400)}
+.acc.done .acc-t{color:var(--grey-600)}
+.acc-r{display:flex;align-items:center;gap:12px;color:var(--grey-400);font-size:var(--text-sm)}
+.acc-r em{font-style:normal;color:var(--grey-600);text-decoration:underline}
+.chip{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:var(--radius-pill);border:1px solid var(--grey-200);background:var(--grey-white);color:var(--grey-500);font:500 var(--text-sm)/1 var(--font-body);white-space:nowrap}
+.chip.on{border-color:var(--rad-600);background:var(--rad-600);color:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border:1px solid var(--grey-200);border-radius:var(--radius-sm);background:var(--grey-50)}
+.seg>span{padding:9px 18px;text-align:center;border-radius:var(--radius-xsm);font:500 var(--text-sm)/1 var(--font-body);color:var(--grey-500);white-space:nowrap}
+.seg>span.on{background:var(--grey-700);color:#fff}
+.cnt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 16px;border-radius:16px;background:var(--grey-50)}
+.cnt-v{display:flex;align-items:baseline;gap:7px}
+.cnt-v span{font:400 26px/1 var(--font-heading);color:var(--grey-600)}
+.cnt-v p{margin:0;color:var(--grey-400);font:400 13px/1 var(--font-body)}
+.cnt-c{display:flex;gap:6px}
+.cnt-c button{width:40px;height:40px;border:1px solid var(--grey-150);border-radius:12px;background:var(--grey-white);color:var(--grey-600);cursor:pointer;font-size:19px;display:grid;place-items:center}
+.fld{width:100%;height:44px;padding:0 14px;border:1px solid var(--grey-200);border-radius:var(--radius-xsm);background:var(--grey-white);color:var(--grey-600);font:400 var(--text-md)/44px var(--font-body)}
+.ta{width:100%;min-height:44px;padding:11px 14px;border:1px solid var(--grey-200);border-radius:var(--radius-xsm);background:var(--grey-white);color:var(--grey-600);font:400 var(--text-md)/1.45 var(--font-body)}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+.foot.end{justify-content:flex-end}
+.btn-txt{background:none;border:0;color:var(--grey-500);cursor:pointer;font:500 var(--text-md)/1 var(--font-body)}
+.next{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border:1px solid var(--rad-600);background:var(--rad-600);color:#fff;border-radius:var(--radius-sm);font:400 var(--text-md)/1 var(--font-body);cursor:pointer}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-nav{width:36px;height:36px;border:1px solid var(--grey-150);background:var(--grey-white);border-radius:var(--radius-xsm);cursor:pointer;color:var(--grey-500);font-size:16px;display:flex;align-items:center;justify-content:center}
+.cal-mo{font-family:var(--font-heading);font-size:var(--text-lg);font-weight:500;letter-spacing:var(--tracking-tight)}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.cal-dow span{text-align:center;font-size:var(--text-xsm);color:var(--grey-300);font-weight:500;text-transform:uppercase;letter-spacing:var(--tracking-wide);padding-bottom:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-grid span{height:46px;display:flex;align-items:center;justify-content:center;font-size:var(--text-md);border-radius:var(--radius-xsm);color:var(--grey-600)}
+.cal-grid span.mid{background:var(--rad-100);color:var(--rad-700);font-weight:500}
+.cal-grid span.edge{background:var(--rad-600);color:#fff;font-weight:600}
+.rangehint{margin-top:14px;color:var(--grey-400);font-size:var(--text-sm)}
+.addtime{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border:1px dashed var(--grey-200);background:var(--grey-white);color:var(--grey-500);border-radius:var(--radius-sm);font:400 var(--text-md)/1 var(--font-body);cursor:pointer}
+.addtime small{color:var(--grey-300);font-size:var(--text-sm)}
+.divtop{border-top:1px solid var(--border-subtle);margin-top:22px;padding-top:22px}
+.slotcol{display:flex;gap:8px;padding:0 4px}
+.slotcol span{flex:1;text-align:center;font-size:var(--text-xsm);color:var(--grey-300)}
+.slotcol .spacer{width:104px;flex:none}
+.dayrow{display:flex;align-items:center;gap:10px;border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px 14px}
+.daylbl{width:104px;flex:none;display:flex;align-items:center;gap:9px}
+.daylbl .x{cursor:pointer;color:var(--grey-300);font-size:13px}
+.daylbl .c{display:flex;flex-direction:column;line-height:1.25}
+.daylbl .c b{font-weight:600;font-size:var(--text-sm);color:var(--grey-600)}
+.daylbl .c i{font-style:normal;color:var(--grey-400);font-size:var(--text-xsm)}
+.dayslots{flex:1;display:flex;gap:8px}
+.slot{flex:1;text-align:center;padding:11px 6px;border-radius:var(--radius-xsm);font-size:var(--text-sm);white-space:nowrap;border:1px solid var(--grey-150);background:var(--grey-white);color:var(--grey-500)}
+.slot.on{border-color:var(--rad-600);background:var(--rad-600);color:#fff;font-weight:500}
+.rail{width:328px;flex:none;background:var(--grey-white);border:1px solid var(--border-default);border-radius:var(--radius-md);box-shadow:var(--shadow-card);padding:22px}
+.rail-k{font-size:var(--text-xsm);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--grey-400);font-weight:600;padding-bottom:18px}
+.rbox{display:flex;justify-content:space-between;align-items:center;background:var(--grey-50);border-radius:var(--radius-xsm);padding:14px 16px}
+.rbox b{font-size:var(--text-md);font-weight:500;color:var(--grey-600)}
+.rbox .mut{font-size:var(--text-sm);color:var(--grey-300)}
+.price{display:flex;align-items:baseline;gap:8px}
+.price b{font-family:var(--font-heading);font-size:28px;font-weight:700;letter-spacing:var(--tracking-tight);color:var(--grey-600)}
+.price i{font-style:normal;font-size:var(--text-xsm);color:var(--grey-400)}
+.note{color:var(--grey-400);font-size:var(--text-xsm);line-height:1.5}
+.tag{background:var(--grey-100);border-radius:var(--radius-xsm);padding:5px 10px;font-size:var(--text-xsm);color:var(--grey-500)}
+.instr{display:flex;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--border-subtle);align-items:center}
+.instr .ph{width:38px;height:38px;border-radius:10px;background:var(--grey-100);display:flex;align-items:center;justify-content:center;color:var(--grey-300);font-size:16px}
+.instr .c{display:flex;flex-direction:column}
+.instr .c i{font-style:normal;font-size:var(--text-xsm);color:var(--grey-400)}
+.instr .c b{font-size:var(--text-md);font-weight:500;color:var(--grey-600)}
+</style>
+</helmet>
+
+<div class="cv">
+
+<div class="cv-head">
+<h1>My Gudauri <span>— заявка · hi-fi поток</span></h1>
+<p>Вариант 2 «подбор оператором» из вайрфреймов, собранный на дизайн-системе. Инструктор ещё не выбран — оператор подберёт сам. Даты в облегчённом режиме (сначала только календарь, время по желанию), плюс шаги «Company» и «What are you into». Экраны слева направо: даты · время · компания · пожелания · контакты · отправлено.</p>
+</div>
+
+<div class="row">
+
+<!-- ============ O1a — DATES (default) ============ -->
+<div class="frm-wrap" data-screen-label="O1a Dates — default">
+<div class="frm-tag"><b>O1a</b><em>Step 1 · dates — default</em><i>Calendar only, time is optional</i></div>
+<div class="frm">
+<div class="nav"><span class="brand"><s>My</s> <b>Gudauri</b></span><div style="flex:1"></div><span class="nav-lnk"><span>Instructors</span><span>Activities</span><span>Rental</span><span>About</span></span></div>
+<div class="body">
+<div class="titlerow"><button class="back" type="button">← Back</button><h1 class="h1">Request a lesson — <b>we'll match an instructor</b></h1></div>
+<div class="layout">
+<div class="main">
+<div class="card">
+<div class="sh">1. When would you like to go?</div>
+<div class="sub">Pick your preferred days. Exact time is optional — the operator suggests the best slots and checks the weather window.</div>
+<div class="cal-head"><button class="cal-nav" type="button">‹</button><span class="cal-mo">March 2026</span><button class="cal-nav" type="button">›</button></div>
+<div class="cal-dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+<div class="cal-grid"><span></span><span></span><span></span><span></span><span></span><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span class="edge">14</span><span class="mid">15</span><span class="edge">16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span></div>
+<div class="rangehint">14–16 March · 3 days selected — tap to change the range</div>
+<div class="divtop"><button class="addtime" type="button">+ Specify time <small>(optional)</small></button></div>
+<div class="foot end"><button class="next" type="button">Next →</button></div>
+</div>
+<div class="acc"><span class="acc-t">2. Company</span></div>
+<div class="acc"><span class="acc-t">3. What are you into</span></div>
+<div class="acc"><span class="acc-t">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div class="rail-k">Your request</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="rbox"><b>14–16 March</b><span class="mut">time not set</span></div>
+<div class="rbox"><span style="font-size:var(--text-sm);color:var(--grey-400)">People</span><span style="color:var(--grey-300);font-weight:500">—</span></div>
+<div class="note" style="padding-top:6px">Price appears once you set the time and participants.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============ O1 — DATES (time expanded) ============ -->
+<div class="frm-wrap" data-screen-label="O1 Dates — time expanded">
+<div class="frm-tag"><b>O1</b><em>Step 1 · dates — time expanded</em><i>Optional per-day slots revealed</i></div>
+<div class="frm">
+<div class="nav"><span class="brand"><s>My</s> <b>Gudauri</b></span><div style="flex:1"></div><span class="nav-lnk"><span>Instructors</span><span>Activities</span><span>Rental</span><span>About</span></span></div>
+<div class="body">
+<div class="titlerow"><button class="back" type="button">← Back</button><h1 class="h1">Request a lesson — <b>we'll match an instructor</b></h1></div>
+<div class="layout">
+<div class="main">
+<div class="card">
+<div class="sh">1. When would you like to go?</div>
+<div class="sub">Pick your preferred days. Exact time is optional — the operator suggests the best slots and checks the weather window.</div>
+<div class="cal-head"><button class="cal-nav" type="button">‹</button><span class="cal-mo">March 2026</span><button class="cal-nav" type="button">›</button></div>
+<div class="cal-dow"><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span></div>
+<div class="cal-grid"><span></span><span></span><span></span><span></span><span></span><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span class="edge">14</span><span class="mid">15</span><span class="edge">16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span></div>
+<div class="rangehint">14–16 March · 3 days</div>
+<div class="divtop" style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:var(--text-md);font-weight:500;color:var(--grey-600)">Time per day <span style="color:var(--grey-300);font-weight:400;font-size:var(--text-sm)">— optional</span></span><button type="button" style="height:34px;padding:0 14px;border:1px solid var(--rad-600);background:transparent;color:var(--rad-600);border-radius:var(--radius-xsm);font-size:var(--text-sm);cursor:pointer">− Collapse</button></div>
+<div class="slotcol"><span class="spacer"></span><span>slot 1 · 2h</span><span>slot 2 · 2h</span><span>slot 3 · 2h</span></div>
+<div class="dayrow"><div class="daylbl"><span class="x">✕</span><span class="c"><b>Day 1</b><i>14.03.26</i></span></div><div class="dayslots"><span class="slot on">10:00–12:00</span><span class="slot">12:30–14:30</span><span class="slot">15:00–17:00</span></div></div>
+<div class="dayrow"><div class="daylbl"><span class="x">✕</span><span class="c"><b>Day 2</b><i>15.03.26</i></span></div><div class="dayslots"><span class="slot on">10:00–12:00</span><span class="slot on">12:30–14:30</span><span class="slot">15:00–17:00</span></div></div>
+<div class="dayrow"><div class="daylbl"><span class="x">✕</span><span class="c"><b>Day 3</b><i>16.03.26</i></span></div><div class="dayslots"><span class="slot on">10:00–12:00</span><span class="slot">12:30–14:30</span><span class="slot">15:00–17:00</span></div></div>
+<div class="note">3 slots a day · 2 hours each. Consecutive days are fine.</div>
+</div>
+<div class="foot end"><button class="next" type="button">Next →</button></div>
+</div>
+<div class="acc"><span class="acc-t">2. Company</span></div>
+<div class="acc"><span class="acc-t">3. What are you into</span></div>
+<div class="acc"><span class="acc-t">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div class="rail-k">Your request</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="rbox"><b>14–16 March</b><b style="font-size:var(--text-sm)">8 h</b></div>
+<div class="rbox"><span style="font-size:var(--text-sm);color:var(--grey-400)">People</span><span style="color:var(--grey-300);font-weight:500">—</span></div>
+<div class="note" style="padding-top:6px">Price appears once you set the participants.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============ O2 — COMPANY ============ -->
+<div class="frm-wrap" data-screen-label="O2 Company">
+<div class="frm-tag"><b>O2</b><em>Step 2 · company</em><i>Who's coming and how many</i></div>
+<div class="frm">
+<div class="nav"><span class="brand"><s>My</s> <b>Gudauri</b></span><div style="flex:1"></div><span class="nav-lnk"><span>Instructors</span><span>Activities</span><span>Rental</span><span>About</span></span></div>
+<div class="body">
+<div class="titlerow"><button class="back" type="button">← Back</button><h1 class="h1">Request a lesson — <b>we'll match an instructor</b></h1></div>
+<div class="layout">
+<div class="main">
+<div class="acc done"><span class="acc-t">1. Dates &amp; time</span><span class="acc-r">14–16 March · 8 hours <em>Edit ↗</em></span></div>
+<div class="card">
+<div class="sh">2. Company</div>
+<div class="sub">A few details about your group help the operator make a relevant match.</div>
+<div style="margin-bottom:20px"><span class="lbl">Who's coming</span><div class="seg" style="max-width:360px"><span class="on">Family</span><span>Friends</span><span>Solo</span></div></div>
+<div style="display:flex;gap:14px;margin-bottom:20px">
+<div style="flex:1"><span class="lbl">Adults</span><div class="cnt"><div class="cnt-v"><span>3</span><p>adults</p></div><div class="cnt-c"><button type="button">−</button><button type="button">+</button></div></div></div>
+<div style="flex:1"><span class="lbl">Kids under 12</span><div class="cnt"><div class="cnt-v"><span>1</span><p>kids</p></div><div class="cnt-c"><button type="button">−</button><button type="button">+</button></div></div></div>
+</div>
+<div><span class="lbl">Instructor language</span><div class="chips"><span class="chip on">Russian</span><span class="chip">English</span><span class="chip">Georgian</span></div></div>
+<div class="foot"><button class="btn-txt" type="button">← Back</button><button class="next" type="button">Next →</button></div>
+</div>
+<div class="acc"><span class="acc-t">3. What are you into</span></div>
+<div class="acc"><span class="acc-t">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div class="rail-k">Your request</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="rbox"><b>14–16 March</b><b style="font-size:var(--text-sm)">8 h</b></div>
+<div class="rbox"><b style="font-size:var(--text-sm)">Family · 3</b><span class="mut">1 kid</span></div>
+<div class="price" style="padding-top:6px"><b>847 ₾</b><i>for 8 hours</i></div>
+<div class="note">Same official rate for every instructor.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============ O3 — WHAT ARE YOU INTO ============ -->
+<div class="frm-wrap" data-screen-label="O3 What are you into">
+<div class="frm-tag"><b>O3</b><em>Step 3 · what are you into</em><i>Short survey that guides the match</i></div>
+<div class="frm">
+<div class="nav"><span class="brand"><s>My</s> <b>Gudauri</b></span><div style="flex:1"></div><span class="nav-lnk"><span>Instructors</span><span>Activities</span><span>Rental</span><span>About</span></span></div>
+<div class="body">
+<div class="titlerow"><button class="back" type="button">← Back</button><h1 class="h1">Request a lesson — <b>we'll match an instructor</b></h1></div>
+<div class="layout">
+<div class="main">
+<div class="acc done"><span class="acc-t">1. Dates &amp; time</span><span class="acc-r">14–16 March · 8 hours <em>Edit ↗</em></span></div>
+<div class="acc done"><span class="acc-t">2. Company</span><span class="acc-r">Family · 3 people <em>Edit ↗</em></span></div>
+<div class="card">
+<div class="sh">3. What are you into</div>
+<div class="sub">Tell us what sounds good — the operator finds the right instructor and plan for it.</div>
+<div style="margin-bottom:18px"><span class="lbl">Activity</span><div class="chips"><span class="chip on">Winter sports</span><span class="chip">Sightseeing</span><span class="chip">Freeride</span><span class="chip">Snowboard</span></div></div>
+<div style="margin-bottom:18px"><span class="lbl">Pace</span><div class="seg" style="max-width:360px"><span>Relaxed</span><span class="on">Medium</span><span>Adrenaline</span></div></div>
+<div style="margin-bottom:18px"><span class="lbl">Skill level (average)</span><div class="seg" style="max-width:360px"><span class="on">Beginner</span><span>Intermediate</span><span>Advanced</span></div></div>
+<div style="margin-bottom:18px"><span class="lbl">Budget per person</span><div class="seg" style="max-width:360px"><span>Economy</span><span class="on">Medium</span><span>Premium</span></div></div>
+<div><span class="lbl">Anything else <span style="font-weight:400;color:var(--grey-400);text-transform:none">— goals, kids, equipment</span></span><textarea class="ta" rows="2">2 beginners + a child, rental needed</textarea></div>
+<div class="foot"><button class="btn-txt" type="button">← Back</button><button class="next" type="button">Next →</button></div>
+</div>
+<div class="acc"><span class="acc-t">4. Contact details</span></div>
+</div>
+<div class="rail">
+<div class="rail-k">Your request</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="rbox"><b>14–16 March</b><b style="font-size:var(--text-sm)">8 h</b></div>
+<div class="rbox"><b style="font-size:var(--text-sm)">Family · 3</b><span class="mut">1 kid</span></div>
+<div style="display:flex;flex-direction:column;gap:8px;background:var(--grey-50);border-radius:var(--radius-xsm);padding:12px 14px"><span class="note" style="font-weight:600;color:var(--grey-400);text-transform:uppercase;letter-spacing:var(--tracking-wide);font-size:10px">Preferences</span><div class="chips"><span class="tag">Winter</span><span class="tag">Medium</span><span class="tag">Beginner</span></div></div>
+<div class="price" style="padding-top:6px"><b>847 ₾</b><i>for 8 hours</i></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============ O4 — CONTACT ============ -->
+<div class="frm-wrap" data-screen-label="O4 Contact details">
+<div class="frm-tag"><b>O4</b><em>Step 4 · contact details</em><i>Where the operator sends the reply</i></div>
+<div class="frm">
+<div class="nav"><span class="brand"><s>My</s> <b>Gudauri</b></span><div style="flex:1"></div><span class="nav-lnk"><span>Instructors</span><span>Activities</span><span>Rental</span><span>About</span></span></div>
+<div class="body">
+<div class="titlerow"><button class="back" type="button">← Back</button><h1 class="h1">Request a lesson — <b>we'll match an instructor</b></h1></div>
+<div class="layout">
+<div class="main">
+<div class="acc done"><span class="acc-t">1. Dates &amp; time</span><span class="acc-r">14–16 March · 8 hours <em>Edit ↗</em></span></div>
+<div class="acc done"><span class="acc-t">2. Company</span><span class="acc-r">Family · 3 people <em>Edit ↗</em></span></div>
+<div class="acc done"><span class="acc-t">3. What are you into</span><span class="acc-r">Winter · Medium · Beginner <em>Edit ↗</em></span></div>
+<div class="card">
+<div class="sh">4. Contact details</div>
+<div class="sub">Where should the operator send the confirmed option?</div>
+<div style="margin-bottom:16px"><span class="lbl">Contact name</span><input class="fld" value="Adam"></div>
+<div style="display:flex;gap:14px;margin-bottom:16px">
+<div style="flex:1"><span class="lbl">Phone number</span><input class="fld" value="+7 916 121 06 06"></div>
+<div style="flex:1"><span class="lbl">Email <span style="font-weight:400;color:var(--grey-400);text-transform:none">— confirmation goes here</span></span><input class="fld" value="adam@email.com"></div>
+</div>
+<div><span class="lbl">Preferred messenger</span><div class="chips"><span class="chip on">WhatsApp</span><span class="chip">Telegram</span><span class="chip">Viber</span></div></div>
+<div class="note" style="margin-top:16px;max-width:520px">Payment happens after confirmation. The operator replies within an hour to confirm the instructor, weather and group spots.</div>
+<div class="foot"><button class="btn-txt" type="button">← Back</button><button class="next" type="button">Send request →</button></div>
+</div>
+</div>
+<div class="rail">
+<div class="rail-k">Your request</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div class="rbox"><b>14–16 March</b><b style="font-size:var(--text-sm)">8 h</b></div>
+<div class="rbox"><b style="font-size:var(--text-sm)">Family · 3</b><span class="mut">1 kid</span></div>
+<div style="display:flex;flex-direction:column;gap:7px;border:1px solid var(--border-default);border-radius:var(--radius-xsm);padding:12px 14px;font-size:var(--text-sm)"><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Name</span><span>Adam</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Phone</span><span>+7 916…</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Messenger</span><span>WhatsApp</span></div></div>
+<div class="price" style="padding-top:6px"><b>847 ₾</b><i>for 8 hours</i></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ============ O5 — SENT ============ -->
+<div class="frm-wrap" data-screen-label="O5 Sent">
+<div class="frm-tag"><b>O5</b><em>Request sent</em><i>Operator matches and gets in touch</i></div>
+<div class="frm">
+<div class="nav"><span class="brand"><s>My</s> <b>Gudauri</b></span><div style="flex:1"></div><span class="nav-lnk"><span>Instructors</span><span>Activities</span><span>Rental</span><span>About</span></span></div>
+<div class="body">
+<div class="titlerow"><button class="back" type="button">← Back</button><h1 class="h1">Request a lesson — <b>we'll match an instructor</b></h1></div>
+<div class="layout">
+<div class="main">
+<div class="card" style="border-color:#bcdcc0">
+<div style="width:44px;height:44px;border-radius:10px;background:#dcefe0;color:#328143;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px">✓</div>
+<div class="h1" style="margin-bottom:18px">Your request is sent</div>
+<span class="lbl" style="text-transform:uppercase;letter-spacing:var(--tracking-wide);font-size:10px">Request ID</span>
+<div style="display:flex;align-items:center;gap:12px;margin:2px 0 8px"><span style="font-family:var(--font-heading);font-size:26px;color:var(--grey-600)">MG-51043</span><button type="button" style="width:34px;height:34px;border:1px solid var(--grey-200);border-radius:8px;background:var(--grey-white);color:var(--grey-600);cursor:pointer">⧉</button></div>
+<div class="note" style="font-style:italic;margin-bottom:22px">*Please save your request ID — useful if you contact support.</div>
+<div style="border-left:3px solid var(--rad-600);padding-left:16px"><div style="font-family:var(--font-heading);font-size:var(--text-md);font-weight:600;color:var(--grey-600);margin-bottom:8px">What happens next</div><div style="display:flex;flex-direction:column;gap:6px;font-size:var(--text-sm);color:var(--grey-500);line-height:1.5"><span>1. The operator selects an instructor and program for your request.</span><span>2. Contacts you via WhatsApp within an hour, confirms weather and group spots.</span><span>3. Sends a secure payment link after confirmation.</span></div></div>
+</div>
+</div>
+<div class="rail">
+<div class="instr"><span class="ph">?</span><div class="c"><i>Instructor</i><b>Being matched</b></div></div>
+<div style="display:flex;flex-direction:column;gap:8px;padding-top:16px">
+<span class="note" style="font-weight:600;color:var(--grey-500)">Preferred days</span>
+<div style="display:flex;flex-direction:column;gap:6px;background:var(--grey-50);border-radius:var(--radius-xsm);padding:12px 14px;font-size:var(--text-sm)"><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">14.03.26</span><span>2h</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">15.03.26</span><span>4h</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">16.03.26</span><span>2h</span></div></div>
+<span class="note" style="font-weight:600;color:var(--grey-500);margin-top:8px">Request</span>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:var(--text-sm)"><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Group</span><span>Family · 3</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Interests</span><span>Winter, Medium</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Contact</span><span>Adam</span></div><div style="display:flex;justify-content:space-between"><span style="color:var(--grey-400)">Messenger</span><span>WhatsApp</span></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

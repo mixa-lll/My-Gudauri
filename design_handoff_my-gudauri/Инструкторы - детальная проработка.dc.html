@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet"><style>body{margin:0;background:#eceae7;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:#2a78d6}a:hover{color:#1a5cb0}
+.dv-turn{padding:40px 44px 32px;scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font-size:16px;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:14px;color:rgba(0,0,0,.6)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font-size:14px;color:rgba(0,0,0,.55)}
+.mtx-sub{font-size:14px;color:rgba(0,0,0,.55);margin:0 0 26px;max-width:820px;line-height:1.5}
+.wf{color:#4a4a4a;font-size:13px}.nav{display:flex;align-items:center;gap:16px;padding:12px 22px;background:#e2e0dd;border-bottom:1px solid #d3d1cd}.box{border:none;border-radius:4px;background:#e4e2df}.ph{border:none;border-radius:4px;background:#d4d2ce}.ln{height:8px;border-radius:3px;background:#d0cecb}.lnd{height:8px;border-radius:3px;background:#a9a7a3}.btn{display:flex;align-items:center;justify-content:center;background:#6b6966;color:#f4f3f1;border-radius:4px;font-size:14px;padding:8px 16px;white-space:nowrap}.bo{display:flex;align-items:center;justify-content:center;border:none;border-radius:4px;font-size:13px;padding:7px 14px;background:#dcdad7;color:#5a5855;white-space:nowrap}.pill{border:none;border-radius:99px;padding:3px 12px;font-size:12.5px;background:#dcdad7;color:#5a5855;white-space:nowrap}.tag{background:#d8d6d2;border-radius:3px;padding:3px 9px;font-size:11.5px;color:#6a6864;white-space:nowrap}.subrow{display:flex;gap:8px;flex-wrap:wrap;padding:16px 22px 0}.subcat{border-radius:99px;padding:8px 16px;font-size:14.5px;background:#e4e2df;color:#4a4a4a;white-space:nowrap;border:1.5px solid transparent}.subcat.on{background:#2b2a28;color:#f4f3f1;border-color:#2b2a28}.subcat .n{font-size:12px;opacity:.6;margin-left:5px}.r{display:flex;align-items:center}.c{display:flex;flex-direction:column}.sec{padding:24px 22px;border-bottom:1px solid #e6e4e1}.h1{font-size:28px;line-height:1.15;color:#333;font-weight:600}.h2{font-size:19px;color:#3d3d3d;font-weight:600}.mut{color:#8f8d89;font-size:13px}.note{font-size:12.5px;color:#8a8884;font-style:italic}.acc{display:flex;justify-content:space-between;align-items:center;border:none;border-radius:4px;padding:10px 14px;font-size:14px;background:#e4e2df;color:#4a4a4a}.star{color:#9a9895;font-size:12.5px;white-space:nowrap}.chk{width:13px;height:13px;border:none;border-radius:2px;background:#c4c2be;flex:none}
+</style></helmet>
+
+<section class="dv-turn" id="t13" data-screen-label="Инструкторы — детальная проработка">
+<div class="dv-thd"><span class="dv-tid">Инструкторы</span><span class="dv-tname">Детальная проработка: каталог · карточка · профиль · единая цена</span></div>
+<p class="mtx-sub">Ключевой принцип: <b>инструктора равны</b> — единый тариф, одинаковая структура карточки и профиля, никаких «топ»-бейджей и промо-мест. Отличаются только <b>специализацией и тегами</b>, а не ценой или позицией. Расписание онлайн не ведём: гость не видит, кто свободен — вместо этого <b>заявка → оператор подтверждает</b> свободного инструктора или предлагает альтернативу. Ниже — <a href="#13a">13a</a> каталог, <a href="#13b">13b</a> карточка, <a href="#13c">13c</a> профиль, <a href="#13d">13d</a> контент-спека, <a href="#13e">13e</a> подбор оператором.</p>
+<div class="dv-opts">
+
+<!-- ============ 13a — КАТАЛОГ ============ -->
+<div class="dv-opt" id="13a" data-screen-label="13a Каталог инструкторов"><div class="dv-olabel"><a class="dv-oid" href="#13a">13a</a>Каталог инструкторов — только важные фильтры, единый тариф</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать инструктором</div></div>
+
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0">
+<div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Сноуборд</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Лыжи</span></div>
+<span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">ИНСТРУКТОРЫ</span>
+<span class="mut" style="font-size:13px">Выберите человека, а не абстрактную школу</span>
+</div>
+
+<!-- Баннер: подбор оператором + единый тариф -->
+<div class="sec" style="border-bottom:none;padding:18px 22px 0">
+<div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff">
+<div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, кого выбрать? <span style="color:#b8b5af">Подберём инструктора под ваши даты и пожелания.</span></span><a href="#13e" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div>
+<div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Единый тариф — 345 gel/час у всех</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">чем больше часов, тем дешевле · <a href="#13d" style="color:#d9d6cf">13d</a></span></div>
+</div>
+<span class="note" style="margin-top:8px">Заявка → оператор отвечает «свободен / занят» → при занятости предлагает другого. Опрос подбора → <a href="#13e">13e</a>.</span>
+</div>
+
+<!-- Панель фильтров (только важное) -->
+<div class="sec" style="border-bottom:none;padding:16px 22px 0">
+<div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div>
+<div class="r" style="gap:7px;flex-wrap:wrap">
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Дата и время</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Направление обучения</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Уровень ученика</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Язык</span><span>▾</span></div>
+</div>
+<div class="note" style="margin-top:9px">Оставили 4 главных фильтра. Фильтра «свободен сейчас» нет — доступность подтверждает оператор. Полный список опций (для будущего) → <a href="#13d">13d</a>.</div>
+</div>
+
+<!-- Дисциплины + сортировка -->
+<div class="subrow" style="padding:16px 22px 0">
+<span class="subcat on">Все<span class="n">12</span></span><span class="subcat">Частные</span><span class="subcat">Групповые</span><span class="subcat">Детские</span><span class="subcat">Продвинутый</span><span class="subcat">Slope Tour</span>
+</div>
+<div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">12 инструкторов</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по рейтингу</span><span>▾</span></div></div>
+
+<!-- Сетка карточек (без строки тарифа) -->
+<div class="sec" style="padding-top:12px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Михаил Андреев</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дети</span><span class="tag">Карвинг</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">стаж 6 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">Ru</span></div></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Олег Юнг</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Фрирайд-гид</span><span class="tag">Продвинутый</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">стаж 8 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span></div></div><span style="font-size:15px">Андрей Григорьев</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Семья</span><span class="tag">Новички</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">стаж 5 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Нина Барамидзе</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дети</span><span class="tag">Группа</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">стаж 7 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ru</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Давид Кипиани</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Фристайл</span><span class="tag">Slope Tour</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">стаж 6 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span></div></div><span style="font-size:15px">Тамара Лежава</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Women×Women</span><span class="tag">Средний</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">стаж 9 лет</span></div></div>
+</div>
+<div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 6</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+
+<!-- ============ 13b — КАРТОЧКА (аннотированная, без строки тарифа) ============ -->
+<div class="dv-opt" id="13b" data-screen-label="13b Карточка инструктора"><div class="dv-olabel"><a class="dv-oid" href="#13b">13b</a>Карточка в каталоге — единый набор полей у всех</div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="dv-card wf" style="width:230px;padding:10px">
+<div class="box c" style="padding:9px;gap:8px">
+<div class="ph c" style="height:150px;padding:7px;justify-content:space-between">
+<div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:11px;padding:2px 8px">Ge</span><span class="pill" style="font-size:11px;padding:2px 8px">En</span></div></div>
+<div class="r" style="gap:4px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span></div>
+</div>
+<span style="font-size:17px">Михаил Андреев</span>
+<div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дети</span><span class="tag">Карвинг</span></div>
+<div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:13px">★★★★★ 4.9</span><span class="mut" style="font-size:12px">стаж 6 лет</span></div>
+</div>
+</div>
+<div class="c" style="gap:9px;width:190px;padding-top:8px">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Что на карточке</span>
+<div class="c" style="gap:7px;font-size:12.5px;color:#4a4a4a">
+<span>◂ Фото инструктора</span>
+<span>◂ Языки (флаги-пилюли)</span>
+<span>◂ Дисциплина: лыжи / сноуборд</span>
+<span>◂ Имя (display)</span>
+<span>◂ 1–2 тега специализации</span>
+<span>◂ Рейтинг + стаж</span>
+</div>
+<div class="note" style="margin-top:2px">У всех одинаковая структура и одна обложка — карточки различаются <b>тегами</b>, а не наполнением. Цену на карточке не показываем.</div>
+</div>
+</div>
+</div>
+
+<!-- ============ 13c — ПРОФИЛЬ ============ -->
+<div class="dv-opt" id="13c" data-screen-label="13c Профиль инструктора"><div class="dv-olabel"><a class="dv-oid" href="#13c">13c</a>Профиль инструктора — компактно + единая цена с формулой</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать инструктором</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+
+<!-- Левая колонка -->
+<div class="c" style="flex:1;gap:18px">
+<span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все инструкторы</span>
+
+<!-- Hero + компактная строка ключевых фактов -->
+<div class="c" style="gap:10px">
+<div class="r" style="gap:7px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span><span class="tag" style="background:#222;color:#fff">Инструктор</span></div>
+<span style="font-size:44px;line-height:1.02;color:#111;letter-spacing:1px">МИХАИЛ<br>АНДРЕЕВ</span>
+<div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 10 подтверждённых отзывов</span></div>
+<span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">Стаж 6 лет · категория ISIA · языки Ge / En / Ru · ученики от 4 лет</span>
+</div>
+
+<!-- Об инструкторе -->
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Об инструкторе</span>
+<div class="ln" style="width:100%"></div><div class="ln" style="width:97%"></div><div class="ln" style="width:62%"></div>
+<span class="mut" style="font-size:12.5px;margin-top:4px">Свой текст, а не шаблон — как учит, чем отличается, стиль преподавания.</span>
+</div>
+
+<!-- Форматы занятий (переработанный «чему обучает») -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Форматы занятий</span>
+<div class="c" style="gap:0">
+<div class="r" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid #eceae5"><span style="font-size:14.5px">Частное</span><span class="mut" style="font-size:12.5px">1–3 ученика · любой уровень</span></div>
+<div class="r" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid #eceae5"><span style="font-size:14.5px">Детское</span><span class="mut" style="font-size:12.5px">от 4 лет · шлем обязателен</span></div>
+<div class="r" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid #eceae5"><span style="font-size:14.5px">Семейное</span><span class="mut" style="font-size:12.5px">взрослые и дети вместе</span></div>
+<div class="r" style="justify-content:space-between;padding:9px 0"><span style="font-size:14.5px">Карвинг · техника</span><span class="mut" style="font-size:12.5px">средний уровень</span></div>
+</div>
+</div>
+
+<!-- Включено / отдельно — компактно одной строкой -->
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Урок</span><span class="tag">Разбор техники</span><span class="tag">Подбор трассы</span></div>
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Прокат</span><span class="tag">Ски-пасс</span><span class="tag">Страховка</span></div>
+</div>
+
+<!-- Место встречи + карта -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Место встречи</span>
+<div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">Нижняя станция подъёмника Gudauri 1</span><span class="mut" style="font-size:12.5px">сбор за 10 минут до начала · оборудование получить накануне</span></div></div>
+</div>
+
+<!-- Отзывы -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 10</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Карла Линн</span><span class="mut" style="font-size:11px">урок 2 часа</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:70%"></div></div>
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Марина Иванц</span><span class="mut" style="font-size:11px">урок 8 часов</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:92%"></div><div class="ln" style="width:60%"></div></div>
+</div>
+<div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (10)</div>
+<span class="note">Только от учеников, которые бронировали именно этого инструктора.</span>
+</div>
+
+<!-- Правила (после отзывов) -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Правила</span>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Опоздание</span><span class="mut" style="font-size:11.5px">урок не продлевается</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Отмена</span><span class="mut" style="font-size:11.5px">бесплатно за 24 ч</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Плохая погода</span><span class="mut" style="font-size:11.5px">перенос без штрафа</span></div>
+</div>
+</div>
+</div>
+
+<!-- Правая колонка — sticky: ЕДИНАЯ ЦЕНА + ФОРМУЛА -->
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px">
+<div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc">
+<div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="ph" style="width:36px;height:36px;border-radius:50%;flex:none"></div><div class="c"><span class="mut" style="font-size:11px">Единый тариф</span><span style="font-size:15px">345 gel / час</span></div></div>
+<div class="c" style="padding:12px 14px;gap:9px">
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">8</span><span class="mut" style="font-size:12px">часов</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div>
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">2</span><span class="mut" style="font-size:12px">ученика</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div>
+<div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855">
+<div class="r" style="justify-content:space-between"><span>345 × 8 часов</span><span>2 760</span></div>
+<div class="r" style="justify-content:space-between"><span>2-й ученик · +40%</span><span>+1 104</span></div>
+<div class="r" style="justify-content:space-between"><span>от 8 часов · −15%</span><span>−580</span></div>
+</div>
+<div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">3 284 gel</span><span class="mut" style="font-size:11px">за 8 ч · 2 чел</span></div>
+<span class="mut" style="font-size:11px">⏱ Часы можно разбить на несколько дней</span>
+<div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div>
+<span class="mut" style="font-size:11px;text-align:center">Выберете дату и время — оператор подтвердит, свободен ли инструктор, или предложит другого</span>
+</div>
+</div>
+<div class="note">Одна формула цены в каталоге, профиле и бронировании. Разбор → <a href="#13d">13d</a>.</div>
+</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+
+<!-- ============ 13d — КОНТЕНТ-СПЕКА ============ -->
+<div class="dv-opt" id="13d" data-screen-label="13d Контент-спека инструкторов"><div class="dv-olabel"><a class="dv-oid" href="#13d">13d</a>Содержание: фильтры · поля карточки · формула цены</div>
+<div class="dv-card wf" style="width:600px;padding:0">
+
+<!-- Фильтры каталога -->
+<div class="sec" style="padding:18px 22px">
+<span class="h2" style="font-size:18px">Фильтры каталога</span>
+<div class="c" style="gap:10px;margin-top:12px">
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Показываем сейчас</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дата и время</span><span class="tag">Направление обучения</span><span class="tag">Уровень ученика</span><span class="tag">Язык</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Резерв (позже, если понадобится)</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дисциплина</span><span class="tag">Взрослый / ребёнок + возраст</span><span class="tag">Квалификация</span><span class="tag">Специализация</span><span class="tag">Место встречи</span><span class="tag">Видеоанализ</span><span class="tag">Помощь с прокатом</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Направление обучения (значения)</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="pill" style="font-size:12.5px">Частное</span><span class="pill" style="font-size:12.5px">Групповое</span><span class="pill" style="font-size:12.5px">Семейное</span><span class="pill" style="font-size:12.5px">Детское</span><span class="pill" style="font-size:12.5px">Продвинутый</span><span class="pill" style="font-size:12.5px">Slope Tour</span></div></div>
+<div class="note">Фильтра по цене нет — тариф единый. Фильтра «свободен сейчас» нет — онлайн-расписания не ведём, доступность подтверждает оператор (<a href="#13e">13e</a>). Направления определяются <b>структурными полями</b>, а не поиском слов.</div>
+</div>
+</div>
+
+<!-- Поля карточки -->
+<div class="sec" style="padding:18px 22px">
+<span class="h2" style="font-size:18px">Карточка в каталоге — единый набор полей</span>
+<div class="c" style="gap:6px;margin-top:10px;font-size:13px;color:#4a4a4a">
+<span>• Фото · имя (display)</span>
+<span>• Дисциплина (лыжи / сноуборд) · языки-флаги</span>
+<span>• 1–2 тега специализации (дети, фрирайд, карвинг…)</span>
+<span>• Рейтинг · стаж (лет)</span>
+</div>
+<div class="note" style="margin-top:9px">У всех одинаковая структура и одна медиа-обложка: карточки различаются <b>тегами</b>, а не наполнением или ценой — никто не «перевешивает». Цену на карточке не показываем.</div>
+</div>
+
+<!-- Формула цены -->
+<div class="sec" style="padding:18px 22px;border-bottom:none;background:#f6f4f0">
+<span class="h2" style="font-size:18px">Единая цена — как формируется</span>
+<div class="c" style="gap:9px;margin-top:12px">
+<div class="r" style="gap:10px;align-items:baseline"><span style="font-size:32px;color:#111">345</span><span class="mut" style="font-size:13px">gel / час — базовый тариф, одинаковый у всех инструкторов (1 ученик)</span></div>
+<div class="c" style="gap:6px;background:#fff;border-radius:10px;padding:12px 14px">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Формула</span>
+<span style="font-size:14px;color:#333">Итог = 345 × часы × <b>коэф. участников</b> × <b>коэф. объёма</b></span>
+<div class="r" style="gap:16px;flex-wrap:wrap;margin-top:4px;font-size:12.5px;color:#5a5855">
+<div class="c" style="gap:3px"><b style="color:#333">Участники</b><span>1 чел — база · 2 чел +40% · 3 чел +70%</span></div>
+<div class="c" style="gap:3px"><b style="color:#333">Объём часов</b><span>1–3 ч — база · 4–7 ч −10% · от 8 ч −15%</span></div>
+</div>
+</div>
+<div class="c" style="gap:5px;background:#fff;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#5a5855">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Пример: 8 часов · 2 ученика</span>
+<div class="r" style="justify-content:space-between"><span>345 × 8 часов</span><span>2 760</span></div>
+<div class="r" style="justify-content:space-between"><span>2-й ученик · +40%</span><span>+1 104</span></div>
+<div class="r" style="justify-content:space-between"><span>от 8 часов · −15%</span><span>−580</span></div>
+<div class="r" style="justify-content:space-between;border-top:1px solid #e6e3dc;padding-top:6px;margin-top:2px"><b style="color:#111;font-size:14px">Итого</b><b style="color:#111;font-size:14px">3 284 gel</b></div>
+</div>
+<div class="note">Одна и та же формула должна работать в каталоге, профиле и бронировании — сейчас в коде три разных расчёта (аудит: блокер перед публикацией). Числа коэффициентов — на утверждение.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ============ 13e — ПОДБОР ОПЕРАТОРОМ ============ -->
+<div class="dv-opt" id="13e" data-screen-label="13e Подбор инструктора оператором"><div class="dv-olabel"><a class="dv-oid" href="#13e">13e</a>Подбор оператором — короткий опрос вместо онлайн-расписания</div>
+<div class="c" style="gap:12px">
+<div style="max-width:860px;font-size:13px;line-height:1.5;background:#fff;border-radius:8px;padding:12px 14px;color:#5a5855">Онлайн-расписания нет — гость не видит, кто свободен. Поэтому вместо календаря: короткий опрос → заявка → оператор подтверждает свободного инструктора или предлагает альтернативу. Тот же опрос запускает кнопка «Подобрать инструктора» в каталоге <a href="#13a">13a</a>.</div>
+<div class="r" style="gap:14px;align-items:stretch;flex-wrap:wrap">
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 1 из 4</span><span style="font-size:15px;color:#111">Даты и время</span>
+<div class="ph" style="height:70px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#8a8884">календарь</div>
+<div class="r" style="gap:5px"><span class="pill" style="font-size:11px">утро</span><span class="pill" style="font-size:11px;background:#222;color:#fff">день</span><span class="pill" style="font-size:11px">вечер</span></div>
+<span class="mut" style="font-size:11px">можно несколько дней</span>
+</div>
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 2 из 4</span><span style="font-size:15px;color:#111">Параметры</span>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:11px">Дисциплина</span><div class="r" style="gap:5px"><span class="pill" style="font-size:11px;background:#222;color:#fff">Лыжи</span><span class="pill" style="font-size:11px">Сноуборд</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:11px">Уровень</span><div class="r" style="gap:5px"><span class="pill" style="font-size:11px">Новичок</span><span class="pill" style="font-size:11px;background:#222;color:#fff">Средний</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:11px">Для кого · язык</span><div class="r" style="gap:5px"><span class="pill" style="font-size:11px">Взрослый</span><span class="pill" style="font-size:11px">Ru</span></div></div>
+</div>
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 3 из 4</span><span style="font-size:15px;color:#111">Пожелания</span>
+<div class="box" style="height:56px;border-radius:6px"></div>
+<div class="r" style="gap:5px;flex-wrap:wrap"><span class="pill" style="font-size:11px">Видеоанализ</span><span class="pill" style="font-size:11px">Помощь с прокатом</span></div>
+<span class="mut" style="font-size:11px">кол-во учеников, дети, особые запросы</span>
+</div>
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 4 из 4</span><span style="font-size:15px;color:#111">Контакты</span>
+<div class="box" style="height:22px;border-radius:6px"></div>
+<div class="box" style="height:22px;border-radius:6px"></div>
+<div class="r" style="gap:5px"><span class="pill" style="font-size:11px;background:#222;color:#fff">WhatsApp</span><span class="pill" style="font-size:11px">Telegram</span></div>
+<div class="btn" style="padding:9px;font-size:14px;margin-top:2px">Отправить заявку</div>
+</div>
+<div class="dv-card wf" style="width:206px;padding:14px;display:flex;flex-direction:column;gap:8px;background:#2b2a28;color:#fff;border:none">
+<span style="font-size:26px;line-height:1">✓</span><span style="font-size:15px">Заявка отправлена</span>
+<span style="font-size:12px;color:#b8b5af;line-height:1.5">Оператор ответит в течение часа: подтвердит свободного инструктора под ваши даты или предложит альтернативу.</span>
+<span class="pill" style="font-size:11px;background:#454340;color:#eceae7;align-self:flex-start">оплата после подтверждения</span>
+</div>
+</div>
+<span class="note">Тот же принцип на профиле <a href="#13c">13c</a>: «Отправить заявку» на конкретного инструктора → оператор подтверждает, свободен ли он.</span>
+</div>
+</div>
+
+</div>
+</section>
+</x-dc>
+</body>
+</html>

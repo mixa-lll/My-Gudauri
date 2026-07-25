@@ -7,8 +7,27 @@ export function slugify(value) {
 }
 
 export async function listAdminInstructors(db) {
-  const { results } = await db.prepare(`SELECT id, slug, status, display_name AS name, card_description AS description, card_image_url AS image, rating, review_count AS reviews, sort_order FROM instructors ORDER BY sort_order, display_name`).all();
-  return results;
+  const { results } = await db.prepare(`
+    SELECT
+      i.id, i.slug, i.status, i.display_name AS name, i.card_description AS description,
+      i.card_image_url AS image, i.rating, i.review_count AS reviews, i.experience_years AS experienceYears,
+      i.sort_order, i.updated_at,
+      COALESCE((SELECT json_group_array(item.name) FROM (
+        SELECT d.name FROM instructor_disciplines link JOIN disciplines d ON d.id = link.discipline_id
+        WHERE link.instructor_id = i.id ORDER BY link.sort_order, d.name
+      ) item), '[]') AS disciplines_json,
+      COALESCE((SELECT json_group_array(item.code) FROM (
+        SELECT l.code FROM instructor_languages link JOIN languages l ON l.id = link.language_id
+        WHERE link.instructor_id = i.id ORDER BY link.sort_order, l.code
+      ) item), '[]') AS languages_json
+    FROM instructors i
+    ORDER BY i.updated_at DESC, i.sort_order, i.display_name
+  `).all();
+  return results.map((item) => ({
+    ...item,
+    disciplines: JSON.parse(item.disciplines_json || '[]'),
+    languages: JSON.parse(item.languages_json || '[]'),
+  }));
 }
 
 export async function getAdminInstructor(db, slug) {
@@ -74,4 +93,30 @@ export async function saveInstructor(db, payload, currentSlug) {
   }
   await replaceRelations(db, instructorId, payload);
   return getAdminInstructor(db, slug);
+}
+
+async function getDuplicateSlug(db, sourceSlug) {
+  const baseSlug = `${sourceSlug}-copy`;
+  const { results } = await db.prepare('SELECT slug FROM instructors WHERE slug = ? OR slug LIKE ?').bind(baseSlug, `${baseSlug}-%`).all();
+  const existing = new Set(results.map((item) => item.slug));
+  if (!existing.has(baseSlug)) return baseSlug;
+  let suffix = 2;
+  while (existing.has(`${baseSlug}-${suffix}`)) suffix += 1;
+  return `${baseSlug}-${suffix}`;
+}
+
+export async function duplicateInstructor(db, sourceSlug) {
+  const source = await getAdminInstructor(db, sourceSlug);
+  if (!source) return null;
+  const slug = await getDuplicateSlug(db, source.slug);
+  return saveInstructor(db, {
+    ...source,
+    id: undefined,
+    slug,
+    status: 'draft',
+    display_name: `${source.display_name} — копия`,
+    rating: 0,
+    review_count: 0,
+    reviewsList: [],
+  });
 }

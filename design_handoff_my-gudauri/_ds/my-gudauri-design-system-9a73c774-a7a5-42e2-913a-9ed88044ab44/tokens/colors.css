@@ -1,0 +1,67 @@
+/* ============================================================
+   My Gudauri — Color tokens
+   Neutral "stone" scale + coral accent + surface tints + semantics.
+   Base values are lifted verbatim from the production repo
+   (src/styles/tokens/_colors.scss); semantic aliases added on top.
+   ============================================================ */
+:root {
+  /* --- Neutral scale (warm stone grey) --- */
+  --grey-50:  #f6f6f3;
+  --grey-100: #eeeeea;
+  --grey-150: #e5e5df;
+  --grey-200: #d8d8d1;
+  --grey-300: #a3a39b;
+  --grey-400: #77776f;
+  --grey-500: #4d4d47;
+  --grey-600: #20211e;
+  --grey-700: #151612;
+  --grey-800: #0e0f0d;
+  --grey-white: #ffffff;
+
+  /* --- Coral accent (the one brand hue) --- */
+  --rad-600: #df4b3f;
+  --rad-700: #c23a2f;
+  --rad-100: #f7e4df;
+
+  /* --- Surface tints (soft section backgrounds) --- */
+  --olive-50: #edf0e6;
+  --blue-50:  #e9eef2;
+  --sand-50:  #f2ede4;
+
+  /* --- Semantic status --- */
+  --green-600:   #51ee6b;
+  --green-700:   rgba(38, 76, 44, 0.42);
+  --success-600: #4c9a59;
+  --danger-700:  #9d2e2e;
+  --warning-100: #fff1d8;
+  --warning-700: #744700;
+
+  /* ---------- Semantic aliases (use these in components) ---------- */
+  --text-strong:   var(--grey-600);   /* primary body / headings */
+  --text-body:     var(--grey-500);   /* long-form copy */
+  --text-muted:    var(--grey-400);   /* secondary / captions */
+  --text-faint:    var(--grey-300);   /* disabled / placeholder */
+  --text-on-dark:  var(--grey-white);
+  --text-accent:   var(--rad-600);
+
+  --surface-page:   var(--grey-white);
+  --surface-raised: var(--grey-50);   /* cards, panels */
+  --surface-sunken: var(--grey-100);  /* wells, chips */
+  --surface-invert: var(--grey-600);  /* dark blocks, promo */
+  --surface-olive:  var(--olive-50);
+  --surface-blue:   var(--blue-50);
+  --surface-sand:   var(--sand-50);
+
+  --border-subtle:  var(--grey-100);
+  --border-default: var(--grey-150);
+  --border-strong:  var(--grey-200);
+  --border-accent:  var(--rad-600);
+
+  --accent:        var(--rad-600);
+  --accent-hover:  var(--rad-700);
+  --accent-soft:   var(--rad-100);
+
+  /* Glass overlay used on photography (pills over images) */
+  --glass-light: rgba(255, 255, 255, 0.86);
+  --glass-dark:  rgba(32, 33, 30, 0.42);
+}

@@ -12,12 +12,14 @@
   --grey-white: #ffffff;
 
   --accent-600: #c43f34;
+  --accent-700: #a9342b;
   --accent-100: #f7e4df;
   /* Deprecated aliases. Keep until all static prototypes have migrated. */
   --rad-600: var(--accent-600);
   --rad-100: var(--accent-100);
   --olive-50: #edf0e6;
-  --blue-50: #e9eef2;
+  --blue-50: #d8e9f6;
+  --blue-100: #c7dff0;
   --sand-50: #f2ede4;
   --green-600: #51ee6b;
   --green-700: rgba(38, 76, 44, 0.42);
@@ -30,14 +32,32 @@
   --surface-page: var(--grey-50);
   --surface-card: var(--grey-white);
   --surface-subtle: var(--grey-100);
+  --surface-accent-subtle: var(--accent-100);
+  --surface-tint-cool: var(--blue-50);
+  --surface-tint-cool-strong: var(--blue-100);
+  --surface-tint-nature: var(--olive-50);
+  --surface-tint-warm: var(--sand-50);
+  --surface-control: color-mix(in srgb, var(--blue-50) 72%, var(--grey-white));
+  --surface-control-hover: var(--blue-50);
   --surface-overlay: rgba(14, 15, 13, 0.72);
   --surface-raised: var(--grey-white);
   --surface-inverse: var(--grey-700);
   --surface-media-overlay: rgba(255, 255, 255, 0.88);
+  /* Category-owned unpublished-media surfaces. */
+  --surface-media-placeholder-neutral: #778b8b;
+  --surface-media-placeholder-activity: #3e6589;
+  --surface-media-placeholder-instructor: #5b7880;
+  --surface-media-placeholder-rental: #7b705e;
+  --surface-media-placeholder-transfer: #526d82;
+  --surface-media-placeholder-stay: #806c5f;
+  --surface-media-placeholder-service: #6d728c;
+  --surface-media-placeholder-place: #8b6e5d;
+  --surface-media-placeholder-editorial: #65776b;
   --text-primary: var(--grey-700);
   --text-secondary: var(--grey-500);
   --text-inverse: var(--grey-white);
   --text-disabled: var(--grey-300);
+  --text-accent: var(--accent-600);
   --border-subtle: var(--grey-150);
   --border-default: var(--grey-200);
   --border-strong: var(--grey-500);
@@ -45,10 +65,12 @@
   --action-primary: var(--grey-700);
   --action-primary-hover: var(--grey-800);
   --action-primary-pressed: var(--grey-600);
-  --action-secondary: var(--grey-white);
-  --action-secondary-hover: var(--grey-100);
-  --action-secondary-pressed: var(--grey-150);
+  --action-secondary: var(--surface-tint-cool);
+  --action-secondary-hover: color-mix(in srgb, var(--surface-tint-cool) 90%, var(--status-info));
+  --action-secondary-pressed: color-mix(in srgb, var(--surface-tint-cool) 82%, var(--status-info));
   --action-accent: var(--accent-600);
+  --action-accent-hover: var(--accent-700);
+  --action-accent-pressed: var(--accent-700);
   --action-disabled: var(--grey-200);
   --status-success: #377842;
   --status-success-surface: #e4f2e7;

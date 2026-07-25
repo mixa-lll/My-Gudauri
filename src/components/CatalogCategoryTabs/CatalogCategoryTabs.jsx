@@ -9,9 +9,10 @@ export function CategoryTab({ category, active = false, onSelect }) {
   );
 }
 
-export function CatalogCategoryTabs({ categories, activeId, onChange, label = 'Browse by category', className = '' }) {
+export function CatalogCategoryTabs({ categories, activeId, onChange, label = 'Browse by category', columns, className = '' }) {
+  if (columns !== undefined && ![2, 3, 4].includes(columns)) throw new Error('CatalogCategoryTabs: columns must be 2, 3 or 4.');
   return (
-    <section className={`catalog-category-tabs ${className}`.trim()} aria-label={label}>
+    <section className={`catalog-category-tabs ${className}`.trim()} aria-label={label} style={columns ? { '--category-tabs-columns': columns } : undefined}>
       <div className="catalog-category-tabs__heading">
         <p className="catalog-category-tabs__kicker">{label}</p>
         <p>Choose a direction first, then refine the results below.</p>

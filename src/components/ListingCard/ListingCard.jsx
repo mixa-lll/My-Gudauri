@@ -17,6 +17,7 @@ export function ListingCard({
   image,
   imageAlt = '',
   placeholderLabel,
+  placeholderKind = 'generic',
   mediaTop,
   mediaBottom,
   title,
@@ -40,7 +41,7 @@ export function ListingCard({
         {image && !imageFailed ? (
           <img src={image} alt={imageAlt} loading={loading} onError={() => setImageFailed(true)} />
         ) : (
-          <MediaPlaceholder label={placeholderLabel ?? title} />
+          <MediaPlaceholder label={placeholderLabel ?? title} kind={placeholderKind} />
         )}
         {mediaTop && <div className="listing-card__media-top">{mediaTop}</div>}
         {mediaBottom && <div className="listing-card__media-bottom">{mediaBottom}</div>}

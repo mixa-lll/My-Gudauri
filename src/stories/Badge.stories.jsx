@@ -4,9 +4,10 @@ import { defineComposition } from '../design-system/architecture/registry';
 export default {
   title: 'Primitives/Badge',
   component: Badge,
+  tags: ['autodocs'],
   parameters: {
     composition: defineComposition({ root: 'Badge' }),
-    docs: { description: { component: 'Borderless metadata label. The neutral tone uses the light page surface so dark text remains clear without a redundant outline.' } },
+    docs: { description: { component: 'Borderless metadata label. The neutral tone uses a quiet cool-tinted surface so metadata is easy to scan without adding another grey outline.' } },
   },
   args: { children: 'Verified', size: 'md', tone: 'neutral' },
   argTypes: {

@@ -5,9 +5,10 @@ import { defineComposition } from '../design-system/architecture/registry';
 export default {
   title: 'Primitives/Filter Chip',
   component: FilterChip,
+  tags: ['autodocs'],
   parameters: { composition: defineComposition({ root: 'FilterChip' }) },
-  args: { children: 'Ski lessons', selected: false, size: 'md', disabled: false },
-  argTypes: { size: { control: 'select', options: ['sm', 'md'] } },
+  args: { children: 'Ski lessons', selected: false, size: 'md', tone: 'primary', disabled: false },
+  argTypes: { size: { control: 'select', options: ['sm', 'md'] }, tone: { control: 'select', options: ['primary', 'accent'] } },
 };
 
 export const Playground = {};
@@ -29,3 +30,5 @@ export const States = { render: () => <main className="sb-canvas sb-section"><Ch
 export const Sizes = {
   render: () => <main className="sb-canvas sb-row"><FilterChip size="sm">Compact</FilterChip><FilterChip>Default</FilterChip></main>,
 };
+
+export const Accent = { render: () => <main className="sb-canvas sb-row"><FilterChip tone="accent" selected>Selected request option</FilterChip><FilterChip tone="accent">Available option</FilterChip></main> };

@@ -263,7 +263,7 @@ export function SiteNavbar({ className }) {
     document.body.classList.add('menu-open');
 
     const focusFirstItem = window.setTimeout(() => {
-      panelRef.current?.querySelector(FOCUSABLE)?.focus({ preventScroll: true });
+      panelRef.current?.focus({ preventScroll: true });
     }, shouldReduceMotion ? 0 : 120);
 
     const handleKeyDown = (event) => {
@@ -279,9 +279,12 @@ export function SiteNavbar({ className }) {
       const firstItem = focusableItems[0];
       const lastItem = focusableItems.at(-1);
 
-      if (event.shiftKey && document.activeElement === firstItem) {
+      if (event.shiftKey && (document.activeElement === firstItem || document.activeElement === panelRef.current)) {
         event.preventDefault();
         lastItem.focus();
+      } else if (!event.shiftKey && document.activeElement === panelRef.current) {
+        event.preventDefault();
+        firstItem.focus();
       } else if (!event.shiftKey && document.activeElement === lastItem) {
         event.preventDefault();
         firstItem.focus();
@@ -399,6 +402,7 @@ export function SiteNavbar({ className }) {
                 role="dialog"
                 aria-modal="true"
                 aria-label={t('nav.siteLabel')}
+                tabIndex={-1}
                 style={isMobile ? undefined : menuPosition}
               >
                 <div className="site-nav-menu__mobile-head">

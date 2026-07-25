@@ -1,0 +1,21 @@
+/* ============================================================
+   My Gudauri — Shadows, blur & motion tokens
+   Shadows are quiet and low-contrast; motion is short and eased.
+   ============================================================ */
+:root {
+  /* Elevation — soft, low-opacity, cool-neutral */
+  --shadow-soft:  4px 4px 60px rgba(0, 0, 0, 0.06);
+  --shadow-card:  0 1px 0 rgba(24, 25, 22, 0.05), 0 18px 48px rgba(24, 25, 22, 0.06);
+  --shadow-float: 0 24px 70px rgba(24, 25, 22, 0.12);
+
+  /* Glass blur used for pills / nav over imagery */
+  --blur-glass: blur(9px);    /* @kind other */
+  --blur-nav:   blur(3.3px);  /* @kind other */
+
+  /* Motion */
+  --motion-duration-fast: 150ms;  /* @kind other */
+  --motion-duration-base: 200ms;  /* @kind other */
+  --motion-duration-slow: 250ms;  /* @kind other */
+  --motion-duration-media: 500ms; /* @kind other */
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+}

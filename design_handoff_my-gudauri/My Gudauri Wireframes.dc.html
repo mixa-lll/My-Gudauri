@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet"><style>body{margin:0;background:#eceae7;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:#2a78d6}a:hover{color:#1a5cb0}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font-size:16px;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:14px;color:rgba(0,0,0,.6)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font-size:14px;color:rgba(0,0,0,.55)}
+.wf{color:#4a4a4a;font-size:13px}.nav{display:flex;align-items:center;gap:16px;padding:12px 22px;background:#e2e0dd;border-bottom:1px solid #d3d1cd}.box{border:none;border-radius:4px;background:#e4e2df}.ph{border:none;border-radius:4px;background:#d4d2ce}.ln{height:8px;border-radius:3px;background:#d0cecb}.lnd{height:8px;border-radius:3px;background:#a9a7a3}.btn{display:flex;align-items:center;justify-content:center;background:#6b6966;color:#f4f3f1;border-radius:4px;font-size:14px;padding:8px 16px;white-space:nowrap}.bo{display:flex;align-items:center;justify-content:center;border:none;border-radius:4px;font-size:13px;padding:7px 14px;background:#dcdad7;color:#5a5855;white-space:nowrap}.pill{border:none;border-radius:99px;padding:3px 12px;font-size:12.5px;background:#dcdad7;color:#5a5855;white-space:nowrap}.tag{background:#d8d6d2;border-radius:3px;padding:3px 9px;font-size:11.5px;color:#6a6864;white-space:nowrap}.subrow{display:flex;gap:8px;flex-wrap:wrap;padding:16px 22px 0}.subcat{border-radius:99px;padding:8px 16px;font-size:14.5px;background:#e4e2df;color:#4a4a4a;white-space:nowrap;border:1.5px solid transparent}.subcat.on{background:#2b2a28;color:#f4f3f1;border-color:#2b2a28}.subcat .n{font-size:12px;opacity:.6;margin-left:5px}.r{display:flex;align-items:center}.c{display:flex;flex-direction:column}.sec{padding:24px 22px;border-bottom:1px solid #e6e4e1}.h1{font-size:28px;line-height:1.15;color:#333;font-weight:600}.h2{font-size:19px;color:#3d3d3d;font-weight:600}.mut{color:#8f8d89;font-size:13px}.note{font-size:12.5px;color:#8a8884;font-style:italic}.acc{display:flex;justify-content:space-between;align-items:center;border:none;border-radius:4px;padding:10px 14px;font-size:14px;background:#e4e2df;color:#4a4a4a}.star{color:#9a9895;font-size:12.5px;white-space:nowrap}.chk{width:13px;height:13px;border:none;border-radius:2px;background:#c4c2be;flex:none}
+.mtx{padding:36px 40px 60px}
+.mtx-h{display:flex;align-items:baseline;gap:12px;margin:0 0 6px}
+.mtx-sub{font-size:14px;color:rgba(0,0,0,.55);margin:0 0 26px;max-width:760px;line-height:1.5}
+.colhdr{display:grid;grid-template-columns:150px 940px 940px;gap:22px;align-items:end;margin-bottom:10px;position:sticky;left:0}
+.colhdr>div{font:600 13px system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;color:rgba(0,0,0,.5)}
+.mrow{display:grid;grid-template-columns:150px 940px 940px;gap:22px;align-items:start;margin-bottom:26px}
+.rowlbl{position:sticky;left:0;display:flex;flex-direction:column;gap:6px;padding-top:8px}
+.rowlbl b{font-size:20px;color:#111}
+.rowlbl span{font-size:13px;color:rgba(0,0,0,.5);line-height:1.4}
+.entry{display:grid;grid-template-columns:150px 940px;gap:22px;align-items:start;margin:0 0 40px}
+.sk-wrap{margin:0 0 54px}
+.pf-legend{display:flex;flex-wrap:wrap;gap:20px;margin:2px 0 20px;font-size:12.5px;color:#5a5855}
+.pf-legend span{display:flex;align-items:center;gap:7px}
+.pf-key{width:20px;height:12px;border-radius:3px;flex:none}
+.pf-grid{display:grid;grid-template-columns:140px 280px 280px;gap:20px 22px;align-items:start}
+.pf-colcap{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#8f8d89;font-weight:700}
+.pf-rl{padding-top:22px;font-size:16px;font-weight:700;color:#333;display:flex;flex-direction:column;gap:4px}
+.pf-rl small{font-size:11px;font-weight:400;color:#8f8d89}
+.mf{background:#fff;border-radius:7px;box-shadow:0 1px 3px rgba(0,0,0,.09);overflow:hidden;display:flex;flex-direction:column}
+.mf-nav{background:#e2e0dd;display:flex;align-items:center;gap:5px;padding:6px 8px}
+.mf-logo{width:26px;height:8px;border-radius:2px;background:#b7b5b1}
+.mf-nl{width:16px;height:5px;border-radius:2px;background:#cbc9c5}
+.mf-b{padding:8px}
+.mf-title{background:#e6ddd0;color:#8a7a60;border-radius:3px;font-size:11px;font-weight:700;padding:6px 8px;margin-bottom:8px}
+.mf-row{display:flex;gap:5px;margin-bottom:8px}
+.mf-chip{height:11px;border-radius:99px;background:#d8d6d2;flex:1}
+.mf-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mf-card{background:#eeece9;border-radius:3px;padding:4px;display:flex;flex-direction:column;gap:3px}
+.mf-img{height:22px;border-radius:2px;background:#d4d2ce}
+.mf-l{height:4px;border-radius:2px;background:#d0cecb}
+.mf-l.s{width:60%}
+.mf-2col{display:flex;gap:7px}
+.mf-foot{background:#e2e0dd;height:12px;margin-top:auto}
+.mf-box{background:#eeece9;border-radius:3px;padding:5px;display:flex;flex-direction:column;gap:4px}
+.mf-btn{height:12px;border-radius:3px;background:#6b6966;margin-top:2px}
+.mf-note{font-size:10px;color:#a06b4a;background:#f0e7dc;border-radius:3px;padding:4px 6px;margin-top:6px;text-align:center}
+.sm{display:flex;flex-direction:column;gap:12px;margin:0 0 12px}
+.sm-branch{display:grid;grid-template-columns:216px 1fr 336px;background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:9px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.sm-l1{display:flex;flex-direction:column;gap:8px;padding:16px 17px;background:#faf9f7;border-right:1px solid #eceae5}
+.sm-top{display:flex;align-items:center;gap:9px}
+.sm-dot{width:13px;height:13px;border-radius:50%;flex:none}
+.sm-name{font-size:18px;color:#1a1a1a;font-weight:600;line-height:1.1}
+.sm-url{font:12px ui-monospace,monospace;color:#8f8d89}
+.sm-tier{font-size:11px;color:#a5a29d}
+.sm-col{padding:15px 17px;display:flex;flex-direction:column;gap:11px}
+.sm-col.mid{border-right:1px solid #eceae5}
+.sm-cap{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#a5a29d;font-weight:700}
+.sm-grp{display:flex;flex-direction:column;gap:5px}
+.sm-grp>span.sm-sub{font-size:11px;color:#a5a29d;font-weight:600}
+.sm-tags{display:flex;flex-wrap:wrap;gap:5px}
+.sm-page{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:#3f3f3f;line-height:1.3}
+.sm-page b{font-weight:600}
+.sm-page code{font:11px ui-monospace,monospace;color:#9a9793;white-space:nowrap}
+.sm-pill{border:none;border-radius:99px;padding:2px 9px;font-size:11px;background:#eceae7;color:#5a5855;white-space:nowrap}
+.sm-note{font-size:11px;color:#a06b4a;background:#f4ede4;border-radius:5px;padding:5px 8px}
+.sm-sys{background:#f6f4f0;border:1px dashed #d3d0ca;border-radius:9px;padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px 24px;margin:0 0 48px}
+.sm-sysgrp{display:flex;flex-direction:column;gap:7px}
+.sm-legend{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0 0 16px}
+.sm-legend span{display:flex;align-items:center;gap:6px;font-size:12px;color:#5a5855}
+</style></helmet>
+
+
+
+<div class="mtx">
+<div class="mtx-h"><span class="dv-tid">My Gudauri</span><span class="dv-tname" style="font-size:18px">Карта прототипа — структура по Figma «my Gudauri 1.fig»</span></div>
+<p class="mtx-sub">Один каркас на все каталоги. Слева — точка входа (Главная). Ниже — матрица: строка = категория, колонки = экраны «Каталог» и «Карточка объекта». Все клетки повторяют один шаблон; меняются только фильтры и содержимое.</p>
+
+<div class="sk-wrap">
+<div class="mtx-h" style="margin-bottom:4px"><span class="dv-tid">Sitemap</span><span class="dv-tname" style="font-size:16px">Карта разделов и вложенность — все 3 уровня</span></div>
+<p class="mtx-sub" style="margin-bottom:14px">Расшифровка структуры из схемы. Для каждого раздела главного меню (L1) показаны его подкатегории/фильтры (L2) и конечные страницы (L3): каталог → карточка объекта → бронирование. Это словарь контента — визуально каждая страница собирается из одного шаблона выше.</p>
+<div class="sm-legend"><span><b>L1</b> — пункт главного меню</span><span><b>L2</b> — категории и подборки (фильтры)</span><span><b>L3</b> — страницы и объекты</span></div>
+
+<div class="sm">
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.72 0.15 50)"></span><span class="sm-name">Инструкторы</span></div><span class="sm-url">/instructors</span><span class="sm-tier">MVP · заявка → подтверждение → оплата</span></div>
+<div class="sm-col mid"><span class="sm-cap">Подкатегории · L2</span>
+<div class="sm-grp"><span class="sm-sub">Дисциплины</span><div class="sm-tags"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span><span class="tag">Лыжи + сноуборд</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Специализации (фильтры)</span><div class="sm-tags"><span class="tag">Дети</span><span class="tag">Семья</span><span class="tag">Группа</span><span class="tag">Фрирайд-гид</span><span class="tag">Карвинг</span><span class="tag">Уровень ученика</span><span class="tag">Язык</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог</b><code>/instructors</code></div>
+<div class="sm-page"><b>Профиль инструктора</b><code>/instructors/:slug</code></div>
+<div class="sm-page"><b>Бронирование</b><code>/booking/instructor</code></div>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.76 0.15 150)"></span><span class="sm-name">Активности</span></div><span class="sm-url">/activities</span><span class="sm-tier">впечатления · по участникам / за группу</span></div>
+<div class="sm-col mid"><span class="sm-cap">Категории · L2</span>
+<div class="sm-grp"><span class="sm-sub">Зимние</span><div class="sm-tags"><span class="tag">Фрирайд</span><span class="tag">Ски-тур</span><span class="tag">Heli-ski</span><span class="tag">Снегоход</span><span class="tag">Параплан</span><span class="tag">Снегоступы</span><span class="tag">Тюбинг</span><span class="tag">Зимние экскурсии</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Экскурсии и поездки</span><div class="sm-tags"><span class="tag">Казбеги</span><span class="tag">Коби</span><span class="tag">Бидара</span><span class="tag">Тбилиси</span><span class="tag">Мцхета</span><span class="tag">Индив. тур</span><span class="tag">Групп. тур</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Летние</span><div class="sm-tags"><span class="tag">Хайкинг</span><span class="tag">Конные</span><span class="tag">Параплан</span><span class="tag">Веломаршруты</span><span class="tag">Джип-тур</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог</b><code>/activities</code></div>
+<div class="sm-page"><b>Категория</b><code>/activities/:category</code></div>
+<div class="sm-page"><b>Страница активности</b><code>/activities/:slug</code></div>
+<div class="sm-page"><b>Бронирование</b><code>/booking/activity</code></div>
+<span class="sm-note">Параплан и снегоход живут здесь, а не в «Услугах» — гость выбирает впечатление, дату и правила безопасности.</span>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.64 0.18 28)"></span><span class="sm-name">Прокат</span></div><span class="sm-url">/rental</span><span class="sm-tier">аренда на диапазон дат · по размерам</span></div>
+<div class="sm-col mid"><span class="sm-cap">Категории · L2</span>
+<div class="sm-grp"><span class="sm-sub">Снаряжение</span><div class="sm-tags"><span class="tag">Лыжи</span><span class="tag">Сноуборды</span><span class="tag">Комплект лыжи</span><span class="tag">Комплект сноуборд</span><span class="tag">Детский</span><span class="tag">Фрирайд</span><span class="tag">Лавинное</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Экипировка</span><div class="sm-tags"><span class="tag">Шлемы</span><span class="tag">Маски</span><span class="tag">Защита</span><span class="tag">Одежда</span><span class="tag">Аксессуары</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог</b><code>/rental</code></div>
+<div class="sm-page"><b>Категория</b><code>/rental/:category</code></div>
+<div class="sm-page"><b>Карточка комплекта</b><code>/rental/:slug</code></div>
+<div class="sm-page"><b>Бронирование</b><code>/booking/rental</code></div>
+<span class="sm-note">Продажа снаряжения → отдельный раздел «Купить» на 2-м этапе, не смешивать с прокатом.</span>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.74 0.11 195)"></span><span class="sm-name">Трансфер</span></div><span class="sm-url">/transfers</span><span class="sm-tier">заказ авто на дату/время · цена за машину</span></div>
+<div class="sm-col mid"><span class="sm-cap">Маршруты · L2</span>
+<div class="sm-tags"><span class="tag">Тбилиси ⇄ Гудаури</span><span class="tag">Кутаиси ⇄ Гудаури</span><span class="tag">Владикавказ ⇄ Гудаури</span><span class="tag">Батуми ⇄ Гудаури</span><span class="tag">Казбеги ⇄ Гудаури</span><span class="tag">Гудаури ⇄ Коби</span></div>
+<div class="sm-grp"><span class="sm-sub">Форматы</span><div class="sm-tags"><span class="tag">Локальное такси</span><span class="tag">Индивидуальный</span><span class="tag">Групповой</span><span class="tag">С остановками</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог маршрутов</b><code>/transfers</code></div>
+<div class="sm-page"><b>Страница маршрута</b><code>/transfers/:slug</code></div>
+<div class="sm-page"><b>Бронирование</b><code>/booking/transfer</code></div>
+<span class="sm-note">Владикавказ — предупреждение о границе и документах; рейс отслеживается, задержка не создаёт новую заявку.</span>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.80 0.14 85)"></span><span class="sm-name">Услуги</span></div><span class="sm-url">/services</span><span class="sm-tier">пакеты / по часам · заявка</span></div>
+<div class="sm-col mid"><span class="sm-cap">Категории · L2</span>
+<div class="sm-grp"><span class="sm-sub">Съёмка</span><div class="sm-tags"><span class="tag">Фотограф</span><span class="tag">Видеограф</span><span class="tag">Дрон</span><span class="tag">Фото + видео пакет</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Персональные</span><div class="sm-tags"><span class="tag">Няня</span><span class="tag">Массаж</span><span class="tag">Повар / кейтеринг</span><span class="tag">Доставка продуктов</span><span class="tag">Событие</span><span class="tag">Переводчик</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог</b><code>/services</code></div>
+<div class="sm-page"><b>Категория</b><code>/services/:category</code></div>
+<div class="sm-page"><b>Страница услуги</b><code>/services/:slug</code></div>
+<div class="sm-page"><b>Бронирование</b> <span class="sm-pill">фото/видео/дрон</span> <span class="sm-pill">няня</span></div>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.66 0.14 255)"></span><span class="sm-name">Жильё</span></div><span class="sm-url">/stays</span><span class="sm-tier">диапазон дат + гости · витрина с заявкой</span></div>
+<div class="sm-col mid"><span class="sm-cap">Категории · L2</span>
+<div class="sm-grp"><span class="sm-sub">Тип жилья</span><div class="sm-tags"><span class="tag">Апартаменты</span><span class="tag">Апарт-отели</span><span class="tag">Отели</span><span class="tag">Шале</span><span class="tag">Хостелы</span><span class="tag">Долгосрочная</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Подборки</span><div class="sm-tags"><span class="tag">У подъёмника</span><span class="tag">Ski-in / ski-out</span><span class="tag">Для семьи</span><span class="tag">С видом</span><span class="tag">SPA</span><span class="tag">С животными</span><span class="tag">Премиум</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Объекты · L3 (пример)</span>
+<div class="sm-tags"><span class="sm-pill">Four Seasons</span><span class="sm-pill">NEO</span><span class="sm-pill">Сьютс / Люкс</span><span class="sm-pill">Атриум</span><span class="sm-pill">Блок II</span><span class="sm-pill">Блок III</span><span class="sm-pill">Лофт I–II</span><span class="sm-pill">Твинс</span></div>
+<div class="sm-page" style="margin-top:2px"><b>Каталог</b><code>/stays</code></div>
+<div class="sm-page"><b>Страница объекта</b><code>/stays/:slug</code></div>
+<div class="sm-page"><b>Бронирование</b><code>/booking/stay</code></div>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.72 0.17 350)"></span><span class="sm-name">Места</span></div><span class="sm-url">/places</span><span class="sm-tier">справочный каталог · заявка для рест./SPA</span></div>
+<div class="sm-col mid"><span class="sm-cap">Категории · L2</span>
+<div class="sm-grp"><span class="sm-sub">Еда и досуг</span><div class="sm-tags"><span class="tag">Рестораны</span><span class="tag">Кафе</span><span class="tag">Бары</span><span class="tag">SPA и бани</span><span class="tag">Развлечения</span></div></div>
+<div class="sm-grp"><span class="sm-sub">Сервис и польза</span><div class="sm-tags"><span class="tag">Магазины</span><span class="tag">Супермаркеты</span><span class="tag">Аптеки</span><span class="tag">Пункты проката</span><span class="tag">Медпомощь</span><span class="tag">Банкоматы / обмен</span><span class="tag">Достопримечательности</span><span class="tag">Смотровые</span><span class="tag">Мероприятия</span></div></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог</b><code>/places</code></div>
+<div class="sm-page"><b>Категория</b><code>/places/:category</code></div>
+<div class="sm-page"><b>Страница места</b><code>/places/:slug</code></div>
+<div class="sm-page"><b>Заявка</b> <span class="sm-pill">бронь стола</span> <span class="sm-pill">SPA</span></div>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.62 0.15 300)"></span><span class="sm-name">Статьи</span></div><span class="sm-url">/articles</span><span class="sm-tier">контент-поддержка коммерческих разделов</span></div>
+<div class="sm-col mid"><span class="sm-cap">Рубрики · L2</span>
+<div class="sm-tags"><span class="tag">Новости курорта</span><span class="tag">Погода и сезон</span><span class="tag">Трассы и подъёмники</span><span class="tag">Новичкам</span><span class="tag">Безопасность</span><span class="tag">Транспорт</span><span class="tag">Жильё</span><span class="tag">Еда и места</span><span class="tag">Маршруты</span><span class="tag">События</span><span class="tag">Инструкции</span></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страницы · L3</span>
+<div class="sm-page"><b>Каталог материалов</b><code>/articles</code></div>
+<div class="sm-page"><b>Категория</b><code>/articles/:category</code></div>
+<div class="sm-page"><b>Статья</b><code>/articles/:slug</code></div>
+</div>
+</div>
+
+<div class="sm-branch">
+<div class="sm-l1"><div class="sm-top"><span class="sm-dot" style="background:oklch(0.70 0.12 165)"></span><span class="sm-name">О Гудаури</span></div><span class="sm-url">/about-gudauri</span><span class="sm-tier">одна информационная страница</span></div>
+<div class="sm-col mid"><span class="sm-cap">Блоки страницы · L2</span>
+<div class="sm-tags"><span class="tag">Сезон и климат</span><span class="tag">Карта районов</span><span class="tag">Подъёмники и зоны</span><span class="tag">Уровни трасс</span><span class="tag">Как добраться</span><span class="tag">Где жить</span><span class="tag">Без катания</span><span class="tag">Безопасность</span><span class="tag">Медпомощь</span><span class="tag">Полезные телефоны</span><span class="tag">FAQ</span></div>
+</div>
+<div class="sm-col"><span class="sm-cap">Страница · L3</span>
+<div class="sm-page"><b>О курорте</b><code>/about-gudauri</code></div>
+<div class="sm-page"><b>Связанные статьи и сервисы</b></div>
+</div>
+</div>
+
+</div>
+
+<div class="sm-legend" style="margin:6px 0 6px"><span style="font-weight:600;color:#333">Сквозные и системные страницы</span></div>
+<div class="sm-sys">
+<div class="sm-sysgrp"><span class="sm-cap">Пользователь</span><div class="sm-page"><b>Поиск</b><code>/search</code></div><div class="sm-page"><b>Избранное</b><code>/favorites</code></div><div class="sm-page"><b>Профиль</b><code>/account</code></div><div class="sm-page"><b>Мои бронирования</b><code>/account/bookings</code></div><div class="sm-page"><b>Поддержка</b><code>/support</code></div></div>
+<div class="sm-sysgrp"><span class="sm-cap">Единый флоу брони</span><div class="sm-page"><b>Форма</b><code>/booking/:type/:slug</code></div><div class="sm-page"><b>Заявка отправлена</b><code>/booking/success</code></div><div class="sm-tags" style="margin-top:2px"><span class="sm-pill">Мгновенно</span><span class="sm-pill">После подтверждения</span><span class="sm-pill">Индив. расчёт</span><span class="sm-pill">Внешняя бронь</span></div><span class="sm-note" style="margin-top:2px">Не показывать «Подтверждено», пока доступность проверяется.</span></div>
+<div class="sm-sysgrp"><span class="sm-cap">Служебные кабинеты</span><div class="sm-page"><b>Кабинет партнёра</b> — заявки, цены, календарь, выплаты</div><div class="sm-page"><b>Админ-панель</b> — сущности, модерация, промокоды, платежи, SEO</div><div class="sm-page"><b>Юр. страницы</b><code>/privacy · /terms · /cookies</code></div></div>
+</div>
+</div>
+
+<div class="sk-wrap">
+<div class="mtx-h" style="margin-bottom:4px"><span class="dv-tid">Схема</span><span class="dv-tname" style="font-size:16px">Один шаблон — все разделы</span></div>
+<p class="mtx-sub" style="margin-bottom:14px">Каждый раздел — это одна и та же страница: шапка, заголовок, фильтры и сетка карточек в каталоге; галерея, заголовок, характеристики и блок брони на странице объекта. Меняется только <b>заголовок</b> и <b>содержимое карточек/характеристик</b> (выделено бежевым) — структура и все прочие блоки одинаковы.</p>
+<div class="pf-legend"><span><span class="pf-key" style="background:#e2e0dd"></span>Одинаково во всех разделах</span><span><span class="pf-key" style="background:#e6ddd0"></span>Меняется под раздел</span></div>
+<div class="pf-grid">
+<div></div><div class="pf-colcap">Каталог раздела</div><div class="pf-colcap">Страница объекта</div>
+<div class="pf-rl">Инструкторы<small>MVP · лыжи/сноуборд</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: ИНСТРУКТОРЫ</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+<div class="mf-note">ниже: инфоблок · FAQ · футер (общие)</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · инструктор</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: опыт · языки · дисциплины</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="pf-rl">Прокат<small>снаряжение</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: ПРОКАТ</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · комплект</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: размеры · что входит</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="pf-rl">Трансфер<small>маршруты</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: ТРАНСФЕР</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · маршрут</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: класс авто · мест · время</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="pf-rl">Туры<small>экскурсии</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: ТУРЫ</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · тур</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: программа · длительность</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="pf-rl">Недвижимость<small>аренда жилья</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: НЕДВИЖИМОСТЬ</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · объект</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: комнаты · удобства · площадь</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="pf-rl">Рестораны и места<small>еда и досуг</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: МЕСТА</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · заведение</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: кухня · часы · средний чек</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="pf-rl">Сервисы<small>няни, фото, видео</small></div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Каталог: СЕРВИСЫ</div>
+<div class="mf-row"><div class="mf-chip"></div><div class="mf-chip"></div><div class="mf-chip"></div></div>
+<div class="mf-cards">
+<div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div><div class="mf-card"><div class="mf-img"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+</div>
+
+</div>
+<div class="mf-foot"></div>
+</div>
+<div class="mf">
+<div class="mf-nav"><div class="mf-logo"></div><div class="mf-nl"></div><div class="mf-nl"></div><div class="mf-nl"></div></div>
+<div class="mf-b">
+<div class="mf-title" style="background:#e6ddd0;color:#8a7a60">Карточка · специалист</div>
+<div class="mf-2col">
+<div style="flex:1.5;display:flex;flex-direction:column;gap:5px"><div class="mf-img" style="height:40px"></div><div class="mf-row" style="margin:0"><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div><div class="mf-img" style="flex:1;height:14px"></div></div><div class="mf-l"></div><div class="mf-l"></div><div class="mf-l s"></div></div>
+<div style="flex:1"><div class="mf-box"><div class="mf-l"></div><div class="mf-l s"></div><div class="mf-l"></div><div class="mf-btn"></div></div></div>
+</div>
+<div class="mf-note">Характеристики: услуги · опыт</div>
+</div>
+<div class="mf-foot"></div>
+</div>
+
+</div>
+</div>
+
+<div class="entry">
+  <div class="rowlbl"><b>Вход</b><span>Главная — витрина всех категорий (bento)</span></div>
+  <div class="dv-opt" id="2a"><div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Главная — hero-заставка + bento-сетка каталогов</div>
+<div class="dv-card wf" style="width:940px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:16px;font-size:15px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Предложить услугу</div></div>
+<div class="c" style="align-items:center;gap:7px;padding:26px 22px 18px">
+<span class="mut" style="font-size:12.5px">06.03.2026</span>
+<span style="font-size:58px;line-height:1;color:#111;letter-spacing:1px">MY GUDAURI</span>
+</div>
+<div class="c" style="align-items:center;gap:12px;padding:4px 22px 26px;background:#e2e0dd;border-top:1px solid #d3d1cd;border-bottom:1px solid #d3d1cd">
+<span class="mut" style="font-size:14px;margin-top:16px">Все услуги Гудаури — один простой поиск</span>
+<div class="r" style="gap:8px;width:640px;max-width:100%">
+<div class="box r" style="flex:1;padding:13px 16px;gap:10px;background:#fff;border-radius:10px;align-items:center"><span style="font-size:18px;color:#8f8d89">⌕</span><span style="font-size:15px;color:#8f8d89">Что вы ищете? Инструктор, трансфер, жильё…</span></div>
+<div class="btn" style="padding:0 26px;font-size:15px;border-radius:10px">Найти</div>
+</div>
+<div class="r" style="gap:8px;flex-wrap:wrap;justify-content:center"><span class="mut" style="font-size:12.5px">Популярное:</span><span class="pill" style="background:#fff">Инструктор</span><span class="pill" style="background:#fff">Трансфер</span><span class="pill" style="background:#fff">Прокат</span><span class="pill" style="background:#fff">Активность</span><span class="pill" style="background:#fff">Жильё</span></div>
+</div>
+<div class="sec">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:104px;gap:12px">
+<div class="box c" style="grid-column:1;grid-row:1/3;padding:11px"><span style="font-size:18px">Инструкторы</span><span class="mut" style="font-size:12.5px">краткое описание на русском</span><div class="r" style="gap:5px;margin-top:auto"><span class="tag">ski</span><span class="tag">snowboard</span></div></div>
+<div class="box c" style="grid-column:2/4;grid-row:1;padding:11px"><span style="font-size:18px">Туры</span><span class="mut" style="font-size:12.5px">краткое описание на русском</span><div class="r" style="gap:5px;margin-top:auto;justify-content:flex-end"><span class="tag">Казбеги</span><span class="tag">Хеви</span></div></div>
+<div class="box c" style="grid-column:4;grid-row:1;padding:11px"><span style="font-size:18px">Прокат</span><span class="mut" style="font-size:12.5px">краткое описание</span><div class="r" style="gap:5px;margin-top:auto"><span class="tag">ski</span><span class="tag">snowboard</span></div></div>
+<div class="box c" style="grid-column:2/4;grid-row:2;padding:11px"><span style="font-size:18px">Места</span><span class="mut" style="font-size:12.5px">краткое описание на русском</span><div class="r" style="gap:5px;margin-top:auto"><span class="tag">Бары</span><span class="tag">Рестораны</span></div></div>
+<div class="box c" style="grid-column:4;grid-row:2/4;padding:11px"><span style="font-size:18px">Сервисы</span><span class="mut" style="font-size:12.5px">краткое описание на русском</span><div class="r" style="gap:5px;margin-top:auto;flex-wrap:wrap"><span class="tag">Няни</span><span class="tag">Фото</span><span class="tag">Видео</span></div></div>
+<div class="box r" style="grid-column:1/3;grid-row:3;padding:11px;gap:10px;align-items:flex-start"><div class="c" style="flex:1;height:100%"><span style="font-size:18px">Трансфер</span><span class="mut" style="font-size:12.5px">краткое описание</span><div class="ph" style="width:110px;height:34px;margin-top:auto;border-radius:8px"></div></div><div class="c" style="gap:5px;align-items:flex-end"><span class="tag">Батуми – Гудаури</span><span class="tag">Тбилиси – Гудаури</span></div></div>
+<div class="box c" style="grid-column:3;grid-row:3;padding:11px"><span style="font-size:18px">Недвижимость</span><span class="mut" style="font-size:12.5px">краткое описание</span><div class="r" style="margin-top:auto;justify-content:flex-end;width:100%"><span class="tag">Апартаменты</span></div></div>
+</div>
+<div class="note" style="margin-top:10px">bento-сетка каталогов — размеры и теги карточек по макету</div>
+</div>
+<div class="sec">
+<div class="c" style="gap:2px;margin-bottom:14px"><span class="mut" style="font-size:13px">Доверьтесь нам</span><span style="font-size:32px;color:#111">Подберите инструктора для себя</span></div>
+<div class="r" style="gap:14px;align-items:stretch">
+<div class="c" style="width:170px;flex:none;gap:8px"><span style="font-size:15px;line-height:1.35">Изучите <u>инструмент</u>, посмотрите <u>отзывы</u> и выберите лучшего <u>для себя</u>!</span><span style="font-size:14px;border-bottom:1.5px solid #333;margin-top:auto;align-self:flex-start">Все инструкторы →</span></div>
+<div class="box c" style="flex:1;padding:8px;gap:6px"><div class="ph c" style="height:130px;padding:6px;justify-content:space-between;align-items:flex-start"><div class="r" style="gap:4px"><span class="pill" style="font-size:11px;padding:1px 8px">Ge</span><span class="pill" style="font-size:11px;padding:1px 8px">En</span></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span><span class="tag">Лыжи</span></div></div><span style="font-size:16px">Михаил Андреев</span><div class="r" style="gap:6px"><span class="star">★★★★★ 4.8</span><span class="mut" style="font-size:12px">6 отзывов</span></div></div>
+<div class="box c" style="flex:1;padding:8px;gap:6px"><div class="ph c" style="height:130px;padding:6px;justify-content:space-between;align-items:flex-start"><div class="r" style="gap:4px"><span class="pill" style="font-size:11px;padding:1px 8px">Ge</span><span class="pill" style="font-size:11px;padding:1px 8px">En</span></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span><span class="tag">Лыжи</span></div></div><span style="font-size:16px">Олег Юнг</span><div class="r" style="gap:6px"><span class="star">★★★★★ 4.8</span><span class="mut" style="font-size:12px">6 отзывов</span></div></div>
+<div class="box c" style="flex:1;padding:8px;gap:6px"><div class="ph c" style="height:130px;padding:6px;justify-content:space-between;align-items:flex-start"><div class="r" style="gap:4px"><span class="pill" style="font-size:11px;padding:1px 8px">Ge</span><span class="pill" style="font-size:11px;padding:1px 8px">En</span></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span><span class="tag">Лыжи</span></div></div><span style="font-size:16px">Михаил Андреев</span><div class="r" style="gap:6px"><span class="star">★★★★★ 4.8</span><span class="mut" style="font-size:12px">6 отзывов</span></div></div>
+</div>
+<div class="note" style="margin-top:10px">паттерн заголовка секции: маленький eyebrow + крупный display-заголовок — во всех секциях</div>
+</div>
+<div class="sec r" style="gap:24px;align-items:flex-start">
+<div class="c" style="width:190px;flex:none"><span class="mut" style="font-size:12.5px">Frequently Asked Questions</span><span style="font-size:38px;color:#111">FAQ</span></div>
+<div class="c" style="flex:1;gap:8px">
+<div class="acc"><span>Цена у всех инструкторов одинаковая?</span><span>+</span></div>
+<div class="acc"><span>Как распределяются часы по дням?</span><span>+</span></div>
+<div class="acc"><span>Как проходит бронирование?</span><span>+</span></div>
+<div class="acc"><span>Когда я получу контакты инструктора?</span><span>+</span></div>
+<div class="acc"><span>Можно ли отменить заявку?</span><span>+</span></div>
+</div>
+</div>
+<div class="c" style="padding:20px 22px 12px;gap:14px;background:#f6f4f0">
+<div class="r" style="justify-content:space-between;align-items:flex-start"><span style="font-size:17px">Mu Gudauri<span style="color:#c33">.</span></span><span class="mut" style="font-size:12.5px;width:260px;text-align:right">Независимая платформа: проверенные локальные инструкторы и активности в Гудаури</span></div>
+<div class="r" style="gap:40px;align-items:flex-start">
+<div class="c" style="gap:6px;flex:1;font-size:13px"><span class="mut" style="font-size:11.5px">Телефон</span><span>+995 123 45 65</span><span class="mut" style="font-size:11.5px">Email</span><span>Mygudauri@gmail.com</span><span class="mut" style="font-size:11.5px">Адрес</span><span>Гудаури, Грузия</span></div>
+<div class="c" style="gap:6px;font-size:13.5px"><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div>
+<div class="c" style="gap:6px;font-size:13.5px"><span class="mut" style="font-size:11.5px">Разделы</span><span>Инструкторы</span><span>Места</span><span>Трансфер</span></div>
+<div class="c" style="gap:6px;font-size:13.5px"><span>Сервисы</span><span>Активности</span><span>Аренда</span></div>
+</div>
+<div class="r" style="gap:18px;border-top:1.5px dashed #d8d5cf;padding-top:8px;font-size:12px;color:#7d7a74"><span>© 2026 MuGudauri, Inc.</span><span>Cookies Policy</span><span>Privacy Policy</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="colhdr"><div></div><div>Каталог категории</div><div>Карточка объекта</div></div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Инструкторы</b><span>MVP · лыжи и сноуборд</span></div>
+  <div class="dv-opt" id="2b" data-screen-label="2b Каталог инструкторов"><div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Каталог инструкторов — только важные фильтры, единый тариф</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать инструктором</div></div>
+
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0">
+<div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Сноуборд</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Лыжи</span></div>
+<span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">ИНСТРУКТОРЫ</span>
+<span class="mut" style="font-size:13px">Выберите человека, а не абстрактную школу</span>
+</div>
+
+<!-- Баннер: подбор оператором + единый тариф -->
+<div class="sec" style="border-bottom:none;padding:18px 22px 0">
+<div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff">
+<div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, кого выбрать? <span style="color:#b8b5af">Подберём инструктора под ваши даты и пожелания.</span></span><a href="#13e" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div>
+<div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Единый тариф — 345 gel/час у всех</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">чем больше часов, тем дешевле · <a href="#13d" style="color:#d9d6cf">13d</a></span></div>
+</div>
+<span class="note" style="margin-top:8px">Заявка → оператор отвечает «свободен / занят» → при занятости предлагает другого. Опрос подбора → <a href="#13e">13e</a>.</span>
+</div>
+
+<!-- Панель фильтров (только важное) -->
+<div class="sec" style="border-bottom:none;padding:16px 22px 0">
+<div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div>
+<div class="r" style="gap:7px;flex-wrap:wrap">
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Дата и время</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Направление обучения</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Уровень ученика</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Язык</span><span>▾</span></div>
+</div>
+<div class="note" style="margin-top:9px">Оставили 4 главных фильтра. Фильтра «свободен сейчас» нет — доступность подтверждает оператор. Полный список опций (для будущего) → <a href="#13d">13d</a>.</div>
+</div>
+
+<!-- Дисциплины + сортировка -->
+<div class="subrow" style="padding:16px 22px 0">
+<span class="subcat on">Все<span class="n">12</span></span><span class="subcat">Частные</span><span class="subcat">Групповые</span><span class="subcat">Детские</span><span class="subcat">Продвинутый</span><span class="subcat">Slope Tour</span>
+</div>
+<div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">12 инструкторов</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по рейтингу</span><span>▾</span></div></div>
+
+<!-- Сетка карточек (без строки тарифа) -->
+<div class="sec" style="padding-top:12px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Михаил Андреев</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дети</span><span class="tag">Карвинг</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">стаж 6 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">Ru</span></div></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Олег Юнг</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Фрирайд-гид</span><span class="tag">Продвинутый</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">стаж 8 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span></div></div><span style="font-size:15px">Андрей Григорьев</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Семья</span><span class="tag">Новички</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">стаж 5 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Нина Барамидзе</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дети</span><span class="tag">Группа</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">стаж 7 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ru</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Сноуборд</span></div></div><span style="font-size:15px">Давид Кипиани</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Фристайл</span><span class="tag">Slope Tour</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">стаж 6 лет</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="pill" style="font-size:10.5px;padding:1px 7px">Ge</span><span class="pill" style="font-size:10.5px;padding:1px 7px">En</span></div></div><div class="r" style="gap:4px"><span class="tag">Лыжи</span></div></div><span style="font-size:15px">Тамара Лежава</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Women×Women</span><span class="tag">Средний</span></div><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">стаж 9 лет</span></div></div>
+</div>
+<div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 6</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="2c" data-screen-label="2c Профиль инструктора"><div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Профиль инструктора — компактно + единая цена с формулой</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать инструктором</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+
+<!-- Левая колонка -->
+<div class="c" style="flex:1;gap:18px">
+<span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все инструкторы</span>
+
+<!-- Hero + компактная строка ключевых фактов -->
+<div class="c" style="gap:10px">
+<div class="r" style="gap:7px"><span class="tag">Лыжи</span><span class="tag">Сноуборд</span><span class="tag" style="background:#222;color:#fff">Инструктор</span></div>
+<span style="font-size:44px;line-height:1.02;color:#111;letter-spacing:1px">МИХАИЛ<br>АНДРЕЕВ</span>
+<div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 10 подтверждённых отзывов</span></div>
+<span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">Стаж 6 лет · категория ISIA · языки Ge / En / Ru · ученики от 4 лет</span>
+</div>
+
+<!-- Об инструкторе -->
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Об инструкторе</span>
+<div class="ln" style="width:100%"></div><div class="ln" style="width:97%"></div><div class="ln" style="width:62%"></div>
+<span class="mut" style="font-size:12.5px;margin-top:4px">Свой текст, а не шаблон — как учит, чем отличается, стиль преподавания.</span>
+</div>
+
+<!-- Форматы занятий (переработанный «чему обучает») -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Форматы занятий</span>
+<div class="c" style="gap:0">
+<div class="r" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid #eceae5"><span style="font-size:14.5px">Частное</span><span class="mut" style="font-size:12.5px">1–3 ученика · любой уровень</span></div>
+<div class="r" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid #eceae5"><span style="font-size:14.5px">Детское</span><span class="mut" style="font-size:12.5px">от 4 лет · шлем обязателен</span></div>
+<div class="r" style="justify-content:space-between;padding:9px 0;border-bottom:1px solid #eceae5"><span style="font-size:14.5px">Семейное</span><span class="mut" style="font-size:12.5px">взрослые и дети вместе</span></div>
+<div class="r" style="justify-content:space-between;padding:9px 0"><span style="font-size:14.5px">Карвинг · техника</span><span class="mut" style="font-size:12.5px">средний уровень</span></div>
+</div>
+</div>
+
+<!-- Включено / отдельно — компактно одной строкой -->
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Урок</span><span class="tag">Разбор техники</span><span class="tag">Подбор трассы</span></div>
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Прокат</span><span class="tag">Ски-пасс</span><span class="tag">Страховка</span></div>
+</div>
+
+<!-- Место встречи + карта -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Место встречи</span>
+<div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">Нижняя станция подъёмника Gudauri 1</span><span class="mut" style="font-size:12.5px">сбор за 10 минут до начала · оборудование получить накануне</span></div></div>
+</div>
+
+<!-- Отзывы -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 10</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Карла Линн</span><span class="mut" style="font-size:11px">урок 2 часа</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:70%"></div></div>
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Марина Иванц</span><span class="mut" style="font-size:11px">урок 8 часов</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:92%"></div><div class="ln" style="width:60%"></div></div>
+</div>
+<div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (10)</div>
+<span class="note">Только от учеников, которые бронировали именно этого инструктора.</span>
+</div>
+
+<!-- Правила (после отзывов) -->
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Правила</span>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Опоздание</span><span class="mut" style="font-size:11.5px">урок не продлевается</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Отмена</span><span class="mut" style="font-size:11.5px">бесплатно за 24 ч</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Плохая погода</span><span class="mut" style="font-size:11.5px">перенос без штрафа</span></div>
+</div>
+</div>
+</div>
+
+<!-- Правая колонка — sticky: ЕДИНАЯ ЦЕНА + ФОРМУЛА -->
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px">
+<div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc">
+<div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="ph" style="width:36px;height:36px;border-radius:50%;flex:none"></div><div class="c"><span class="mut" style="font-size:11px">Единый тариф</span><span style="font-size:15px">345 gel / час</span></div></div>
+<div class="c" style="padding:12px 14px;gap:9px">
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">8</span><span class="mut" style="font-size:12px">часов</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div>
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">2</span><span class="mut" style="font-size:12px">ученика</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div>
+<div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855">
+<div class="r" style="justify-content:space-between"><span>345 × 8 часов</span><span>2 760</span></div>
+<div class="r" style="justify-content:space-between"><span>2-й ученик · +40%</span><span>+1 104</span></div>
+<div class="r" style="justify-content:space-between"><span>от 8 часов · −15%</span><span>−580</span></div>
+</div>
+<div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">3 284 gel</span><span class="mut" style="font-size:11px">за 8 ч · 2 чел</span></div>
+<span class="mut" style="font-size:11px">⏱ Часы можно разбить на несколько дней</span>
+<div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div>
+<span class="mut" style="font-size:11px;text-align:center">Выберете дату и время — оператор подтвердит, свободен ли инструктор, или предложит другого</span>
+</div>
+</div>
+<div class="note">Одна формула цены в каталоге, профиле и бронировании. Разбор → <a href="#13d">13d</a>.</div>
+</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Ниже — тот же шаблон, развёрнутый на другие категории: Прокат, Трансфер, Туры.</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Прокат — тот же каркас каталог + карточка</span></div>
+<div class="dv-opts">
+</div>
+<div class="mrow">
+  <div class="rowlbl"><b>Прокат</b><span>снаряжение и одежда</span></div>
+  <div class="dv-opt" id="3a" data-screen-label="Каталог проката — важные фильтры, доставка к склону"><div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>Каталог проката — важные фильтры, доставка к склону</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0"><div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Снаряжение</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Одежда</span></div><span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">ПРОКАТ</span><span class="mut" style="font-size:13px">Комплекты снаряжения с доставкой к склону</span></div><div class="sec" style="border-bottom:none;padding:18px 22px 0"><div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff"><div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, что взять? <span style="color:#b8b5af">Подберём комплект под рост, уровень и даты.</span></span><a href="#" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div><div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Дешевле при аренде от 3 дней</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">от 55 gel/день</span></div></div></div><div class="sec" style="border-bottom:none;padding:16px 22px 0"><div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div><div class="r" style="gap:7px;flex-wrap:wrap"><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Даты</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Тип снаряжения</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Размер</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Срок аренды</span><span>▾</span></div></div><div class="note" style="margin-top:9px">4 главных фильтра. Каркас общий с инструкторами и активностями.</div></div><div class="c" style="padding:16px 22px 0;gap:8px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="subcat on">Всё<span class="n">9</span></span><span class="subcat">Лыжи</span><span class="subcat">Сноуборды</span><span class="subcat">Комплекты</span><span class="subcat">Детское</span><span class="subcat">Фрирайд</span><span class="subcat">Лавинное</span><span class="subcat">Экипировка</span></div></div><div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">9 предложений</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по популярности</span><span>▾</span></div></div><div class="sec" style="padding-top:12px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Комплект</span></div><span class="tag" style="align-self:flex-start">лыжи · рост 150–180</span></div><span style="font-size:15px">Лыжи + ботинки + палки</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.7</span><span class="mut" style="font-size:11px">от 60 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Комплект</span></div><span class="tag" style="align-self:flex-start">сноуборд · 150–165</span></div><span style="font-size:15px">Сноуборд + ботинки</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 65 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Одежда</span></div><span class="tag" style="align-self:flex-start">мембрана · S–XXL</span></div><span style="font-size:15px">Куртка + штаны</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.5</span><span class="mut" style="font-size:11px">от 35 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Аксессуары</span></div><span class="tag" style="align-self:flex-start">шлем + маска</span></div><span style="font-size:15px">Шлем + маска</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 15 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Детское</span></div><span class="tag" style="align-self:flex-start">от 3 лет</span></div><span style="font-size:15px">Детский комплект лыжи</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 45 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Премиум</span></div><span class="tag" style="align-self:flex-start">фрирайд</span></div><span style="font-size:15px">Сноуборд премиум</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 5.0</span><span class="mut" style="font-size:11px">от 90 gel</span></div></div></div><div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 3</div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="3b" data-screen-label="Карточка проката — состав, доставка + расчёт"><div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>Карточка проката — состав, доставка + расчёт</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+<div class="c" style="flex:1;gap:18px"><span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Весь прокат</span><div class="c" style="gap:10px"><div class="r" style="gap:7px"><span class="tag">Комплект</span><span class="tag" style="background:#222;color:#fff">Прокат</span></div><span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">СНОУБОРД<br>+ БОТИНКИ</span><div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.8</span><span class="mut" style="font-size:13px">· 24 отзыва</span></div><span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">All-mountain · доски 150–165 · ботинки 39–46 · обслужено перед выдачей</span></div><div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Описание</span><div class="ln" style="width:100%"></div><div class="ln" style="width:95%"></div><div class="ln" style="width:60%"></div></div><div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px"><div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Доска</span><span class="tag">Крепления</span><span class="tag">Ботинки</span><span class="tag">Чехол</span></div><div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Прокат маски</span><span class="tag">Ски-пасс</span><span class="tag">Страховка</span></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Пункт выдачи</span><div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">Прокат Gudauri 1, нижняя станция</span><span class="mut" style="font-size:12.5px">доставка к склону по запросу · возврат до 20:00</span></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Отзывы · ★ 4.8 · 24</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Карла Линн</span><span class="mut" style="font-size:11px">аренда 3 дня</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Георгий Т.</span><span class="mut" style="font-size:11px">аренда 5 дней</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div></div><div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (24)</div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Правила</span><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Залог</span><span class="mut" style="font-size:11.5px">по документу</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Замена размера</span><span class="mut" style="font-size:11.5px">бесплатно на месте</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Возврат</span><span class="mut" style="font-size:11.5px">в любом пункте</span></div></div></div></div>
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px"><div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc"><div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="c"><span class="mut" style="font-size:11px">Цена за день</span><span style="font-size:18px">от 65 gel</span></div></div><div class="c" style="padding:12px 14px;gap:9px"><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">3</span><span class="mut" style="font-size:12px">дня</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Размер ботинок</span><span style="font-size:13px">42 ▾</span></div><div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855"><div class="r" style="justify-content:space-between"><span>65 × 3 дня</span><span>195</span></div><div class="r" style="justify-content:space-between"><span>от 3 дней · −10%</span><span>−20</span></div></div><div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">175 gel</span><span class="mut" style="font-size:11px">за 3 дня</span></div><span class="mut" style="font-size:11px">🚚 Доставка к склону включена</span><div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div><span class="mut" style="font-size:11px;text-align:center">Точку выдачи и даты подтвердит оператор</span></div></div><div class="note">Единый паттерн: цена считается тут, детали — на шаге брони.</div></div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Трансфер</b><span>маршруты и авто</span></div>
+  <div class="dv-opt" id="4a" data-screen-label="Каталог трансферов — маршруты и класс авто"><div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>Каталог трансферов — маршруты и класс авто</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0"><div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Из аэропорта</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>По региону</span></div><span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">ТРАНСФЕР</span><span class="mut" style="font-size:13px">Фиксированная цена за машину, встреча с табличкой</span></div><div class="sec" style="border-bottom:none;padding:18px 22px 0"><div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff"><div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, какой трансфер выбрать? <span style="color:#b8b5af">Подберём авто под рейс и багаж.</span></span><a href="#" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div><div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Цена за машину, а не за место</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">от 180 gel</span></div></div></div><div class="sec" style="border-bottom:none;padding:16px 22px 0"><div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div><div class="r" style="gap:7px;flex-wrap:wrap"><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Дата</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Маршрут</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Класс авто</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Пассажиров</span><span>▾</span></div></div><div class="note" style="margin-top:9px">4 главных фильтра. «Класс авто» = седан / минивэн / джип.</div></div><div class="c" style="padding:16px 22px 0;gap:8px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="subcat on">Все<span class="n">12</span></span><span class="subcat">Тбилиси ⇄ Гудаури</span><span class="subcat">Кутаиси ⇄ Гудаури</span><span class="subcat">Владикавказ ⇄ Гудаури</span><span class="subcat">Батуми ⇄ Гудаури</span><span class="subcat">Казбеги ⇄ Гудаури</span></div></div><div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">12 маршрутов</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по цене</span><span>▾</span></div></div><div class="sec" style="padding-top:12px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Седан</span></div><span class="tag" style="align-self:flex-start">до 3 · ~2 ч</span></div><span style="font-size:15px">Тбилиси (аэропорт) → Гудаури</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 180 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Минивэн</span></div><span class="tag" style="align-self:flex-start">до 7 · ~2 ч</span></div><span style="font-size:15px">Тбилиси → Гудаури</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 260 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Седан</span></div><span class="tag" style="align-self:flex-start">до 3 · ~6 ч</span></div><span style="font-size:15px">Батуми → Гудаури</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.6</span><span class="mut" style="font-size:11px">от 520 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Джип</span></div><span class="tag" style="align-self:flex-start">до 4 · ~1 ч</span></div><span style="font-size:15px">Гудаури → Казбеги</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 150 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Минивэн</span></div><span class="tag" style="align-self:flex-start">до 7 · ~5 ч</span></div><span style="font-size:15px">Кутаиси → Гудаури</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.7</span><span class="mut" style="font-size:11px">от 430 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Седан</span></div><span class="tag" style="align-self:flex-start">до 3 · ~4 ч</span></div><span style="font-size:15px">Владикавказ → Гудаури</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.5</span><span class="mut" style="font-size:11px">от 300 gel</span></div></div></div><div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 6</div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="4b" data-screen-label="Страница маршрута — авто, включено + расчёт"><div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>Страница маршрута — авто, включено + расчёт</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+<div class="c" style="flex:1;gap:18px"><span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все трансферы</span><div class="c" style="gap:10px"><div class="r" style="gap:7px"><span class="tag">Из аэропорта</span><span class="tag" style="background:#222;color:#fff">Трансфер</span></div><span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">АЭРОПОРТ<br>→ ГУДАУРИ</span><div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 130 поездок</span></div><span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">Седан · до 3 пассажиров · ~2 ч в пути · встреча с табличкой · зимняя резина</span></div><div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Описание</span><div class="ln" style="width:100%"></div><div class="ln" style="width:92%"></div><div class="ln" style="width:55%"></div></div><div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px"><div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Встреча с табличкой</span><span class="tag">Зимняя резина</span><span class="tag">Вода</span><span class="tag">Ожидание 60 мин</span></div><div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Детское кресло (по запросу)</span><span class="tag">Доп. остановки</span></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Маршрут</span><div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">Тбилиси (аэропорт) → Гудаури</span><span class="mut" style="font-size:12.5px">≈ 120 км · перевал Гудаури · выезд по времени рейса</span></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 130</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Анна К.</span><span class="mut" style="font-size:11px">январь 2026</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Илья М.</span><span class="mut" style="font-size:11px">февраль 2026</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div></div><div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (130)</div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Правила</span><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Задержка рейса</span><span class="mut" style="font-size:11.5px">ждём бесплатно 60 мин</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Багаж</span><span class="mut" style="font-size:11.5px">без доплат</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Оплата</span><span class="mut" style="font-size:11.5px">водителю или онлайн</span></div></div></div></div>
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px"><div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc"><div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="c"><span class="mut" style="font-size:11px">Цена за машину</span><span style="font-size:18px">от 180 gel</span></div></div><div class="c" style="padding:12px 14px;gap:9px"><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Направление</span><span style="font-size:13px">Туда ▾</span></div><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">3</span><span class="mut" style="font-size:12px">пассажира</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div><div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855"><div class="r" style="justify-content:space-between"><span>Седан · туда</span><span>180</span></div><div class="r" style="justify-content:space-between"><span>Детское кресло</span><span>бесплатно</span></div></div><div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">180 gel</span><span class="mut" style="font-size:11px">за машину</span></div><span class="mut" style="font-size:11px">🧾 Оплата водителю или онлайн</span><div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div><span class="mut" style="font-size:11px;text-align:center">Рейс и время укажете на шаге брони</span></div></div><div class="note">Параметры свои (направление/пассажиры), паттерн — общий.</div></div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Активности</b><span>впечатления · фрирайд, ски-тур, экскурсии</span></div>
+  <div class="dv-opt" id="5a" data-screen-label="5a Каталог активностей"><div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a>Каталог активностей — группы по сезону, важные фильтры</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0">
+<div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Зима</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Лето</span></div>
+<span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">АКТИВНОСТИ</span>
+<span class="mut" style="font-size:13px">Впечатления в Гудаури — фрирайд, ски-тур, экскурсии и не только</span>
+</div>
+
+<!-- Баннер: подбор + модель цены -->
+<div class="sec" style="border-bottom:none;padding:18px 22px 0">
+<div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff">
+<div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, что выбрать? <span style="color:#b8b5af">Подберём активность под даты, компанию и уровень.</span></span><a href="#14f" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div>
+<div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Цена — за человека или за группу, зависит от программы</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">разбор → <a href="#14d" style="color:#d9d6cf">14d</a></span></div>
+</div>
+</div>
+
+<!-- Фильтры -->
+<div class="sec" style="border-bottom:none;padding:16px 22px 0">
+<div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div>
+<div class="r" style="gap:7px;flex-wrap:wrap">
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Дата</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Сложность</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Длительность</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Кто едет</span><span>▾</span></div>
+</div>
+<div class="note" style="margin-top:9px">4 главных фильтра. «Кто едет» = взрослые / дети / семья / компания. Полный список → <a href="#14d">14d</a>.</div>
+</div>
+
+<!-- Категории-переключатели (большие плашки, как лыжи/сноуборд у инструкторов) -->
+<div class="c" style="padding:16px 22px 0;gap:8px">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span>
+<div class="r" style="gap:8px;flex-wrap:wrap">
+<span class="subcat on">Все<span class="n">21</span></span><span class="subcat">Freeride<span class="n">6</span></span><span class="subcat">Ski Touring<span class="n">7</span></span><span class="subcat">Heliskiing<span class="n">1</span></span><span class="subcat">Mountaineering<span class="n">2</span></span><span class="subcat">Freestyle<span class="n">1</span></span><span class="subcat">Paragliding<span class="n">1</span></span><span class="subcat">Excursions<span class="n">4</span></span><span class="subcat">Mountain Biking<span class="n">1</span></span>
+</div>
+</div>
+<div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">21 активность</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>популярные</span><span>▾</span></div></div>
+
+<!-- Сетка карточек (реальные товары WinterGudauri) -->
+<div class="sec" style="padding-top:12px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Freeride</span><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">продвинутый · 16+</span></div><span style="font-size:15px">Бидара</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 190 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="tag">Freeride</span><span class="tag">Ski Touring</span></div><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">средний · 14+</span></div><span style="font-size:15px">Ломиси</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 150 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Ski Touring</span><span class="pill" style="font-size:10.5px;padding:1px 7px">полдня</span></div><div class="r" style="gap:4px"><span class="tag" style="background:#cfe0cf;color:#3a5a3a">старт</span><span class="tag">начинающий</span></div></div><span style="font-size:15px">Дэдаена</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 90 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Heliskiing</span><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">эксперт · 18+</span></div><span style="font-size:15px">Heli-ski Gudauri</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 5.0</span><span class="mut" style="font-size:11px">от 650 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Paragliding</span><span class="pill" style="font-size:10.5px;padding:1px 7px">20 мин</span></div><span class="tag" style="align-self:flex-start">без опыта · тандем</span></div><span style="font-size:15px">Tandem Paragliding Gudauri</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 125 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Excursions</span><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">лёгкая · семья</span></div><span style="font-size:15px">Казбеги и Гергети</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 35 €/чел</span></div></div>
+</div>
+<div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 12</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="5b" data-screen-label="5b Страница активности"><div class="dv-olabel"><a class="dv-oid" href="#5b">5b</a>Страница активности — программа, организатор, ограничения + цена</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+
+<div class="c" style="flex:1;gap:18px">
+<span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все активности</span>
+
+<div class="c" style="gap:10px">
+<div class="r" style="gap:7px"><span class="tag">Freeride</span><span class="tag">Ski Touring</span><span class="tag" style="background:#222;color:#fff">Сезон: зима</span></div>
+<span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">БИДАРА</span>
+<div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 24 отзыва</span></div>
+<span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">Полный день · сложность продвинутая · от 16 лет · лыжи / сноуборд · гид-фрирайд Ru / En · до 6 человек</span>
+</div>
+
+<div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div>
+
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Об активности</span>
+<div class="ln" style="width:100%"></div><div class="ln" style="width:96%"></div><div class="ln" style="width:58%"></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Программа</span>
+<div class="c" style="gap:0">
+<div class="r" style="gap:10px;padding:8px 0;border-bottom:1px solid #eceae5"><span class="pill" style="font-size:11px;flex:none">1</span><span style="font-size:14px">Сбор, проверка лавинного снаряжения</span><span class="mut" style="font-size:12px;margin-left:auto">30 мин</span></div>
+<div class="r" style="gap:10px;padding:8px 0;border-bottom:1px solid #eceae5"><span class="pill" style="font-size:11px;flex:none">2</span><span style="font-size:14px">Заброска: подъёмник + короткий скитур-подход</span><span class="mut" style="font-size:12px;margin-left:auto">1 ч</span></div>
+<div class="r" style="gap:10px;padding:8px 0;border-bottom:1px solid #eceae5"><span class="pill" style="font-size:11px;flex:none">3</span><span style="font-size:14px">Спуски по маршруту Бидара с гидом</span><span class="mut" style="font-size:12px;margin-left:auto">4–5 ч</span></div>
+<div class="r" style="gap:10px;padding:8px 0"><span class="pill" style="font-size:11px;flex:none">4</span><span style="font-size:14px">Возвращение, разбор дня и фото</span><span class="mut" style="font-size:12px;margin-left:auto">—</span></div>
+</div>
+</div>
+
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Гид-фрирайд</span><span class="tag">Лавкомплект (бипер/лопата/щуп)</span><span class="tag">Ски-пасс</span><span class="tag">Инструктаж</span></div>
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Трансфер</span><span class="tag">Фото/видео</span><span class="tag">Прокат лыж</span></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Организатор</span>
+<div class="r" style="gap:10px;align-items:center"><div class="ph" style="width:44px;height:44px;border-radius:50%;flex:none"></div><div class="c" style="gap:3px"><div class="r" style="gap:6px"><span style="font-size:15px">Партнёр-оператор</span><span class="tag" style="background:#cfe0cf;color:#3a5a3a">проверен</span></div><span class="mut" style="font-size:12px">лицензия · страховка ответственности · опыт на курорте</span></div></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Ограничения</span>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Возраст</span><span class="mut" style="font-size:11.5px">от 16 лет</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Сезон</span><span class="mut" style="font-size:11.5px">декабрь–апрель</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Лавопасность</span><span class="mut" style="font-size:11.5px">перенос / смена зоны</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Физуровень</span><span class="mut" style="font-size:11.5px">высокий</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Группа</span><span class="mut" style="font-size:11.5px">до 6 человек</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Опыт</span><span class="mut" style="font-size:11.5px">уверенно вне трасс</span></div>
+</div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Место встречи</span>
+<div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">Сбор у верхней станции Gudauri 3</span><span class="mut" style="font-size:12.5px">выезд в 8:30 · трансфер от отеля по запросу</span></div></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 24</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Анна К.</span><span class="mut" style="font-size:11px">январь 2026</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:70%"></div></div>
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Георгий Т.</span><span class="mut" style="font-size:11px">февраль 2026</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:92%"></div><div class="ln" style="width:60%"></div></div>
+</div>
+<div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (24)</div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Правила</span>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Отмена</span><span class="mut" style="font-size:11.5px">бесплатно за 24 ч</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Плохая погода</span><span class="mut" style="font-size:11.5px">перенос без штрафа</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Опоздание</span><span class="mut" style="font-size:11.5px">время не продлевается</span></div>
+</div>
+</div>
+</div>
+
+<!-- Правая колонка — цена -->
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px">
+<div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc">
+<div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="c"><span class="mut" style="font-size:11px">Цена за человека</span><span style="font-size:18px">от 190 €</span></div></div>
+<div class="c" style="padding:12px 14px;gap:9px">
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">3</span><span class="mut" style="font-size:12px">участника</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div>
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Дата</span><span style="font-size:13px">выбрать →</span></div>
+<div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855">
+<div class="r" style="justify-content:space-between"><span>190 × 3 участника</span><span>570</span></div>
+<div class="r" style="justify-content:space-between"><span>группа 3+ · −10%</span><span>−57</span></div>
+</div>
+<div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">513 €</span><span class="mut" style="font-size:11px">за 3 чел</span></div>
+<div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div>
+<span class="mut" style="font-size:11px;text-align:center">Оператор подтвердит дату, погоду и место в группе</span>
+</div>
+</div>
+<div class="note">Модель цены: за человека или за группу. Разбор → <a href="#14d">14d</a>.</div>
+</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Услуги</b><span>фото, видео, дрон, няня</span></div>
+  <div class="dv-opt" id="7a" data-screen-label="Каталог услуг — специалисты и пакеты"><div class="dv-olabel"><a class="dv-oid" href="#7a">7a</a>Каталог услуг — специалисты и пакеты</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0"><div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Съёмка</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Персональные</span></div><span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">УСЛУГИ</span><span class="mut" style="font-size:13px">Проверенные специалисты — фото, видео, забота о детях</span></div><div class="sec" style="border-bottom:none;padding:18px 22px 0"><div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff"><div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, кого выбрать? <span style="color:#b8b5af">Подберём специалиста под задачу и дату.</span></span><a href="#" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div><div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Пакеты и цены «от» — состав и сроки заранее</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">от 60 gel</span></div></div></div><div class="sec" style="border-bottom:none;padding:16px 22px 0"><div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div><div class="r" style="gap:7px;flex-wrap:wrap"><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Дата</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Категория</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Язык</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Формат</span><span>▾</span></div></div><div class="note" style="margin-top:9px">4 главных фильтра. Часть услуг — с выездом, подтверждает менеджер.</div></div><div class="c" style="padding:16px 22px 0;gap:8px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="subcat on">Все<span class="n">10</span></span><span class="subcat">Фото</span><span class="subcat">Видео</span><span class="subcat">Дрон</span><span class="subcat">Фото+видео</span><span class="subcat">Няня</span><span class="subcat">Массаж</span><span class="subcat">Повар</span><span class="subcat">Переводчик</span></div></div><div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">10 услуг</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по рейтингу</span><span>▾</span></div></div><div class="sec" style="padding-top:12px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Фото</span></div><span class="tag" style="align-self:flex-start">склон · 3 дня</span></div><span style="font-size:15px">Фотограф на склоне</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 250 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Видео</span></div><span class="tag" style="align-self:flex-start">монтаж · 5 дней</span></div><span style="font-size:15px">Видеограф + монтаж</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 400 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Дрон</span></div><span class="tag" style="align-self:flex-start">aerial</span></div><span style="font-size:15px">Съёмка с дрона</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 5.0</span><span class="mut" style="font-size:11px">от 300 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Фото+видео</span></div><span class="tag" style="align-self:flex-start">пакет</span></div><span style="font-size:15px">Пакет фото + видео</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 600 gel</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Няня</span></div><span class="tag" style="align-self:flex-start">по часам</span></div><span style="font-size:15px">Няня (детская)</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 40 gel/ч</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Массаж</span></div><span class="tag" style="align-self:flex-start">в отеле</span></div><span style="font-size:15px">Массаж в отеле</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 120 gel</span></div></div></div><div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 4</div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="7b" data-screen-label="Страница услуги — пакеты, портфолио + расчёт"><div class="dv-olabel"><a class="dv-oid" href="#7b">7b</a>Страница услуги — пакеты, портфолио + расчёт</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+<div class="c" style="flex:1;gap:18px"><span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все услуги</span><div class="c" style="gap:10px"><div class="r" style="gap:7px"><span class="tag">Фото</span><span class="tag" style="background:#222;color:#fff">Услуга</span></div><span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">ФОТОГРАФ<br>НА СКЛОНЕ</span><div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 42 отзыва</span></div><span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">Фотосъёмка · на склоне · Ru / En · готовность 3 дня · онлайн-галерея</span></div><div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Пакеты</span><div class="r" style="gap:10px"><div class="box c" style="flex:1;padding:11px;gap:5px"><span style="font-size:15px">Базовый</span><span class="mut" style="font-size:12px">1 час · 30 фото</span><span style="font-size:16px">250 gel</span></div><div class="box c" style="flex:1;padding:11px;gap:5px;border:1.5px solid #b7b5b1"><span style="font-size:15px">Стандарт</span><span class="mut" style="font-size:12px">2 часа · 80 фото</span><span style="font-size:16px">420 gel</span></div><div class="box c" style="flex:1;padding:11px;gap:5px"><span style="font-size:15px">Полный день</span><span class="mut" style="font-size:12px">4 часа · 200 фото</span><span style="font-size:16px">750 gel</span></div></div></div><div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px"><div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Съёмка на склоне</span><span class="tag">Обработка</span><span class="tag">Онлайн-галерея</span></div><div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Печать фото</span><span class="tag">Срочная обработка</span></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 42</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Мария П.</span><span class="mut" style="font-size:11px">пакет «Стандарт»</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Данил В.</span><span class="mut" style="font-size:11px">полный день</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div></div><div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (42)</div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Правила</span><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Готовность</span><span class="mut" style="font-size:11.5px">3 дня</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Погода</span><span class="mut" style="font-size:11.5px">перенос без штрафа</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Отмена</span><span class="mut" style="font-size:11.5px">бесплатно за 24 ч</span></div></div></div></div>
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px"><div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc"><div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="c"><span class="mut" style="font-size:11px">Пакет «Стандарт»</span><span style="font-size:18px">420 gel</span></div></div><div class="c" style="padding:12px 14px;gap:9px"><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Пакет</span><span style="font-size:13px">Стандарт ▾</span></div><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">2</span><span class="mut" style="font-size:12px">человека</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div><div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855"><div class="r" style="justify-content:space-between"><span>Стандарт · 2 ч</span><span>420</span></div><div class="r" style="justify-content:space-between"><span>2-й участник</span><span>включён</span></div></div><div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">420 gel</span><span class="mut" style="font-size:11px">пакет</span></div><span class="mut" style="font-size:11px">🕒 Готовность результата — 3 дня</span><div class="btn" style="padding:10px;font-size:15px">Оставить заявку</div><span class="mut" style="font-size:11px;text-align:center">Дату и место съёмки укажете на шаге брони</span></div></div><div class="note">Съёмка = пакеты; для няни блок меняется на часы + дети.</div></div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Жильё</b><span>апартаменты и апарт-отели</span></div>
+  <div class="dv-opt" id="8a" data-screen-label="Каталог жилья — даты, гости, объекты у склона"><div class="dv-olabel"><a class="dv-oid" href="#8a">8a</a>Каталог жилья — даты, гости, объекты у склона</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0"><div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>У подъёмника</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Все районы</span></div><span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">ЖИЛЬЁ</span><span class="mut" style="font-size:13px">Проверенное жильё у склона — заявка с подтверждением</span></div><div class="sec" style="border-bottom:none;padding:18px 22px 0"><div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff"><div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, где остановиться? <span style="color:#b8b5af">Подберём жильё под даты, гостей и бюджет.</span></span><a href="#" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div><div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Проживание, уборку и депозит показываем отдельно</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">от 190 gel/ночь</span></div></div></div><div class="sec" style="border-bottom:none;padding:16px 22px 0"><div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div><div class="r" style="gap:7px;flex-wrap:wrap"><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Заезд — выезд</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Гости</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Цена/ночь</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Удобства</span><span>▾</span></div></div><div class="note" style="margin-top:9px">4 главных фильтра. «Удобства» = кухня / SPA / парковка / Wi-Fi.</div></div><div class="c" style="padding:16px 22px 0;gap:8px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="subcat on">Всё<span class="n">8</span></span><span class="subcat">Апартаменты</span><span class="subcat">Апарт-отели</span><span class="subcat">Отели</span><span class="subcat">Шале</span><span class="subcat">Хостелы</span><span class="subcat">Долгосрочно</span></div></div><div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">8 объектов</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по цене</span><span>▾</span></div></div><div class="sec" style="padding-top:12px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Апарт-отель</span></div><span class="tag" style="align-self:flex-start">ski-in/out · до 4</span></div><span style="font-size:15px">Four Seasons Гудаури</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 320 gel/ночь</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Апарт-отель</span></div><span class="tag" style="align-self:flex-start">300 м · до 2</span></div><span style="font-size:15px">Апарт-отель NEO</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.6</span><span class="mut" style="font-size:11px">от 190 gel/ночь</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Сьютс</span></div><span class="tag" style="align-self:flex-start">вид · до 3</span></div><span style="font-size:15px">Новый Гудаури — Люкс</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 240 gel/ночь</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Апартаменты</span></div><span class="tag" style="align-self:flex-start">центр · до 5</span></div><span style="font-size:15px">Новый Гудаури — Атриум</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.7</span><span class="mut" style="font-size:11px">от 280 gel/ночь</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Шале</span></div><span class="tag" style="align-self:flex-start">у леса · до 6</span></div><span style="font-size:15px">Шале Коби</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 450 gel/ночь</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Отель</span></div><span class="tag" style="align-self:flex-start">1 линия · до 2</span></div><span style="font-size:15px">Gudauri Lodge</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.6</span><span class="mut" style="font-size:11px">от 210 gel/ночь</span></div></div></div><div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 2</div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="8b" data-screen-label="Страница объекта — удобства, доступность + расчёт"><div class="dv-olabel"><a class="dv-oid" href="#8b">8b</a>Страница объекта — удобства, доступность + расчёт</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+<div class="c" style="flex:1;gap:18px"><span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Всё жильё</span><div class="c" style="gap:10px"><div class="r" style="gap:7px"><span class="tag">Апарт-отель</span><span class="tag" style="background:#222;color:#fff">Жильё</span></div><span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">FOUR SEASONS<br>ГУДАУРИ</span><div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 56 отзывов · у подъёмника</span></div><span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">До 4 гостей · 2 спальни · ski-in/out · заезд с 14:00 · кухня, Wi-Fi, SPA</span></div><div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Удобства</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="pill" style="font-size:13px">● Кухня</span><span class="pill" style="font-size:13px">● Wi-Fi</span><span class="pill" style="font-size:13px">● Парковка</span><span class="pill" style="font-size:13px">● SPA</span><span class="pill" style="font-size:13px">● Балкон</span><span class="pill" style="font-size:13px">● Стиральная машина</span></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Доступность</span><div class="box" style="padding:10px"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px"><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div></div></div><span class="mut" style="font-size:12px">Календарь на первом этапе справочный — доступность подтверждает менеджер.</span></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Расположение</span><div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">У нижней станции Gudauri 1</span><span class="mut" style="font-size:12.5px">ski-in/out · трансфер из аэропорта по запросу</span></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 56</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Ольга Р.</span><span class="mut" style="font-size:11px">3 ночи · семья</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Ника Б.</span><span class="mut" style="font-size:11px">неделя · компания</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div></div><div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (56)</div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Правила</span><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px"><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Предоплата</span><span class="mut" style="font-size:11.5px">по подтверждению</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Депозит</span><span class="mut" style="font-size:11.5px">при заселении</span></div><div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Поздний выезд</span><span class="mut" style="font-size:11.5px">по возможности</span></div></div></div></div>
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px"><div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc"><div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="c"><span class="mut" style="font-size:11px">Цена за 3 ночи</span><span style="font-size:18px">от 320 gel/ночь</span></div></div><div class="c" style="padding:12px 14px;gap:9px"><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Заезд — выезд</span><span style="font-size:13px">12 — 15 янв ▾</span></div><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">2</span><span class="mut" style="font-size:12px">гостя</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div><div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855"><div class="r" style="justify-content:space-between"><span>Проживание · 3 ночи</span><span>900</span></div><div class="r" style="justify-content:space-between"><span>Уборка</span><span>60</span></div></div><div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">960 gel</span><span class="mut" style="font-size:11px">3 ночи · 2 гостя</span></div><span class="mut" style="font-size:11px">🔑 Депозит уточняется при подтверждении</span><div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div><span class="mut" style="font-size:11px;text-align:center">Точные даты и депозит — на шаге брони</span></div></div><div class="note">Жильё: даты + гости; проживание/уборку/депозит показываем отдельно.</div></div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Места</b><span>рестораны, бары, SPA</span></div>
+  <div class="dv-opt" id="9a" data-screen-label="Каталог мест — справочник, «открыто сейчас»"><div class="dv-olabel"><a class="dv-oid" href="#9a">9a</a>Каталог мест — справочник, «открыто сейчас»</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0"><div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Еда и досуг</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Сервис</span></div><span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">МЕСТА</span><span class="mut" style="font-size:13px">Справочник Гудаури — карта, часы работы, контакты</span></div><div class="sec" style="border-bottom:none;padding:18px 22px 0"><div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff"><div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Ищете, куда сходить? <span style="color:#b8b5af">Подскажем места под ваш запрос и компанию.</span></span><a href="#" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div><div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Для ресторанов и SPA — простая заявка на бронь</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">бесплатно</span></div></div></div><div class="sec" style="border-bottom:none;padding:16px 22px 0"><div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div><div class="r" style="gap:7px;flex-wrap:wrap"><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Категория</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Район</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Средний чек</span><span>▾</span></div><div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Открыто сейчас</span><span>▾</span></div></div><div class="note" style="margin-top:9px">4 главных фильтра. «Открыто сейчас» отсекает закрытые места.</div></div><div class="c" style="padding:16px 22px 0;gap:8px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="subcat on">Все<span class="n">24</span></span><span class="subcat">Рестораны</span><span class="subcat">Кафе</span><span class="subcat">Бары</span><span class="subcat">SPA</span><span class="subcat">Магазины</span><span class="subcat">Аптеки</span><span class="subcat">Медпомощь</span></div></div><div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">24 места</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>по рейтингу</span><span>▾</span></div></div><div class="sec" style="padding-top:12px"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Ресторан</span></div><span class="tag" style="align-self:flex-start">грузинская · ₾₾</span></div><span style="font-size:15px">Ресторан «Панорама»</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">открыто</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Бар</span></div><span class="tag" style="align-self:flex-start">коктейли · ₾₾</span></div><span style="font-size:15px">Après-ski бар</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.5</span><span class="mut" style="font-size:11px">до 02:00</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">SPA</span></div><span class="tag" style="align-self:flex-start">по записи</span></div><span style="font-size:15px">SPA-центр</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">бронь</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Кафе</span></div><span class="tag" style="align-self:flex-start">кофе · ₾</span></div><span style="font-size:15px">Кофейня у подъёмника</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★☆ 4.6</span><span class="mut" style="font-size:11px">открыто</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Магазин</span></div><span class="tag" style="align-self:flex-start">продукты</span></div><span style="font-size:15px">Супермаркет</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px"></span><span class="mut" style="font-size:11px">до 23:00</span></div></div><div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Аптека</span></div><span class="tag" style="align-self:flex-start">24/7</span></div><span style="font-size:15px">Аптека</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px"></span><span class="mut" style="font-size:11px">круглосуточно</span></div></div></div><div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 18</div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="9b" data-screen-label="Страница места — часы, карта, заявка (без оплаты)"><div class="dv-olabel"><a class="dv-oid" href="#9b">9b</a>Страница места — часы, карта, заявка (без оплаты)</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+<div class="c" style="flex:1;gap:18px"><span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все места</span><div class="c" style="gap:10px"><div class="r" style="gap:7px"><span class="tag">Ресторан</span><span class="tag" style="background:#222;color:#fff">Место</span><span class="pill" style="font-size:12px;background:#d0e0d3">Открыто сейчас</span></div><span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">РЕСТОРАН<br>«ПАНОРАМА»</span><div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.8</span><span class="mut" style="font-size:13px">· 210 отзывов · ₾₾</span></div><span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">10:00 — 00:00 · грузинская кухня · средний чек 40–70 gel · у подъёмника</span></div><div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Особенности</span><div class="r" style="gap:8px;flex-wrap:wrap"><span class="pill" style="font-size:13px">● Вид на горы</span><span class="pill" style="font-size:13px">● Детское меню</span><span class="pill" style="font-size:13px">● Вегетарианское</span><span class="pill" style="font-size:13px">● Wi-Fi</span></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Как добраться</span><div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">У нижней станции Gudauri 1</span><span class="mut" style="font-size:12.5px">5 минут пешком от подъёмника · парковка рядом</span></div></div></div><div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Отзывы · ★ 4.8 · 210</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Тео Г.</span><span class="mut" style="font-size:11px">ужин · пара</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div><div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Лиза Н.</span><span class="mut" style="font-size:11px">обед · семья</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:65%"></div></div></div><div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (210)</div></div></div>
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px"><div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc"><div class="c" style="padding:12px 14px;gap:10px"><span style="font-size:16px">Забронировать стол</span><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Дата · время</span><span style="font-size:13px">сегодня 19:00 ▾</span></div><div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">4</span><span class="mut" style="font-size:12px">гостя</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div><div class="btn" style="padding:10px;font-size:15px">Оставить заявку</div><div class="bo" style="padding:9px;font-size:14px">Позвонить</div><span class="mut" style="font-size:11px;text-align:center">Подтверждает заведение · без оплаты онлайн</span></div></div><div class="note">Места = справочник; коммерческий блок только «заявка / позвонить», без sticky-цены.</div></div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow">
+  <div class="rowlbl"><b>Статьи</b><span>гид и новости курорта</span></div>
+  <div class="dv-opt" id="10a" data-screen-label="Каталог статей — главная статья + сетка"><div class="dv-olabel"><a class="dv-oid" href="#10a">10a</a>Каталог статей — главная статья + сетка</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Предложить материал</div></div>
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0"><span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">СТАТЬИ</span><span class="mut" style="font-size:13px">Гид по Гудаури · новости · инструкции</span></div><div class="sec" style="border-bottom:none;padding:16px 22px 0"><div class="r" style="gap:8px;flex-wrap:wrap"><span class="subcat on">Все</span><span class="subcat">Новости</span><span class="subcat">Погода и сезон</span><span class="subcat">Трассы</span><span class="subcat">Новичкам</span><span class="subcat">Безопасность</span><span class="subcat">Маршруты</span><span class="subcat">События</span></div></div><div class="sec"><div class="box r" style="padding:0;gap:0;overflow:hidden;margin-bottom:14px"><div class="ph" style="width:300px;height:190px;flex:none"></div><div class="c" style="flex:1;padding:16px;gap:8px;justify-content:center"><span class="tag" style="align-self:flex-start">Главное · Трассы</span><span style="font-size:24px;color:#111;line-height:1.15">Открытие сезона 2026: какие трассы уже работают</span><div class="ln" style="width:90%"></div><div class="ln" style="width:70%"></div><span class="mut" style="font-size:12px">Обновлено сегодня · 4 мин чтения</span></div></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"><div class="box c" style="padding:8px;gap:6px"><div class="ph" style="height:110px"></div><span class="tag" style="align-self:flex-start">Новичкам</span><span style="font-size:15px;line-height:1.2">Первый день в Гудаури: с чего начать</span><span class="mut" style="font-size:11.5px">3 мин · вчера</span></div><div class="box c" style="padding:8px;gap:6px"><div class="ph" style="height:110px"></div><span class="tag" style="align-self:flex-start">Транспорт</span><span style="font-size:15px;line-height:1.2">Как добраться из аэропорта Тбилиси</span><span class="mut" style="font-size:11.5px">5 мин</span></div><div class="box c" style="padding:8px;gap:6px"><div class="ph" style="height:110px"></div><span class="tag" style="align-self:flex-start">Безопасность</span><span style="font-size:15px;line-height:1.2">Фрирайд и лавинная безопасность</span><span class="mut" style="font-size:11.5px">7 мин · важно</span></div><div class="box c" style="padding:8px;gap:6px"><div class="ph" style="height:110px"></div><span class="tag" style="align-self:flex-start">Еда и места</span><span style="font-size:15px;line-height:1.2">Где вкусно поесть у склона</span><span class="mut" style="font-size:11.5px">4 мин</span></div><div class="box c" style="padding:8px;gap:6px"><div class="ph" style="height:110px"></div><span class="tag" style="align-self:flex-start">Погода</span><span style="font-size:15px;line-height:1.2">Прогноз и снежный покров на неделю</span><span class="mut" style="font-size:11.5px">2 мин</span></div><div class="box c" style="padding:8px;gap:6px"><div class="ph" style="height:110px"></div><span class="tag" style="align-self:flex-start">Маршруты</span><span style="font-size:15px;line-height:1.2">Топ-5 экскурсий из Гудаури</span><span class="mut" style="font-size:11.5px">6 мин</span></div></div></div><div class="sec r" style="justify-content:space-between;align-items:center;background:#f6f4f0"><div class="c"><span style="font-size:18px;color:#111">Подписка на новости курорта</span><span class="mut" style="font-size:12.5px">погода, трассы и события — раз в неделю</span></div><div class="r" style="gap:8px"><div class="box" style="width:200px;padding:10px 12px"><div class="ln" style="width:60%"></div></div><div class="btn">Подписаться</div></div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+  <div class="dv-opt" id="10b" data-screen-label="10b Страница статьи"><div class="dv-olabel"><a class="dv-oid" href="#10b">10b</a>Страница статьи — оглавление + текст + связанное</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Предложить материал</div></div>
+<div class="c" style="padding:16px 22px 8px;gap:6px"><span class="mut" style="font-size:12px">Статьи · Трассы</span><span style="font-size:32px;color:#111;line-height:1.1;max-width:560px">Открытие сезона 2026: какие трассы уже работают</span><span class="mut" style="font-size:12.5px">Обновлено сегодня · 4 мин · редакция My Gudauri</span></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:8px 22px 24px">
+<div class="c" style="flex:1;gap:16px">
+<div class="ph" style="height:240px"></div>
+<div class="c" style="gap:8px"><div class="lnd" style="width:40%;height:12px"></div><div class="ln" style="width:100%"></div><div class="ln" style="width:98%"></div><div class="ln" style="width:70%"></div><div class="ln" style="width:100%;margin-top:6px"></div><div class="ln" style="width:92%"></div><div class="ln" style="width:55%"></div></div>
+<div class="box r" style="padding:10px 12px;gap:10px;align-items:center"><span style="font-size:18px">ℹ</span><span style="font-size:13px;color:#4a4a4a">Часть трасс может закрываться из-за погоды — проверяйте статус подъёмников.</span></div>
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px"><span style="font-size:22px;color:#111">Связанные предложения</span><div class="r" style="gap:10px"><div class="box c" style="flex:1;padding:8px;gap:5px"><div class="ph" style="height:70px"></div><span style="font-size:13px">Инструктор для новичка</span></div><div class="box c" style="flex:1;padding:8px;gap:5px"><div class="ph" style="height:70px"></div><span style="font-size:13px">Прокат: комплект лыжи</span></div><div class="box c" style="flex:1;padding:8px;gap:5px"><div class="ph" style="height:70px"></div><span style="font-size:13px">Трансфер из аэропорта</span></div></div></div>
+</div>
+<div class="c" style="width:220px;flex:none;gap:10px;margin-top:4px">
+<div class="box c" style="padding:12px 14px;gap:8px;border-radius:12px"><span class="mut" style="font-size:11.5px">Содержание</span><span style="font-size:13px;border-left:2px solid #333;padding-left:8px">Что открыто сейчас</span><span style="font-size:13px;color:#8f8d89;padding-left:8px">Подъёмники</span><span style="font-size:13px;color:#8f8d89;padding-left:8px">Уровни трасс</span><span style="font-size:13px;color:#8f8d89;padding-left:8px">Погода и безопасность</span></div>
+<div class="box c" style="padding:12px 14px;gap:6px;border-radius:12px;background:#f6f4f0"><span style="font-size:14px">Нужна помощь с выбором?</span><span class="mut" style="font-size:12px">Напишите менеджеру в WhatsApp</span><div class="bo" style="padding:8px">Связаться</div></div>
+</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="colhdr" style="grid-template-columns:150px 1fr"><div></div><div>Информация, поиск и личный кабинет</div></div>
+<div class="mrow" style="grid-template-columns:150px 1fr">
+  <div class="rowlbl"><b>О Гудаури</b><span>информационная страница курорта</span></div>
+  <div class="dv-opt" id="11a"><div class="dv-olabel"><a class="dv-oid" href="#11a">11a</a>О Гудаури — обзор курорта</div>
+<div class="dv-card wf" style="width:100%">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:16px;font-size:15px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Предложить услугу</div></div>
+<div class="ph r" style="height:200px;border-radius:0;justify-content:center"><span style="font-size:48px;color:#555;letter-spacing:1px">О ГУДАУРИ</span></div>
+<div class="sec"><div class="r" style="gap:20px;align-items:flex-start"><div class="c" style="flex:1;gap:6px"><span style="font-size:24px;color:#111">Горный курорт на высоте 2000 м</span><div class="ln" style="width:100%"></div><div class="ln" style="width:95%"></div><div class="ln" style="width:60%"></div></div><div class="r" style="gap:10px"><div class="box c" style="padding:10px 14px;gap:2px;align-items:center"><span style="font-size:22px;color:#111">2196 м</span><span class="mut" style="font-size:11px">база</span></div><div class="box c" style="padding:10px 14px;gap:2px;align-items:center"><span style="font-size:22px;color:#111">3307 м</span><span class="mut" style="font-size:11px">вершина</span></div><div class="box c" style="padding:10px 14px;gap:2px;align-items:center"><span style="font-size:22px;color:#111">70 км</span><span class="mut" style="font-size:11px">трасс</span></div></div></div></div>
+<div class="sec"><div class="c" style="gap:12px"><span style="font-size:20px;color:#111">Что важно знать</span><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="box c" style="padding:12px;gap:6px"><div class="box" style="width:26px;height:26px;border-radius:7px"></div><span style="font-size:16px">Сезон и климат</span><div class="ln" style="width:90%"></div><div class="ln" style="width:60%"></div></div>
+<div class="box c" style="padding:12px;gap:6px"><div class="box" style="width:26px;height:26px;border-radius:7px"></div><span style="font-size:16px">Подъёмники и зоны</span><div class="ln" style="width:90%"></div><div class="ln" style="width:55%"></div></div>
+<div class="box c" style="padding:12px;gap:6px"><div class="box" style="width:26px;height:26px;border-radius:7px"></div><span style="font-size:16px">Уровни трасс</span><div class="ln" style="width:90%"></div><div class="ln" style="width:65%"></div></div>
+<div class="box c" style="padding:12px;gap:6px"><div class="box" style="width:26px;height:26px;border-radius:7px"></div><span style="font-size:16px">Как добраться</span><div class="ln" style="width:90%"></div><div class="ln" style="width:50%"></div></div>
+<div class="box c" style="padding:12px;gap:6px"><div class="box" style="width:26px;height:26px;border-radius:7px"></div><span style="font-size:16px">Безопасность и медпомощь</span><div class="ln" style="width:90%"></div><div class="ln" style="width:60%"></div></div>
+<div class="box c" style="padding:12px;gap:6px"><div class="box" style="width:26px;height:26px;border-radius:7px"></div><span style="font-size:16px">Связь, деньги, магазины</span><div class="ln" style="width:90%"></div><div class="ln" style="width:55%"></div></div>
+</div></div></div>
+<div class="sec"><div class="c" style="gap:8px"><span style="font-size:20px;color:#111">Карта районов и подъёмников</span><div class="ph r" style="height:220px;justify-content:center;font-size:14px;color:#555">схема курорта · зоны катания</div></div></div>
+<div class="sec r" style="gap:24px;align-items:flex-start;background:#f6f4f0"><div class="c" style="width:190px;flex:none"><span class="mut" style="font-size:12.5px">Frequently Asked Questions</span><span style="font-size:38px;color:#111">FAQ</span></div><div class="c" style="flex:1;gap:8px"><div class="acc"><span>Когда лучший сезон для катания?</span><span>+</span></div><div class="acc"><span>Нужна ли страховка?</span><span>+</span></div><div class="acc"><span>Есть ли трассы для новичков?</span><span>+</span></div></div></div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:44px"><span style="font-size:15px">Mu Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:60px"></div><div class="ln" style="width:60px"></div><div class="ln" style="width:60px"></div><span class="mut" style="font-size:12px;margin-left:auto">© 2026 MuGudauri, Inc.</span></div>
+</div>
+</div>
+</div>
+
+<div class="mrow" style="grid-template-columns:150px 1fr">
+  <div class="rowlbl"><b>Система</b><span>поиск, избранное, брони, профиль, помощь</span></div>
+  <div class="c" style="gap:16px">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start">
+
+      <div class="dv-opt" id="12a" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#12a">12a</a>Поиск по всему сервису</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">/search</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <div class="box r" style="padding:10px 12px;gap:8px"><span style="font-size:15px">⌕</span><div class="ln" style="width:60%"></div></div>
+          <div class="r" style="gap:6px;flex-wrap:wrap"><span class="pill" style="background:#6b6966;color:#f4f3f1">Всё</span><span class="pill">Инструкторы</span><span class="pill">Активности</span><span class="pill">Жильё</span><span class="pill">Места</span></div>
+          <span class="mut" style="font-size:11.5px">18 результатов</span>
+          <div class="c" style="gap:8px"><div class="box r" style="padding:8px;gap:8px"><div class="ph" style="width:44px;height:44px;flex:none"></div><div class="c" style="flex:1;gap:3px"><div class="ln" style="width:70%"></div><div class="ln s" style="width:40%;height:6px"></div></div></div><div class="box r" style="padding:8px;gap:8px"><div class="ph" style="width:44px;height:44px;flex:none"></div><div class="c" style="flex:1;gap:3px"><div class="ln" style="width:60%"></div><div class="ln s" style="width:45%;height:6px"></div></div></div><div class="box r" style="padding:8px;gap:8px"><div class="ph" style="width:44px;height:44px;flex:none"></div><div class="c" style="flex:1;gap:3px"><div class="ln" style="width:65%"></div><div class="ln s" style="width:35%;height:6px"></div></div></div></div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="12b" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#12b">12b</a>Избранное</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">/favorites</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <span style="font-size:17px;font-weight:600;color:#333">Избранное</span>
+          <div class="r" style="gap:6px"><span class="pill" style="background:#6b6966;color:#f4f3f1">Инструкторы</span><span class="pill">Жильё</span><span class="pill">Активности</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="box c" style="padding:8px;gap:5px"><div class="ph" style="height:70px"></div><div class="ln" style="width:70%"></div><div class="ln s" style="width:45%;height:6px"></div></div><div class="box c" style="padding:8px;gap:5px"><div class="ph" style="height:70px"></div><div class="ln" style="width:65%"></div><div class="ln s" style="width:50%;height:6px"></div></div></div>
+          <div class="box r" style="padding:9px 12px;justify-content:space-between;background:#f6f4f0"><span style="font-size:12.5px;color:#4a4a4a">Сравнить выбранное</span><span style="font-size:13px">→</span></div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="12c" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#12c">12c</a>Мои бронирования</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">/account/bookings</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <span style="font-size:17px;font-weight:600;color:#333">Мои бронирования</span>
+          <div class="r" style="gap:6px;flex-wrap:wrap"><span class="pill" style="background:#6b6966;color:#f4f3f1">Все</span><span class="pill">Ждут подтверждения</span><span class="pill">К оплате</span><span class="pill">Подтверждены</span></div>
+          <div class="box c" style="padding:10px;gap:6px"><div class="r" style="justify-content:space-between"><span style="font-size:13px">#GD-2041 · Инструктор</span><span class="pill" style="font-size:10px;padding:1px 8px;background:#f0e7dc;color:#a06b4a">Проверяется</span></div><div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">12–15 янв · 8 ч</span><span style="font-size:12.5px">647 gel</span></div><div class="r" style="gap:6px"><div class="bo" style="padding:6px 10px;font-size:12px">Связаться</div><div class="bo" style="padding:6px 10px;font-size:12px">Отменить</div></div></div>
+          <div class="box c" style="padding:10px;gap:6px"><div class="r" style="justify-content:space-between"><span style="font-size:13px">#GD-2038 · Трансфер</span><span class="pill" style="font-size:10px;padding:1px 8px;background:#d0e0d3">К оплате</span></div><div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">10 янв · аэропорт</span><span style="font-size:12.5px">180 gel</span></div><div class="btn" style="padding:6px;font-size:12px">Оплатить</div></div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="12d" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#12d">12d</a>Профиль пользователя</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">/account</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <div class="r" style="gap:10px;align-items:center"><div class="ph" style="width:48px;height:48px;border-radius:50%;flex:none"></div><div class="c" style="gap:3px"><span style="font-size:15px;color:#333">Гость</span><span class="mut" style="font-size:11.5px">+995 ··· · RU</span></div></div>
+          <div class="c" style="gap:7px"><div class="box r" style="padding:10px 12px;justify-content:space-between"><span style="font-size:13px">Мои бронирования</span><span>→</span></div><div class="box r" style="padding:10px 12px;justify-content:space-between"><span style="font-size:13px">Избранное</span><span>→</span></div><div class="box r" style="padding:10px 12px;justify-content:space-between"><span style="font-size:13px">Контактные данные</span><span>→</span></div><div class="box r" style="padding:10px 12px;justify-content:space-between"><span style="font-size:13px">Язык · RU / EN / GE</span><span>→</span></div></div>
+          <div class="bo" style="padding:9px">Выйти</div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="12e" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#12e">12e</a>Поддержка</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">/support</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <span style="font-size:17px;font-weight:600;color:#333">Помощь и контакты</span>
+          <div class="box c" style="padding:12px;gap:6px;background:#f6f4f0"><span style="font-size:14px">Нужна помощь с выбором?</span><span class="mut" style="font-size:12px">Ответим в мессенджере в течение часа</span><div class="r" style="gap:8px"><div class="btn" style="padding:8px 12px;font-size:13px">WhatsApp</div><div class="bo" style="padding:8px 12px;font-size:13px">Telegram</div></div></div>
+          <div class="c" style="gap:6px"><span class="mut" style="font-size:11.5px">Популярные вопросы</span><div class="acc" style="padding:9px 12px;font-size:13px"><span>Как проходит бронирование?</span><span>+</span></div><div class="acc" style="padding:9px 12px;font-size:13px"><span>Когда списывается оплата?</span><span>+</span></div><div class="acc" style="padding:9px 12px;font-size:13px"><span>Как отменить заявку?</span><span>+</span></div></div>
+          <div class="c" style="gap:4px"><span class="mut" style="font-size:11.5px">Форма обратного звонка</span><div class="box" style="padding:10px 12px"><div class="ln" style="width:55%"></div></div></div>
+        </div>
+      </div>
+      </div>
+
+    </div>
+    <span class="note">Сквозные экраны: единый поиск по всем сущностям, избранное со сравнением, статусы заявок из общей логики бронирования, профиль с языками и поддержка с быстрым контактом менеджера</span>
+  </div>
+</div>
+
+<div class="colhdr" style="grid-template-columns:150px 1fr"><div></div><div>Бронирование — единый флоу для всех категорий</div></div>
+<div class="mrow" style="grid-template-columns:150px 1fr">
+  <div class="rowlbl"><b>Бронирование</b><span>один сценарий: заявка → подтверждение менеджером → оплата</span></div>
+  <div class="c" style="gap:16px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start">
+
+      <div class="dv-opt" id="6a" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#6a">6a</a>Шаг 1 · Дата и время</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">Шаг 1 из 4</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <div class="r" style="gap:8px"><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div><div class="ln" style="width:24%;height:5px"></div><div class="ln" style="width:24%;height:5px"></div><div class="ln" style="width:24%;height:5px"></div></div>
+          <span style="font-size:17px;font-weight:600;color:#333">Когда удобно?</span>
+          <div class="box r" style="gap:9px;padding:10px;align-items:flex-start"><div class="ph" style="width:34px;height:34px;flex:none"></div><div class="c" style="flex:1;gap:3px"><span style="font-size:13px;color:#4a4a4a">Михаил Андреев · Инструктор</span><span class="mut" style="font-size:11px">8 часов · 2 человека</span></div></div>
+          <div class="c" style="gap:6px"><span class="mut" style="font-size:11.5px">Даты</span><div class="box" style="padding:10px;height:120px"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px"><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div><div style="height:16px;border-radius:3px;background:#dcdad7"></div></div></div></div>
+          <div class="c" style="gap:6px"><span class="mut" style="font-size:11.5px">Время начала</span><div class="r" style="gap:6px"><span class="pill" style="background:#6b6966;color:#f4f3f1">09:00</span><span class="pill">11:00</span><span class="pill">14:00</span></div></div>
+          <div class="btn" style="padding:9px">Далее</div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="6b" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#6b">6b</a>Шаг 2 · Ваши данные</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">Шаг 2 из 4</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <div class="r" style="gap:8px"><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div><div class="ln" style="width:24%;height:5px"></div><div class="ln" style="width:24%;height:5px"></div></div>
+          <span style="font-size:17px;font-weight:600;color:#333">Контактные данные</span>
+          <div class="c" style="gap:8px">
+            <div class="c" style="gap:4px"><span class="mut" style="font-size:11.5px">Имя</span><div class="box" style="padding:10px 12px"><div class="ln" style="width:55%"></div></div></div>
+            <div class="c" style="gap:4px"><span class="mut" style="font-size:11.5px">Телефон / WhatsApp</span><div class="box" style="padding:10px 12px"><div class="ln" style="width:70%"></div></div></div>
+            <div class="c" style="gap:4px"><span class="mut" style="font-size:11.5px">Telegram (необязательно)</span><div class="box" style="padding:10px 12px"><div class="ln" style="width:45%"></div></div></div>
+            <div class="c" style="gap:4px"><span class="mut" style="font-size:11.5px">Уровень катания</span><div class="r" style="gap:6px"><span class="pill" style="background:#6b6966;color:#f4f3f1">Новичок</span><span class="pill">Средний</span><span class="pill">Уверенный</span></div></div>
+            <div class="c" style="gap:4px"><span class="mut" style="font-size:11.5px">Комментарий</span><div class="box" style="padding:10px 12px;height:48px"></div></div>
+          </div>
+          <div class="btn" style="padding:9px">Отправить заявку</div>
+          <span class="mut" style="font-size:10.5px;text-align:center">Оплата — после подтверждения менеджером</span>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="6c" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#6c">6c</a>Шаг 3 · Заявка принята</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">Шаг 3 из 4</span></div>
+        <div class="c" style="padding:22px 14px;gap:14px;align-items:center;text-align:center">
+          <div class="box" style="width:56px;height:56px;border-radius:50%;background:#d0e0d3"></div>
+          <span style="font-size:18px;font-weight:600;color:#333">Заявка отправлена</span>
+          <span class="mut" style="font-size:12.5px;line-height:1.5">Номер брони <b style="color:#4a4a4a">#GD-2041</b>. Менеджер проверит доступность и напишет в WhatsApp в течение 1 часа.</span>
+          <div class="box c" style="width:100%;padding:12px;gap:8px;text-align:left">
+            <div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">Инструктор</span><span style="font-size:12.5px">Михаил Андреев</span></div>
+            <div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">Даты</span><span style="font-size:12.5px">12–15 января</span></div>
+            <div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">Часы · люди</span><span style="font-size:12.5px">8 ч · 2</span></div>
+            <div class="r" style="justify-content:space-between;border-top:1px solid #e6e4e1;padding-top:8px"><span class="mut" style="font-size:11.5px">Ориентир. сумма</span><span style="font-size:13px;font-weight:600">647 gel</span></div>
+          </div>
+          <div class="bo" style="width:100%;padding:9px">Открыть чат в WhatsApp</div>
+        </div>
+      </div>
+      </div>
+
+      <div class="dv-opt" id="6d" style="gap:9px"><div class="dv-olabel"><a class="dv-oid" href="#6d">6d</a>Шаг 4 · Подтверждение и оплата</div>
+      <div class="dv-card wf" style="width:100%">
+        <div class="nav" style="padding:9px 14px;gap:10px"><span style="font-size:14px;font-weight:600">My Gudauri.</span><div style="flex:1"></div><span class="mut" style="font-size:11px">Шаг 4 из 4</span></div>
+        <div class="c" style="padding:14px;gap:12px">
+          <div class="r" style="gap:8px"><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div><div class="lnd" style="width:24%;height:5px;background:#6b6966"></div></div>
+          <div class="box r" style="gap:9px;padding:10px;background:#d0e0d3"><div class="ph" style="width:28px;height:28px;flex:none;background:#bcd0c0"></div><div class="c"><span style="font-size:13px;font-weight:600;color:#3d3d3d">Доступность подтверждена</span><span class="mut" style="font-size:11px">Менеджер согласовал время</span></div></div>
+          <span style="font-size:16px;font-weight:600;color:#333">Оплата</span>
+          <div class="box c" style="padding:12px;gap:8px">
+            <div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">8 ч × 2 чел</span><span style="font-size:12.5px">647 gel</span></div>
+            <div class="r" style="justify-content:space-between"><span class="mut" style="font-size:11.5px">Предоплата 30%</span><span style="font-size:13px;font-weight:600">194 gel</span></div>
+          </div>
+          <div class="c" style="gap:6px"><span class="mut" style="font-size:11.5px">Способ оплаты</span><div class="box r" style="padding:10px 12px;justify-content:space-between"><div class="ln" style="width:50%"></div><div class="ph" style="width:30px;height:18px"></div></div></div>
+          <div class="btn" style="padding:9px">Оплатить 194 gel</div>
+          <span class="mut" style="font-size:10.5px;text-align:center">После оплаты придёт письмо с контактами инструктора</span>
+        </div>
+      </div>
+      </div>
+
+    </div>
+    <span class="note">Флоу общий для всех категорий — меняются только параметры на шаге 1 (даты/часы/направление/размер)</span>
+  </div>
+</div>
+
+</div>
+</div>
+
+</x-dc>
+</body>
+</html>

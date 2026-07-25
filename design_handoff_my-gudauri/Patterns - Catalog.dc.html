@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/my-gudauri-design-system-9a73c774-a7a5-42e2-913a-9ed88044ab44/tokens/fonts.css">
+<style>body{margin:0;background:#eef2f6;font-family:'Geist',-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}a{color:#2a78d6}a:hover{color:#df4b3f}</style>
+</helmet>
+<div style="padding: 56px 64px 80px; width: fit-content;">
+
+  <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px;">
+    <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #7a5ea8; color: #fff; border-radius: 5px; width: fit-content;">Patterns / Catalog</span>
+    <span style="font-size: 28px; font-weight: 600; letter-spacing: -0.03em; color: #26282b;">Секции мега-шаблона каталога</span>
+    <span style="font-size: 13.5px; color: #5f6469; max-width: 760px; line-height: 1.55;">Каждая секция — отдельный компонент. Утверждаем по одной, затем собираем каталоги категорий из instances. <a href="Вайфрейм Категории.dc.html">Мега-шаблон каталога и каталог инструкторов</a> уже пересобраны из этих секций — внешне без изменений.</span>
+  </div>
+
+  <div style="display: flex; gap: 16px; margin: 24px 0 48px; align-items: stretch;">
+    <div style="width: 440px; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; font-size: 12.5px; color: #3d4248; line-height: 1.6;">
+      <div style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #b3452f; margin-bottom: 6px;">Missing components — нет в дизайн-системе</div>
+      Прорисовать до сборки hi-fi, дубликаты не создавать: <b style="font-weight: 600;">SiteNavbar · SiteFooter · CategoryTab · FilterControl</b> (пилюля-дропдаун) <b style="font-weight: 600;">· ResultCount · PromoBanner</b> (контейнер-слот) <b style="font-weight: 600;">· BenefitCard · BookingStep · MediaPlaceholder</b>
+    </div>
+    <div style="width: 440px; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; font-size: 12.5px; color: #3d4248; line-height: 1.6;">
+      <div style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #2e7d4f; margin-bottom: 6px;">Уже есть в дизайн-системе — реюз</div>
+      Не перерисовывать, брать из бандла: <b style="font-weight: 600;">Button · Pill · SectionHeading · Badge · ListingCard</b> (+ Pill / Rating / Price) <b style="font-weight: 600;">· InstructorCard · FaqAccordion · Container</b>
+    </div>
+    <div style="width: 440px; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; font-size: 12.5px; color: #3d4248; line-height: 1.6;">
+      <div style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 6px;">Как читать</div>
+      Пунктирное подчёркивание — текст, который задаёт шаблон-плейсхолдер. Серый чип — значение из БД. У каждой секции есть вариант <b style="font-weight: 600;">mode="filled"</b>: чипы становятся голубыми (контент категории), как в каталоге инструкторов.
+    </div>
+  </div>
+
+  <!-- Global / SiteNavbar -->
+  <div style="margin-bottom: 52px;" data-screen-label="SiteNavbar">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #3f403d; color: #fff; border-radius: 5px;">Global / SiteNavbar</span>
+      <span style="font-size: 12px; color: #8a9099;">SiteNavbar.dc.html</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Глобальная навигация, одинакова на всех страницах — меняется только активный пункт.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>Wordmark · NavLink ×N (активный выделен) · переключатель языка · Button «Оставить заявку».</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Обязательны wordmark, категории, CTA; язык — опционален.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Только какой пункт активен.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>template / filled.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — одна пилюля-строка. Mobile — wordmark + бургер, категории в меню, CTA остаётся.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="border: 1.5px solid #c9cdd2; border-radius: 999px; padding: 12px 24px; display: flex; align-items: center; gap: 24px;">
+          <span style="font-family: 'Paytone One', sans-serif; font-size: 16px; color: #55595e;"><span style="color: #aab1b8;">My</span> Gudauri</span>
+          <div style="display: flex; gap: 18px; align-items: center; flex: 1; font-size: 13.5px; color: #8a9099;">
+            <span style="color: #26282b; font-weight: 600; background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 6px;">Текущая категория</span>
+            <span>Остальные категории…</span>
+          </div>
+          <span style="border: 1.5px solid #c9cdd2; border-radius: 999px; padding: 7px 15px; font-size: 12.5px; color: #55595e;">Ru</span>
+          <span style="border: 1.5px solid #55595e; border-radius: 999px; padding: 7px 18px; font-size: 12.5px; color: #26282b; font-weight: 600;">Оставить заявку</span>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / Hero -->
+  <div style="margin-bottom: 52px;" data-screen-label="Catalog Hero">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #55595e; color: #fff; border-radius: 5px;">Catalog / Hero</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogHero.dc.html</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Заголовок каталога — что это за раздел и по каким признакам выбирать.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>SectionHeading, центрованный вариант: кикер · H1 · описание (max-width 640).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Обязателен H1; кикер и описание опциональны.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Все три текста — из настроек категории.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>template / filled.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — по центру, H1 52px. Mobile — H1 32–36px, боковые отступы меньше.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding: 26px 48px 6px;">
+          <span style="font-size: 12px; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 600; color: #6b7076;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 2px;">Кикер категории</span></span>
+          <span style="font-size: 52px; font-weight: 600; letter-spacing: -0.04em; color: #26282b; line-height: 1.05;"><span style="border-bottom: 2px dashed #b9bec4; padding-bottom: 4px;">H1 — название категории</span></span>
+          <span style="font-size: 15.5px; line-height: 1.55; color: #6b7076; max-width: 640px;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 2px;">Описание категории — 1–2 предложения о том, что здесь можно выбрать и по каким признакам сравнивать.</span></span>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / PromoBanner -->
+  <div style="margin-bottom: 52px;" data-screen-label="PromoBanner">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #3f97e0; color: #fff; border-radius: 5px;">Catalog / PromoBanner</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogPromoBanner.dc.html · слот</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Слот произвольного промо-контента категории (промо, условия, цены).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>Контейнер-слот; наполнение — произвольная вёрстка. У инструкторов: «Персональный подбор» + полоса «Единая ставка».</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Блок целиком опционален, 0–2 полосы.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Весь контент. Не зашивается в общую секцию — кастомная вёрстка живёт на странице категории, секция даёт только слот.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>placeholder (пунктир) / кастомная вёрстка per-категория.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — полная ширина. Mobile — полосы складываются в столбец, CTA на всю ширину.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="border: 1.5px dashed #aab1b8; background: #f6f6f3; border-radius: 20px; padding: 34px 32px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;">
+          <span style="font-size: 15px; font-weight: 600; color: #55595e;">Кастомный баннер категории</span>
+          <span style="font-size: 12.5px; color: #8a9099; max-width: 520px; line-height: 1.5;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">произвольная вёрстка и текст — заводится вручную для каждой категории</span> · может быть 1–2 полосы (промо, условия, цены)</span>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / CategoryTabs -->
+  <div style="margin-bottom: 52px;" data-screen-label="CategoryTabs">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #55595e; color: #fff; border-radius: 5px;">Catalog / CategoryTabs</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogCategoryTabs.dc.html · внутри: CategoryTab ×N</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Первый уровень навигации по разделу — значения главного поля БД категории.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>Подпись раздела · CategoryTab ×N (лейбл, подпись, счётчик), таб «Все» — первым.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Обязательны «Все» + ≥1 подкатегория и счётчики; подписи под лейблами опциональны.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Список табов и счётчики N из БД.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>CategoryTab: активный / неактивный; секция: template / filled.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — одна строка. Mobile — горизонтальный скролл табов, подпись раздела сверху.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="display: flex; align-items: center; gap: 24px; border: 1.5px solid #c9cdd2; border-radius: 20px; padding: 18px 24px;">
+          <div style="display: flex; flex-direction: column; gap: 3px; min-width: 210px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #8a9099;">Категории раздела</span>
+            <span style="font-size: 12.5px; color: #aab1b8;">Сначала направление, затем фильтры ниже.</span>
+          </div>
+          <div style="display: flex; gap: 10px; flex: 1;">
+            <span style="border: 1.5px solid #26282b; background: #f6f6f3; border-radius: 14px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 12px;"><span style="display: flex; flex-direction: column;"><span style="font-size: 13.5px; font-weight: 600; color: #26282b;">Все</span><span style="font-size: 11px; color: #8a9099;">весь раздел</span></span><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 999px; padding: 2px 9px; font-size: 12px; color: #3d4248; font-weight: 600;">N</span></span>
+            <span style="border: 1.5px solid #c9cdd2; border-radius: 14px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 12px;"><span style="display: flex; flex-direction: column;"><span style="font-size: 13.5px; font-weight: 600; color: #55595e;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 5px;">Подкатегория A</span></span><span style="font-size: 11px; color: #aab1b8;">подпись</span></span><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 999px; padding: 2px 9px; font-size: 12px; color: #3d4248; font-weight: 600;">N</span></span>
+            <span style="border: 1.5px solid #c9cdd2; border-radius: 14px; padding: 10px 18px; display: inline-flex; align-items: center; gap: 12px;"><span style="display: flex; flex-direction: column;"><span style="font-size: 13.5px; font-weight: 600; color: #55595e;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 5px;">Подкатегория B</span></span><span style="font-size: 11px; color: #aab1b8;">подпись</span></span><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 999px; padding: 2px 9px; font-size: 12px; color: #3d4248; font-weight: 600;">N</span></span>
+            <span style="border: 1.5px dashed #c9cdd2; border-radius: 14px; padding: 10px 18px; display: inline-flex; align-items: center; color: #aab1b8; font-size: 12.5px;">…значения главного поля БД категории</span>
+          </div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / FilterToolbar -->
+  <div style="margin-bottom: 52px;" data-screen-label="FilterToolbar">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #55595e; color: #fff; border-radius: 5px;">Catalog / FilterToolbar + ResultsHeader</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogFilterToolbar.dc.html · внутри: FilterControl ×N, ResultCount</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Уточнение выборки внутри выбранного таба + счётчик результатов.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>SectionHeading S · FilterControl (пилюля-дропдаун) ×N · ResultCount справа. ResultsHeader в текущем дизайне совмещён с тулбаром — отдельная секция не нужна.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Обязательны ≥1 фильтр и счётчик; кикер опционален.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Набор фильтров = поля БД категории; словоформа счётчика («8 инструкторов»).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>FilterControl: закрыт / открыт / активен (коралловый в hi-fi); секция: template / filled.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — фильтры слева, счётчик справа. Mobile — кнопка «Фильтры» открывает шторку, счётчик под ней.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding: 4px 4px 0;">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #8a9099;">Параметры подбора</span>
+              <span style="font-size: 21px; font-weight: 600; letter-spacing: -0.02em; color: #26282b;">Найдите подходящее</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <span style="border: 1.5px solid #c9cdd2; border-radius: 999px; padding: 9px 16px; font-size: 13px; color: #3d4248; display: inline-flex; align-items: center; gap: 8px;">Фильтр 1 <span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 6px; font-size: 12px;">значения поля БД</span> ▾</span>
+              <span style="border: 1.5px solid #c9cdd2; border-radius: 999px; padding: 9px 16px; font-size: 13px; color: #3d4248; display: inline-flex; align-items: center; gap: 8px;">Фильтр 2 <span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 6px; font-size: 12px;">значения поля БД</span> ▾</span>
+              <span style="border: 1.5px dashed #c9cdd2; border-radius: 999px; padding: 9px 16px; font-size: 13px; color: #aab1b8;">…набор фильтров свой у категории</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2px; text-align: right; flex: none; padding-bottom: 2px;">
+            <span style="font-size: 13px; color: #8a9099;">Подобрано для вас</span>
+            <span style="font-size: 17px; font-weight: 600; color: #26282b;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 6px;">N</span> объектов</span>
+          </div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / ListingGrid -->
+  <div style="margin-bottom: 52px;" data-screen-label="ListingGrid">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #55595e; color: #fff; border-radius: 5px;">Catalog / ListingGrid</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogListingGrid.dc.html · внутри: ListingCard ×N</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Результаты выборки — карточки объектов из БД.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>ListingCard ×N: MediaPlaceholder + FilterChip-пилюли · название + Badge · ключевые теги · метрика (Rating или цена) · ссылка «Подробнее ↗».</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Обязательны медиа, название, ссылка; бейдж, пилюли и метрика — опциональны.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Состав плашек — свой набор полей у каждой категории; число карточек из БД; клик → /:category/:slug.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>Карточка с рейтингом (инструкторы) / с ценой (прокат, туры); hover-lift; карточка реюзается в «Другие предложения» на странице объекта.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — 4 колонки. Mobile — 1–2 колонки, подвал карточки не меняется.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+          <div style="border: 1.5px solid #c9cdd2; border-radius: 18px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="height: 190px; background: #f1f3f5; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 9px;">
+              <svg width="100%" height="100%" style="position: absolute; inset: 0;" preserveAspectRatio="none"><line x1="0" y1="0" x2="100%" y2="100%" stroke="#dfe3e8" stroke-width="1.5"></line><line x1="100%" y1="0" x2="0" y2="100%" stroke="#dfe3e8" stroke-width="1.5"></line></svg>
+              <div style="display: flex; gap: 4px; position: relative;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; color: #3d4248;">теги-пилюли верх</span></div>
+              <div style="display: flex; gap: 4px; position: relative;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 999px; padding: 2px 8px; font-size: 10.5px; color: #3d4248;">теги-пилюли низ</span></div>
+            </div>
+            <div style="padding: 13px 14px 15px; display: flex; flex-direction: column; gap: 7px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;"><span style="font-size: 14.5px; font-weight: 600; color: #26282b;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 5px;">Название объекта</span></span><span style="border: 1px solid #c9cdd2; border-radius: 999px; padding: 2px 8px; font-size: 10px; color: #8a9099;">Бейдж</span></div>
+              <span style="font-size: 12px; color: #6b7076;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 5px;">Ключевые теги объекта</span></span>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #dfe3e8; padding-top: 9px; margin-top: 2px;">
+                <span style="font-size: 12px; color: #3d4248;"><span style="background: #eef0f2; box-shadow: inset 0 0 0 1px #dfe3e8; border-radius: 4px; padding: 0 5px;">метрика: рейтинг / цена</span></span>
+                <span style="font-size: 11.5px; color: #55595e; font-weight: 600;">Подробнее ↗</span>
+              </div>
+            </div>
+          </div>
+          <div style="border: 1.5px dashed #c9cdd2; border-radius: 18px; min-height: 150px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 16px; color: #aab1b8; font-size: 12.5px; line-height: 1.5;">…карточка объекта из БД</div>
+          <div style="border: 1.5px dashed #c9cdd2; border-radius: 18px; min-height: 150px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 16px; color: #aab1b8; font-size: 12.5px; line-height: 1.5;">…карточка объекта из БД</div>
+          <div style="border: 1.5px dashed #c9cdd2; border-radius: 18px; min-height: 150px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 16px; color: #aab1b8; font-size: 12.5px; line-height: 1.5;">…карточка объекта из БД</div>
+        </div>
+        <div style="font-size: 11.5px; color: #8a9099; margin-top: 12px;">карточек столько, сколько объектов в БД по табу и фильтрам · состав плашек в карточке — свой набор полей у каждой категории · клик → страница объекта /:category/:slug</div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / BenefitsSection -->
+  <div style="margin-bottom: 52px;" data-screen-label="BenefitsSection">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #3f403d; color: #fff; border-radius: 5px;">Catalog / BenefitsSection</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogBenefits.dc.html · внутри: BenefitCard ×4</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Блок доверия — почему платформа. Общий для всех категорий.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>SectionHeading S · BenefitCard ×4 (номер, тайтл, текст).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Все 4 карточки обязательны.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Только заголовок («…инструкторов My Gudauri»); тексты карточек статичны для всего сайта.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>Нет.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — 4 колонки. Mobile — 2×2 или столбец.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="background: #f6f6f3; border: 1.5px solid #c9cdd2; border-radius: 20px; padding: 28px 32px 30px;">
+          <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #8a9099;">Почему My Gudauri</span>
+            <span style="font-size: 21px; font-weight: 600; letter-spacing: -0.02em; color: #26282b;">Почему выбирают My Gudauri</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+            <div style="background: #fff; border: 1px solid #dfe3e8; border-radius: 14px; padding: 16px 18px;"><div style="font-size: 12px; color: #aab1b8; margin-bottom: 8px;">01</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 6px;">Преимущество</div><div style="font-size: 12px; color: #8a9099; line-height: 1.5;">Один и тот же статичный текст на всех категориях сайта.</div></div>
+            <div style="background: #fff; border: 1px solid #dfe3e8; border-radius: 14px; padding: 16px 18px;"><div style="font-size: 12px; color: #aab1b8; margin-bottom: 8px;">02</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 6px;">Преимущество</div><div style="font-size: 12px; color: #8a9099; line-height: 1.5;">Один и тот же статичный текст на всех категориях сайта.</div></div>
+            <div style="background: #fff; border: 1px solid #dfe3e8; border-radius: 14px; padding: 16px 18px;"><div style="font-size: 12px; color: #aab1b8; margin-bottom: 8px;">03</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 6px;">Преимущество</div><div style="font-size: 12px; color: #8a9099; line-height: 1.5;">Один и тот же статичный текст на всех категориях сайта.</div></div>
+            <div style="background: #fff; border: 1px solid #dfe3e8; border-radius: 14px; padding: 16px 18px;"><div style="font-size: 12px; color: #aab1b8; margin-bottom: 8px;">04</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 6px;">Преимущество</div><div style="font-size: 12px; color: #8a9099; line-height: 1.5;">Один и тот же статичный текст на всех категориях сайта.</div></div>
+          </div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / BookingSteps -->
+  <div style="margin-bottom: 52px;" data-screen-label="BookingSteps">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #3f97e0; color: #fff; border-radius: 5px;">Catalog / BookingSteps</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogBookingSteps.dc.html · внутри: BookingStep ×3</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Объяснить процесс бронирования в этой категории.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>SectionHeading S · BookingStep ×3 (номер, тайтл, текст).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Ровно 3 шага.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Все тексты — свои у категории.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>Размер M (каталог) и S (страница объекта — реюз секции).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — 3 колонки. Mobile — столбец с нумерацией слева.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="padding: 0 4px;">
+          <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #8a9099;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Как это работает</span></span>
+            <span style="font-size: 21px; font-weight: 600; letter-spacing: -0.02em; color: #26282b;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 2px;">Как забронировать — текст свой у категории</span></span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+            <div style="border: 1.5px solid #c9cdd2; border-radius: 16px; padding: 18px 20px;"><div style="font-size: 20px; font-weight: 700; color: #c9cdd2; margin-bottom: 10px;">1</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 5px;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Шаг категории</span></div><div style="font-size: 12.5px; color: #8a9099; line-height: 1.5;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Короткое пояснение шага — своё в каждой категории.</span></div></div>
+            <div style="border: 1.5px solid #c9cdd2; border-radius: 16px; padding: 18px 20px;"><div style="font-size: 20px; font-weight: 700; color: #c9cdd2; margin-bottom: 10px;">2</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 5px;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Шаг категории</span></div><div style="font-size: 12.5px; color: #8a9099; line-height: 1.5;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Короткое пояснение шага — своё в каждой категории.</span></div></div>
+            <div style="border: 1.5px solid #c9cdd2; border-radius: 16px; padding: 18px 20px;"><div style="font-size: 20px; font-weight: 700; color: #c9cdd2; margin-bottom: 10px;">3</div><div style="font-size: 14px; font-weight: 600; color: #26282b; margin-bottom: 5px;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Шаг категории</span></div><div style="font-size: 12.5px; color: #8a9099; line-height: 1.5;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Короткое пояснение шага — своё в каждой категории.</span></div></div>
+          </div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Catalog / FAQSection -->
+  <div style="margin-bottom: 52px;" data-screen-label="FAQSection">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #3f97e0; color: #fff; border-radius: 5px;">Catalog / FAQSection</span>
+      <span style="font-size: 12px; color: #8a9099;">CatalogFAQ.dc.html · внутри: AccordionItem ×3–6</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Снять типовые вопросы категории до заявки.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>SectionHeading S · AccordionItem ×3–6 (вопрос, ±, ответ).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>≥3 вопроса; первый раскрыт — опционально.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Все вопросы и ответы заводятся per-категория.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>Item открыт / закрыт. В hi-fi использовать готовый FaqAccordion из дизайн-системы.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — max-width 860. Mobile — полная ширина.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="padding: 0 4px;">
+          <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 18px;">
+            <span style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; color: #8a9099;">Полезно знать</span>
+            <span style="font-size: 21px; font-weight: 600; letter-spacing: -0.02em; color: #26282b;">Частые вопросы</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px; max-width: 860px;">
+            <div style="border: 1.5px solid #c9cdd2; border-radius: 14px; padding: 15px 20px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="font-size: 14px; font-weight: 600; color: #26282b;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Вопрос категории 1</span></span><span style="color: #8a9099; font-size: 15px;">−</span></div>
+              <div style="font-size: 13px; color: #8a9099; line-height: 1.55; margin-top: 8px; max-width: 640px;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Ответ — вопросы и ответы заводятся отдельно для каждой категории.</span></div>
+            </div>
+            <div style="border: 1.5px solid #c9cdd2; border-radius: 14px; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="font-size: 14px; font-weight: 600; color: #55595e;"><span style="border-bottom: 1.5px dashed #b9bec4; padding-bottom: 1px;">Вопрос категории 2</span></span><span style="color: #8a9099; font-size: 15px;">＋</span></div>
+            <div style="border: 1.5px dashed #c9cdd2; border-radius: 14px; padding: 15px 20px; color: #aab1b8; font-size: 13px;">…3–6 вопросов на категорию</div>
+          </div>
+        </div></div></div>
+    </div>
+  </div>
+
+  <!-- Global / SiteFooter -->
+  <div data-screen-label="SiteFooter">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+      <span style="font: 600 12px ui-monospace, monospace; padding: 4px 8px; background: #3f403d; color: #fff; border-radius: 5px;">Global / SiteFooter</span>
+      <span style="font-size: 12px; color: #8a9099;">SiteFooter.dc.html</span>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: stretch;">
+      <div style="width: 400px; flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; color: #3d4248; line-height: 1.5;">
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Назначение</div>Глобальный футер, одинаков на всех страницах.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Анатомия</div>Wordmark + тэглайн · LinkColumn ×3 (Сервисы, Обзор, Контакты).</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Обязательно / опционально</div>Всё обязательно; тэглайн можно менять.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Данные категории</div>Нет.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Варианты</div>Нет.</div>
+        <div><div style="font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #8a9099; margin-bottom: 2px;">Desktop / mobile</div>Desktop — одна строка. Mobile — колонки ссылок в столбец под wordmark.</div>
+      </div>
+      <div style="flex: none; background: #fff; border: 1px solid #c9cdd2; border-radius: 18px; padding: 24px;"><div style="width: 1116px;"><div style="background: #f6f6f3; border: 1.5px solid #c9cdd2; border-radius: 20px; padding: 28px 32px; display: flex; justify-content: space-between; align-items: flex-start; gap: 32px;">
+          <div style="display: flex; flex-direction: column; gap: 8px; max-width: 300px;">
+            <span style="font-family: 'Paytone One', sans-serif; font-size: 16px; color: #55595e;"><span style="color: #aab1b8;">My</span> Gudauri</span>
+            <span style="font-size: 12.5px; color: #8a9099; line-height: 1.55;">Один и тот же футер на всех страницах сайта.</span>
+          </div>
+          <div style="display: flex; gap: 48px;">
+            <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; color: #8a9099;"><span style="font-weight: 600; color: #55595e; margin-bottom: 2px;">Сервисы</span><span>Инструкторы</span><span>Активности</span><span>Прокат</span><span>Трансфер</span></div>
+            <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; color: #8a9099;"><span style="font-weight: 600; color: #55595e; margin-bottom: 2px;">Обзор</span><span>Жильё</span><span>Туры</span><span>Места</span></div>
+            <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; color: #8a9099;"><span style="font-weight: 600; color: #55595e; margin-bottom: 2px;">Контакты</span><span>+995 123 45 65</span><span>mygudauri@gmail.com</span></div>
+          </div>
+        </div></div></div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

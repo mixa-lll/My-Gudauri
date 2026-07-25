@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   BackLink,
   Badge,
-  BookingWidget,
+  BookingConfigurator,
   FaqAccordion,
   InstructorCertifications,
   InstructorObjectPattern,
@@ -13,16 +13,18 @@ import {
   ObjectMainTags,
   ObjectRelatedListings,
   ObjectReviews,
-  ProfileGallery,
+  ObjectMediaGallery,
   SiteFooter,
   SiteNavbar,
 } from '../../design-system';
+import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { FAQ_ITEMS } from '../../data/faqItems';
 import { getInstructor, getInstructors } from '../../services/instructorsApi';
 import './ProfilePage.scss';
 
 export function ProfilePage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [instructor, setInstructor] = useState(null);
   const [status, setStatus] = useState('loading');
   const [galleryIndex, setGalleryIndex] = useState(0);
@@ -78,7 +80,6 @@ export function ProfilePage() {
     { label: 'Specialization', value: sportNames },
     { label: 'Languages', value: languageCodes },
     { label: 'Experience', value: [`${instructor.experienceYears}+ years`] },
-    { label: 'Certificate', value: [instructor.certificate] },
   ];
   const reviews = (instructor.reviewsList ?? []).map((review, index) => ({
     id: `${review.author}-${index}`,
@@ -90,6 +91,21 @@ export function ProfilePage() {
     avatar: review.avatar && !review.avatar.includes('avatars-sprite') ? review.avatar : undefined,
   }));
   const related = relatedInstructors.map((item) => ({ ...item, title: item.name }));
+  const bookingDefinition = getBookingFlowDefinition('instructors');
+  const bookingOffer = createBookingOffer({
+    definition: bookingDefinition,
+    object: { id: `instructor:${instructor.id ?? instructor.slug}`, slug: instructor.slug, name: instructor.name, typeLabel: 'Private instructor', image: instructor.bookingAvatar },
+    basePrice: instructor.pricing.hourlyRateGel,
+    availability: instructor.availability,
+    constraints: {
+      duration: { min: instructor.pricing.minHours, max: instructor.pricing.maxHours, step: instructor.pricing.hoursStep, initial: instructor.pricing.defaultHours },
+      participants: { min: instructor.pricing.minPeople, max: instructor.pricing.maxPeople, initial: instructor.pricing.defaultPeople },
+    },
+  });
+  const startBooking = (answers) => {
+    saveBookingDraft(createBookingDraft({ definition: bookingDefinition, offer: bookingOffer, answers }));
+    navigate(`/booking/instructors/${instructor.slug}`);
+  };
 
   const hero = <ObjectHero
     variant="split"
@@ -112,13 +128,25 @@ export function ProfilePage() {
     objectDescription={<ObjectDescription kicker={instructor.tagline} title="About the instructor" tags={instructor.tags} tagsLabel="Lesson focus">{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
     certifications={<InstructorCertifications items={instructor.certifications} />}
     reviews={<ObjectReviews rating={{ value: instructor.rating, label: `${instructor.reviews} reviews` }} reviews={reviews} />}
-    faqSection={<FaqAccordion kicker="Good to know" title="Common questions" items={FAQ_ITEMS} />}
-    bookingWidget={<BookingWidget category="instructor" price={instructor.pricing.hourlyRateGel} availability={instructor.availability} />}
+    faqSection={<FaqAccordion variant="object" kicker="Good to know" title="Common questions" items={FAQ_ITEMS} />}
+    bookingWidget={<BookingConfigurator
+      title="Configure your lesson"
+      priceLabel={bookingDefinition.priceLabel}
+      object={bookingOffer.object}
+      fields={resolveEntryFields(bookingDefinition, bookingOffer)}
+      basePrice={bookingOffer.basePrice}
+      availability={bookingOffer.availability}
+      entryNote={bookingDefinition.entryNote}
+      confirmationText={bookingDefinition.confirmationText}
+      defaultValues={{ duration: instructor.pricing.defaultHours, participants: instructor.pricing.defaultPeople }}
+      estimate={(answers) => estimateBookingTotal(bookingDefinition, bookingOffer, answers)}
+      onContinue={startBooking}
+    />}
     relatedListings={<ObjectRelatedListings cardType="instructor" title="More instructors" items={related} />}
   />;
 
   return <>
     <ObjectDetailPageTemplate navbar={<SiteNavbar />} hero={hero} content={content} footer={<SiteFooter />} />
-    <ProfileGallery images={gallery} index={galleryIndex} instructorName={instructor.name} isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
+    <ObjectMediaGallery images={gallery} index={galleryIndex} objectName={instructor.name} objectLabel="Instructor media" isOpen={isGalleryOpen} onClose={closeGallery} onIndexChange={setGalleryIndex} />
   </>;
 }

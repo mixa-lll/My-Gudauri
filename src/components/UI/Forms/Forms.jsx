@@ -1,4 +1,4 @@
-import { cloneElement, forwardRef, useId } from 'react';
+import { cloneElement, forwardRef, useId, useMemo, useState } from 'react';
 import { cn } from '../../../utils/cn';
 import { Button } from '../Button/Button';
 import './Forms.scss';
@@ -44,11 +44,135 @@ export const DateField = forwardRef(function DateField(props, ref) {
   return <Input ref={ref} type="date" {...props} />;
 });
 
-export function QuantityStepper({ value, min = 0, max = Infinity, onChange, label = 'Quantity', disabled = false }) {
-  return <div className="ui-quantity" role="group" aria-label={label}>
-    <Button className="ui-quantity__button" variant="secondary" size="md" aria-label={`Decrease ${label}`} disabled={disabled || value <= min} onClick={() => onChange(Math.max(min, value - 1))}><span aria-hidden="true">−</span></Button>
+function dateKey(date) {
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
+}
+
+function dateFromKey(value) {
+  const [year, month, day] = String(value ?? '').split('-').map(Number);
+  return year && month && day ? new Date(year, month - 1, day) : null;
+}
+
+function monthStart(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function shiftMonth(month, amount) {
+  return new Date(month.getFullYear(), month.getMonth() + amount, 1);
+}
+
+function rangeDays(start, end) {
+  if (!start || !end) return 0;
+  return Math.round((dateFromKey(end) - dateFromKey(start)) / 86400000) + 1;
+}
+
+/**
+ * A serialisable date-range control. The value contract intentionally uses
+ * YYYY-MM-DD strings so it can be kept in a request draft without timezone
+ * conversions: { start: '2026-02-12', end: '2026-02-15' }.
+ */
+export function DateRangeCalendar({
+  id,
+  label = 'Choose dates',
+  value = {},
+  onChange,
+  min,
+  max,
+  locale = 'en-GB',
+  disabled = false,
+}) {
+  const today = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }, []);
+  const minDate = dateFromKey(min) ?? today;
+  const maxDate = dateFromKey(max) ?? new Date(today.getFullYear() + 1, 11, 31);
+  const [month, setMonth] = useState(() => monthStart(dateFromKey(value.start) ?? minDate));
+  const [activeBoundary, setActiveBoundary] = useState('start');
+  const start = value.start ?? '';
+  const end = value.end ?? '';
+  const visibleMonths = [month, shiftMonth(month, 1)];
+  const weekDays = useMemo(() => {
+    const monday = new Date(2026, 0, 5);
+    return Array.from({ length: 7 }, (_, index) => new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2026, 0, 5 + index)));
+  }, [locale]);
+  const selectedRangeLabel = start ? [start, end].filter(Boolean).map((key) => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(dateFromKey(key))).join(' – ') : '';
+
+  const selectDate = (nextDate) => {
+    const next = dateKey(nextDate);
+    if (activeBoundary === 'start' || !start) {
+      onChange?.({ start: next, end: '' });
+      setActiveBoundary('end');
+      return;
+    }
+    onChange?.(next < start ? { start: next, end: start } : { start, end: next });
+    setActiveBoundary('start');
+  };
+
+  return <section id={id} className="ui-date-range" aria-label={label}>
+    <div className="ui-date-range__months">
+      <Button className="ui-date-range__previous" type="button" variant="secondary" size="md" aria-label="Previous month" disabled={disabled || month <= monthStart(minDate)} onClick={() => setMonth((current) => shiftMonth(current, -1))}>‹</Button>
+      {visibleMonths.map((visibleMonth) => {
+        const firstWeekday = (visibleMonth.getDay() + 6) % 7;
+        const totalDays = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
+        const cells = [...Array.from({ length: firstWeekday }, () => null), ...Array.from({ length: totalDays }, (_, index) => new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index + 1))];
+        return <section className="ui-date-range__month" key={`${visibleMonth.getFullYear()}-${visibleMonth.getMonth()}`} aria-label={new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(visibleMonth)}>
+          <h3>{new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(visibleMonth)}</h3>
+          <div className="ui-date-range__weekdays" aria-hidden="true">{weekDays.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div>
+          <div className="ui-date-range__grid">
+            {cells.map((date, index) => {
+              if (!date) return <span key={`empty-${index}`} aria-hidden="true" />;
+              const key = dateKey(date);
+              const isDisabled = disabled || date < minDate || date > maxDate;
+              const selected = Boolean(start && key >= start && key <= (end || start));
+              const edge = selected && (key === start || key === (end || start));
+              const boundary = key === start ? ' is-start' : key === (end || start) ? ' is-end' : '';
+              const dateLabel = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+              return <button type="button" className={`ui-date-range__day${selected ? ' is-selected' : ''}${edge ? ' is-edge' : ''}${boundary}`} key={key} disabled={isDisabled} aria-pressed={selected} aria-label={dateLabel} onClick={() => selectDate(date)}>{date.getDate()}</button>;
+            })}
+          </div>
+        </section>;
+      })}
+      <Button className="ui-date-range__next" type="button" variant="secondary" size="md" aria-label="Next month" disabled={disabled || shiftMonth(month, 1) >= monthStart(maxDate)} onClick={() => setMonth((current) => shiftMonth(current, 1))}>›</Button>
+    </div>
+    {selectedRangeLabel ? <p className="ui-date-range__hint">{selectedRangeLabel} · {rangeDays(start, end) || 1} {rangeDays(start, end) === 1 ? 'day' : 'days'} selected — choose a new start date to change the range</p> : <p className="ui-date-range__hint">Choose a start and end date.</p>}
+  </section>;
+}
+
+/**
+ * Reusable per-day booking availability selector. Selection is stored by day
+ * key, so request drafts can be serialised without converting local time.
+ */
+export function TimeSlotPicker({ days = [], slots = [], value = {}, onChange, disabled = false, label = 'Time per day' }) {
+  const toggleSlot = (dayId, slotId) => {
+    const current = value[dayId] ?? [];
+    const nextSlots = current.includes(slotId) ? current.filter((id) => id !== slotId) : [...current, slotId];
+    onChange?.({ ...value, [dayId]: nextSlots });
+  };
+
+  return <fieldset className="ui-time-slot-picker" disabled={disabled}>
+    <legend>{label}</legend>
+    <div className="ui-time-slot-picker__legend" aria-hidden="true"><span>Day</span>{slots.map((slot) => <span key={slot.id}>{slot.meta ?? slot.label}</span>)}</div>
+    <div className="ui-time-slot-picker__rows">
+      {days.map((day, index) => <div className="ui-time-slot-picker__row" key={day.id}>
+        <div><strong>Day {index + 1}</strong><small>{day.label}</small></div>
+        <div>{slots.map((slot) => {
+          const selected = (value[day.id] ?? []).includes(slot.id);
+          return <Button key={slot.id} type="button" variant={selected ? 'accent' : 'secondary'} size="md" aria-pressed={selected} disabled={disabled} onClick={() => toggleSlot(day.id, slot.id)}>{slot.label}</Button>;
+        })}</div>
+      </div>)}
+    </div>
+    <p>Choose as many slots as you need. Consecutive days are fine.</p>
+  </fieldset>;
+}
+
+export function QuantityStepper({ value, min = 0, max = Infinity, step = 1, onChange, label = 'Quantity', disabled = false, variant = 'default' }) {
+  if (!['default', 'booking'].includes(variant)) throw new Error(`QuantityStepper: unsupported variant “${variant}”.`);
+  return <div className={`ui-quantity ui-quantity--${variant}`} role="group" aria-label={label}>
+    <Button className="ui-quantity__button" variant="secondary" size="md" aria-label={`Decrease ${label}`} disabled={disabled || value <= min} onClick={() => onChange(Math.max(min, value - step))}><span aria-hidden="true">−</span></Button>
     <output aria-live="polite">{value}</output>
-    <Button className="ui-quantity__button" variant="secondary" size="md" aria-label={`Increase ${label}`} disabled={disabled || value >= max} onClick={() => onChange(Math.min(max, value + 1))}><span aria-hidden="true">+</span></Button>
+    <Button className="ui-quantity__button" variant="secondary" size="md" aria-label={`Increase ${label}`} disabled={disabled || value >= max} onClick={() => onChange(Math.min(max, value + step))}><span aria-hidden="true">+</span></Button>
   </div>;
 }
 

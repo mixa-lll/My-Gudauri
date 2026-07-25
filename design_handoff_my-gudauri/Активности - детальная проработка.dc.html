@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet"><style>body{margin:0;background:#eceae7;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}a{color:#2a78d6}a:hover{color:#1a5cb0}
+.dv-turn{padding:40px 44px 32px;scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font-size:16px;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 12px ui-monospace,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font-size:14px;color:rgba(0,0,0,.6)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font-size:14px;color:rgba(0,0,0,.55)}
+.mtx-sub{font-size:14px;color:rgba(0,0,0,.55);margin:0 0 26px;max-width:840px;line-height:1.5}
+.wf{color:#4a4a4a;font-size:13px}.nav{display:flex;align-items:center;gap:16px;padding:12px 22px;background:#e2e0dd;border-bottom:1px solid #d3d1cd}.box{border:none;border-radius:4px;background:#e4e2df}.ph{border:none;border-radius:4px;background:#d4d2ce}.ln{height:8px;border-radius:3px;background:#d0cecb}.lnd{height:8px;border-radius:3px;background:#a9a7a3}.btn{display:flex;align-items:center;justify-content:center;background:#6b6966;color:#f4f3f1;border-radius:4px;font-size:14px;padding:8px 16px;white-space:nowrap}.bo{display:flex;align-items:center;justify-content:center;border:none;border-radius:4px;font-size:13px;padding:7px 14px;background:#dcdad7;color:#5a5855;white-space:nowrap}.pill{border:none;border-radius:99px;padding:3px 12px;font-size:12.5px;background:#dcdad7;color:#5a5855;white-space:nowrap}.tag{background:#d8d6d2;border-radius:3px;padding:3px 9px;font-size:11.5px;color:#6a6864;white-space:nowrap}.subrow{display:flex;gap:8px;flex-wrap:wrap;padding:16px 22px 0}.subcat{border-radius:99px;padding:8px 16px;font-size:14.5px;background:#e4e2df;color:#4a4a4a;white-space:nowrap;border:1.5px solid transparent}.subcat.on{background:#2b2a28;color:#f4f3f1;border-color:#2b2a28}.subcat .n{font-size:12px;opacity:.6;margin-left:5px}.r{display:flex;align-items:center}.c{display:flex;flex-direction:column}.sec{padding:24px 22px;border-bottom:1px solid #e6e4e1}.h1{font-size:28px;line-height:1.15;color:#333;font-weight:600}.h2{font-size:19px;color:#3d3d3d;font-weight:600}.mut{color:#8f8d89;font-size:13px}.note{font-size:12.5px;color:#8a8884;font-style:italic}.acc{display:flex;justify-content:space-between;align-items:center;border:none;border-radius:4px;padding:10px 14px;font-size:14px;background:#e4e2df;color:#4a4a4a}.star{color:#9a9895;font-size:12.5px;white-space:nowrap}.chk{width:13px;height:13px;border:none;border-radius:2px;background:#c4c2be;flex:none}
+.map-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #eceae5}
+.map-src{display:flex;flex-direction:column;gap:2px}
+.map-arrow{color:#b7b5b1;text-align:center;font-size:16px}
+.map-dst{display:flex;align-items:center;gap:7px}
+</style></helmet>
+
+<section class="dv-turn" id="t14" data-screen-label="Активности — детальная проработка">
+<div class="dv-thd"><span class="dv-tid">Активности</span><span class="dv-tname">Детальная проработка: каталог · карточка · страница · цена · распределение товаров</span></div>
+<p class="mtx-sub">Модель — <b>два уровня: категория → карточка активности</b>, без промежуточных разделов. Крупные дисциплины (Freeride, Ski Touring, Heliskiing, Mountaineering, Freestyle, Paragliding, Excursions, Mountain Biking) — это <b>большие плашки-переключатели сверху</b>, как «лыжи / сноуборд» у инструкторов. Маршрут, сезон, сложность и формат — это <b>фильтры</b>, а не отдельные уровни. Цена — за человека или за группу. Ниже — <a href="#14a">14a</a> каталог, <a href="#14b">14b</a> карточка, <a href="#14c">14c</a> страница активности, <a href="#14d">14d</a> структура и фильтры, <a href="#14e">14e</a> распределение реальных товаров, <a href="#14f">14f</a> подбор оператором.</p>
+<div class="dv-opts">
+
+<!-- ============ 14a — КАТАЛОГ ============ -->
+<div class="dv-opt" id="14a" data-screen-label="14a Каталог активностей"><div class="dv-olabel"><a class="dv-oid" href="#14a">14a</a>Каталог активностей — группы по сезону, важные фильтры</div>
+<div class="dv-card wf" style="width:660px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+
+<div class="c" style="align-items:center;gap:8px;padding:20px 22px 0">
+<div class="r" style="gap:14px;font-size:14px"><span class="r" style="gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#222"></span>Зима</span><span class="r" style="gap:6px;color:#7d7a74"><span style="width:8px;height:8px;border-radius:50%;border:1.5px solid #999"></span>Лето</span></div>
+<span style="font-size:44px;line-height:1;color:#111;letter-spacing:1px">АКТИВНОСТИ</span>
+<span class="mut" style="font-size:13px">Впечатления в Гудаури — фрирайд, ски-тур, экскурсии и не только</span>
+</div>
+
+<!-- Баннер: подбор + модель цены -->
+<div class="sec" style="border-bottom:none;padding:18px 22px 0">
+<div class="c" style="background:#2b2a28;border-radius:14px;padding:14px 18px;gap:9px;color:#fff">
+<div class="r" style="gap:14px;align-items:center"><span style="font-size:15px;flex:1">Не знаете, что выбрать? <span style="color:#b8b5af">Подберём активность под даты, компанию и уровень.</span></span><a href="#14f" class="btn" style="background:#f4f3f1;color:#1a1a1a;padding:9px 16px;font-size:14px;flex:none;text-decoration:none">Подобрать →</a></div>
+<div class="r" style="gap:10px;border-top:1px solid #454340;padding-top:9px;align-items:center"><span style="font-size:14px">Цена — за человека или за группу, зависит от программы</span><span style="font-size:12px;color:#b8b5af;margin-left:auto">разбор → <a href="#14d" style="color:#d9d6cf">14d</a></span></div>
+</div>
+</div>
+
+<!-- Фильтры -->
+<div class="sec" style="border-bottom:none;padding:16px 22px 0">
+<div class="r" style="justify-content:space-between;align-items:center;margin-bottom:8px"><span class="mut" style="font-size:12.5px">Фильтры</span><span style="font-size:12.5px;border-bottom:1.5px solid #999;color:#7d7a74">Сбросить</span></div>
+<div class="r" style="gap:7px;flex-wrap:wrap">
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>📅 Дата</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Сложность</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Длительность</span><span>▾</span></div>
+<div class="box r" style="padding:6px 12px;gap:8px;font-size:13.5px;border-radius:99px"><span>Кто едет</span><span>▾</span></div>
+</div>
+<div class="note" style="margin-top:9px">4 главных фильтра. «Кто едет» = взрослые / дети / семья / компания. Полный список → <a href="#14d">14d</a>.</div>
+</div>
+
+<!-- Категории-переключатели (большие плашки, как лыжи/сноуборд у инструкторов) -->
+<div class="c" style="padding:16px 22px 0;gap:8px">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Категория</span>
+<div class="r" style="gap:8px;flex-wrap:wrap">
+<span class="subcat on">Все<span class="n">21</span></span><span class="subcat">Freeride<span class="n">6</span></span><span class="subcat">Ski Touring<span class="n">7</span></span><span class="subcat">Heliskiing<span class="n">1</span></span><span class="subcat">Mountaineering<span class="n">2</span></span><span class="subcat">Freestyle<span class="n">1</span></span><span class="subcat">Paragliding<span class="n">1</span></span><span class="subcat">Excursions<span class="n">4</span></span><span class="subcat">Mountain Biking<span class="n">1</span></span>
+</div>
+</div>
+<div class="r" style="padding:12px 22px 0;justify-content:space-between;align-items:center"><span class="mut" style="font-size:13px">21 активность</span><div class="box r" style="padding:5px 12px;gap:8px;font-size:13px;border-radius:99px"><span class="mut">Сортировка:</span><span>популярные</span><span>▾</span></div></div>
+
+<!-- Сетка карточек (реальные товары WinterGudauri) -->
+<div class="sec" style="padding-top:12px">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Freeride</span><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">продвинутый · 16+</span></div><span style="font-size:15px">Бидара</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 190 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="tag">Freeride</span><span class="tag">Ski Touring</span></div><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">средний · 14+</span></div><span style="font-size:15px">Ломиси</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 150 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Ski Touring</span><span class="pill" style="font-size:10.5px;padding:1px 7px">полдня</span></div><div class="r" style="gap:4px"><span class="tag" style="background:#cfe0cf;color:#3a5a3a">старт</span><span class="tag">начинающий</span></div></div><span style="font-size:15px">Дэдаена</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 90 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Heliskiing</span><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">эксперт · 18+</span></div><span style="font-size:15px">Heli-ski Gudauri</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 5.0</span><span class="mut" style="font-size:11px">от 650 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Paragliding</span><span class="pill" style="font-size:10.5px;padding:1px 7px">20 мин</span></div><span class="tag" style="align-self:flex-start">без опыта · тандем</span></div><span style="font-size:15px">Tandem Paragliding Gudauri</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.9</span><span class="mut" style="font-size:11px">от 125 €/чел</span></div></div>
+<div class="box c" style="padding:8px;gap:6px"><div class="ph c" style="height:120px;padding:6px;justify-content:space-between"><div class="r" style="justify-content:space-between"><span class="tag">Excursions</span><span class="pill" style="font-size:10.5px;padding:1px 7px">день</span></div><span class="tag" style="align-self:flex-start">лёгкая · семья</span></div><span style="font-size:15px">Казбеги и Гергети</span><div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:12px">★★★★★ 4.8</span><span class="mut" style="font-size:11px">от 35 €/чел</span></div></div>
+</div>
+<div class="bo" style="align-self:center;margin-top:14px;border-radius:99px;padding:8px 20px">Показать ещё 12</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+
+<!-- ============ 14b — КАРТОЧКА ============ -->
+<div class="dv-opt" id="14b" data-screen-label="14b Карточка активности"><div class="dv-olabel"><a class="dv-oid" href="#14b">14b</a>Карточка в каталоге — единый набор полей у всех</div>
+<div class="r" style="gap:16px;align-items:flex-start">
+<div class="dv-card wf" style="width:230px;padding:10px">
+<div class="box c" style="padding:9px;gap:8px">
+<div class="ph c" style="height:150px;padding:7px;justify-content:space-between">
+<div class="r" style="justify-content:space-between"><div class="r" style="gap:4px"><span class="tag">Freeride</span><span class="tag">Ski Touring</span></div><span class="pill" style="font-size:11px;padding:2px 8px">день</span></div>
+<span class="tag" style="align-self:flex-start">средний · 14+</span>
+</div>
+<span style="font-size:17px">Ломиси</span>
+<div class="r" style="justify-content:space-between;align-items:center"><span class="star" style="font-size:13px">★★★★★ 4.9</span><span class="mut" style="font-size:12px">от 150 €/чел</span></div>
+</div>
+</div>
+<div class="c" style="gap:9px;width:190px;padding-top:8px">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Что на карточке</span>
+<div class="c" style="gap:7px;font-size:12.5px;color:#4a4a4a">
+<span>◂ Обложка активности</span>
+<span>◂ Категория (одна или несколько)</span>
+<span>◂ Длительность · сезон</span>
+<span>◂ Сложность · мин. возраст</span>
+<span>◂ Название</span>
+<span>◂ Рейтинг</span>
+<span>◂ Цена «от X / чел» или «за группу»</span>
+</div>
+<div class="note" style="margin-top:2px">Единая структура у всех активностей — различаются категорией, длительностью и сложностью, а не вёрсткой. Одна карточка может стоять сразу в двух категориях (Ломиси — Freeride и Ski Touring): это одна карточка с двумя тегами, а не копия.</div>
+</div>
+</div>
+</div>
+
+<!-- ============ 14c — СТРАНИЦА АКТИВНОСТИ ============ -->
+<div class="dv-opt" id="14c" data-screen-label="14c Страница активности"><div class="dv-olabel"><a class="dv-oid" href="#14c">14c</a>Страница активности — программа, организатор, ограничения + цена</div>
+<div class="dv-card wf" style="width:720px">
+<div class="nav"><div class="box" style="padding:5px 12px;font-size:16px">My Gudauri<span style="color:#c33">.</span></div><div class="r" style="gap:14px;font-size:14px;color:#444"><span>Категории</span><span>Статьи</span><span>О Гудаури</span><span>Поддержка</span></div><div style="flex:1"></div><div class="btn" style="padding:5px 14px;font-size:14px">Стать партнёром</div></div>
+<div class="r" style="align-items:flex-start;gap:22px;padding:16px 22px 24px">
+
+<div class="c" style="flex:1;gap:18px">
+<span style="font-size:13px;border-bottom:1.5px solid #333;align-self:flex-start">← Все активности</span>
+
+<div class="c" style="gap:10px">
+<div class="r" style="gap:7px"><span class="tag">Freeride</span><span class="tag">Ski Touring</span><span class="tag" style="background:#222;color:#fff">Сезон: зима</span></div>
+<span style="font-size:40px;line-height:1.04;color:#111;letter-spacing:1px">БИДАРА</span>
+<div class="r" style="gap:8px"><span class="star" style="font-size:14px">★★★★★ 4.9</span><span class="mut" style="font-size:13px">· 24 отзыва</span></div>
+<span class="mut" style="font-size:13px;border-top:1.5px solid #e6e3dc;padding-top:10px">Полный день · сложность продвинутая · от 16 лет · лыжи / сноуборд · гид-фрирайд Ru / En · до 6 человек</span>
+</div>
+
+<div class="r" style="gap:8px"><div class="ph" style="flex:2;height:150px"></div><div class="c" style="flex:1;gap:8px"><div class="ph" style="height:71px"></div><div class="ph" style="height:71px"></div></div></div>
+
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Об активности</span>
+<div class="ln" style="width:100%"></div><div class="ln" style="width:96%"></div><div class="ln" style="width:58%"></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Программа</span>
+<div class="c" style="gap:0">
+<div class="r" style="gap:10px;padding:8px 0;border-bottom:1px solid #eceae5"><span class="pill" style="font-size:11px;flex:none">1</span><span style="font-size:14px">Сбор, проверка лавинного снаряжения</span><span class="mut" style="font-size:12px;margin-left:auto">30 мин</span></div>
+<div class="r" style="gap:10px;padding:8px 0;border-bottom:1px solid #eceae5"><span class="pill" style="font-size:11px;flex:none">2</span><span style="font-size:14px">Заброска: подъёмник + короткий скитур-подход</span><span class="mut" style="font-size:12px;margin-left:auto">1 ч</span></div>
+<div class="r" style="gap:10px;padding:8px 0;border-bottom:1px solid #eceae5"><span class="pill" style="font-size:11px;flex:none">3</span><span style="font-size:14px">Спуски по маршруту Бидара с гидом</span><span class="mut" style="font-size:12px;margin-left:auto">4–5 ч</span></div>
+<div class="r" style="gap:10px;padding:8px 0"><span class="pill" style="font-size:11px;flex:none">4</span><span style="font-size:14px">Возвращение, разбор дня и фото</span><span class="mut" style="font-size:12px;margin-left:auto">—</span></div>
+</div>
+</div>
+
+<div class="c" style="gap:7px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Включено</span><span class="tag">Гид-фрирайд</span><span class="tag">Лавкомплект (бипер/лопата/щуп)</span><span class="tag">Ски-пасс</span><span class="tag">Инструктаж</span></div>
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="mut" style="font-size:12.5px;width:78px;flex:none">Отдельно</span><span class="tag">Трансфер</span><span class="tag">Фото/видео</span><span class="tag">Прокат лыж</span></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Организатор</span>
+<div class="r" style="gap:10px;align-items:center"><div class="ph" style="width:44px;height:44px;border-radius:50%;flex:none"></div><div class="c" style="gap:3px"><div class="r" style="gap:6px"><span style="font-size:15px">Партнёр-оператор</span><span class="tag" style="background:#cfe0cf;color:#3a5a3a">проверен</span></div><span class="mut" style="font-size:12px">лицензия · страховка ответственности · опыт на курорте</span></div></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Ограничения</span>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Возраст</span><span class="mut" style="font-size:11.5px">от 16 лет</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Сезон</span><span class="mut" style="font-size:11.5px">декабрь–апрель</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Лавопасность</span><span class="mut" style="font-size:11.5px">перенос / смена зоны</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Физуровень</span><span class="mut" style="font-size:11.5px">высокий</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Группа</span><span class="mut" style="font-size:11.5px">до 6 человек</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Опыт</span><span class="mut" style="font-size:11.5px">уверенно вне трасс</span></div>
+</div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Место встречи</span>
+<div class="r" style="gap:12px;align-items:stretch"><div class="ph" style="width:180px;height:96px;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8884">карта</div><div class="c" style="gap:6px;justify-content:center"><span style="font-size:14px">Сбор у верхней станции Gudauri 3</span><span class="mut" style="font-size:12.5px">выезд в 8:30 · трансфер от отеля по запросу</span></div></div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Отзывы · ★ 4.9 · 24</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Анна К.</span><span class="mut" style="font-size:11px">январь 2026</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:95%"></div><div class="ln" style="width:70%"></div></div>
+<div class="c" style="gap:5px"><div class="r" style="gap:8px"><span style="font-size:14px">Георгий Т.</span><span class="mut" style="font-size:11px">февраль 2026</span></div><span class="star" style="font-size:11px">★★★★★ · подтверждён</span><div class="ln" style="width:92%"></div><div class="ln" style="width:60%"></div></div>
+</div>
+<div class="bo" style="align-self:flex-start;border-radius:99px">Все отзывы (24)</div>
+</div>
+
+<div class="c" style="gap:8px;border-top:1.5px solid #e6e3dc;padding-top:14px">
+<span style="font-size:22px;color:#111">Правила</span>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Отмена</span><span class="mut" style="font-size:11.5px">бесплатно за 24 ч</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Плохая погода</span><span class="mut" style="font-size:11.5px">перенос без штрафа</span></div>
+<div class="box c" style="padding:10px;gap:4px"><span style="font-size:13.5px">Опоздание</span><span class="mut" style="font-size:11.5px">время не продлевается</span></div>
+</div>
+</div>
+</div>
+
+<!-- Правая колонка — цена -->
+<div class="c" style="width:250px;flex:none;gap:10px;margin-top:40px">
+<div class="box c" style="border-radius:16px;box-shadow:3px 3px 0 #e6e3dc">
+<div class="r" style="gap:9px;padding:12px 14px;border-bottom:1.5px solid #eceae5"><div class="c"><span class="mut" style="font-size:11px">Цена за человека</span><span style="font-size:18px">от 190 €</span></div></div>
+<div class="c" style="padding:12px 14px;gap:9px">
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><div class="r" style="gap:5px;align-items:baseline"><span style="font-size:18px">3</span><span class="mut" style="font-size:12px">участника</span></div><div class="r" style="gap:10px;font-size:15px"><span>−</span><span>+</span></div></div>
+<div class="box r" style="padding:8px 12px;justify-content:space-between;background:#f6f4f0"><span class="mut" style="font-size:12.5px">Дата</span><span style="font-size:13px">выбрать →</span></div>
+<div class="c" style="gap:5px;border-top:1px dashed #d6d4d0;border-bottom:1px dashed #d6d4d0;padding:9px 0;font-size:12.5px;color:#5a5855">
+<div class="r" style="justify-content:space-between"><span>190 × 3 участника</span><span>570</span></div>
+<div class="r" style="justify-content:space-between"><span>группа 3+ · −10%</span><span>−57</span></div>
+</div>
+<div class="r" style="justify-content:space-between;align-items:baseline"><span style="font-size:20px;color:#111">513 €</span><span class="mut" style="font-size:11px">за 3 чел</span></div>
+<div class="btn" style="padding:10px;font-size:15px">Отправить заявку</div>
+<span class="mut" style="font-size:11px;text-align:center">Оператор подтвердит дату, погоду и место в группе</span>
+</div>
+</div>
+<div class="note">Модель цены: за человека или за группу. Разбор → <a href="#14d">14d</a>.</div>
+</div>
+</div>
+<div class="r" style="background:#f6f4f0;padding:14px 22px;gap:24px"><span style="font-size:14px">My Gudauri<span style="color:#c33">.</span></span><div class="ln" style="width:50px"></div><div class="ln" style="width:50px"></div><span class="mut" style="font-size:11px;margin-left:auto">© 2026 My Gudauri, Inc.</span></div>
+</div>
+</div>
+
+<!-- ============ 14d — КОНТЕНТ-СПЕКА ============ -->
+<div class="dv-opt" id="14d" data-screen-label="14d Контент-спека активностей"><div class="dv-olabel"><a class="dv-oid" href="#14d">14d</a>Содержание: категории · фильтры · поля карточки · модель цены · что на старте</div>
+<div class="dv-card wf" style="width:620px;padding:0">
+
+<div class="sec" style="padding:18px 22px">
+<span class="h2" style="font-size:18px">Категории — 8 дисциплин, два уровня</span>
+<span class="mut" style="font-size:12.5px;display:block;margin-top:4px;line-height:1.5">Только <b>категория → карточка</b>, без промежуточных разделов. Синим отмечены карточки, которые стоят сразу в двух категориях (одна карточка, а не копия).</span>
+<div class="c" style="gap:10px;margin-top:12px">
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Freeride</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag" style="background:#d5e2ef;color:#3a557a">Ломиси</span><span class="tag">Бидара</span><span class="tag">Коби</span><span class="tag">Бидара Hardcore</span><span class="tag">Милиони</span><span class="tag" style="background:#d5e2ef;color:#3a557a">Freeride / Ski Touring Package</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Ski Touring</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дэдаена</span><span class="tag" style="background:#d5e2ef;color:#3a557a">Ломиси</span><span class="tag">Микети</span><span class="tag">Арагхвети</span><span class="tag">Казбек Light</span><span class="tag">Ski Touring в Раче</span><span class="tag" style="background:#d5e2ef;color:#3a557a">Freeride / Ski Touring Package</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Heliskiing</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Heli-ski Gudauri</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Mountaineering</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Казбек</span><span class="tag">Шода</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Freestyle</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Freestyle Training</span><span class="tag">Freestyle Camp</span><span class="tag">Freestyle Intensive</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Paragliding</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Tandem Paragliding Gudauri</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Excursions</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Казбеги и Гергети</span><span class="tag">Ананури — Мцхета — Уплисцихе</span><span class="tag">Винный тур в Кахетию</span><span class="tag">Гастрономический маршрут</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Mountain Biking</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">MTB Georgia</span></div></div>
+</div>
+<div class="note" style="margin-top:10px">Споты Рачи (Шода, Мухамеш, Чиор, Хваргула, Ноцара) — не уровень каталога, а маршруты внутри карточки «Ski Touring в Раче». Снегоходы — не активность: аренда и покатушки → Services (разбор → <a href="#14e">14e</a>).</div>
+</div>
+
+<div class="sec" style="padding:18px 22px">
+<span class="h2" style="font-size:18px">Что публикуем на старте</span>
+<div class="c" style="gap:8px;margin-top:10px">
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="tag" style="background:#cfe0cf;color:#3a5a3a">старт</span><span style="font-size:13px;color:#4a4a4a">Ski Touring (базовые маршруты), Excursions, Tandem Paragliding, Freestyle Training — расширяют аудиторию без сложной логистики.</span></div>
+<div class="r" style="gap:8px;flex-wrap:wrap;align-items:center"><span class="tag" style="background:#e6ddd0;color:#8a7a60">позже</span><span style="font-size:13px;color:#4a4a4a">Heliskiing, Бидара Hardcore и сложный фрирайд, Mountaineering — только после проверки лицензированных партнёров.</span></div>
+</div>
+</div>
+
+<div class="sec" style="padding:18px 22px">
+<span class="h2" style="font-size:18px">Фильтры — универсальные, применяются к карточкам</span>
+<div class="c" style="gap:10px;margin-top:12px">
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Показываем сейчас</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Дата</span><span class="tag">Сложность</span><span class="tag">Длительность</span><span class="tag">Кто едет</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Полный набор</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Сезон</span><span class="tag">Продолжительность</span><span class="tag">Уровень подготовки</span><span class="tag">Физнагрузка</span><span class="tag">Формат</span><span class="tag">Регион</span><span class="tag">Для кого</span><span class="tag">Что включено</span><span class="tag">Цена</span><span class="tag">Дата / доступность</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">По категориям (профильтры)</span><div class="r" style="gap:6px;flex-wrap:wrap"><span class="tag">Freeride: лыжи / сноуборд, доступ</span><span class="tag">Ski Touring: splitboard, набор высоты</span><span class="tag">Freestyle: Big Air / Jibbing / Slopestyle / Half-pipe / Flat</span><span class="tag">Excursions: тематика</span><span class="tag">Mountaineering: высота, дни, ледник</span><span class="tag">MTB: trail / enduro / expedition</span></div></div>
+<div class="note">Фильтры применяются к карточкам и не создают уровней каталога. Расписания онлайн нет — доступность и место в группе подтверждает оператор (<a href="#14f">14f</a>). Сезонные активности сами прячутся вне сезона.</div>
+</div>
+</div>
+
+<div class="sec" style="padding:18px 22px">
+<span class="h2" style="font-size:18px">Карточка — единый набор полей</span>
+<div class="c" style="gap:6px;margin-top:10px;font-size:13px;color:#4a4a4a">
+<span>• Обложка · название</span>
+<span>• Категория (одна / несколько) + сезон · длительность</span>
+<span>• Сложность · мин. возраст (или «семья»)</span>
+<span>• Рейтинг</span>
+<span>• Цена «от X / чел» либо «за группу»</span>
+<span>• Бейдж «старт» — только у приоритетных</span>
+</div>
+</div>
+
+<div class="sec" style="padding:18px 22px;border-bottom:none;background:#f6f4f0">
+<span class="h2" style="font-size:18px">Цена — как формируется</span>
+<div class="c" style="gap:9px;margin-top:12px">
+<span class="mut" style="font-size:13px">У активностей нет единого тарифа: у каждой своя цена от партнёра. Показываем её единообразно.</span>
+<div class="c" style="gap:6px;background:#fff;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#5a5855">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Две модели</span>
+<div class="r" style="gap:16px;flex-wrap:wrap">
+<div class="c" style="gap:3px"><b style="color:#333">За человека</b><span>цена × участники − скидка группе (3+ −10%)</span></div>
+<div class="c" style="gap:3px"><b style="color:#333">За группу</b><span>фикс за всю группу до N человек (экскурсия на авто, борт вертолёта)</span></div>
+</div>
+</div>
+<div class="c" style="gap:5px;background:#fff;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#5a5855">
+<span class="mut" style="font-size:12px;text-transform:uppercase;letter-spacing:.05em">Пример: Бидара (фрирайд) · 3 участника</span>
+<div class="r" style="justify-content:space-between"><span>190 € × 3</span><span>570</span></div>
+<div class="r" style="justify-content:space-between"><span>группа 3+ · −10%</span><span>−57</span></div>
+<div class="r" style="justify-content:space-between;border-top:1px solid #e6e3dc;padding-top:6px;margin-top:2px"><b style="color:#111;font-size:14px">Итого</b><b style="color:#111;font-size:14px">513 €</b></div>
+</div>
+<div class="note">Цены — реальные с WinterGudauri (референс). Итог всегда подтверждает оператор: погода, место в группе, сезон.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ============ 14e — РАСПРЕДЕЛЕНИЕ РЕАЛЬНЫХ ТОВАРОВ ============ -->
+<div class="dv-opt" id="14e" data-screen-label="14e Распределение товаров по разделам"><div class="dv-olabel"><a class="dv-oid" href="#14e">14e</a>Реальные товары WinterGudauri → наши разделы (не всё это «активности»)</div>
+<div class="dv-card wf" style="width:620px;padding:0">
+<div class="sec" style="padding:18px 22px;border-bottom:none">
+<span class="h2" style="font-size:18px">Что стоит на странице «Туры» у WinterGudauri</span>
+<span class="mut" style="font-size:12.5px;display:block;margin-top:4px;line-height:1.5">У них «Туры» — свалка всего подряд. У нас те же товары ложатся <b>логично по разделам</b>: часть — в Активности, а Трансфер и Видео уходят в свои разделы.</span>
+
+<div class="c" style="gap:0;margin-top:14px">
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Тур на снегоходе</span><span class="mut" style="font-size:11px">125 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#d5e2ef;color:#3a557a">Активности</span><span style="font-size:12.5px">Зимние</span></div></div>
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Параглайдинг в Гудаури</span><span class="mut" style="font-size:11px">125 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#d5e2ef;color:#3a557a">Активности</span><span style="font-size:12.5px">Зимние</span></div></div>
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Казбеги трип</span><span class="mut" style="font-size:11px">35 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#d5e2ef;color:#3a557a">Активности</span><span style="font-size:12.5px">Экскурсии</span></div></div>
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Ананури · Мцхета · Уплисцихе</span><span class="mut" style="font-size:11px">40 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#d5e2ef;color:#3a557a">Активности</span><span style="font-size:12.5px">Экскурсии</span></div></div>
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Винный тур в Кахетию</span><span class="mut" style="font-size:11px">55 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#d5e2ef;color:#3a557a">Активности</span><span style="font-size:12.5px">Экскурсии · гастро</span></div></div>
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Велотуры по Грузии (MTB)</span><span class="mut" style="font-size:11px">по запросу</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#d5e2ef;color:#3a557a">Активности</span><span style="font-size:12.5px">Лето</span></div></div>
+<div class="map-row"><div class="map-src"><span style="font-size:14px;color:#222">Трансфер</span><span class="mut" style="font-size:11px">70 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#e6ddd0;color:#8a7a60">Трансфер</span><span style="font-size:12.5px">свой раздел</span></div></div>
+<div class="map-row" style="border-bottom:none"><div class="map-src"><span style="font-size:14px;color:#222">Услуга видеосъёмки</span><span class="mut" style="font-size:11px">55 €</span></div><span class="map-arrow">→</span><div class="map-dst"><span class="tag" style="background:#e6ddd0;color:#8a7a60">Услуги</span><span style="font-size:12.5px">свой раздел</span></div></div>
+</div>
+
+<div class="note" style="margin-top:14px">Вывод: 6 из 8 товаров — активности (зимние, экскурсии, лето). <b>Трансфер</b> и <b>видеосъёмка</b> — не активности: у них своя логика заказа, поэтому живут в разделах <a href="#14d">Трансфер</a> и Услуги. Так внутренности разделов остаются в единой системе, но не смешиваются.</div>
+</div>
+</div>
+</div>
+
+<!-- ============ 14f — ПОДБОР ОПЕРАТОРОМ ============ -->
+<div class="dv-opt" id="14f" data-screen-label="14f Подбор активности оператором"><div class="dv-olabel"><a class="dv-oid" href="#14f">14f</a>Подбор оператором — короткий опрос вместо онлайн-расписания</div>
+<div class="c" style="gap:12px">
+<div style="max-width:860px;font-size:13px;line-height:1.5;background:#fff;border-radius:8px;padding:12px 14px;color:#5a5855">Онлайн-расписания и мест в группе нет. Поэтому: короткий опрос → заявка → оператор подтверждает дату, погоду и место или предлагает альтернативу. Тот же опрос запускает кнопка «Подобрать» в каталоге <a href="#14a">14a</a>.</div>
+<div class="r" style="gap:14px;align-items:stretch;flex-wrap:wrap">
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 1 из 4</span><span style="font-size:15px;color:#111">Даты</span>
+<div class="ph" style="height:70px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#8a8884">календарь</div>
+<span class="mut" style="font-size:11px">можно диапазон дат</span>
+</div>
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 2 из 4</span><span style="font-size:15px;color:#111">Компания</span>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:11px">Кто едет</span><div class="r" style="gap:5px"><span class="pill" style="font-size:11px;background:#222;color:#fff">Семья</span><span class="pill" style="font-size:11px">Компания</span></div></div>
+<div class="c" style="gap:5px"><span class="mut" style="font-size:11px">Участники</span><div class="box r" style="padding:5px 10px;justify-content:space-between;background:#f6f4f0"><span style="font-size:13px">3</span><span style="font-size:13px">− +</span></div></div>
+</div>
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 3 из 4</span><span style="font-size:15px;color:#111">Что интересно</span>
+<div class="r" style="gap:5px;flex-wrap:wrap"><span class="pill" style="font-size:11px;background:#222;color:#fff">Зимние</span><span class="pill" style="font-size:11px">Экскурсии</span><span class="pill" style="font-size:11px">Спокойно</span><span class="pill" style="font-size:11px">Адреналин</span></div>
+<span class="mut" style="font-size:11px">бюджет, дети, пожелания</span>
+</div>
+<div class="dv-card wf" style="width:186px;padding:12px;display:flex;flex-direction:column;gap:8px">
+<span class="mut" style="font-size:11px">Шаг 4 из 4</span><span style="font-size:15px;color:#111">Контакты</span>
+<div class="box" style="height:22px;border-radius:6px"></div>
+<div class="r" style="gap:5px"><span class="pill" style="font-size:11px;background:#222;color:#fff">WhatsApp</span><span class="pill" style="font-size:11px">Telegram</span></div>
+<div class="btn" style="padding:9px;font-size:14px;margin-top:2px">Отправить заявку</div>
+</div>
+<div class="dv-card wf" style="width:206px;padding:14px;display:flex;flex-direction:column;gap:8px;background:#2b2a28;color:#fff;border:none">
+<span style="font-size:26px;line-height:1">✓</span><span style="font-size:15px">Заявка отправлена</span>
+<span style="font-size:12px;color:#b8b5af;line-height:1.5">Оператор ответит в течение часа: подберёт активность под даты и компанию, подтвердит погоду и место в группе.</span>
+<span class="pill" style="font-size:11px;background:#454340;color:#eceae7;align-self:flex-start">оплата после подтверждения</span>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</section>
+</x-dc>
+</body>
+</html>

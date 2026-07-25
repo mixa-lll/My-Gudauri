@@ -4,6 +4,7 @@ import { defineComposition } from '../design-system/architecture/registry';
 const meta = {
   title: 'Primitives/Button',
   component: Button,
+  tags: ['autodocs'],
   parameters: { composition: defineComposition({ root: 'Button' }) },
   args: {
     children: 'Continue',
@@ -11,7 +12,7 @@ const meta = {
     size: 'md'
   },
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'ghost', 'inverse', 'destructive', 'link'] },
+    variant: { control: 'select', options: ['primary', 'accent', 'secondary', 'ghost', 'inverse', 'destructive', 'link'] },
     size: { control: 'select', options: ['md', 'lg'] },
     iconLeft: { control: false },
     iconRight: { control: false }
@@ -26,7 +27,7 @@ export const Variants = {
   render: () => (
     <main className="sb-canvas sb-section">
       <div className="sb-row">
-        {['primary', 'secondary', 'ghost', 'destructive', 'link'].map((variant) => <Button variant={variant} key={variant}>{variant}</Button>)}
+        {['primary', 'accent', 'secondary', 'ghost', 'destructive', 'link'].map((variant) => <Button variant={variant} key={variant}>{variant}</Button>)}
       </div>
       <div className="sb-inverse-sample"><Button variant="inverse">Inverse on dark</Button></div>
     </main>

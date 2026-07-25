@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams } from 'react-router-dom';
-import { Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
+import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, SiteFooter, SiteNavbar } from '../../design-system';
 import { getDestination } from '../../data/destinations';
+import { ACTIVITY_GROUP_LABELS, getActivities } from '../../services/activitiesApi';
 import { getInstructors } from '../../services/instructorsApi';
 import './DestinationCatalogPage.scss';
 
@@ -25,19 +26,6 @@ const CATALOG_FILTERS = {
       ['carving', 'Carving', null, null, 'specialty', 'Focus'],
       ['freeride', 'Freeride', null, null, 'specialty', 'Focus'],
       ['freestyle', 'Freestyle', null, null, 'specialty', 'Focus']
-    ]
-  },
-  activities: {
-    categories: [
-      ['all', 'All adventures', 'Every way to explore Gudauri'],
-      ['freeride', 'Freeride', 'Guided off-piste days', ['heli-ski', 'freeride-day']],
-      ['snow-air', 'Snow & air', 'Snowmobiles and paragliding', ['snowmobile-plateau', 'paragliding-gudauri']],
-      ['excursions', 'Excursions', 'Culture, views and food', ['kazbegi-gergeti', 'gastro-route']]
-    ],
-    refinements: [
-      ['beginner', 'Beginner friendly', null, ['kazbegi-gergeti', 'snowmobile-plateau', 'paragliding-gudauri', 'gastro-route'], 'level', 'Level'],
-      ['short', 'Half day', null, ['snowmobile-plateau', 'paragliding-gudauri', 'gastro-route'], 'duration', 'Duration'],
-      ['transfer', 'With transfer', null, ['kazbegi-gergeti', 'gastro-route'], 'format', 'Format']
     ]
   },
   rental: {
@@ -111,6 +99,28 @@ function toFilter(items) {
   return items.map(([id, label, description, slugs, group, groupLabel]) => ({ id, label, description, slugs, group, groupLabel }));
 }
 
+function activityFilters(items) {
+  const options = (field, group, groupLabel) => [...new Set(items.map((item) => item[field]).filter(Boolean))].map((value) => ({
+    id: `${field}:${value}`,
+    label: value,
+    field,
+    value,
+    group,
+    groupLabel
+  }));
+  return {
+    categories: [
+      { id: 'all', label: 'All adventures', description: 'Every way to explore Gudauri' },
+      ...options('catalogGroup').map((item) => ({ ...item, label: ACTIVITY_GROUP_LABELS[item.value] || item.value }))
+    ],
+    refinements: [
+      ...options('skillLevel', 'level', 'Level'),
+      ...options('durationGroup', 'duration', 'Duration'),
+      ...options('format', 'format', 'Format')
+    ]
+  };
+}
+
 const INSTRUCTOR_FILTER_MATCHERS = {
   russian: (item) => item.languages?.some((language) => language.code === 'Ru'),
   english: (item) => item.languages?.some((language) => language.code === 'En'),
@@ -127,6 +137,7 @@ const INSTRUCTOR_FILTER_MATCHERS = {
 
 function matchesFilter(section, filter, item) {
   if (!filter || filter.id === 'all') return true;
+  if (section === 'activities' && filter.field) return item[filter.field] === filter.value;
   if (section !== 'instructors') return !filter.slugs || filter.slugs.includes(item.slug);
 
   if (filter.id === 'ski' || filter.id === 'snowboard') {
@@ -138,7 +149,7 @@ function matchesFilter(section, filter, item) {
 
 function matchesActiveRefinements(section, refinements, activeFilters, item) {
   const selected = refinements.filter((filter) => activeFilters.includes(filter.id));
-  if (section !== 'instructors') return selected.every((filter) => matchesFilter(section, filter, item));
+  if (section !== 'instructors' && section !== 'activities') return selected.every((filter) => matchesFilter(section, filter, item));
 
   const grouped = selected.reduce((groups, filter) => {
     const group = filter.group || filter.id;
@@ -179,8 +190,9 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const section = sectionProp ?? params.section;
   const config = getDestination(section);
   const filterConfig = CATALOG_FILTERS[section];
-  const [items, setItems] = useState(section === 'instructors' ? [] : (config?.items ?? []));
-  const [status, setStatus] = useState(section === 'instructors' ? 'loading' : 'ready');
+  const apiBacked = section === 'instructors' || section === 'activities';
+  const [items, setItems] = useState(apiBacked ? [] : (config?.items ?? []));
+  const [status, setStatus] = useState(apiBacked ? 'loading' : 'ready');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeFilters, setActiveFilters] = useState([]);
 
@@ -194,7 +206,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     setActiveFilters([]);
     if (config) document.title = `${config.title} — My Gudauri`;
 
-    if (section !== 'instructors') {
+    if (!apiBacked) {
       setItems(config?.items ?? []);
       setStatus('ready');
       return undefined;
@@ -203,7 +215,8 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     let active = true;
     setItems([]);
     setStatus('loading');
-    getInstructors()
+    const loader = section === 'activities' ? getActivities : getInstructors;
+    loader()
       .then((nextItems) => {
         if (!active) return;
         if (!Array.isArray(nextItems)) throw new Error('Invalid instructor response');
@@ -217,10 +230,11 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     return () => {
       active = false;
     };
-  }, [config, section]);
+  }, [apiBacked, config, section]);
 
-  const categories = useMemo(() => toFilter(filterConfig?.categories ?? []), [filterConfig]);
-  const refinements = useMemo(() => toFilter(filterConfig?.refinements ?? []), [filterConfig]);
+  const dynamicActivityFilters = useMemo(() => section === 'activities' ? activityFilters(items) : null, [items, section]);
+  const categories = useMemo(() => dynamicActivityFilters?.categories ?? toFilter(filterConfig?.categories ?? []), [dynamicActivityFilters, filterConfig]);
+  const refinements = useMemo(() => dynamicActivityFilters?.refinements ?? toFilter(filterConfig?.refinements ?? []), [dynamicActivityFilters, filterConfig]);
   const availableRefinements = refinements;
   const refinementGroups = useMemo(() => availableRefinements.reduce((groups, filter) => {
     const groupId = filter.group || 'filters';
@@ -299,6 +313,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
             <CatalogCategoryTabs
               categories={categoryTabs}
               activeId={activeCategory}
+              columns={section === 'activities' ? 3 : undefined}
               onChange={(categoryId) => {
                 setActiveCategory(categoryId);
                 setActiveFilters([]);
@@ -310,7 +325,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
               titleId="destination-list-title"
               ariaLabel={`${config.title} filters`}
               resultCount={status === 'loading' ? '…' : displayedItems.length}
-              resultLabel={section === 'instructors' && displayedItems.length === 1 ? 'instructor' : config.countLabel}
+              resultLabel={section === 'instructors' && displayedItems.length === 1 ? 'instructor' : (section === 'activities' && displayedItems.length === 1 ? 'experience' : config.countLabel)}
               controls={refinementGroups.map((group) => (
                 <FilterControl id={`${section}-${group.id}`} label={group.label} options={group.filters} selectedValues={activeFilters} onToggle={toggleFilter} onClear={clearFilters} key={group.id} />
               ))}
@@ -320,7 +335,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
             {status === 'loading' ? (
               <div className="destination-empty-state"><p>Loading {config.countLabel}…</p></div>
             ) : status === 'error' ? (
-              <p role="alert">Instructors are temporarily unavailable. Please try again later.</p>
+              <p role="alert">{section === 'activities' ? 'Activities' : 'Instructors'} are temporarily unavailable. Please try again later.</p>
             ) : displayedItems.length ? (
               <ListingCardGrid className="destination-grid" columns={3} ariaLabel={`${config.title} results`}>
                 {displayedItems.map((item) => <DestinationCard item={item} section={section} key={item.slug} />)}
@@ -333,44 +348,22 @@ export function DestinationCatalogPage({ section: sectionProp }) {
             )}
           </section>
 
-          <section className="destination-benefits" aria-labelledby="destination-benefits-title">
-            <SectionHeading
-              as="h2"
-              size="md"
+          <div className="destination-benefits">
+            <BenefitsSection
               kicker="Why My Gudauri"
               title={config.benefitsTitle}
-              titleId="destination-benefits-title"
+              items={config.benefits.map(([title, description], index) => ({ icon: String(index + 1).padStart(2, '0'), title, description }))}
             />
-            <div className="destination-benefits__grid">
-              {config.benefits.map(([title, description], index) => (
-                <article key={title}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                </article>
-              ))}
-            </div>
-          </section>
+          </div>
 
           {config.bookingSteps?.length ? (
-            <section className="destination-booking" aria-labelledby="destination-booking-title">
-              <SectionHeading
-                as="h2"
-                size="md"
+            <div className="destination-booking">
+              <BookingSteps
                 kicker={config.bookingKicker}
                 title={config.bookingTitle}
-                titleId="destination-booking-title"
+                items={config.bookingSteps.map(([title, description]) => ({ title, description }))}
               />
-              <div className="destination-booking__grid">
-                {config.bookingSteps.map(([title, description], index) => (
-                  <article key={title}>
-                    <span>{index + 1}</span>
-                    <h3>{title}</h3>
-                    <p>{description}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
+            </div>
           ) : null}
 
           <section className="destination-faq">

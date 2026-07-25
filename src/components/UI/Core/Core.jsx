@@ -49,8 +49,9 @@ export function Breadcrumbs({ items, label = 'Breadcrumbs' }) {
   return <nav className="ui-breadcrumbs" aria-label={label}><ol>{items.map((item, index) => <li key={`${item.label}-${index}`}>{index ? <span aria-hidden="true">/</span> : null}{item.to || item.href ? <Link to={item.to} href={item.href}>{item.label}</Link> : <span aria-current="page">{item.label}</span>}</li>)}</ol></nav>;
 }
 
-export function BackLink({ children = 'Back', ...props }) {
-  return <Link className="ui-back-link" {...props}><span aria-hidden="true">←</span>{children}</Link>;
+export function BackLink({ children = 'Back', tone = 'primary', className, ...props }) {
+  if (!['primary', 'accent'].includes(tone)) throw new Error(`BackLink: unsupported tone “${tone}”.`);
+  return <Link className={cn('ui-back-link', `ui-back-link--${tone}`, className)} {...props}><span aria-hidden="true">←</span>{children}</Link>;
 }
 
 export function Pagination({ page, totalPages, onPageChange, getPageHref, label = 'Pagination' }) {

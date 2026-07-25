@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import './ProfileGallery.scss';
 
-export function ProfileGallery({ images, index, instructorName, isOpen, onClose, onIndexChange }) {
+export function ObjectMediaGallery({ images, index, objectName, objectLabel = 'Object media', isOpen, onClose, onIndexChange }) {
   const panelRef = useRef(null);
   const closeRef = useRef(null);
 
@@ -55,8 +55,8 @@ export function ProfileGallery({ images, index, instructorName, isOpen, onClose,
       <section ref={panelRef} className="profile-gallery__panel" role="dialog" aria-modal="true" aria-labelledby="profile-gallery-title">
         <header className="profile-gallery__header">
           <div>
-            <p>Instructor media</p>
-            <h2 id="profile-gallery-title">{instructorName}</h2>
+            <p>{objectLabel}</p>
+            <h2 id="profile-gallery-title">{objectName}</h2>
           </div>
           <p className="profile-gallery__counter" aria-live="polite">{index + 1} / {images.length}</p>
           <button ref={closeRef} className="profile-gallery__close" type="button" aria-label="Close gallery" onClick={onClose}>×</button>

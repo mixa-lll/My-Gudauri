@@ -74,7 +74,7 @@ export function BenefitsSection({ kicker = 'Why book here', title, description, 
 }
 
 export function BookingStep({ number, title, description, context = 'catalog' }) {
-  return <article className={`ds-booking-step ds-booking-step--${context}`}><Badge tone="inverse">{number}</Badge><h3>{title}</h3><p>{description}</p></article>;
+  return <article className={`ds-booking-step ds-booking-step--${context}`}><Badge tone="accent">{number}</Badge><h3>{title}</h3><p>{description}</p></article>;
 }
 
 export function BookingSteps({ id, kicker = 'Simple and clear', title = 'How booking works', description, items = [], context = 'catalog' }) {

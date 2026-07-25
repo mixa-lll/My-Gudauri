@@ -22,6 +22,14 @@ Pages consume the public design-system barrel. Blocks are grouped by Global, Cat
 
 There is no Home, Contacts, About or unique promotion template. There is no WizardTemplate yet because the two existing flows do not share an implemented step structure.
 
+## Booking composition
+
+Object pages use `BookingConfigurator` for the two or three category-owned answers that shape the initial estimate. The shared sticky card identifies the concrete object, uses large booking-row quantity controls, explains the current estimate and shows category-owned guidance. It never collects contact details. Continuing creates a versioned `BookingDraft` and opens the route-level request page.
+
+`BookingFlow` remains a pattern rather than a CMS template. It composes `BookingProgress`, one registered semantic step rendered inside `BookingFormSection`, `BookingRequestSummary`, actions and request status. Product definitions live in `src/features/booking/contracts.js`; step keys are resolved exclusively through `BOOKING_STEP_REGISTRY`.
+
+The CMS may select a registered `flowKey` and provide content or offer parameters. It may not provide component names, arbitrary JSX, pricing functions or an unregistered step sequence. `WizardTemplate` remains intentionally absent until Booking and Instructor Match implement the same step contract.
+
 ## Statuses
 
 - `draft`: API is still being designed.

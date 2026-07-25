@@ -3,13 +3,13 @@ import { Container } from '../design-system';
 const COLORS = [
   ['grey-50', '#f6f6f3'], ['grey-100', '#eeeeea'], ['grey-150', '#e5e5df'], ['grey-200', '#d8d8d1'],
   ['grey-300', '#a3a39b'], ['grey-400', '#77776f'], ['grey-500', '#4d4d47'], ['grey-600', '#20211e'],
-  ['grey-700', '#151612'], ['grey-800', '#0e0f0d'], ['grey-white', '#ffffff'], ['accent-600', '#c43f34'],
-  ['accent-100', '#f7e4df'], ['olive-50', '#edf0e6'], ['blue-50', '#e9eef2'], ['sand-50', '#f2ede4'],
+  ['grey-700', '#151612'], ['grey-800', '#0e0f0d'], ['grey-white', '#ffffff'], ['accent-600', '#c43f34'], ['accent-700', '#a9342b'],
+  ['accent-100', '#f7e4df'], ['olive-50', '#edf0e6'], ['blue-50', '#d8e9f6'], ['blue-100', '#c7dff0'], ['sand-50', '#f2ede4'],
   ['green-600', '#51ee6b'], ['green-700', 'rgba(38, 76, 44, 0.42)'], ['success-600', '#4c9a59'],
   ['danger-700', '#9d2e2e'], ['warning-100', '#fff1d8'], ['warning-700', '#744700']
 ];
 
-const SEMANTIC_COLORS = ['surface-page', 'surface-card', 'surface-subtle', 'surface-overlay', 'surface-inverse', 'surface-media-overlay', 'text-primary', 'text-secondary', 'text-inverse', 'text-disabled', 'border-subtle', 'border-default', 'border-strong', 'action-primary', 'action-primary-hover', 'action-secondary', 'action-secondary-hover', 'action-disabled', 'status-success', 'status-warning', 'status-danger', 'focus-ring'];
+const SEMANTIC_COLORS = ['surface-page', 'surface-card', 'surface-subtle', 'surface-accent-subtle', 'surface-tint-cool', 'surface-tint-cool-strong', 'surface-tint-nature', 'surface-tint-warm', 'surface-control', 'surface-control-hover', 'surface-overlay', 'surface-inverse', 'surface-media-overlay', 'text-primary', 'text-secondary', 'text-inverse', 'text-disabled', 'text-accent', 'border-subtle', 'border-default', 'border-strong', 'action-primary', 'action-primary-hover', 'action-secondary', 'action-secondary-hover', 'action-accent', 'action-accent-hover', 'action-disabled', 'status-success', 'status-warning', 'status-danger', 'status-info', 'focus-ring'];
 
 const TYPE_STYLES = [['type-display', 'Display — MY GUDAURI'], ['type-page-title', 'Page Title — Mountain services'], ['type-section-title', 'Section Title — Local knowledge'], ['type-subsection-title', 'Subsection Title — Booking details'], ['type-body-large', 'Body Large — A clear, calm introduction to the service.'], ['type-body', 'Body — Practical information for planning your trip.'], ['type-body-small', 'Body Small — Updated for winter 2026'], ['type-label', 'Label — Available this week'], ['type-caption', 'Caption — Supporting metadata']];
 
@@ -22,6 +22,7 @@ function StoryHeader({ title, children }) {
 
 export default {
   title: 'Foundations/Tokens',
+  tags: ['autodocs'],
   parameters: { controls: { disable: true } }
 };
 

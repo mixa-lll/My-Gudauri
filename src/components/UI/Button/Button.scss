@@ -36,17 +36,20 @@
 .ui-button--primary { background: var(--action-primary); color: var(--text-inverse); }
 .ui-button--primary:hover { background: var(--action-primary-hover); }
 .ui-button--primary:active { background: var(--action-primary-pressed); }
-.ui-button--secondary { border-color: var(--border-strong); background: var(--action-secondary); color: var(--text-primary); }
-.ui-button--secondary:hover { background: var(--action-secondary-hover); }
+.ui-button--accent { border-color: var(--action-accent); background: var(--action-accent); color: var(--text-inverse); }
+.ui-button--accent:hover { border-color: var(--action-accent-hover); background: var(--action-accent-hover); }
+.ui-button--accent:active { border-color: var(--action-accent-pressed); background: var(--action-accent-pressed); }
+.ui-button--secondary { border-color: transparent; background: var(--action-secondary); color: var(--text-primary); }
+.ui-button--secondary:hover { border-color: transparent; background: var(--action-secondary-hover); }
 .ui-button--secondary:active { background: var(--action-secondary-pressed); }
 .ui-button--ghost { color: var(--text-primary); }
-.ui-button--ghost:hover { background: var(--action-secondary-hover); }
-.ui-button--ghost:active { background: var(--action-secondary-pressed); }
+.ui-button--ghost:hover { background: var(--surface-accent-subtle); color: var(--text-accent); }
+.ui-button--ghost:active { background: var(--action-secondary-pressed); color: var(--text-primary); }
 .ui-button--inverse { border-color: var(--text-inverse); background: transparent; color: var(--text-inverse); }
 .ui-button--inverse:hover { background: var(--text-inverse); color: var(--text-primary); }
 .ui-button--destructive { background: var(--status-danger); color: var(--text-inverse); }
 .ui-button--destructive:hover { background: var(--status-danger-hover); }
-.ui-button--link { padding-inline: var(--space-0); border-radius: var(--radius-none); color: var(--text-primary); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: var(--space-150); }
+.ui-button--link { padding-inline: var(--space-0); border-radius: var(--radius-none); color: var(--text-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: var(--space-150); }
 .ui-button--link:hover { text-decoration-thickness: 2px; }
 .ui-button--full-width { width: 100%; }
 .ui-button--icon-only { aspect-ratio: 1; padding: 0; }

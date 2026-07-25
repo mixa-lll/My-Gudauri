@@ -14,9 +14,27 @@
   align-content: start;
 }
 
+.faq--object {
+  padding: clamp(var(--space-700), 4vw, var(--space-1000));
+  border-radius: var(--radius-lg);
+  background: var(--surface-inverse);
+}
+
+.faq--object .section-heading__kicker {
+  color: color-mix(in srgb, var(--text-inverse) 72%, transparent);
+}
+
+.faq--object .section-heading__title {
+  color: var(--text-inverse);
+}
+
 @media (max-width: 860px) {
   .faq {
     grid-template-columns: 1fr;
+  }
+
+  .faq--object {
+    gap: var(--space-700);
   }
 }
 

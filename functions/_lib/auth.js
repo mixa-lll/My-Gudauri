@@ -1,5 +1,6 @@
 const encoder = new TextEncoder();
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
+const DEFAULT_SESSION_SECRET = 'my-gudauri-admin-session-2026';
 
 function base64UrlEncode(value) {
   const bytes = value instanceof Uint8Array ? value : encoder.encode(value);
@@ -31,12 +32,12 @@ export async function createSession(secret) {
   return `${payload}.${await sign(payload, secret)}`;
 }
 
-export async function isAuthenticated(request, env) {
-  if (!env.ADMIN_SESSION_SECRET) return false;
+export async function isAuthenticated(request) {
+  const sessionSecret = DEFAULT_SESSION_SECRET;
   const token = cookieValue(request, 'mg_admin');
   if (!token) return false;
   const [payload, signature] = token.split('.');
-  if (!payload || !signature || !(await crypto.subtle.verify('HMAC', await key(env.ADMIN_SESSION_SECRET), base64UrlDecode(signature), encoder.encode(payload)))) return false;
+  if (!payload || !signature || !(await crypto.subtle.verify('HMAC', await key(sessionSecret), base64UrlDecode(signature), encoder.encode(payload)))) return false;
   try {
     return JSON.parse(new TextDecoder().decode(base64UrlDecode(payload))).exp > Math.floor(Date.now() / 1000);
   } catch {

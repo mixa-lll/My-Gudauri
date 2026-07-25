@@ -21,7 +21,7 @@
 <div class="page">
   <div class="top"><span class="index">2. Активности</span><span class="title">Структура страниц и данных</span></div>
   <sc-if value="{{ showAnnotations }}" hint-placeholder-val="{{ true }}">
-    <p class="intro">Два экрана категории: каталог и страница активности. Иерархия состоит только из двух уровней: подкатегория → карточка активности. Все активности находятся в одной базе и используют один состав блоков — по той же логике, что каталог и профили инструкторов. Freeride, Ski Touring, Heliskiing, Mountaineering, Freestyle, Paragliding, Excursions и Mountain Biking меняют только наполнение карточек и страниц.</p>
+    <p class="intro">Два экрана категории: каталог и страница активности. Иерархия состоит только из двух уровней: подкатегория → карточка активности. Все активности находятся в одной базе и используют один состав блоков — по той же логике, что каталог и профили инструкторов. Freeride, Ski Touring, Heliskiing, Snowmobile Tours, Paragliding и Excursions меняют только наполнение карточек и страниц.</p>
   </sc-if>
 
   <sc-if value="{{ showLegend }}" hint-placeholder-val="{{ true }}">
@@ -68,7 +68,7 @@
       <div class="arrow">↓</div>
       <div class="block category"><div class="block-head"><strong>2 · Кастомный баннер</strong><span>категория</span></div><div class="pills"><span class="pill common">оффер активностей</span><span class="pill common">изображение</span><span class="pill common">CTA</span></div></div>
       <div class="arrow">↓</div>
-      <div class="block template"><div class="block-head"><strong>3 · Категории</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Freeride</span><span class="pill data">Ski Touring</span><span class="pill data">Heliskiing</span><span class="pill data">Mountaineering</span><span class="pill data">Freestyle</span><span class="pill data">Paragliding</span><span class="pill data">Excursions</span><span class="pill data">Mountain Biking</span></div></div>
+      <div class="block template"><div class="block-head"><strong>3 · Категории</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Freeride</span><span class="pill data">Ski Touring</span><span class="pill data">Heliskiing</span><span class="pill data">Snowmobile Tours</span><span class="pill data">Paragliding</span><span class="pill data">Excursions</span></div></div>
       <div class="arrow">↓</div>
       <div class="block template"><div class="block-head"><strong>4 · Фильтры — минимальный фиксированный набор</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Сезон</span><span class="pill data">Продолжительность</span><span class="pill data">Регион</span></div><div class="small" style="margin-top:9px">Один и тот же состав для всей базы. При небольшом количестве карточек блок можно не показывать.</div></div>
       <div class="arrow">↓</div>
@@ -93,7 +93,7 @@
       <div class="stack">
         <div class="block template"><div class="block-head"><strong>1 · Hero</strong><span>шаблон</span></div><div class="pills"><span class="pill data">Обложка / галерея</span><span class="pill data">Название</span><span class="pill data">Категория</span><span class="pill data">Регион</span><span class="pill data">Цена от</span></div></div>
         <div class="arrow">↓</div>
-        <div class="block template"><div class="block-head"><strong>2 · Главные характеристики — 4 пары</strong><span>шаблон</span></div><div class="pills"><span class="pill data"><b>Продолжительность:</b> значение</span><span class="pill data"><b>Уровень:</b> значение</span><span class="pill data"><b>Формат:</b> значение</span><span class="pill data"><b>Сезон:</b> значение</span></div></div>
+        <div class="block template"><div class="block-head"><strong>2 · Главные характеристики — 4 пары</strong><span>шаблон</span></div><div class="pills"><span class="pill data"><b>Сложность:</b> 1–5 цветных точек</span><span class="pill data"><b>Продолжительность:</b> в часах</span><span class="pill data"><b>Верхняя точка:</b> высота в метрах</span><span class="pill data"><b>Перепад высоты:</b> в метрах</span></div></div>
         <div class="arrow">↓</div>
         <div class="block template"><div class="block-head"><strong>3 · Описание</strong><span>шаблон</span></div><div class="pills"><span class="pill data">полное описание активности</span></div></div>
         <div class="arrow">↓</div>
