@@ -109,7 +109,7 @@ function GroupDetailsFields({ answers, update, maxParticipants, maxAdults = 10, 
       <div className="booking-request-flow__counter-field"><span>{t('booking.group.adults')}</span><div><p><strong>{adults}</strong><small>{t('booking.group.adultsShort')}</small></p><QuantityStepper variant="booking" label={t('booking.group.adults')} value={adults} min={1} max={adultMaximum} onChange={(value) => setCounts(value, Math.min(children, value, maxParticipants - value))} /></div></div>
       <div className="booking-request-flow__counter-field"><span>{t('booking.group.kids')}</span><div><p><strong>{children}</strong><small>{t('booking.group.kidsShort')}</small></p><QuantityStepper variant="booking" label={t('booking.group.kids')} value={children} min={0} max={childMaximum} onChange={(value) => setCounts(adults, value)} /></div></div>
     </div>
-    <ChoiceGroup label={t('booking.group.instructorLanguage')} options={MATCH_OPTIONS.languages} value={answers.languages ?? []} multiple tone="accent" onChange={(values) => update('languages', values)} />
+    <ChoiceGroup label={t('booking.group.instructorLanguage')} options={MATCH_OPTIONS.languages} value={answers.languages ?? []} multiple onChange={(values) => update('languages', values)} />
     {includeSkillLevel ? <ChoiceGroup label={t('booking.group.skillLevel')} options={MATCH_OPTIONS.skillLevel} value={answers[levelField] ?? 'Beginner'} onChange={(value) => update(levelField, value)} /> : null}
   </>;
 }

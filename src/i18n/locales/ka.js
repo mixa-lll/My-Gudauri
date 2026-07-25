@@ -700,6 +700,8 @@ export const ka = {
     }
   },
   calendar: {
+    nextMonth: 'შემდეგი თვე',
+    previousMonth: 'წინა თვე',
     chooseRange: 'აირჩიეთ დაწყებისა და დასრულების თარიღი.',
     rangeSelected: '{{range}} · არჩეულია {{days}} დღე — დიაპაზონის შესაცვლელად აირჩიეთ ახალი საწყისი თარიღი'
   },

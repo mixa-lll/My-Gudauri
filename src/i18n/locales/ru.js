@@ -700,6 +700,8 @@ export const ru = {
     }
   },
   calendar: {
+    nextMonth: 'Следующий месяц',
+    previousMonth: 'Предыдущий месяц',
     chooseRange: 'Выберите дату начала и окончания.',
     rangeSelected: '{{range}} · выбрано дней: {{days}} — выберите новую дату начала, чтобы изменить диапазон'
   },

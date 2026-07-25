@@ -700,6 +700,8 @@ export const en = {
     }
   },
   calendar: {
+    nextMonth: 'Next month',
+    previousMonth: 'Previous month',
     chooseRange: 'Choose a start and end date.',
     rangeSelected: '{{range}} · {{days}} days selected — choose a new start date to change the range'
   },

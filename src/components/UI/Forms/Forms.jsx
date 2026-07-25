@@ -115,7 +115,7 @@ export function DateRangeCalendar({
 
   return <section id={id} className="ui-date-range" aria-label={label}>
     <div className="ui-date-range__months">
-      <Button className="ui-date-range__previous" type="button" variant="secondary" size="md" aria-label="Previous month" disabled={disabled || month <= monthStart(minDate)} onClick={() => setMonth((current) => shiftMonth(current, -1))}>‹</Button>
+      <Button className="ui-date-range__previous" type="button" variant="secondary" size="md" aria-label={t('calendar.previousMonth')} disabled={disabled || month <= monthStart(minDate)} onClick={() => setMonth((current) => shiftMonth(current, -1))}>‹</Button>
       {visibleMonths.map((visibleMonth) => {
         const firstWeekday = (visibleMonth.getDay() + 6) % 7;
         const totalDays = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
@@ -131,13 +131,14 @@ export function DateRangeCalendar({
               const selected = Boolean(start && key >= start && key <= (end || start));
               const edge = selected && (key === start || key === (end || start));
               const boundary = key === start ? ' is-start' : key === (end || start) ? ' is-end' : '';
+              const isToday = key === dateKey(today);
               const dateLabel = new Intl.DateTimeFormat(activeLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(date);
-              return <button type="button" className={`ui-date-range__day${selected ? ' is-selected' : ''}${edge ? ' is-edge' : ''}${boundary}`} key={key} disabled={isDisabled} aria-pressed={selected} aria-label={dateLabel} onClick={() => selectDate(date)}>{date.getDate()}</button>;
+              return <button type="button" className={`ui-date-range__day${selected ? ' is-selected' : ''}${edge ? ' is-edge' : ''}${boundary}${isToday ? ' is-today' : ''}`} key={key} disabled={isDisabled} aria-pressed={selected} aria-label={dateLabel} onClick={() => selectDate(date)}>{date.getDate()}</button>;
             })}
           </div>
         </section>;
       })}
-      <Button className="ui-date-range__next" type="button" variant="secondary" size="md" aria-label="Next month" disabled={disabled || shiftMonth(month, 1) >= monthStart(maxDate)} onClick={() => setMonth((current) => shiftMonth(current, 1))}>›</Button>
+      <Button className="ui-date-range__next" type="button" variant="secondary" size="md" aria-label={t('calendar.nextMonth')} disabled={disabled || shiftMonth(month, 1) >= monthStart(maxDate)} onClick={() => setMonth((current) => shiftMonth(current, 1))}>›</Button>
     </div>
     {selectedRangeLabel ? <p className="ui-date-range__hint">{t('calendar.rangeSelected', { range: selectedRangeLabel, days: rangeDays(start, end) || 1 })}</p> : <p className="ui-date-range__hint">{t('calendar.chooseRange')}</p>}
   </section>;
