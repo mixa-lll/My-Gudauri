@@ -700,6 +700,10 @@ export const ka = {
     }
   },
   calendar: {
+    day: 'დღე',
+    dayNumber: 'დღე {{number}}',
+    timePerDay: 'დრო დღეების მიხედვით',
+    slotsHint: 'მონიშნეთ იმდენი ინტერვალი, რამდენიც გჭირდებათ. ზედიზედ დღეები ნორმალურია.',
     nextMonth: 'შემდეგი თვე',
     previousMonth: 'წინა თვე',
     chooseRange: 'აირჩიეთ დაწყებისა და დასრულების თარიღი.',

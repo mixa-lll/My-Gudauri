@@ -700,6 +700,10 @@ export const ru = {
     }
   },
   calendar: {
+    day: 'День',
+    dayNumber: 'День {{number}}',
+    timePerDay: 'Время по дням',
+    slotsHint: 'Отметьте столько интервалов, сколько нужно. Дни подряд — это нормально.',
     nextMonth: 'Следующий месяц',
     previousMonth: 'Предыдущий месяц',
     chooseRange: 'Выберите дату начала и окончания.',

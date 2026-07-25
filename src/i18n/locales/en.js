@@ -700,6 +700,10 @@ export const en = {
     }
   },
   calendar: {
+    day: 'Day',
+    dayNumber: 'Day {{number}}',
+    timePerDay: 'Time per day',
+    slotsHint: 'Choose as many slots as you need. Consecutive days are fine.',
     nextMonth: 'Next month',
     previousMonth: 'Previous month',
     chooseRange: 'Choose a start and end date.',

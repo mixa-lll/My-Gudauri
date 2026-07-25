@@ -40,13 +40,13 @@
 .ds-booking-progress li.is-current > span { border-color: var(--action-primary); background: var(--action-primary); color: var(--text-inverse); }
 .ds-booking-progress li.is-complete > span { border-color: var(--status-success); color: var(--status-success); }
 
-.ds-booking-form-section { display: grid; gap: var(--space-500); padding: var(--space-700); border: 1px solid var(--border-subtle); border-radius: var(--radius-card); background: var(--surface-card); box-shadow: var(--shadow-soft); }
+.ds-booking-form-section { display: grid; gap: var(--space-500); padding: var(--space-700); border: 0; border-radius: var(--radius-card); background: var(--surface-card); box-shadow: var(--shadow-card); }
 .ds-booking-form-section header h2 { margin: 0; font: var(--fw-semibold) var(--text-h5) / var(--lh-h5) var(--font-heading); letter-spacing: -0.025em; }
 .ds-booking-form-section header p { max-width: 64ch; margin: var(--space-150) 0 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
 .ds-booking-form-section__body { display: grid; gap: var(--space-500); }
 .ds-booking-form-section footer { display: flex; justify-content: space-between; gap: var(--space-300); padding-top: var(--space-300); }
 .ds-booking-form-section__error { margin: 0; color: var(--status-danger); }
-.ds-booking-form-section--compact { padding: 0; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface-card); box-shadow: none; }
+.ds-booking-form-section--compact { padding: 0; border: 0; border-radius: var(--radius-md); background: var(--surface-subtle); box-shadow: none; }
 .ds-booking-form-section__compact-trigger { width: 100%; min-height: var(--control-height-lg); padding: var(--space-400) var(--space-500); border: 0; display: flex; align-items: center; justify-content: space-between; gap: var(--space-500); border-radius: inherit; background: transparent; color: var(--text-primary); text-align: left; cursor: pointer; }
 .ds-booking-form-section__compact-trigger strong { font: var(--fw-medium) var(--type-body-large-size) / var(--type-body-large-line) var(--font-body); }
 .ds-booking-form-section__compact-trigger > span { min-width: 0; display: flex; align-items: center; justify-content: end; gap: var(--space-300); color: var(--text-secondary); }
@@ -61,10 +61,10 @@
   display: grid;
   gap: 0;
   width: 100%;
-  border-color: var(--border-subtle);
+  border-color: transparent;
   border-radius: var(--radius-lg);
   color: var(--text-primary);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-card);
 }
 .ds-booking-request-summary__heading {
   margin: 0 0 var(--space-400);
@@ -79,13 +79,12 @@
   align-items: center;
   gap: var(--space-350);
   padding-bottom: var(--space-400);
-  border-bottom: 1px solid var(--border-subtle);
 }
 .ds-booking-request-summary__object img,
 .ds-booking-request-summary__object-fallback {
   width: var(--control-height-lg);
   height: var(--control-height-lg);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-full);
 }
 .ds-booking-request-summary__object img { object-fit: cover; }
 .ds-booking-request-summary__object-fallback {
@@ -108,21 +107,20 @@
 .ds-booking-request-summary dl {
   display: grid;
   margin: 0;
-  padding: 0;
+  padding-block: var(--space-400);
+  border-block: 1px dashed var(--border-default);
   border-radius: 0;
   background: transparent;
 }
 .ds-booking-request-summary dl:empty { display: none; }
 .ds-booking-request-summary dl > div {
   min-height: 0;
-  padding-block: var(--space-300);
-  border-bottom: 1px solid var(--border-subtle);
+  padding-block: var(--space-200);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-400);
 }
-.ds-booking-request-summary dl > div:last-child { border-bottom: 0; }
 .ds-booking-request-summary dt {
   color: var(--text-secondary);
   font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body);
@@ -141,8 +139,6 @@
 .ds-booking-request-summary dl > div.is-muted dd { color: var(--text-disabled); font-weight: var(--fw-regular); }
 .ds-booking-request-summary__total {
   margin-top: var(--space-400);
-  padding-top: var(--space-400);
-  border-top: 1px solid var(--border-default);
   display: flex;
   align-items: baseline;
   justify-content: space-between;

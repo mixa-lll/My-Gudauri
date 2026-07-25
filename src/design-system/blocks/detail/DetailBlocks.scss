@@ -84,7 +84,7 @@
 .ds-booking-widget__head > div { display: grid; gap: var(--space-150); }
 .ds-booking-widget__head small, .ds-booking-widget__note { color: var(--text-secondary); font: var(--fw-regular) var(--type-caption-size) / var(--type-caption-line) var(--font-body); }
 .ds-booking-widget__fields { display: grid; gap: var(--space-400); }
-.ds-booking-widget__stepper { min-height: var(--control-height-lg); padding: var(--space-200) var(--space-300); border: 1px solid var(--border-default); border-radius: var(--radius-control); display: flex; align-items: center; justify-content: space-between; gap: var(--space-300); }
+.ds-booking-widget__stepper { min-height: var(--control-height-lg); padding: var(--space-200) var(--space-300); border: 0; border-radius: var(--radius-control); background: var(--surface-subtle); display: flex; align-items: center; justify-content: space-between; gap: var(--space-300); }
 .ds-booking-widget__stepper > span { font: var(--fw-medium) var(--type-label-size) / var(--type-label-line) var(--font-body); }
 .ds-booking-widget__total { padding-top: var(--space-400); border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-300); }
 .ds-booking-widget__total strong { font: var(--fw-bold) var(--type-body-large-size) / 1 var(--font-heading); }

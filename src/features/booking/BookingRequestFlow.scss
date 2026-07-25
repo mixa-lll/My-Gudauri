@@ -22,8 +22,9 @@
 .booking-request-flow__choice-group--segmented .ui-filter-chip.is-selected { background: var(--action-primary); color: var(--text-inverse); }
 .booking-request-flow__time-section { padding-top: var(--space-500); border-top: 1px solid var(--border-subtle); display: grid; gap: var(--space-400); }
 .booking-request-flow__time-actions { display: flex; justify-content: flex-end; }
-.booking-request-flow__time-section .ui-button--ghost { min-height: var(--control-height-sm); padding-inline: var(--space-300); border: 1px solid var(--action-accent); border-radius: var(--radius-xsm); color: var(--text-accent); }
-.booking-request-flow__add-time.ui-button { width: max-content; min-height: var(--control-height-md); border-style: dashed; color: var(--text-primary); }
+.booking-request-flow__time-section .ui-button--ghost { min-height: var(--control-height-sm); padding-inline: var(--space-300); border: 0; border-radius: var(--radius-sm); background: var(--surface-subtle); color: var(--text-secondary); }
+.booking-request-flow__time-section .ui-button--ghost:hover:not(:disabled) { background: var(--surface-control-hover); color: var(--text-primary); }
+.booking-request-flow__add-time.ui-button { width: max-content; min-height: var(--control-height-md); border: 0; background: var(--surface-subtle); color: var(--text-primary); }
 .booking-request-flow__add-time small { color: var(--text-disabled); font: inherit; }
 .booking-request-flow__back-action.ui-button { padding-inline: 0; }
 .booking-request-flow__actions--forward-only { justify-content: flex-end; }

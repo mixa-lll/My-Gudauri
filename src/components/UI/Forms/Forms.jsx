@@ -148,7 +148,8 @@ export function DateRangeCalendar({
  * Reusable per-day booking availability selector. Selection is stored by day
  * key, so request drafts can be serialised without converting local time.
  */
-export function TimeSlotPicker({ days = [], slots = [], value = {}, onChange, disabled = false, label = 'Time per day' }) {
+export function TimeSlotPicker({ days = [], slots = [], value = {}, onChange, disabled = false, label }) {
+  const { t } = useLanguage();
   const toggleSlot = (dayId, slotId) => {
     const current = value[dayId] ?? [];
     const nextSlots = current.includes(slotId) ? current.filter((id) => id !== slotId) : [...current, slotId];
@@ -156,18 +157,25 @@ export function TimeSlotPicker({ days = [], slots = [], value = {}, onChange, di
   };
 
   return <fieldset className="ui-time-slot-picker" disabled={disabled}>
-    <legend>{label}</legend>
-    <div className="ui-time-slot-picker__legend" aria-hidden="true"><span>Day</span>{slots.map((slot) => <span key={slot.id}>{slot.meta ?? slot.label}</span>)}</div>
+    <legend>{label ?? t('calendar.timePerDay')}</legend>
+    <div className="ui-time-slot-picker__legend" aria-hidden="true"><span>{t('calendar.day')}</span>{slots.map((slot) => <span key={slot.id}>{slot.meta ?? slot.label}</span>)}</div>
     <div className="ui-time-slot-picker__rows">
       {days.map((day, index) => <div className="ui-time-slot-picker__row" key={day.id}>
-        <div><strong>Day {index + 1}</strong><small>{day.label}</small></div>
+        <div><strong>{t('calendar.dayNumber', { number: index + 1 })}</strong><small>{day.label}</small></div>
         <div>{slots.map((slot) => {
           const selected = (value[day.id] ?? []).includes(slot.id);
-          return <Button key={slot.id} type="button" variant={selected ? 'accent' : 'secondary'} size="md" aria-pressed={selected} disabled={disabled} onClick={() => toggleSlot(day.id, slot.id)}>{slot.label}</Button>;
+          return <button
+            className={cn('ui-time-slot', selected && 'is-selected')}
+            key={slot.id}
+            type="button"
+            aria-pressed={selected}
+            disabled={disabled}
+            onClick={() => toggleSlot(day.id, slot.id)}
+          >{slot.label}</button>;
         })}</div>
       </div>)}
     </div>
-    <p>Choose as many slots as you need. Consecutive days are fine.</p>
+    <p>{t('calendar.slotsHint')}</p>
   </fieldset>;
 }
 
