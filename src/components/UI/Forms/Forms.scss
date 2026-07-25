@@ -24,14 +24,19 @@
 .ui-date-range__weekdays, .ui-date-range__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; }
 .ui-date-range__weekdays { padding-bottom: var(--space-150); color: var(--text-secondary); font: var(--fw-medium) var(--type-caption-size) / var(--type-caption-line) var(--font-body); text-transform: uppercase; letter-spacing: .04em; }
 .ui-date-range__grid { row-gap: var(--space-150); }
-.ui-date-range__day { position: relative; z-index: 0; min-height: var(--control-height-md); padding: 0; border: 0; border-radius: var(--radius-xsm); background: transparent; color: var(--text-primary); font: var(--fw-medium) var(--type-body-size) / 1 var(--font-body); font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard); }
-.ui-date-range__day:hover:not(:disabled):not(.is-edge) { background: var(--surface-subtle); }
-.ui-date-range__day.is-selected { border-radius: 0; background: var(--surface-tint-neutral-strong); }
-.ui-date-range__day.is-edge { z-index: 1; border-radius: var(--radius-xsm); background: var(--action-primary); color: var(--text-inverse); font-weight: var(--fw-semibold); }
-.ui-date-range__day.is-selected.is-start:not(.is-end) { border-start-start-radius: var(--radius-xsm); border-end-start-radius: var(--radius-xsm); }
-.ui-date-range__day.is-selected.is-end:not(.is-start) { border-start-end-radius: var(--radius-xsm); border-end-end-radius: var(--radius-xsm); }
+.ui-date-range__day { position: relative; z-index: 0; min-height: var(--control-height-md); padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--text-primary); font: var(--fw-medium) var(--type-body-size) / 1 var(--font-body); font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color var(--motion-duration-fast) var(--motion-ease-standard), color var(--motion-duration-fast) var(--motion-ease-standard); }
+.ui-date-range__day:hover:not(:disabled):not(.is-edge) { border-radius: var(--radius-xsm); background: var(--surface-subtle); }
+// The selected range is one uninterrupted band: only its ends and the days that
+// begin or finish a week are rounded, so a range never shows a seam.
+.ui-date-range__day.is-selected { background: var(--surface-tint-neutral-strong); }
+.ui-date-range__day.is-selected.is-start,
+.ui-date-range__day.is-selected.is-week-start { border-start-start-radius: var(--radius-xsm); border-end-start-radius: var(--radius-xsm); }
+.ui-date-range__day.is-selected.is-end,
+.ui-date-range__day.is-selected.is-week-end { border-start-end-radius: var(--radius-xsm); border-end-end-radius: var(--radius-xsm); }
+.ui-date-range__day.is-edge { z-index: 1; background: var(--action-primary); color: var(--text-inverse); font-weight: var(--fw-semibold); }
+.ui-date-range__day.is-outside { color: var(--text-disabled); pointer-events: none; }
 .ui-date-range__day.is-today:not(.is-edge)::after { position: absolute; inset-inline: 40%; bottom: var(--space-150); height: 2px; border-radius: var(--radius-full); background: var(--text-secondary); content: ''; }
-.ui-date-range__day:focus-visible { z-index: 2; outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: calc(var(--focus-ring-offset) * -1); }
+.ui-date-range__day:focus-visible { z-index: 2; border-radius: var(--radius-xsm); outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: calc(var(--focus-ring-offset) * -1); }
 .ui-date-range__day:disabled { color: var(--text-disabled); cursor: not-allowed; }
 .ui-date-range__hint { margin: 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
 .ui-time-slot-picker { min-width: 0; margin: 0; padding: 0; border: 0; display: grid; gap: var(--space-300); }

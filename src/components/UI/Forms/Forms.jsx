@@ -119,21 +119,26 @@ export function DateRangeCalendar({
       {visibleMonths.map((visibleMonth) => {
         const firstWeekday = (visibleMonth.getDay() + 6) % 7;
         const totalDays = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
-        const cells = [...Array.from({ length: firstWeekday }, () => null), ...Array.from({ length: totalDays }, (_, index) => new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index + 1))];
+        const cells = [
+          ...Array.from({ length: firstWeekday }, (_, index) => new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index + 1 - firstWeekday)),
+          ...Array.from({ length: totalDays }, (_, index) => new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index + 1)),
+        ];
+        while (cells.length % 7 !== 0) cells.push(new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), cells.length - firstWeekday + 1));
         return <section className="ui-date-range__month" key={`${visibleMonth.getFullYear()}-${visibleMonth.getMonth()}`} aria-label={new Intl.DateTimeFormat(activeLocale, { month: 'long', year: 'numeric' }).format(visibleMonth)}>
           <h3>{new Intl.DateTimeFormat(activeLocale, { month: 'long', year: 'numeric' }).format(visibleMonth)}</h3>
           <div className="ui-date-range__weekdays" aria-hidden="true">{weekDays.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div>
           <div className="ui-date-range__grid">
             {cells.map((date, index) => {
-              if (!date) return <span key={`empty-${index}`} aria-hidden="true" />;
               const key = dateKey(date);
-              const isDisabled = disabled || date < minDate || date > maxDate;
-              const selected = Boolean(start && key >= start && key <= (end || start));
+              const outside = date.getMonth() !== visibleMonth.getMonth();
+              const isDisabled = disabled || outside || date < minDate || date > maxDate;
+              const selected = !outside && Boolean(start && key >= start && key <= (end || start));
               const edge = selected && (key === start || key === (end || start));
               const boundary = key === start ? ' is-start' : key === (end || start) ? ' is-end' : '';
+              const weekEdge = `${index % 7 === 0 ? ' is-week-start' : ''}${index % 7 === 6 ? ' is-week-end' : ''}`;
               const isToday = key === dateKey(today);
               const dateLabel = new Intl.DateTimeFormat(activeLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(date);
-              return <button type="button" className={`ui-date-range__day${selected ? ' is-selected' : ''}${edge ? ' is-edge' : ''}${boundary}${isToday ? ' is-today' : ''}`} key={key} disabled={isDisabled} aria-pressed={selected} aria-label={dateLabel} onClick={() => selectDate(date)}>{date.getDate()}</button>;
+              return <button type="button" className={`ui-date-range__day${outside ? ' is-outside' : ''}${selected ? ' is-selected' : ''}${edge ? ' is-edge' : ''}${boundary}${weekEdge}${isToday ? ' is-today' : ''}`} key={key} disabled={isDisabled} aria-pressed={selected} aria-label={dateLabel} onClick={() => selectDate(date)}>{date.getDate()}</button>;
             })}
           </div>
         </section>;
