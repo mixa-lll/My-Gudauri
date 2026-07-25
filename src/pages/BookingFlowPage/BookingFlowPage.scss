@@ -7,8 +7,10 @@
 .booking-flow-page__header { display: flex; align-items: center; gap: var(--space-400); }
 .booking-flow-page__header h1 { margin: 0; font: var(--fw-regular) var(--text-h4) / var(--lh-h4) var(--font-heading); letter-spacing: var(--tracking-heading); }
 .booking-flow-page__header h1 strong { font-weight: var(--fw-semibold); }
-.booking-flow-page__back.ui-back-link { flex: none; width: var(--control-height-lg); min-height: var(--control-height-lg); padding: 0; border: 0; border-radius: var(--radius-full); display: grid; place-items: center; background: var(--surface-subtle); color: var(--text-primary); font-size: 0; text-decoration: none; }
-.booking-flow-page__back.ui-back-link span { font-size: var(--type-body-large-size); }
+// The label stays for assistive tech; the circle shows only the arrow, so the
+// link centres as a single flex line instead of a two-row grid with a gap.
+.booking-flow-page__back.ui-back-link { flex: none; width: var(--control-height-lg); min-height: var(--control-height-lg); padding: 0; border: 0; border-radius: var(--radius-full); display: inline-flex; align-items: center; justify-content: center; gap: 0; background: var(--surface-subtle); color: var(--text-primary); font-size: 0; line-height: 1; text-decoration: none; }
+.booking-flow-page__back.ui-back-link span { display: block; font-size: var(--type-body-large-size); line-height: 1; }
 .booking-flow-page__back.ui-back-link:hover { background: var(--action-secondary-hover); }
 .booking-flow-page__content { min-width: 0; }
 .booking-flow-page__state { min-height: 60vh; display: grid; place-items: center; padding-block: var(--space-1200); }
