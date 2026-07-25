@@ -457,6 +457,258 @@ export const en = {
     galleryLabel: 'Instructor media',
     typeLabel: 'Private instructor'
   },
+  booking: {
+    onRequest: 'On request',
+    notSelected: 'Not selected',
+    timeFlexible: 'time flexible',
+    timeNotSet: 'time not set',
+    hourShort: 'h',
+    languageNotSelected: 'Language not selected',
+    levelNotSelected: 'Level not selected',
+    readyToSend: 'Ready to send',
+    submitted: 'Your request has been sent.',
+    received: 'Request received',
+    reference: 'Reference:',
+    summaryTitle: 'Your request',
+    forHours: 'for {{hours}} hours',
+    sameRateNote: 'Same official rate for every instructor.',
+    priceLaterNote: 'Price appears once you set the time and participants.',
+    actions: {
+      edit: 'Edit',
+      back: 'Back',
+      next: 'Next',
+      send: 'Send request',
+      sending: 'Sending request',
+      collapse: 'Collapse',
+      specifyTime: 'Specify time',
+      optional: '(optional)',
+      backToOffer: 'Back to the offer',
+      backToInstructors: 'Back to instructors'
+    },
+    validation: {
+      date: 'Choose a preferred date.',
+      dateOnly: 'Choose at least one preferred date.',
+      dateAndSlot: 'Choose at least one date and one preferred time slot.',
+      group: 'Choose the group size, instructor language and skill level.',
+      matchGroup: 'Tell us about the group and preferred languages.',
+      preferences: 'Choose activity, pace, skill level and budget.',
+      contact: 'Add a valid name, phone, email and preferred messenger.'
+    },
+    group: {
+      whoIsComing: 'Who is coming',
+      adults: 'Adults',
+      adultsShort: 'adults',
+      kids: 'Kids under 12',
+      kidsShort: 'kids',
+      instructorLanguage: 'Instructor language',
+      skillLevel: 'Group skill level'
+    },
+    fields: {
+      preferredDate: 'Preferred date',
+      additionalDetails: 'Additional details',
+      preferredLessonDates: 'Preferred lesson dates',
+      timePerDay: 'Time per day',
+      timePerDayOptional: 'Time per day — optional',
+      slotMeta: 'slot {{index}} · 2h',
+      activity: 'Activity',
+      pace: 'Pace',
+      skillLevel: 'Skill level',
+      budget: 'Budget per person',
+      anythingElse: 'Anything else',
+      anythingElseHint: 'Goals, kids, rental equipment',
+      anythingElsePlaceholder: '2 beginners and a child, rental needed',
+      name: 'Name',
+      phone: 'Phone',
+      email: 'Email',
+      emailHint: 'Confirmation goes here',
+      messenger: 'Preferred messenger',
+      messengerPlaceholder: 'Choose a messenger',
+      comment: 'Comment'
+    },
+    review: {
+      offer: 'Offer',
+      date: 'Date',
+      dates: 'Dates',
+      timeSlots: 'Time slots',
+      preferredTime: 'Preferred time',
+      duration: 'Duration',
+      participants: 'Participants',
+      contact: 'Contact',
+      lesson: 'Lesson',
+      preferences: 'Preferences',
+      peopleLabel: 'People',
+      hours: '{{hours}} hours',
+      hoursSelected: '{{hours}} hours selected',
+      people: '{{count}} people',
+      adultsCount: '{{count}} adults',
+      kidsCount: '{{count}} kids'
+    },
+    steps: {
+      instructorDates: {
+        label: 'Dates & time',
+        title: 'When would you like to go?',
+        descriptionSpecific: 'Choose one or several lesson days, then mark the time slots that work for you.',
+        descriptionMatch: 'Choose your preferred days. You can add a preferred time after selecting the dates.'
+      },
+      instructorParticipants: {
+        label: 'Company',
+        title: 'Company',
+        description: 'Tell the instructor who is coming and choose the preferred lesson language and group level.'
+      },
+      matchCompany: {
+        title: 'Company',
+        description: 'A few details about your group help the operator make a relevant match.'
+      },
+      matchPreferences: {
+        title: 'What are you into?',
+        description: 'A few preferences help the operator match the right lesson and instructor.'
+      },
+      inquiryDetails: {
+        title: 'Add request details',
+        description: 'Share the preferred date and anything the local team should know.'
+      },
+      contact: {
+        title: 'Contact details',
+        description: 'A local manager will use these details only for this request.',
+        descriptionMatch: 'Where should the operator send the confirmed option?',
+        privacy: 'Payment happens after confirmation. The operator replies within an hour to confirm the instructor, weather and meeting point.'
+      },
+      review: { label: 'Review', title: 'Review your request', description: 'Nothing is charged now. We confirm availability and the final total first.' },
+      activityDetails: 'Activity details',
+      rentalDetails: 'Rental details',
+      transferDetails: 'Transfer details',
+      stayDetails: 'Stay details',
+      serviceDetails: 'Service details',
+      placeDetails: 'Place details'
+    },
+    page: {
+      withObject: 'with {{name}}',
+      preparing: 'Preparing your request',
+      cannotOpen: 'Booking cannot be opened',
+      instructorNotFound: 'Instructor not found.',
+      noDraft: 'Open a specific offer and configure the request first.'
+    },
+    match: { title: 'Request a lesson', titleAccent: 'we’ll match an instructor' },
+    options: {
+      family: 'Family',
+      friends: 'Friends',
+      solo: 'Solo',
+      russian: 'Russian',
+      english: 'English',
+      georgian: 'Georgian',
+      ski: 'Ski',
+      snowboard: 'Snowboard',
+      freeride: 'Freeride',
+      sightseeing: 'Sightseeing',
+      relaxed: 'Relaxed',
+      medium: 'Medium',
+      adrenaline: 'Adrenaline',
+      beginner: 'Beginner',
+      intermediate: 'Intermediate',
+      advanced: 'Advanced',
+      economy: 'Economy',
+      'mid-range': 'Mid-range',
+      premium: 'Premium',
+      'half-day': 'Half day',
+      'full-day': 'Full day',
+      'ski-set': 'Ski set',
+      'snowboard-set': 'Snowboard set',
+      clothing: 'Clothing',
+      standard: 'Standard',
+      extended: 'Extended',
+      custom: 'Custom'
+    },
+    flows: {
+      'instructor-match-v1': {
+        title: 'Request a lesson',
+        priceLabel: 'Price',
+        entryNote: 'The operator confirms a suitable instructor, the weather and meeting point before payment.',
+        confirmationText: 'Tell us what you need and the local team will match an instructor for you.',
+        fields: {}
+      },
+      'instructor-lesson-v1': {
+        title: 'Book a lesson',
+        priceLabel: 'Estimated lesson total',
+        entryNote: 'Hours can be split across several days.',
+        confirmationText: 'Pick a date and time — the manager confirms whether the instructor is free, or suggests another.',
+        fields: {
+          duration: { label: 'Hours', singularLabel: 'Hour', shortLabel: 'h' },
+          participants: { label: 'Students', singularLabel: 'Student', shortLabel: 'ppl', shortSingularLabel: 'person' },
+          level: { label: 'Group level' }
+        }
+      },
+      'activity-request-v1': {
+        title: 'Request an activity',
+        priceLabel: 'Estimated activity total',
+        entryNote: 'Timing may change with weather and mountain conditions.',
+        confirmationText: 'Continue to choose a date and time. The manager confirms the activity and final meeting details.',
+        fields: {
+          participants: { label: 'People', singularLabel: 'Person', shortLabel: 'ppl', shortSingularLabel: 'person' },
+          duration: { label: 'Duration' }
+        }
+      },
+      'rental-request-v1': {
+        title: 'Request equipment',
+        priceLabel: 'Estimated rental total',
+        entryNote: 'Equipment sizes and availability are confirmed before payment.',
+        confirmationText: 'Continue to add sizes and pickup dates. The manager confirms the selected equipment.',
+        fields: {
+          days: { label: 'Days', singularLabel: 'Day', shortLabel: 'days', shortSingularLabel: 'day' },
+          equipment: { label: 'Equipment' }
+        }
+      },
+      'transfer-request-v1': {
+        title: 'Request a transfer',
+        priceLabel: 'Estimated transfer total',
+        entryNote: 'The final route and pickup time are confirmed by the manager.',
+        confirmationText: 'Continue to add your travel details. The manager confirms the vehicle and exact pickup time.',
+        fields: {
+          passengers: { label: 'Passengers', singularLabel: 'Passenger', shortLabel: 'ppl', shortSingularLabel: 'person' },
+          pickup: { label: 'Pickup point', placeholder: 'Tbilisi airport' }
+        }
+      },
+      'stay-request-v1': {
+        title: 'Request a stay',
+        priceLabel: 'Estimated stay total',
+        entryNote: 'Availability and the final stay total are confirmed before payment.',
+        confirmationText: 'Continue to choose dates and guest details. The host confirms availability and the final price.',
+        fields: {
+          nights: { label: 'Nights', singularLabel: 'Night', shortLabel: 'nights', shortSingularLabel: 'night' },
+          guests: { label: 'Guests', singularLabel: 'Guest', shortLabel: 'guests', shortSingularLabel: 'guest' }
+        }
+      },
+      'service-request-v1': {
+        title: 'Request a service',
+        priceLabel: 'Starting price',
+        entryNote: 'The service scope and final price are confirmed after your request.',
+        confirmationText: 'Continue to describe what you need. The provider confirms availability and the final quote.',
+        fields: {
+          participants: { label: 'People', singularLabel: 'Person', shortLabel: 'ppl', shortSingularLabel: 'person' },
+          duration: { label: 'Duration' }
+        }
+      },
+      'place-request-v1': {
+        title: 'Send an inquiry',
+        priceLabel: 'Starting price',
+        entryNote: 'Availability is confirmed directly with the venue.',
+        confirmationText: 'Continue to add your preferred time and contact details. The venue confirms your request.',
+        fields: {
+          guests: { label: 'Guests', singularLabel: 'Guest', shortLabel: 'guests', shortSingularLabel: 'guest' },
+          preferredTime: { label: 'Preferred time', placeholder: '19:00' }
+        }
+      }
+    }
+  },
+  calendar: {
+    chooseRange: 'Choose a start and end date.',
+    rangeSelected: '{{range}} · {{days}} days selected — choose a new start date to change the range'
+  },
+  configurator: {
+    title: 'Configure your request',
+    priceLabel: 'Estimated total',
+    action: 'Continue',
+    confirmation: 'Continue to choose the remaining details. A local manager confirms availability before payment.'
+  },
   footer: {
     tagline: 'One trusted local guide for instructors, mountain experiences, stays and everything around Gudauri.',
     services: 'Services',

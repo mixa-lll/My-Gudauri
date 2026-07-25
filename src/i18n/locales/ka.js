@@ -457,6 +457,258 @@ export const ka = {
     galleryLabel: 'ინსტრუქტორის მედია',
     typeLabel: 'პირადი ინსტრუქტორი'
   },
+  booking: {
+    onRequest: 'მოთხოვნით',
+    notSelected: 'არ არის არჩეული',
+    timeFlexible: 'დრო მოქნილია',
+    timeNotSet: 'დრო არ არის მითითებული',
+    hourShort: 'სთ',
+    languageNotSelected: 'ენა არ არის არჩეული',
+    levelNotSelected: 'დონე არ არის არჩეული',
+    readyToSend: 'მზადაა გასაგზავნად',
+    submitted: 'თქვენი მოთხოვნა გაიგზავნა.',
+    received: 'მოთხოვნა მიღებულია',
+    reference: 'ნომერი:',
+    summaryTitle: 'თქვენი მოთხოვნა',
+    forHours: '{{hours}} საათში',
+    sameRateNote: 'ერთიანი ოფიციალური ტარიფი ყველა ინსტრუქტორისთვის.',
+    priceLaterNote: 'ფასი გამოჩნდება დროისა და მონაწილეების არჩევის შემდეგ.',
+    actions: {
+      edit: 'შეცვლა',
+      back: 'უკან',
+      next: 'შემდეგი',
+      send: 'მოთხოვნის გაგზავნა',
+      sending: 'იგზავნება მოთხოვნა',
+      collapse: 'დახურვა',
+      specifyTime: 'დროის მითითება',
+      optional: '(არასავალდებულო)',
+      backToOffer: 'შეთავაზებაზე დაბრუნება',
+      backToInstructors: 'ყველა ინსტრუქტორი'
+    },
+    validation: {
+      date: 'აირჩიეთ სასურველი თარიღი.',
+      dateOnly: 'აირჩიეთ მინიმუმ ერთი სასურველი თარიღი.',
+      dateAndSlot: 'აირჩიეთ მინიმუმ ერთი თარიღი და ერთი დროის ინტერვალი.',
+      group: 'აირჩიეთ ჯგუფის ზომა, ინსტრუქტორის ენა და დონე.',
+      matchGroup: 'მოგვიყევით ჯგუფსა და სასურველ ენებზე.',
+      preferences: 'აირჩიეთ აქტივობა, ტემპი, დონე და ბიუჯეტი.',
+      contact: 'მიუთითეთ სწორი სახელი, ტელეფონი, ელფოსტა და მესენჯერი.'
+    },
+    group: {
+      whoIsComing: 'ვინ მოდის',
+      adults: 'უფროსები',
+      adultsShort: 'უფროსი',
+      kids: 'ბავშვები 12 წლამდე',
+      kidsShort: 'ბავშვი',
+      instructorLanguage: 'ინსტრუქტორის ენა',
+      skillLevel: 'ჯგუფის დონე'
+    },
+    fields: {
+      preferredDate: 'სასურველი თარიღი',
+      additionalDetails: 'დამატებითი დეტალები',
+      preferredLessonDates: 'გაკვეთილის სასურველი თარიღები',
+      timePerDay: 'დრო დღეების მიხედვით',
+      timePerDayOptional: 'დრო დღეების მიხედვით — არასავალდებულო',
+      slotMeta: 'ინტერვალი {{index}} · 2 სთ',
+      activity: 'აქტივობა',
+      pace: 'ტემპი',
+      skillLevel: 'დონე',
+      budget: 'ბიუჯეტი ერთ ადამიანზე',
+      anythingElse: 'სხვა რამ',
+      anythingElseHint: 'მიზნები, ბავშვები, აღჭურვილობის ქირაობა',
+      anythingElsePlaceholder: 'ორი დამწყები და ბავშვი, საჭიროა გაქირავება',
+      name: 'სახელი',
+      phone: 'ტელეფონი',
+      email: 'ელფოსტა',
+      emailHint: 'აქ მოვა დადასტურება',
+      messenger: 'სასურველი მესენჯერი',
+      messengerPlaceholder: 'აირჩიეთ მესენჯერი',
+      comment: 'კომენტარი'
+    },
+    review: {
+      offer: 'შეთავაზება',
+      date: 'თარიღი',
+      dates: 'თარიღები',
+      timeSlots: 'დროის ინტერვალები',
+      preferredTime: 'სასურველი დრო',
+      duration: 'ხანგრძლივობა',
+      participants: 'მონაწილეები',
+      contact: 'კონტაქტი',
+      lesson: 'გაკვეთილი',
+      preferences: 'პრიორიტეტები',
+      peopleLabel: 'ადამიანები',
+      hours: '{{hours}} სთ',
+      hoursSelected: 'არჩეულია {{hours}} სთ',
+      people: '{{count}} ადამიანი',
+      adultsCount: 'უფროსი: {{count}}',
+      kidsCount: 'ბავშვი: {{count}}'
+    },
+    steps: {
+      instructorDates: {
+        label: 'თარიღები და დრო',
+        title: 'როდის გირჩევნიათ?',
+        descriptionSpecific: 'აირჩიეთ ერთი ან რამდენიმე დღე, შემდეგ მონიშნეთ თქვენთვის მოსახერხებელი ინტერვალები.',
+        descriptionMatch: 'აირჩიეთ სასურველი დღეები. დროის მითითება თარიღების არჩევის შემდეგ შეგიძლიათ.'
+      },
+      instructorParticipants: {
+        label: 'ჯგუფის შემადგენლობა',
+        title: 'ჯგუფის შემადგენლობა',
+        description: 'უთხარით ინსტრუქტორს ვინ მოდის და აირჩიეთ გაკვეთილის ენა და ჯგუფის დონე.'
+      },
+      matchCompany: {
+        title: 'ჯგუფის შემადგენლობა',
+        description: 'რამდენიმე დეტალი ჯგუფზე დაეხმარება ოპერატორს შესაფერისი ვარიანტის შერჩევაში.'
+      },
+      matchPreferences: {
+        title: 'რა გაინტერესებთ?',
+        description: 'რამდენიმე პრიორიტეტი დაეხმარება ოპერატორს გაკვეთილისა და ინსტრუქტორის შერჩევაში.'
+      },
+      inquiryDetails: {
+        title: 'მოთხოვნის დეტალები',
+        description: 'მიუთითეთ სასურველი თარიღი და ყველაფერი, რაც ადგილობრივმა გუნდმა უნდა იცოდეს.'
+      },
+      contact: {
+        title: 'საკონტაქტო მონაცემები',
+        description: 'ადგილობრივი მენეჯერი ამ მონაცემებს მხოლოდ ამ მოთხოვნისთვის გამოიყენებს.',
+        descriptionMatch: 'სად გამოაგზავნოს ოპერატორმა დადასტურებული ვარიანტი?',
+        privacy: 'გადახდა დადასტურების შემდეგ ხდება. ოპერატორი ერთ საათში პასუხობს და ადასტურებს ინსტრუქტორს, ამინდსა და შეხვედრის ადგილს.'
+      },
+      review: { label: 'შემოწმება', title: 'შეამოწმეთ მოთხოვნა', description: 'ახლა თანხა არ ჩამოიჭრება. ჯერ ვადასტურებთ ხელმისაწვდომობასა და საბოლოო თანხას.' },
+      activityDetails: 'აქტივობის დეტალები',
+      rentalDetails: 'გაქირავების დეტალები',
+      transferDetails: 'ტრანსფერის დეტალები',
+      stayDetails: 'განთავსების დეტალები',
+      serviceDetails: 'სერვისის დეტალები',
+      placeDetails: 'ადგილის დეტალები'
+    },
+    page: {
+      withObject: '— {{name}}',
+      preparing: 'ვამზადებთ თქვენს მოთხოვნას',
+      cannotOpen: 'ჯავშნის გახსნა ვერ მოხერხდა',
+      instructorNotFound: 'ინსტრუქტორი ვერ მოიძებნა.',
+      noDraft: 'გახსენით კონკრეტული შეთავაზება და შეავსეთ მოთხოვნა.'
+    },
+    match: { title: 'გაკვეთილის მოთხოვნა', titleAccent: 'ჩვენ შეგირჩევთ ინსტრუქტორს' },
+    options: {
+      family: 'ოჯახი',
+      friends: 'მეგობრები',
+      solo: 'მარტო',
+      russian: 'რუსული',
+      english: 'ინგლისური',
+      georgian: 'ქართული',
+      ski: 'თხილამურები',
+      snowboard: 'სნოუბორდი',
+      freeride: 'ფრირაიდი',
+      sightseeing: 'ღირსშესანიშნაობების დათვალიერება',
+      relaxed: 'მშვიდი',
+      medium: 'საშუალო',
+      adrenaline: 'ადრენალინი',
+      beginner: 'დამწყები',
+      intermediate: 'საშუალო',
+      advanced: 'გამოცდილი',
+      economy: 'ეკონომი',
+      'mid-range': 'საშუალო',
+      premium: 'პრემიუმი',
+      'half-day': 'ნახევარი დღე',
+      'full-day': 'სრული დღე',
+      'ski-set': 'სათხილამურო კომპლექტი',
+      'snowboard-set': 'სნოუბორდის კომპლექტი',
+      clothing: 'ტანსაცმელი',
+      standard: 'სტანდარტი',
+      extended: 'გაფართოებული',
+      custom: 'ინდივიდუალური'
+    },
+    flows: {
+      'instructor-match-v1': {
+        title: 'გაკვეთილის მოთხოვნა',
+        priceLabel: 'ფასი',
+        entryNote: 'ოპერატორი გადახდამდე ადასტურებს შესაფერის ინსტრუქტორს, ამინდსა და შეხვედრის ადგილს.',
+        confirmationText: 'გვითხარით რა გჭირდებათ და ადგილობრივი გუნდი შეგირჩევთ ინსტრუქტორს.',
+        fields: {}
+      },
+      'instructor-lesson-v1': {
+        title: 'გაკვეთილის დაჯავშნა',
+        priceLabel: 'გაკვეთილის სავარაუდო თანხა',
+        entryNote: 'საათები შეიძლება გადანაწილდეს რამდენიმე დღეზე.',
+        confirmationText: 'აირჩიეთ თარიღი და დრო — მენეჯერი დაადასტურებს, თავისუფალია თუ არა ინსტრუქტორი, ან შემოგთავაზებთ სხვას.',
+        fields: {
+          duration: { label: 'საათები', singularLabel: 'საათი', shortLabel: 'სთ' },
+          participants: { label: 'მოსწავლეები', singularLabel: 'მოსწავლე', shortLabel: 'კაცი', shortSingularLabel: 'კაცი' },
+          level: { label: 'ჯგუფის დონე' }
+        }
+      },
+      'activity-request-v1': {
+        title: 'აქტივობის მოთხოვნა',
+        priceLabel: 'აქტივობის სავარაუდო თანხა',
+        entryNote: 'დრო შეიძლება შეიცვალოს ამინდისა და მთის პირობების გამო.',
+        confirmationText: 'გააგრძელეთ თარიღისა და დროის ასარჩევად. მენეჯერი დაადასტურებს აქტივობასა და შეხვედრის დეტალებს.',
+        fields: {
+          participants: { label: 'ადამიანი', singularLabel: 'ადამიანი', shortLabel: 'კაცი', shortSingularLabel: 'კაცი' },
+          duration: { label: 'ხანგრძლივობა' }
+        }
+      },
+      'rental-request-v1': {
+        title: 'აღჭურვილობის მოთხოვნა',
+        priceLabel: 'გაქირავების სავარაუდო თანხა',
+        entryNote: 'ზომები და ხელმისაწვდომობა დასტურდება გადახდამდე.',
+        confirmationText: 'გააგრძელეთ ზომებისა და თარიღების მისათითებლად. მენეჯერი დაადასტურებს არჩეულ აღჭურვილობას.',
+        fields: {
+          days: { label: 'დღეები', singularLabel: 'დღე', shortLabel: 'დღე', shortSingularLabel: 'დღე' },
+          equipment: { label: 'აღჭურვილობა' }
+        }
+      },
+      'transfer-request-v1': {
+        title: 'ტრანსფერის მოთხოვნა',
+        priceLabel: 'ტრანსფერის სავარაუდო თანხა',
+        entryNote: 'საბოლოო მარშრუტსა და მოსვლის დროს ადასტურებს მენეჯერი.',
+        confirmationText: 'გააგრძელეთ მგზავრობის დეტალების მისათითებლად. მენეჯერი დაადასტურებს ავტომობილსა და ზუსტ დროს.',
+        fields: {
+          passengers: { label: 'მგზავრები', singularLabel: 'მგზავრი', shortLabel: 'კაცი', shortSingularLabel: 'კაცი' },
+          pickup: { label: 'გამოყვანის ადგილი', placeholder: 'თბილისის აეროპორტი' }
+        }
+      },
+      'stay-request-v1': {
+        title: 'განთავსების მოთხოვნა',
+        priceLabel: 'განთავსების სავარაუდო თანხა',
+        entryNote: 'ხელმისაწვდომობა და საბოლოო თანხა დასტურდება გადახდამდე.',
+        confirmationText: 'გააგრძელეთ თარიღებისა და სტუმრების მისათითებლად. მასპინძელი დაადასტურებს ხელმისაწვდომობასა და ფასს.',
+        fields: {
+          nights: { label: 'ღამეები', singularLabel: 'ღამე', shortLabel: 'ღამე', shortSingularLabel: 'ღამე' },
+          guests: { label: 'სტუმრები', singularLabel: 'სტუმარი', shortLabel: 'სტუმ.', shortSingularLabel: 'სტუმარი' }
+        }
+      },
+      'service-request-v1': {
+        title: 'სერვისის მოთხოვნა',
+        priceLabel: 'ფასი დან',
+        entryNote: 'სერვისის მოცულობა და საბოლოო ფასი დასტურდება მოთხოვნის შემდეგ.',
+        confirmationText: 'გააგრძელეთ ამოცანის აღსაწერად. პროვაიდერი დაადასტურებს ხელმისაწვდომობასა და საბოლოო ხარჯთაღრიცხვას.',
+        fields: {
+          participants: { label: 'ადამიანი', singularLabel: 'ადამიანი', shortLabel: 'კაცი', shortSingularLabel: 'კაცი' },
+          duration: { label: 'ხანგრძლივობა' }
+        }
+      },
+      'place-request-v1': {
+        title: 'მოთხოვნის გაგზავნა',
+        priceLabel: 'ფასი დან',
+        entryNote: 'ხელმისაწვდომობა დასტურდება უშუალოდ დაწესებულებასთან.',
+        confirmationText: 'გააგრძელეთ სასურველი დროისა და კონტაქტების მისათითებლად. დაწესებულება დაადასტურებს მოთხოვნას.',
+        fields: {
+          guests: { label: 'სტუმრები', singularLabel: 'სტუმარი', shortLabel: 'სტუმ.', shortSingularLabel: 'სტუმარი' },
+          preferredTime: { label: 'სასურველი დრო', placeholder: '19:00' }
+        }
+      }
+    }
+  },
+  calendar: {
+    chooseRange: 'აირჩიეთ დაწყებისა და დასრულების თარიღი.',
+    rangeSelected: '{{range}} · არჩეულია {{days}} დღე — დიაპაზონის შესაცვლელად აირჩიეთ ახალი საწყისი თარიღი'
+  },
+  configurator: {
+    title: 'დააკონფიგურირეთ მოთხოვნა',
+    priceLabel: 'სავარაუდო თანხა',
+    action: 'გაგრძელება',
+    confirmation: 'შემდეგ აირჩევთ დანარჩენ დეტალებს. ადგილობრივი მენეჯერი გადახდამდე დაადასტურებს ხელმისაწვდომობას.'
+  },
   footer: {
     tagline: 'ერთი სანდო ადგილობრივი გზამკვლევი ინსტრუქტორებისთვის, მთის გამოცდილებისთვის, განთავსებისა და ყველაფრისთვის გუდაურში.',
     services: 'სერვისები',

@@ -17,7 +17,7 @@ import {
   SiteFooter,
   SiteNavbar,
 } from '../../design-system';
-import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
+import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructor, getInstructors } from '../../services/instructorsApi';
 import './ProfilePage.scss';
@@ -92,7 +92,7 @@ export function ProfilePage() {
     avatar: review.avatar && !review.avatar.includes('avatars-sprite') ? review.avatar : undefined,
   }));
   const related = relatedInstructors.map((item) => ({ ...item, title: item.name }));
-  const bookingDefinition = getBookingFlowDefinition('instructors');
+  const bookingDefinition = localizeBookingDefinition(getBookingFlowDefinition('instructors'), t);
   const bookingOffer = createBookingOffer({
     definition: bookingDefinition,
     object: { id: `instructor:${instructor.id ?? instructor.slug}`, slug: instructor.slug, name: instructor.name, typeLabel: t('instructor.typeLabel'), image: instructor.bookingAvatar },

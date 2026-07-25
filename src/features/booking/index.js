@@ -6,7 +6,9 @@ export {
   estimateBookingTotal,
   formatBookingPrice,
   getBookingFlowDefinition,
+  localizeBookingDefinition,
   normalizeBookingCategory,
+  optionKey,
   resolveEntryFields,
 } from './contracts';
 export { BOOKING_DRAFT_STORAGE_KEY, clearBookingDraft, createBookingDraft, readBookingDraft, saveBookingDraft } from './draft';

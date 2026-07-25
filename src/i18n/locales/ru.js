@@ -457,6 +457,258 @@ export const ru = {
     galleryLabel: 'Медиа инструктора',
     typeLabel: 'Персональный инструктор'
   },
+  booking: {
+    onRequest: 'По запросу',
+    notSelected: 'Не выбрано',
+    timeFlexible: 'время гибкое',
+    timeNotSet: 'время не указано',
+    hourShort: 'ч',
+    languageNotSelected: 'Язык не выбран',
+    levelNotSelected: 'Уровень не выбран',
+    readyToSend: 'Готово к отправке',
+    submitted: 'Ваш запрос отправлен.',
+    received: 'Запрос принят',
+    reference: 'Номер:',
+    summaryTitle: 'Ваш запрос',
+    forHours: 'за {{hours}} ч',
+    sameRateNote: 'Единый официальный тариф для всех инструкторов.',
+    priceLaterNote: 'Цена появится после выбора времени и участников.',
+    actions: {
+      edit: 'Изменить',
+      back: 'Назад',
+      next: 'Далее',
+      send: 'Отправить запрос',
+      sending: 'Отправляем запрос',
+      collapse: 'Свернуть',
+      specifyTime: 'Указать время',
+      optional: '(необязательно)',
+      backToOffer: 'Вернуться к предложению',
+      backToInstructors: 'Ко всем инструкторам'
+    },
+    validation: {
+      date: 'Выберите желаемую дату.',
+      dateOnly: 'Выберите хотя бы одну желаемую дату.',
+      dateAndSlot: 'Выберите хотя бы одну дату и один интервал времени.',
+      group: 'Укажите размер группы, язык инструктора и уровень.',
+      matchGroup: 'Расскажите о группе и предпочитаемых языках.',
+      preferences: 'Выберите активность, темп, уровень и бюджет.',
+      contact: 'Укажите корректные имя, телефон, email и мессенджер.'
+    },
+    group: {
+      whoIsComing: 'Кто едет',
+      adults: 'Взрослые',
+      adultsShort: 'взрослых',
+      kids: 'Дети до 12 лет',
+      kidsShort: 'детей',
+      instructorLanguage: 'Язык инструктора',
+      skillLevel: 'Уровень группы'
+    },
+    fields: {
+      preferredDate: 'Желаемая дата',
+      additionalDetails: 'Дополнительные детали',
+      preferredLessonDates: 'Желаемые даты занятий',
+      timePerDay: 'Время по дням',
+      timePerDayOptional: 'Время по дням — необязательно',
+      slotMeta: 'интервал {{index}} · 2 ч',
+      activity: 'Активность',
+      pace: 'Темп',
+      skillLevel: 'Уровень',
+      budget: 'Бюджет на человека',
+      anythingElse: 'Что-то ещё',
+      anythingElseHint: 'Цели, дети, аренда снаряжения',
+      anythingElsePlaceholder: 'Двое новичков и ребёнок, нужен прокат',
+      name: 'Имя',
+      phone: 'Телефон',
+      email: 'Email',
+      emailHint: 'Сюда придёт подтверждение',
+      messenger: 'Предпочитаемый мессенджер',
+      messengerPlaceholder: 'Выберите мессенджер',
+      comment: 'Комментарий'
+    },
+    review: {
+      offer: 'Предложение',
+      date: 'Дата',
+      dates: 'Даты',
+      timeSlots: 'Интервалы времени',
+      preferredTime: 'Желаемое время',
+      duration: 'Длительность',
+      participants: 'Участники',
+      contact: 'Контакт',
+      lesson: 'Занятие',
+      preferences: 'Предпочтения',
+      peopleLabel: 'Люди',
+      hours: '{{hours}} ч',
+      hoursSelected: 'выбрано {{hours}} ч',
+      people: '{{count}} чел.',
+      adultsCount: 'взрослых: {{count}}',
+      kidsCount: 'детей: {{count}}'
+    },
+    steps: {
+      instructorDates: {
+        label: 'Даты и время',
+        title: 'Когда вам удобно?',
+        descriptionSpecific: 'Выберите один или несколько дней занятий, затем отметьте подходящие интервалы времени.',
+        descriptionMatch: 'Выберите удобные дни. Время можно указать после выбора дат.'
+      },
+      instructorParticipants: {
+        label: 'Состав группы',
+        title: 'Состав группы',
+        description: 'Расскажите инструктору, кто едет, и выберите язык занятия и уровень группы.'
+      },
+      matchCompany: {
+        title: 'Состав группы',
+        description: 'Несколько деталей о группе помогут оператору подобрать подходящий вариант.'
+      },
+      matchPreferences: {
+        title: 'Что вам интересно?',
+        description: 'Несколько предпочтений помогут оператору подобрать занятие и инструктора.'
+      },
+      inquiryDetails: {
+        title: 'Детали запроса',
+        description: 'Укажите желаемую дату и всё, что стоит знать местной команде.'
+      },
+      contact: {
+        title: 'Контактные данные',
+        description: 'Местный менеджер использует эти данные только для этого запроса.',
+        descriptionMatch: 'Куда оператору отправить подтверждённый вариант?',
+        privacy: 'Оплата — после подтверждения. Оператор отвечает в течение часа и подтверждает инструктора, погоду и место встречи.'
+      },
+      review: { label: 'Проверка', title: 'Проверьте запрос', description: 'Сейчас ничего не списывается. Сначала мы подтверждаем доступность и итоговую сумму.' },
+      activityDetails: 'Детали активности',
+      rentalDetails: 'Детали проката',
+      transferDetails: 'Детали трансфера',
+      stayDetails: 'Детали проживания',
+      serviceDetails: 'Детали услуги',
+      placeDetails: 'Детали места'
+    },
+    page: {
+      withObject: '— {{name}}',
+      preparing: 'Готовим ваш запрос',
+      cannotOpen: 'Не удалось открыть бронирование',
+      instructorNotFound: 'Инструктор не найден.',
+      noDraft: 'Откройте конкретное предложение и заполните запрос.'
+    },
+    match: { title: 'Запрос на занятие', titleAccent: 'мы подберём инструктора' },
+    options: {
+      family: 'Семья',
+      friends: 'Друзья',
+      solo: 'Один',
+      russian: 'Русский',
+      english: 'Английский',
+      georgian: 'Грузинский',
+      ski: 'Лыжи',
+      snowboard: 'Сноуборд',
+      freeride: 'Фрирайд',
+      sightseeing: 'Осмотр достопримечательностей',
+      relaxed: 'Спокойный',
+      medium: 'Средний',
+      adrenaline: 'Адреналин',
+      beginner: 'Новичок',
+      intermediate: 'Средний',
+      advanced: 'Продвинутый',
+      economy: 'Эконом',
+      'mid-range': 'Средний',
+      premium: 'Премиум',
+      'half-day': 'Полдня',
+      'full-day': 'Полный день',
+      'ski-set': 'Лыжный комплект',
+      'snowboard-set': 'Сноуборд-комплект',
+      clothing: 'Одежда',
+      standard: 'Стандарт',
+      extended: 'Расширенный',
+      custom: 'Индивидуально'
+    },
+    flows: {
+      'instructor-match-v1': {
+        title: 'Запрос на занятие',
+        priceLabel: 'Цена',
+        entryNote: 'Оператор подтверждает подходящего инструктора, погоду и место встречи до оплаты.',
+        confirmationText: 'Расскажите, что вам нужно, и местная команда подберёт инструктора.',
+        fields: {}
+      },
+      'instructor-lesson-v1': {
+        title: 'Забронировать занятие',
+        priceLabel: 'Примерная сумма занятия',
+        entryNote: 'Часы можно разделить на несколько дней.',
+        confirmationText: 'Выберите дату и время — менеджер подтвердит, свободен ли инструктор, или предложит другого.',
+        fields: {
+          duration: { label: 'Часы', singularLabel: 'Час', shortLabel: 'ч' },
+          participants: { label: 'Ученики', singularLabel: 'Ученик', shortLabel: 'чел.', shortSingularLabel: 'человек' },
+          level: { label: 'Уровень группы' }
+        }
+      },
+      'activity-request-v1': {
+        title: 'Запрос на активность',
+        priceLabel: 'Примерная сумма активности',
+        entryNote: 'Время может измениться из-за погоды и условий в горах.',
+        confirmationText: 'Продолжите, чтобы выбрать дату и время. Менеджер подтвердит активность и детали встречи.',
+        fields: {
+          participants: { label: 'Человек', singularLabel: 'Человек', shortLabel: 'чел.', shortSingularLabel: 'человек' },
+          duration: { label: 'Длительность' }
+        }
+      },
+      'rental-request-v1': {
+        title: 'Запрос снаряжения',
+        priceLabel: 'Примерная сумма проката',
+        entryNote: 'Размеры и наличие снаряжения подтверждаются до оплаты.',
+        confirmationText: 'Продолжите, чтобы указать размеры и даты. Менеджер подтвердит выбранное снаряжение.',
+        fields: {
+          days: { label: 'Дни', singularLabel: 'День', shortLabel: 'дн.', shortSingularLabel: 'день' },
+          equipment: { label: 'Снаряжение' }
+        }
+      },
+      'transfer-request-v1': {
+        title: 'Запрос трансфера',
+        priceLabel: 'Примерная сумма трансфера',
+        entryNote: 'Итоговый маршрут и время подачи подтверждает менеджер.',
+        confirmationText: 'Продолжите, чтобы указать детали поездки. Менеджер подтвердит машину и точное время подачи.',
+        fields: {
+          passengers: { label: 'Пассажиры', singularLabel: 'Пассажир', shortLabel: 'чел.', shortSingularLabel: 'человек' },
+          pickup: { label: 'Место подачи', placeholder: 'Аэропорт Тбилиси' }
+        }
+      },
+      'stay-request-v1': {
+        title: 'Запрос на проживание',
+        priceLabel: 'Примерная сумма проживания',
+        entryNote: 'Доступность и итоговая сумма подтверждаются до оплаты.',
+        confirmationText: 'Продолжите, чтобы выбрать даты и указать гостей. Хозяин подтвердит доступность и итоговую цену.',
+        fields: {
+          nights: { label: 'Ночи', singularLabel: 'Ночь', shortLabel: 'ноч.', shortSingularLabel: 'ночь' },
+          guests: { label: 'Гости', singularLabel: 'Гость', shortLabel: 'гост.', shortSingularLabel: 'гость' }
+        }
+      },
+      'service-request-v1': {
+        title: 'Запрос услуги',
+        priceLabel: 'Цена от',
+        entryNote: 'Объём услуги и итоговая цена подтверждаются после запроса.',
+        confirmationText: 'Продолжите, чтобы описать задачу. Исполнитель подтвердит доступность и итоговую смету.',
+        fields: {
+          participants: { label: 'Человек', singularLabel: 'Человек', shortLabel: 'чел.', shortSingularLabel: 'человек' },
+          duration: { label: 'Длительность' }
+        }
+      },
+      'place-request-v1': {
+        title: 'Отправить запрос',
+        priceLabel: 'Цена от',
+        entryNote: 'Доступность подтверждается напрямую с заведением.',
+        confirmationText: 'Продолжите, чтобы указать удобное время и контакты. Заведение подтвердит запрос.',
+        fields: {
+          guests: { label: 'Гости', singularLabel: 'Гость', shortLabel: 'гост.', shortSingularLabel: 'гость' },
+          preferredTime: { label: 'Желаемое время', placeholder: '19:00' }
+        }
+      }
+    }
+  },
+  calendar: {
+    chooseRange: 'Выберите дату начала и окончания.',
+    rangeSelected: '{{range}} · выбрано дней: {{days}} — выберите новую дату начала, чтобы изменить диапазон'
+  },
+  configurator: {
+    title: 'Настройте запрос',
+    priceLabel: 'Примерная сумма',
+    action: 'Продолжить',
+    confirmation: 'Дальше выберете остальные детали. Местный менеджер подтвердит доступность до оплаты.'
+  },
   footer: {
     tagline: 'Один надежный местный гид по инструкторам, горным впечатлениям, проживанию и всему, что связано с Гудаури.',
     services: 'Услуги',

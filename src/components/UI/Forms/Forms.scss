@@ -19,7 +19,8 @@
 .ui-date-range__previous.ui-button:hover:not(:disabled), .ui-date-range__next.ui-button:hover:not(:disabled) { border-color: var(--border-default); background: var(--action-secondary-hover); }
 .ui-date-range__previous.ui-button:disabled, .ui-date-range__next.ui-button:disabled { background: transparent; color: var(--text-disabled); }
 .ui-date-range__month { display: grid; gap: var(--space-300); }
-.ui-date-range__month h3 { min-height: var(--control-height-md); margin: 0; display: grid; place-items: center; font: var(--fw-semibold) var(--type-body-large-size) / 1 var(--font-heading); text-transform: capitalize; }
+.ui-date-range__month h3::first-letter { text-transform: uppercase; }
+.ui-date-range__month h3 { min-height: var(--control-height-md); margin: 0; display: grid; place-items: center; font: var(--fw-semibold) var(--type-body-large-size) / 1 var(--font-heading); }
 .ui-date-range__weekdays, .ui-date-range__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; }
 .ui-date-range__weekdays { color: var(--text-secondary); font: var(--fw-medium) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
 .ui-date-range__grid { row-gap: var(--space-100); }

@@ -17,7 +17,7 @@ import {
   SiteFooter,
   SiteNavbar,
 } from '../../design-system';
-import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
+import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { getActivities, getActivity } from '../../services/activitiesApi';
@@ -92,7 +92,7 @@ export function ActivityPage() {
     rating: review.rating,
     avatar: review.avatar || undefined,
   }));
-  const bookingDefinition = getBookingFlowDefinition('activities');
+  const bookingDefinition = localizeBookingDefinition(getBookingFlowDefinition('activities'), t);
   const bookingOffer = createBookingOffer({
     definition: bookingDefinition,
     object: { id: `activity:${activity.id ?? activity.slug}`, slug: activity.slug, name: activity.name, typeLabel: activity.category, image: activity.image },

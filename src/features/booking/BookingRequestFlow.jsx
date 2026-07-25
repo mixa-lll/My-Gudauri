@@ -15,7 +15,8 @@ import {
   Textarea,
   TimeSlotPicker,
 } from '../../design-system';
-import { createInitialBookingAnswers, estimateBookingTotal, formatBookingPrice } from './contracts';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { createInitialBookingAnswers, estimateBookingTotal, formatBookingPrice, optionKey } from './contracts';
 import './BookingRequestFlow.scss';
 
 const TIME_SLOTS = [
@@ -37,11 +38,11 @@ function toDateKey(date) {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
 }
 
-function formatDateRange(range) {
+function formatDateRange(range, locale = 'en-GB') {
   if (!range?.start) return '';
   const start = new Date(`${range.start}T12:00:00`);
   const end = range.end ? new Date(`${range.end}T12:00:00`) : start;
-  const formatter = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long' });
+  const formatter = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' });
   if (range.start === range.end || !range.end) return formatter.format(start);
   if (start.getMonth() === end.getMonth()) return `${start.getDate()}–${formatter.format(end)}`;
   return `${formatter.format(start)} – ${formatter.format(end)}`;
@@ -56,8 +57,8 @@ function datesInRange(range) {
   return dates;
 }
 
-function formatShortDate(dateKey) {
-  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' }).format(new Date(`${dateKey}T12:00:00`));
+function formatShortDate(dateKey, locale = 'en-GB') {
+  return new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit', year: '2-digit' }).format(new Date(`${dateKey}T12:00:00`));
 }
 
 function matchHours(answers) {
@@ -65,16 +66,21 @@ function matchHours(answers) {
   return selected.reduce((total, slotId) => total + (TIME_SLOTS.find((slot) => slot.value === slotId)?.hours ?? 0), 0);
 }
 
+function optionLabel(t, value) {
+  return t(`booking.options.${optionKey(value)}`);
+}
+
 function toggleList(values, item) {
   return values.includes(item) ? values.filter((value) => value !== item) : [...values, item];
 }
 
 function ChoiceGroup({ label, options, value, onChange, multiple = false, variant = 'chips', tone = 'primary' }) {
+  const { t } = useLanguage();
   return <fieldset className={`booking-request-flow__choice-group booking-request-flow__choice-group--${variant}`}>
     <legend>{label}</legend>
     <div>{options.map((option) => {
       const selected = multiple ? value.includes(option) : value === option;
-      return <FilterChip key={option} tone={tone} selected={selected} onClick={() => onChange(multiple ? toggleList(value, option) : option)}>{option}</FilterChip>;
+      return <FilterChip key={option} tone={tone} selected={selected} onClick={() => onChange(multiple ? toggleList(value, option) : option)}>{optionLabel(t, option)}</FilterChip>;
     })}</div>
   </fieldset>;
 }
@@ -87,6 +93,7 @@ function groupCounts(answers, fallbackToParticipants = false) {
 }
 
 function GroupDetailsFields({ answers, update, maxParticipants, maxAdults = 10, syncParticipants = false, includeSkillLevel = false, levelField = 'skillLevel' }) {
+  const { t } = useLanguage();
   const { adults, children } = groupCounts(answers, syncParticipants);
   const setCounts = (nextAdults, nextChildren) => {
     update('adultsCount', nextAdults);
@@ -97,31 +104,35 @@ function GroupDetailsFields({ answers, update, maxParticipants, maxAdults = 10, 
   const childMaximum = Math.max(0, Math.min(adults, maxParticipants - adults));
 
   return <>
-    <ChoiceGroup label="Who's coming" options={MATCH_OPTIONS.companyType} value={answers.companyType ?? 'Family'} onChange={(value) => update('companyType', value)} variant="segmented" />
+    <ChoiceGroup label={t('booking.group.whoIsComing')} options={MATCH_OPTIONS.companyType} value={answers.companyType ?? 'Family'} onChange={(value) => update('companyType', value)} variant="segmented" />
     <div className="booking-request-flow__counter-grid">
-      <div className="booking-request-flow__counter-field"><span>Adults</span><div><p><strong>{adults}</strong><small>adults</small></p><QuantityStepper variant="booking" label="Adults" value={adults} min={1} max={adultMaximum} onChange={(value) => setCounts(value, Math.min(children, value, maxParticipants - value))} /></div></div>
-      <div className="booking-request-flow__counter-field"><span>Kids under 12</span><div><p><strong>{children}</strong><small>kids</small></p><QuantityStepper variant="booking" label="Kids under 12" value={children} min={0} max={childMaximum} onChange={(value) => setCounts(adults, value)} /></div></div>
+      <div className="booking-request-flow__counter-field"><span>{t('booking.group.adults')}</span><div><p><strong>{adults}</strong><small>{t('booking.group.adultsShort')}</small></p><QuantityStepper variant="booking" label={t('booking.group.adults')} value={adults} min={1} max={adultMaximum} onChange={(value) => setCounts(value, Math.min(children, value, maxParticipants - value))} /></div></div>
+      <div className="booking-request-flow__counter-field"><span>{t('booking.group.kids')}</span><div><p><strong>{children}</strong><small>{t('booking.group.kidsShort')}</small></p><QuantityStepper variant="booking" label={t('booking.group.kids')} value={children} min={0} max={childMaximum} onChange={(value) => setCounts(adults, value)} /></div></div>
     </div>
-    <ChoiceGroup label="Instructor language" options={MATCH_OPTIONS.languages} value={answers.languages ?? []} multiple tone="accent" onChange={(values) => update('languages', values)} />
-    {includeSkillLevel ? <ChoiceGroup label="Group skill level" options={MATCH_OPTIONS.skillLevel} value={answers[levelField] ?? 'Beginner'} onChange={(value) => update(levelField, value)} /> : null}
+    <ChoiceGroup label={t('booking.group.instructorLanguage')} options={MATCH_OPTIONS.languages} value={answers.languages ?? []} multiple tone="accent" onChange={(values) => update('languages', values)} />
+    {includeSkillLevel ? <ChoiceGroup label={t('booking.group.skillLevel')} options={MATCH_OPTIONS.skillLevel} value={answers[levelField] ?? 'Beginner'} onChange={(value) => update(levelField, value)} /> : null}
   </>;
 }
 
 export function InstructorParticipantsStep({ answers, update, definition, error, actions, stepNumber }) {
-  return <BookingFormSection stepNumber={stepNumber} title="Company" description="Tell the instructor who is coming and choose the preferred lesson language and group level." error={error} actions={actions}>
+  const { t } = useLanguage();
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.instructorParticipants.title')} description={t('booking.steps.instructorParticipants.description')} error={error} actions={actions}>
     <GroupDetailsFields answers={answers} update={update} maxParticipants={definition.fields.participants.max} syncParticipants includeSkillLevel levelField="level" />
   </BookingFormSection>;
 }
 
 export function InquiryDetailsStep({ answers, update, definition, error, actions, stepNumber }) {
-  return <BookingFormSection stepNumber={stepNumber} title="Add request details" description="Share the preferred date and anything the local team should know." error={error} actions={actions}>
-    <FormField label="Preferred date" required><DateField value={answers.date ?? ''} onChange={(event) => update('date', event.target.value)} /></FormField>
+  const { t } = useLanguage();
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.inquiryDetails.title')} description={t('booking.steps.inquiryDetails.description')} error={error} actions={actions}>
+    <FormField label={t('booking.fields.preferredDate')} required><DateField value={answers.date ?? ''} onChange={(event) => update('date', event.target.value)} /></FormField>
     {Object.values(definition.fields).filter((field) => !definition.entryFields.includes(field.id)).map((field) => <FormField label={field.label} key={field.id}><Input value={answers[field.id] ?? ''} onChange={(event) => update(field.id, event.target.value)} /></FormField>)}
-    <FormField label="Additional details"><Textarea value={answers.details ?? ''} onChange={(event) => update('details', event.target.value)} /></FormField>
+    <FormField label={t('booking.fields.additionalDetails')}><Textarea value={answers.details ?? ''} onChange={(event) => update('details', event.target.value)} /></FormField>
   </BookingFormSection>;
 }
 
 export function InstructorDatesStep({ answers, update, definition, error, actions, stepNumber }) {
+  const { currentLanguage, t } = useLanguage();
+  const locale = currentLanguage.intlLocale;
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
   const [timeExpanded, setTimeExpanded] = useState(true);
@@ -140,60 +151,65 @@ export function InstructorDatesStep({ answers, update, definition, error, action
     const selectedHours = Object.values(timeSlotsByDate).flat().length * 2;
     if (isSpecificInstructor && selectedHours) update('duration', selectedHours);
   };
-  return <BookingFormSection stepNumber={stepNumber} title="When would you like to go?" description={isSpecificInstructor ? 'Choose one or several lesson days, then mark the time slots that work for you.' : 'Choose your preferred days. You can add a preferred time after selecting the dates.'} error={error} actions={actions}>
-    <DateRangeCalendar label="Preferred lesson dates" value={answers.dateRange} min={toDateKey(new Date())} max={toDateKey(maxDate)} onChange={setDateRange} />
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.instructorDates.title')} description={t(isSpecificInstructor ? 'booking.steps.instructorDates.descriptionSpecific' : 'booking.steps.instructorDates.descriptionMatch')} error={error} actions={actions}>
+    <DateRangeCalendar label={t('booking.fields.preferredLessonDates')} value={answers.dateRange} min={toDateKey(new Date())} max={toDateKey(maxDate)} onChange={setDateRange} />
     {selectedDays.length ? <div className="booking-request-flow__time-section">
       {timeExpanded ? <>
-        <div className="booking-request-flow__time-actions"><Button type="button" variant="ghost" onClick={() => setTimeExpanded(false)}>− Collapse</Button></div>
-        <TimeSlotPicker label={`Time per day${isSpecificInstructor ? '' : ' — optional'}`} days={selectedDays.map((day) => ({ id: day, label: formatShortDate(day) }))} slots={TIME_SLOTS.map(({ value, label, meta }) => ({ id: value, label, meta }))} value={answers.timeSlotsByDate ?? {}} onChange={setTimeSlots} />
-      </> : <Button className="booking-request-flow__add-time" type="button" variant="secondary" onClick={() => setTimeExpanded(true)}>+ Specify time {!isSpecificInstructor ? <small>(optional)</small> : null}</Button>}
+        <div className="booking-request-flow__time-actions"><Button type="button" variant="ghost" onClick={() => setTimeExpanded(false)}>− {t('booking.actions.collapse')}</Button></div>
+        <TimeSlotPicker label={t(isSpecificInstructor ? 'booking.fields.timePerDay' : 'booking.fields.timePerDayOptional')} days={selectedDays.map((day) => ({ id: day, label: formatShortDate(day, currentLanguage.intlLocale) }))} slots={TIME_SLOTS.map(({ value, label }, index) => ({ id: value, label, meta: t('booking.fields.slotMeta', { index: index + 1 }) }))} value={answers.timeSlotsByDate ?? {}} onChange={setTimeSlots} />
+      </> : <Button className="booking-request-flow__add-time" type="button" variant="secondary" onClick={() => setTimeExpanded(true)}>+ {t('booking.actions.specifyTime')} {!isSpecificInstructor ? <small>{t('booking.actions.optional')}</small> : null}</Button>}
     </div> : null}
   </BookingFormSection>;
 }
 
 export function InstructorMatchCompanyStep({ answers, update, error, actions, stepNumber }) {
-  return <BookingFormSection stepNumber={stepNumber} title="Company" description="A few details about your group help the operator make a relevant match." error={error} actions={actions}>
+  const { t } = useLanguage();
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.matchCompany.title')} description={t('booking.steps.matchCompany.description')} error={error} actions={actions}>
     <GroupDetailsFields answers={answers} update={update} maxParticipants={20} />
   </BookingFormSection>;
 }
 
 export function InstructorMatchPreferencesStep({ answers, update, error, actions, stepNumber }) {
-  return <BookingFormSection stepNumber={stepNumber} title="What are you into?" description="A few preferences help the operator match the right lesson and instructor." error={error} actions={actions}>
-    <ChoiceGroup label="Activity" options={MATCH_OPTIONS.activities} value={answers.activities ?? []} multiple onChange={(values) => update('activities', values)} />
-    <ChoiceGroup label="Pace" options={MATCH_OPTIONS.pace} value={answers.pace} onChange={(value) => update('pace', value)} />
-    <ChoiceGroup label="Skill level" options={MATCH_OPTIONS.skillLevel} value={answers.skillLevel} onChange={(value) => update('skillLevel', value)} />
-    <ChoiceGroup label="Budget per person" options={MATCH_OPTIONS.budget} value={answers.budget} onChange={(value) => update('budget', value)} />
-    <FormField label="Anything else" hint="Goals, kids, rental equipment"><Textarea rows="3" value={answers.notes ?? ''} onChange={(event) => update('notes', event.target.value)} placeholder="2 beginners and a child, rental needed" /></FormField>
+  const { t } = useLanguage();
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.matchPreferences.title')} description={t('booking.steps.matchPreferences.description')} error={error} actions={actions}>
+    <ChoiceGroup label={t('booking.fields.activity')} options={MATCH_OPTIONS.activities} value={answers.activities ?? []} multiple onChange={(values) => update('activities', values)} />
+    <ChoiceGroup label={t('booking.fields.pace')} options={MATCH_OPTIONS.pace} value={answers.pace} onChange={(value) => update('pace', value)} />
+    <ChoiceGroup label={t('booking.fields.skillLevel')} options={MATCH_OPTIONS.skillLevel} value={answers.skillLevel} onChange={(value) => update('skillLevel', value)} />
+    <ChoiceGroup label={t('booking.fields.budget')} options={MATCH_OPTIONS.budget} value={answers.budget} onChange={(value) => update('budget', value)} />
+    <FormField label={t('booking.fields.anythingElse')} hint={t('booking.fields.anythingElseHint')}><Textarea rows="3" value={answers.notes ?? ''} onChange={(event) => update('notes', event.target.value)} placeholder={t('booking.fields.anythingElsePlaceholder')} /></FormField>
   </BookingFormSection>;
 }
 
 export function ContactDetailsStep({ answers, update, definition, error, actions, stepNumber }) {
+  const { t } = useLanguage();
   const isMatch = definition.presentation === 'operator-match';
-  return <BookingFormSection stepNumber={stepNumber} title="Contact details" description={isMatch ? 'Where should the operator send the confirmed option?' : 'A local manager will use these details only for this request.'} error={error} actions={actions}>
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.contact.title')} description={t(isMatch ? 'booking.steps.contact.descriptionMatch' : 'booking.steps.contact.description')} error={error} actions={actions}>
     <div className="booking-request-flow__field-grid">
-      <FormField label="Name" required><Input autoComplete="name" value={answers.contactName ?? ''} onChange={(event) => update('contactName', event.target.value)} /></FormField>
-      <FormField label="Phone" required><Input type="tel" autoComplete="tel" value={answers.contactPhone ?? ''} onChange={(event) => update('contactPhone', event.target.value)} /></FormField>
-      <FormField label="Email" required hint={isMatch ? 'Confirmation goes here' : undefined}><Input type="email" autoComplete="email" value={answers.contactEmail ?? ''} onChange={(event) => update('contactEmail', event.target.value)} /></FormField>
-      <FormField label="Preferred messenger" required><Select value={answers.messenger ?? ''} onChange={(event) => update('messenger', event.target.value)}><option value="">Choose a messenger</option>{MESSENGERS.map((option) => <option key={option}>{option}</option>)}</Select></FormField>
+      <FormField label={t('booking.fields.name')} required><Input autoComplete="name" value={answers.contactName ?? ''} onChange={(event) => update('contactName', event.target.value)} /></FormField>
+      <FormField label={t('booking.fields.phone')} required><Input type="tel" autoComplete="tel" value={answers.contactPhone ?? ''} onChange={(event) => update('contactPhone', event.target.value)} /></FormField>
+      <FormField label={t('booking.fields.email')} required hint={isMatch ? t('booking.fields.emailHint') : undefined}><Input type="email" autoComplete="email" value={answers.contactEmail ?? ''} onChange={(event) => update('contactEmail', event.target.value)} /></FormField>
+      <FormField label={t('booking.fields.messenger')} required><Select value={answers.messenger ?? ''} onChange={(event) => update('messenger', event.target.value)}><option value="">{t('booking.fields.messengerPlaceholder')}</option>{MESSENGERS.map((option) => <option value={option} key={option}>{option}</option>)}</Select></FormField>
     </div>
-    {isMatch ? <p className="booking-request-flow__privacy">Payment happens after confirmation. The operator replies within an hour to confirm the instructor, weather and meeting point.</p> : <FormField label="Comment"><Textarea value={answers.comment ?? ''} onChange={(event) => update('comment', event.target.value)} /></FormField>}
+    {isMatch ? <p className="booking-request-flow__privacy">{t('booking.steps.contact.privacy')}</p> : <FormField label={t('booking.fields.comment')}><Textarea value={answers.comment ?? ''} onChange={(event) => update('comment', event.target.value)} /></FormField>}
   </BookingFormSection>;
 }
 
 export function RequestReviewStep({ answers, definition, offer, error, actions, stepNumber }) {
+  const { currentLanguage, t } = useLanguage();
+  const locale = currentLanguage.intlLocale;
   const total = estimateBookingTotal(definition, offer, answers);
-  return <BookingFormSection stepNumber={stepNumber} title="Review your request" description="Nothing is charged now. We confirm availability and the final total first." error={error} actions={actions}>
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.review.title')} description={t('booking.steps.review.description')} error={error} actions={actions}>
     <dl className="booking-request-flow__review">
-      <div><dt>Offer</dt><dd>{offer.object.name}</dd></div>
-      {answers.dateRange?.start ? <div><dt>Dates</dt><dd>{formatDateRange(answers.dateRange)}</dd></div> : null}
-      {!answers.dateRange?.start && answers.date ? <div><dt>Date</dt><dd>{answers.date}</dd></div> : null}
-      {matchHours(answers) ? <div><dt>Preferred time</dt><dd>{matchHours(answers)} hours selected</dd></div> : null}
-      {answers.duration ? <div><dt>Duration</dt><dd>{answers.duration} hours</dd></div> : null}
-      {answers.participants ? <div><dt>Participants</dt><dd>{answers.participants}</dd></div> : null}
-      {answers.languages?.length ? <div><dt>Instructor language</dt><dd>{answers.languages.join(', ')}</dd></div> : null}
-      {answers.level ? <div><dt>Group skill level</dt><dd>{answers.level}</dd></div> : null}
-      <div><dt>Contact</dt><dd>{answers.contactName} · {answers.contactPhone}</dd></div>
-      <div><dt>{definition.priceLabel}</dt><dd>{formatBookingPrice(total, offer.currency)}</dd></div>
+      <div><dt>{t('booking.review.offer')}</dt><dd>{offer.object.name}</dd></div>
+      {answers.dateRange?.start ? <div><dt>{t('booking.review.dates')}</dt><dd>{formatDateRange(answers.dateRange, locale)}</dd></div> : null}
+      {!answers.dateRange?.start && answers.date ? <div><dt>{t('booking.review.date')}</dt><dd>{answers.date}</dd></div> : null}
+      {matchHours(answers) ? <div><dt>{t('booking.review.preferredTime')}</dt><dd>{t('booking.review.hoursSelected', { hours: matchHours(answers) })}</dd></div> : null}
+      {answers.duration ? <div><dt>{t('booking.review.duration')}</dt><dd>{t('booking.review.hours', { hours: answers.duration })}</dd></div> : null}
+      {answers.participants ? <div><dt>{t('booking.review.participants')}</dt><dd>{answers.participants}</dd></div> : null}
+      {answers.languages?.length ? <div><dt>{t('booking.group.instructorLanguage')}</dt><dd>{answers.languages.map((value) => optionLabel(t, value)).join(', ')}</dd></div> : null}
+      {answers.level ? <div><dt>{t('booking.group.skillLevel')}</dt><dd>{optionLabel(t, answers.level)}</dd></div> : null}
+      <div><dt>{t('booking.review.contact')}</dt><dd>{answers.contactName} · {answers.contactPhone}</dd></div>
+      <div><dt>{definition.priceLabel}</dt><dd>{formatBookingPrice(total, offer.currency, t('booking.onRequest'))}</dd></div>
     </dl>
   </BookingFormSection>;
 }
@@ -202,9 +218,9 @@ const required = (value) => Boolean(String(value ?? '').trim());
 const validEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value ?? '');
 const matchDateRange = (answers) => Boolean(answers.dateRange?.start);
 
-function inquirySummaryRows({ definition, answers }) {
+function inquirySummaryRows({ definition, answers, t }) {
   return [
-    { label: 'Date', value: answers.date || 'Not selected', muted: !answers.date },
+    { label: t('booking.review.date'), value: answers.date || t('booking.notSelected'), muted: !answers.date },
     ...definition.entryFields.map((fieldId) => {
       const field = definition.fields[fieldId];
       const value = answers[fieldId];
@@ -219,98 +235,107 @@ function inquiryCompactSummary({ definition, answers }) {
 
 const contactSummary = ({ answers }) => answers.contactName ? `${answers.contactName} · ${answers.messenger}` : '';
 
+const detailsStep = (labelKey, scope) => ({
+  labelKey,
+  scope,
+  Component: InquiryDetailsStep,
+  validate: (answers, t) => required(answers.date) ? '' : t('booking.validation.date'),
+  compactSummary: inquiryCompactSummary,
+  summaryRows: inquirySummaryRows,
+});
+
 export const BOOKING_STEP_REGISTRY = Object.freeze({
   'instructor-dates': {
-    label: 'Dates & time',
+    labelKey: 'booking.steps.instructorDates.label',
     scope: ['instructors'],
     Component: InstructorDatesStep,
-    validate: (answers) => matchDateRange(answers) && matchHours(answers) ? '' : 'Choose at least one date and one preferred time slot.',
-    compactSummary: ({ answers }) => [formatDateRange(answers.dateRange), matchHours(answers) ? `${matchHours(answers)} hours` : 'time flexible'].filter(Boolean).join(' · '),
-    summaryRows: ({ answers }) => [
-      { label: 'Dates', value: formatDateRange(answers.dateRange) || null },
-      { label: 'Time slots', value: matchHours(answers) ? `${matchHours(answers)} hours selected` : 'Not selected', muted: !matchHours(answers) },
-      { label: 'Duration', value: answers.duration ? `${answers.duration} hours` : null },
+    validate: (answers, t) => matchDateRange(answers) && matchHours(answers) ? '' : t('booking.validation.dateAndSlot'),
+    compactSummary: ({ answers, t, locale }) => [formatDateRange(answers.dateRange, locale), matchHours(answers) ? t('booking.review.hours', { hours: matchHours(answers) }) : t('booking.timeFlexible')].filter(Boolean).join(' · '),
+    summaryRows: ({ answers, t, locale }) => [
+      { label: t('booking.review.dates'), value: formatDateRange(answers.dateRange, locale) || null },
+      { label: t('booking.review.timeSlots'), value: matchHours(answers) ? t('booking.review.hoursSelected', { hours: matchHours(answers) }) : t('booking.notSelected'), muted: !matchHours(answers) },
+      { label: t('booking.review.duration'), value: answers.duration ? t('booking.review.hours', { hours: answers.duration }) : null },
     ],
   },
   'instructor-participants': {
-    label: 'Company',
+    labelKey: 'booking.steps.instructorParticipants.label',
     scope: ['instructors'],
     Component: InstructorParticipantsStep,
-    validate: (answers) => {
+    validate: (answers, t) => {
       const group = groupCounts(answers, true);
-      return group.total <= 10 && answers.languages?.length && required(answers.level) ? '' : 'Choose the group size, instructor language and skill level.';
+      return group.total <= 10 && answers.languages?.length && required(answers.level) ? '' : t('booking.validation.group');
     },
-    compactSummary: ({ answers }) => {
+    compactSummary: ({ answers, t, locale }) => {
       const group = groupCounts(answers, true);
-      return `${answers.companyType ?? 'Group'} · ${group.total} people · ${answers.level ?? 'Beginner'}`;
+      return `${optionLabel(t, answers.companyType ?? 'Family')} · ${t('booking.review.people', { count: group.total })} · ${optionLabel(t, answers.level ?? 'Beginner')}`;
     },
-    summaryRows: ({ answers, currentStep, stepIndex }) => {
+    summaryRows: ({ answers, currentStep, stepIndex, t, locale }) => {
       const group = groupCounts(answers, true);
       return [
-        { label: 'Participants', value: `${group.total} · ${group.adults} adults${group.children ? ` · ${group.children} ${group.children === 1 ? 'child' : 'kids'}` : ''}` },
-        ...(currentStep >= stepIndex ? [{ label: 'Lesson', value: `${(answers.languages ?? []).join(', ') || 'Language not selected'} · ${answers.level ?? 'Level not selected'}`, muted: !answers.languages?.length || !answers.level }] : []),
+        { label: t('booking.review.participants'), value: `${group.total} · ${t('booking.review.adultsCount', { count: group.adults })}${group.children ? ` · ${t('booking.review.kidsCount', { count: group.children })}` : ''}` },
+        ...(currentStep >= stepIndex ? [{ label: t('booking.review.lesson'), value: `${(answers.languages ?? []).map((value) => optionLabel(t, value)).join(', ') || t('booking.languageNotSelected')} · ${answers.level ? optionLabel(t, answers.level) : t('booking.levelNotSelected')}`, muted: !answers.languages?.length || !answers.level }] : []),
       ];
     },
   },
   'instructor-match-dates': {
-    label: 'When would you like to go?',
+    labelKey: 'booking.steps.instructorDates.title',
     scope: ['instructor-match'],
     Component: InstructorDatesStep,
-    validate: (answers) => matchDateRange(answers) ? '' : 'Choose at least one preferred date.',
-    compactSummary: ({ answers }) => [formatDateRange(answers.dateRange), matchHours(answers) ? `${matchHours(answers)} hours` : ''].filter(Boolean).join(' · '),
-    summaryRows: ({ answers }) => [{
-      label: formatDateRange(answers.dateRange) || 'Dates',
-      value: matchHours(answers) ? `${matchHours(answers)} h` : 'time not set',
+    validate: (answers, t) => matchDateRange(answers) ? '' : t('booking.validation.dateOnly'),
+    compactSummary: ({ answers, t, locale }) => [formatDateRange(answers.dateRange, locale), matchHours(answers) ? t('booking.review.hours', { hours: matchHours(answers) }) : ''].filter(Boolean).join(' · '),
+    summaryRows: ({ answers, t, locale }) => [{
+      label: formatDateRange(answers.dateRange, locale) || t('booking.review.dates'),
+      value: matchHours(answers) ? `${matchHours(answers)} ${t('booking.hourShort')}` : t('booking.timeNotSet'),
       emphasis: true,
       muted: !answers.dateRange?.start,
     }],
   },
   'instructor-match-company': {
-    label: 'Company',
+    labelKey: 'booking.steps.instructorParticipants.label',
     scope: ['instructor-match'],
     Component: InstructorMatchCompanyStep,
-    validate: (answers) => Number(answers.adultsCount) > 0 && Number(answers.childrenCount) <= Number(answers.adultsCount) && answers.languages?.length ? '' : 'Tell us about the group and preferred languages.',
-    compactSummary: ({ answers }) => `${answers.companyType} · ${Number(answers.adultsCount) + Number(answers.childrenCount || 0)}`,
-    summaryRows: ({ answers, currentStep, stepIndex }) => currentStep >= stepIndex ? [{
-      label: 'People',
-      value: `${answers.companyType} · ${Number(answers.adultsCount) + Number(answers.childrenCount || 0)}`,
-    }] : [{ label: 'People', value: '—', muted: true }],
+    validate: (answers, t) => Number(answers.adultsCount) > 0 && Number(answers.childrenCount) <= Number(answers.adultsCount) && answers.languages?.length ? '' : t('booking.validation.matchGroup'),
+    compactSummary: ({ answers, t, locale }) => `${optionLabel(t, answers.companyType)} · ${Number(answers.adultsCount) + Number(answers.childrenCount || 0)}`,
+    summaryRows: ({ answers, currentStep, stepIndex, t, locale }) => currentStep >= stepIndex ? [{
+      label: t('booking.review.peopleLabel'),
+      value: `${optionLabel(t, answers.companyType)} · ${Number(answers.adultsCount) + Number(answers.childrenCount || 0)}`,
+    }] : [{ label: t('booking.review.peopleLabel'), value: '—', muted: true }],
   },
   'instructor-match-preferences': {
-    label: 'What are you into?',
+    labelKey: 'booking.steps.matchPreferences.title',
     scope: ['instructor-match'],
     Component: InstructorMatchPreferencesStep,
-    validate: (answers) => answers.activities?.length && answers.pace && answers.skillLevel && answers.budget ? '' : 'Choose activity, pace, skill level and budget.',
-    compactSummary: ({ answers }) => [answers.activities?.join(', '), answers.pace, answers.skillLevel].filter(Boolean).join(' · '),
-    summaryRows: ({ answers, currentStep, stepIndex }) => currentStep >= stepIndex ? [{
-      label: 'Preferences',
-      value: answers.activities?.length ? `${answers.activities.join(', ')} · ${answers.pace}` : '—',
+    validate: (answers, t) => answers.activities?.length && answers.pace && answers.skillLevel && answers.budget ? '' : t('booking.validation.preferences'),
+    compactSummary: ({ answers, t, locale }) => [answers.activities?.map((value) => optionLabel(t, value)).join(', '), answers.pace && optionLabel(t, answers.pace), answers.skillLevel && optionLabel(t, answers.skillLevel)].filter(Boolean).join(' · '),
+    summaryRows: ({ answers, currentStep, stepIndex, t, locale }) => currentStep >= stepIndex ? [{
+      label: t('booking.review.preferences'),
+      value: answers.activities?.length ? `${answers.activities.map((value) => optionLabel(t, value)).join(', ')} · ${optionLabel(t, answers.pace)}` : '—',
       muted: !answers.activities?.length,
     }] : [],
   },
-  'activity-details': { label: 'Activity details', scope: ['activities'], Component: InquiryDetailsStep, validate: (answers) => required(answers.date) ? '' : 'Choose a preferred date.', compactSummary: inquiryCompactSummary, summaryRows: inquirySummaryRows },
-  'rental-details': { label: 'Rental details', scope: ['rental'], Component: InquiryDetailsStep, validate: (answers) => required(answers.date) ? '' : 'Choose a preferred date.', compactSummary: inquiryCompactSummary, summaryRows: inquirySummaryRows },
-  'transfer-details': { label: 'Transfer details', scope: ['transfers'], Component: InquiryDetailsStep, validate: (answers) => required(answers.date) ? '' : 'Choose a preferred date.', compactSummary: inquiryCompactSummary, summaryRows: inquirySummaryRows },
-  'stay-details': { label: 'Stay details', scope: ['stays'], Component: InquiryDetailsStep, validate: (answers) => required(answers.date) ? '' : 'Choose a preferred date.', compactSummary: inquiryCompactSummary, summaryRows: inquirySummaryRows },
-  'service-details': { label: 'Service details', scope: ['services'], Component: InquiryDetailsStep, validate: (answers) => required(answers.date) ? '' : 'Choose a preferred date.', compactSummary: inquiryCompactSummary, summaryRows: inquirySummaryRows },
-  'place-details': { label: 'Place details', scope: ['places'], Component: InquiryDetailsStep, validate: (answers) => required(answers.date) ? '' : 'Choose a preferred date.', compactSummary: inquiryCompactSummary, summaryRows: inquirySummaryRows },
+  'activity-details': detailsStep('booking.steps.activityDetails', ['activities']),
+  'rental-details': detailsStep('booking.steps.rentalDetails', ['rental']),
+  'transfer-details': detailsStep('booking.steps.transferDetails', ['transfers']),
+  'stay-details': detailsStep('booking.steps.stayDetails', ['stays']),
+  'service-details': detailsStep('booking.steps.serviceDetails', ['services']),
+  'place-details': detailsStep('booking.steps.placeDetails', ['places']),
   'contact-details': {
-    label: 'Contact details',
+    labelKey: 'booking.steps.contact.title',
     scope: ['shared'],
     Component: ContactDetailsStep,
-    validate: (answers) => required(answers.contactName) && required(answers.contactPhone) && validEmail(answers.contactEmail) && required(answers.messenger) ? '' : 'Add a valid name, phone, email and preferred messenger.',
+    validate: (answers, t) => required(answers.contactName) && required(answers.contactPhone) && validEmail(answers.contactEmail) && required(answers.messenger) ? '' : t('booking.validation.contact'),
     compactSummary: contactSummary,
-    summaryRows: ({ answers, currentStep, stepIndex }) => currentStep >= stepIndex && answers.contactName ? [{ label: 'Contact', value: `${answers.contactName} · ${answers.messenger}` }] : [],
+    summaryRows: ({ answers, currentStep, stepIndex, t, locale }) => currentStep >= stepIndex && answers.contactName ? [{ label: t('booking.review.contact'), value: `${answers.contactName} · ${answers.messenger}` }] : [],
   },
-  'request-review': { label: 'Review', scope: ['shared'], Component: RequestReviewStep, validate: () => '', compactSummary: () => 'Ready to send', summaryRows: () => [] },
+  'request-review': { labelKey: 'booking.steps.review.label', scope: ['shared'], Component: RequestReviewStep, validate: () => '', compactSummary: ({ t }) => t('booking.readyToSend'), summaryRows: () => [] },
 });
 
-export function getBookingStepPresentation(stepId, { definition, answers, currentStep = 0, stepIndex = 0 }) {
+export function getBookingStepPresentation(stepId, { definition, answers, currentStep = 0, stepIndex = 0, t, locale }) {
   const step = BOOKING_STEP_REGISTRY[stepId];
   if (!step) throw new Error(`Booking flow: unregistered step “${stepId}”.`);
-  const context = { definition, answers, currentStep, stepIndex };
+  const context = { definition, answers, currentStep, stepIndex, t, locale };
   return {
-    label: step.label,
+    label: t(step.labelKey),
     scope: step.scope,
     compactSummary: step.compactSummary?.(context) ?? '',
     summaryRows: step.summaryRows?.(context) ?? [],
@@ -318,6 +343,8 @@ export function getBookingStepPresentation(stepId, { definition, answers, curren
 }
 
 export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswersChange, onSubmit, onBack }) {
+  const { currentLanguage, t } = useLanguage();
+  const locale = currentLanguage.intlLocale;
   const [answers, setAnswers] = useState(() => createInitialBookingAnswers(definition, initialAnswers));
   const [currentStep, setCurrentStep] = useState(0);
   const [error, setError] = useState('');
@@ -336,41 +363,41 @@ export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswer
   });
   const goTo = (index) => { setError(''); setCurrentStep(index); };
   const next = () => {
-    const validationError = active.validate(answers);
+    const validationError = active.validate(answers, t);
     if (validationError) { setError(validationError); return; }
     goTo(Math.min(currentStep + 1, steps.length - 1));
   };
   const submit = async () => {
-    const validationError = active.validate(answers);
+    const validationError = active.validate(answers, t);
     if (validationError) { setError(validationError); return; }
     setSubmitState({ status: 'loading', message: '', requestCode: '' });
     try {
       const result = await onSubmit({ definition, offer, answers, estimatedTotal: total });
-      setSubmitState({ status: 'success', message: 'Your request has been sent.', requestCode: result?.requestCode ?? '' });
+      setSubmitState({ status: 'success', message: t('booking.submitted'), requestCode: result?.requestCode ?? '' });
     } catch (submitError) {
       setSubmitState({ status: 'error', message: submitError.message, requestCode: '' });
     }
   };
-  const summaryRows = steps.flatMap((step, stepIndex) => step.summaryRows?.({ definition, answers, currentStep, stepIndex }) ?? []);
+  const summaryRows = steps.flatMap((step, stepIndex) => step.summaryRows?.({ definition, answers, currentStep, stepIndex, t, locale }) ?? []);
   const matchingHours = definition.presentation === 'operator-match' ? matchHours(answers) : 0;
   const matchingHasPrice = definition.presentation === 'operator-match' && currentStep > 0 && matchingHours > 0;
 
-  if (submitState.status === 'success') return <Notice tone="info" title="Request received"><p>{submitState.message}</p>{submitState.requestCode ? <p>Reference: <strong>{submitState.requestCode}</strong></p> : null}<Button variant="secondary" onClick={onBack}>Back to {offer.object?.name ? 'the offer' : 'instructors'}</Button></Notice>;
+  if (submitState.status === 'success') return <Notice tone="info" title={t('booking.received')}><p>{submitState.message}</p>{submitState.requestCode ? <p>{t('booking.reference')} <strong>{submitState.requestCode}</strong></p> : null}<Button variant="secondary" onClick={onBack}>{t(offer.object?.name ? 'booking.actions.backToOffer' : 'booking.actions.backToInstructors')}</Button></Notice>;
 
   const actions = <div className={`booking-request-flow__actions${currentStep === 0 ? ' booking-request-flow__actions--forward-only' : ''}`}>
-    {currentStep > 0 ? <Button className="booking-request-flow__back-action" variant="ghost" onClick={() => goTo(currentStep - 1)}>← Back</Button> : null}
+    {currentStep > 0 ? <Button className="booking-request-flow__back-action" variant="ghost" onClick={() => goTo(currentStep - 1)}>← {t('booking.actions.back')}</Button> : null}
     {currentStep === steps.length - 1
-      ? <Button variant="accent" onClick={submit} loading={submitState.status === 'loading'} loadingLabel="Sending request">Send request →</Button>
-      : <Button variant="accent" onClick={next}>Next →</Button>}
+      ? <Button variant="accent" onClick={submit} loading={submitState.status === 'loading'} loadingLabel={t('booking.actions.sending')}>{t('booking.actions.send')} →</Button>
+      : <Button variant="accent" onClick={next}>{t('booking.actions.next')} →</Button>}
   </div>;
 
   return <BookingFlow
     step={<div className="booking-request-flow__steps">{steps.map((step, index) => {
-      if (index !== currentStep) return <BookingFormSection key={step.id} compact stepNumber={index + 1} title={step.label} summary={index < currentStep ? step.compactSummary?.({ definition, answers, currentStep, stepIndex: index }) : ''} onEdit={index < currentStep ? () => goTo(index) : undefined} />;
+      if (index !== currentStep) return <BookingFormSection key={step.id} compact stepNumber={index + 1} title={t(step.labelKey)} summary={index < currentStep ? step.compactSummary?.({ definition, answers, currentStep, stepIndex: index, t, locale }) : ''} onEdit={index < currentStep ? () => goTo(index) : undefined} />;
       const StepComponent = step.Component;
       return <StepComponent key={step.id} answers={answers} update={update} definition={definition} offer={offer} stepNumber={index + 1} actions={actions} error={error || (submitState.status === 'error' ? submitState.message : '')} />;
     })}</div>}
-    summary={<BookingRequestSummary title="Your request" object={definition.presentation === 'operator-match' ? null : offer.object} rows={summaryRows} priceLabel={definition.presentation === 'operator-match' ? `for ${matchingHours} hours` : definition.priceLabel} totalLabel={definition.presentation === 'operator-match' ? (matchingHasPrice ? formatBookingPrice(total, offer.currency) : null) : formatBookingPrice(total, offer.currency)} note={definition.presentation === 'operator-match' ? (matchingHasPrice ? 'Same official rate for every instructor.' : 'Price appears once you set the time and participants.') : undefined} />}
+    summary={<BookingRequestSummary title={t('booking.summaryTitle')} object={definition.presentation === 'operator-match' ? null : offer.object} rows={summaryRows} priceLabel={definition.presentation === 'operator-match' ? t('booking.forHours', { hours: matchingHours }) : definition.priceLabel} totalLabel={definition.presentation === 'operator-match' ? (matchingHasPrice ? formatBookingPrice(total, offer.currency, t('booking.onRequest')) : null) : formatBookingPrice(total, offer.currency, t('booking.onRequest'))} note={definition.presentation === 'operator-match' ? (matchingHasPrice ? t('booking.sameRateNote') : t('booking.priceLaterNote')) : undefined} />}
     status={submitState.status === 'error' ? <Notice tone="danger">{submitState.message}</Notice> : null}
   />;
 }

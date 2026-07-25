@@ -6,12 +6,14 @@ import {
   Surface,
 } from '../../../design-system';
 import { defineComposition } from '../../../design-system/architecture/registry';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import {
   BOOKING_STEP_REGISTRY,
   createBookingOffer,
   createInitialBookingAnswers,
   getBookingFlowDefinition,
   getBookingStepPresentation,
+  localizeBookingDefinition,
 } from '../../../features/booking';
 
 export const STORY_OBJECTS = {
@@ -20,12 +22,13 @@ export const STORY_OBJECTS = {
 };
 
 function StoryStep({ config, mode }) {
-  const definition = getBookingFlowDefinition(config.category);
+  const { t } = useLanguage();
+  const definition = localizeBookingDefinition(getBookingFlowDefinition(config.category), t);
   const offer = createBookingOffer({ definition, object: config.object, basePrice: config.basePrice });
   const [answers, setAnswers] = useState(() => createInitialBookingAnswers(definition, config.answers));
   const update = (key, value) => setAnswers((current) => ({ ...current, [key]: value }));
   const contract = BOOKING_STEP_REGISTRY[config.stepId];
-  const presentation = getBookingStepPresentation(config.stepId, { definition, answers, currentStep: 0, stepIndex: 0 });
+  const presentation = getBookingStepPresentation(config.stepId, { definition, answers, currentStep: 0, stepIndex: 0, t });
 
   if (mode === 'collapsed') {
     return <div style={{ maxWidth: 820 }}>

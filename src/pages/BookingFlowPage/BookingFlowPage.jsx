@@ -6,9 +6,11 @@ import {
   createBookingDraft,
   createBookingOffer,
   getBookingFlowDefinition,
+  localizeBookingDefinition,
   readBookingDraft,
   saveBookingDraft,
 } from '../../features/booking';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructor } from '../../services/instructorsApi';
 import { createBookingRequest } from '../../services/bookingRequestsApi';
 import { createInstructorRequest } from '../../services/instructorRequestsApi';
@@ -23,17 +25,17 @@ function draftOffer(draft) {
   };
 }
 
-async function loadInstructorDraft(slug) {
+async function loadInstructorDraft(slug, t) {
   const instructor = await getInstructor(slug);
   if (!instructor) return null;
-  const definition = getBookingFlowDefinition('instructors');
+  const definition = localizeBookingDefinition(getBookingFlowDefinition('instructors'), t);
   const offer = createBookingOffer({
     definition,
     object: {
       id: `instructor:${instructor.id ?? instructor.slug}`,
       slug: instructor.slug,
       name: instructor.name,
-      typeLabel: 'Private instructor',
+      typeLabel: t('instructor.typeLabel'),
       image: instructor.bookingAvatar ?? instructor.image,
     },
     basePrice: instructor.pricing.hourlyRateGel,
@@ -76,6 +78,7 @@ function instructorPayload({ offer, answers }) {
 }
 
 export function BookingFlowPage() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { category, slug } = useParams();
   const [state, setState] = useState({ status: 'loading', draft: null, error: '' });
@@ -94,10 +97,10 @@ export function BookingFlowPage() {
     }
 
     if ((category === 'instructors' || !category) && slug) {
-      loadInstructorDraft(slug)
+      loadInstructorDraft(slug, t)
         .then((draft) => {
           if (!active) return;
-          if (!draft) { setState({ status: 'error', draft: null, error: 'Instructor not found.' }); return; }
+          if (!draft) { setState({ status: 'error', draft: null, error: t('booking.page.instructorNotFound') }); return; }
           saveBookingDraft(draft);
           setState({ status: 'ready', draft, error: '' });
         })
@@ -105,14 +108,14 @@ export function BookingFlowPage() {
       return () => { active = false; };
     }
 
-    setState({ status: 'error', draft: null, error: 'Open a specific offer and configure the request first.' });
+    setState({ status: 'error', draft: null, error: t('booking.page.noDraft') });
     return () => { active = false; };
   }, [category, slug]);
 
-  if (state.status === 'loading') return <><SiteNavbar /><Container as="main" width="detail" className="booking-flow-page__state"><LoadingState title="Preparing your request" /></Container><SiteFooter /></>;
-  if (state.status === 'error' || !state.draft) return <><SiteNavbar /><Container as="main" width="detail" className="booking-flow-page__state"><ErrorState title="Booking cannot be opened" description={state.error} action={<BackLink to="/instructors">Back to instructors</BackLink>} /></Container><SiteFooter /></>;
+  if (state.status === 'loading') return <><SiteNavbar /><Container as="main" width="detail" className="booking-flow-page__state"><LoadingState title={t('booking.page.preparing')} /></Container><SiteFooter /></>;
+  if (state.status === 'error' || !state.draft) return <><SiteNavbar /><Container as="main" width="detail" className="booking-flow-page__state"><ErrorState title={t('booking.page.cannotOpen')} description={state.error} action={<BackLink to="/instructors">{t('instructor.backToList')}</BackLink>} /></Container><SiteFooter /></>;
 
-  const definition = getBookingFlowDefinition(state.draft.flowKey);
+  const definition = localizeBookingDefinition(getBookingFlowDefinition(state.draft.flowKey), t);
   const offer = draftOffer(state.draft);
   const backPath = definition.category === 'instructors' ? `/instructors/${offer.object.slug}` : `/${definition.category}/${offer.object.slug}`;
   const submit = definition.category === 'instructors'
@@ -133,8 +136,8 @@ export function BookingFlowPage() {
     <SiteNavbar className="booking-flow-page__nav" />
     <main>
       <Container width="detail" className="booking-flow-page__header">
-        <BackLink className="booking-flow-page__back" to={backPath} aria-label="Back to the offer">Back to the offer</BackLink>
-        <h1>{definition.title} <strong>with {offer.object.name}</strong></h1>
+        <BackLink className="booking-flow-page__back" to={backPath} aria-label={t('booking.actions.backToOffer')}>{t('booking.actions.backToOffer')}</BackLink>
+        <h1>{definition.title} <strong>{t('booking.page.withObject', { name: offer.object.name })}</strong></h1>
       </Container>
       <Container width="detail" className="booking-flow-page__content">
         <BookingRequestFlow

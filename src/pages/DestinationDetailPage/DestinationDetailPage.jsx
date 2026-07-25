@@ -19,7 +19,7 @@ import {
   StayObjectPattern,
   TransferObjectPattern,
 } from '../../design-system';
-import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
+import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { getDestination, getDestinationItem } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './DestinationDetailPage.scss';
@@ -61,7 +61,7 @@ export function DestinationDetailPage() {
   const Pattern = OBJECT_PATTERNS[section] ?? ActivityObjectPattern;
   const cardType = CARD_TYPES[section] ?? 'activity';
   const numericPrice = Number.parseFloat(String(item.price).replace(/[^0-9.,]/g, '').replace(',', '.')) || undefined;
-  const bookingDefinition = getBookingFlowDefinition(section);
+  const bookingDefinition = localizeBookingDefinition(getBookingFlowDefinition(section), t);
   const bookingOffer = createBookingOffer({
     definition: bookingDefinition,
     object: { id: `${section}:${item.slug}`, slug: item.slug, name: item.name, typeLabel: item.category, image: item.image },

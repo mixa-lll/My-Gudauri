@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackLink, Container, SiteNavbar } from '../../design-system';
-import { BookingRequestFlow, createBookingOffer, createInitialBookingAnswers, getBookingFlowDefinition } from '../../features/booking';
+import { BookingRequestFlow, createBookingOffer, createInitialBookingAnswers, getBookingFlowDefinition, localizeBookingDefinition } from '../../features/booking';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { createInstructorRequest } from '../../services/instructorRequestsApi';
 import './InstructorMatchPage.scss';
 
@@ -36,7 +37,8 @@ function matchPayload(answers) {
 
 export function InstructorMatchPage() {
   const navigate = useNavigate();
-  const definition = useMemo(() => getBookingFlowDefinition('instructor-match-v1'), []);
+  const { t } = useLanguage();
+  const definition = useMemo(() => localizeBookingDefinition(getBookingFlowDefinition('instructor-match-v1'), t), [t]);
   const offer = useMemo(() => createBookingOffer({ definition, object: null, basePrice: definition.matchHourlyRate }), [definition]);
   const initialAnswers = useMemo(() => createInitialBookingAnswers(definition), [definition]);
 
@@ -45,8 +47,8 @@ export function InstructorMatchPage() {
     <main>
       <Container width="detail" className="instructor-match-page__header">
         <div className="instructor-match-page__title-row">
-          <BackLink className="instructor-match-page__back" to="/instructors" aria-label="Back to instructors">Back</BackLink>
-          <h1>Request a lesson — <strong>we’ll match an instructor</strong></h1>
+          <BackLink className="instructor-match-page__back" to="/instructors" aria-label={t('instructor.backToList')}>{t('booking.actions.back')}</BackLink>
+          <h1>{t('booking.match.title')} — <strong>{t('booking.match.titleAccent')}</strong></h1>
         </div>
       </Container>
       <Container width="detail" className="instructor-match-page__content">

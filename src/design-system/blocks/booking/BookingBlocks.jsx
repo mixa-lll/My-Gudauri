@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import { Button, Dialog, FormField, Input, QuantityStepper, Select, Surface } from '../../../components';
 import './BookingBlocks.scss';
+import { useLanguage } from '../../../i18n/LanguageContext';
 
 const numberFormatter = new Intl.NumberFormat('en');
 
@@ -45,7 +46,10 @@ function EntryField({ field, value, onChange, disabled }) {
   if (field.control === 'select') {
     return <FormField label={field.label} required={field.required}>
       <Select value={value} disabled={disabled} onChange={(event) => onChange(field.id, event.target.value)}>
-        {field.options.map((option) => <option value={option} key={option}>{option}</option>)}
+        {field.options.map((option) => {
+          const optionValue = option?.value ?? option;
+          return <option value={optionValue} key={optionValue}>{option?.label ?? option}</option>;
+        })}
       </Select>
     </FormField>;
   }
@@ -79,24 +83,25 @@ function ConfiguratorForm({ className = '', object, objectName, availability, fi
 
 export function BookingConfigurator({
   id = 'booking-request',
-  title = 'Configure your request',
-  priceLabel = 'Estimated total',
+  title,
+  priceLabel,
   object,
   fields = [],
   basePrice,
   currency = 'GEL',
   availability,
   entryNote,
-  confirmationText = 'Continue to choose the remaining details. A local manager confirms availability before payment.',
+  confirmationText,
   defaultValues,
   estimate,
-  actionLabel = 'Continue',
+  actionLabel,
   disabled = false,
   loading = false,
   onValuesChange,
   onSummaryChange,
   onContinue,
 }) {
+  const { t } = useLanguage();
   const [values, setValues] = useState(() => initialValues(fields, defaultValues));
   const estimatedTotal = useMemo(() => estimate?.(values) ?? (Number(basePrice) || 0), [basePrice, estimate, values]);
   const totalLabel = estimatedTotal ? `${new Intl.NumberFormat('en').format(estimatedTotal)} ${currency}` : 'On request';
@@ -117,7 +122,25 @@ export function BookingConfigurator({
     onSummaryChange?.({ actionLabel, ready, totalLabel });
   }, [actionLabel, onSummaryChange, ready, totalLabel]);
 
-  const formProps = { object, objectName, availability, fields, values, disabled, loading, update, breakdown, totalLabel, quantitySummary, priceLabel, entryNote, actionLabel, confirmationText, ready, onContinue };
+  const formProps = {
+    object,
+    objectName,
+    availability,
+    fields,
+    values,
+    disabled,
+    loading,
+    update,
+    breakdown,
+    totalLabel,
+    quantitySummary,
+    priceLabel: priceLabel ?? t('configurator.priceLabel'),
+    entryNote,
+    actionLabel: actionLabel ?? t('configurator.action'),
+    confirmationText: confirmationText ?? t('configurator.confirmation'),
+    ready,
+    onContinue,
+  };
 
   return <Surface as="aside" id={id} className="ds-booking-configurator" padding="md" aria-label={`Booking request for ${objectName}`}>
     <Dialog
@@ -171,15 +194,16 @@ export function BookingProgress({ steps = [], currentStep = 0, label = 'Booking 
 }
 
 export function BookingFormSection({ title, description, children, actions, error, status = 'editing', compact = false, summary, onEdit, stepNumber }) {
+  const { t } = useLanguage();
   const titleId = useId();
   if (compact) return <section className={`ds-booking-form-section ds-booking-form-section--${status} ds-booking-form-section--compact`} aria-labelledby={titleId}>
     <button type="button" className="ds-booking-form-section__compact-trigger" onClick={onEdit} disabled={!onEdit}>
-      <strong id={titleId}>{stepNumber ? `${stepNumber}. ` : ''}{title}</strong>
-      <span>{summary ? <small>{summary}</small> : null}{onEdit ? <em>Edit ↗</em> : null}</span>
+      <strong id={titleId}>{stepNumber ? `${stepNumber}. ` : ''}{title ?? t('configurator.title')}</strong>
+      <span>{summary ? <small>{summary}</small> : null}{onEdit ? <em>{t('booking.actions.edit')} ↗</em> : null}</span>
     </button>
   </section>;
   return <section className={`ds-booking-form-section ds-booking-form-section--${status}`} aria-labelledby={titleId}>
-    <header><div><h2 id={titleId}>{stepNumber ? `${stepNumber}. ` : ''}{title}</h2>{description ? <p>{description}</p> : null}</div></header>
+    <header><div><h2 id={titleId}>{stepNumber ? `${stepNumber}. ` : ''}{title ?? t('configurator.title')}</h2>{description ? <p>{description}</p> : null}</div></header>
     {error ? <p className="ds-booking-form-section__error" role="alert">{error}</p> : null}
     <div className="ds-booking-form-section__body">{children}</div>
     {actions ? <footer>{actions}</footer> : null}
@@ -189,7 +213,7 @@ export function BookingFormSection({ title, description, children, actions, erro
 export function BookingRequestSummary({ title = 'Your request', object, rows = [], priceLabel = 'Estimated total', totalLabel = 'On request', note, status }) {
   const hasObject = Boolean(object?.name);
   return <Surface as="section" className={`ds-booking-request-summary ${hasObject ? 'ds-booking-request-summary--object' : 'ds-booking-request-summary--match'}`} padding="md" aria-label="Request summary">
-    <h2 className="ds-booking-request-summary__heading">{title}</h2>
+    <h2 className="ds-booking-request-summary__heading">{title ?? t('configurator.title')}</h2>
     {hasObject ? <div className="ds-booking-request-summary__object">
       {object.image
         ? <img src={object.image} alt="" />

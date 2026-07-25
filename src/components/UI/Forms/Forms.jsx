@@ -1,5 +1,6 @@
 import { cloneElement, forwardRef, useId, useMemo, useState } from 'react';
 import { cn } from '../../../utils/cn';
+import { useLanguage } from '../../../i18n/LanguageContext';
 import { Button } from '../Button/Button';
 import './Forms.scss';
 
@@ -78,9 +79,11 @@ export function DateRangeCalendar({
   onChange,
   min,
   max,
-  locale = 'en-GB',
+  locale,
   disabled = false,
 }) {
+  const { currentLanguage, t } = useLanguage();
+  const activeLocale = locale ?? currentLanguage.intlLocale;
   const today = useMemo(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -95,9 +98,9 @@ export function DateRangeCalendar({
   const visibleMonths = [month, shiftMonth(month, 1)];
   const weekDays = useMemo(() => {
     const monday = new Date(2026, 0, 5);
-    return Array.from({ length: 7 }, (_, index) => new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2026, 0, 5 + index)));
-  }, [locale]);
-  const selectedRangeLabel = start ? [start, end].filter(Boolean).map((key) => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(dateFromKey(key))).join(' – ') : '';
+    return Array.from({ length: 7 }, (_, index) => new Intl.DateTimeFormat(activeLocale, { weekday: 'short' }).format(new Date(2026, 0, 5 + index)));
+  }, [activeLocale]);
+  const selectedRangeLabel = start ? [start, end].filter(Boolean).map((key) => new Intl.DateTimeFormat(activeLocale, { day: 'numeric', month: 'long' }).format(dateFromKey(key))).join(' – ') : '';
 
   const selectDate = (nextDate) => {
     const next = dateKey(nextDate);
@@ -117,8 +120,8 @@ export function DateRangeCalendar({
         const firstWeekday = (visibleMonth.getDay() + 6) % 7;
         const totalDays = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 0).getDate();
         const cells = [...Array.from({ length: firstWeekday }, () => null), ...Array.from({ length: totalDays }, (_, index) => new Date(visibleMonth.getFullYear(), visibleMonth.getMonth(), index + 1))];
-        return <section className="ui-date-range__month" key={`${visibleMonth.getFullYear()}-${visibleMonth.getMonth()}`} aria-label={new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(visibleMonth)}>
-          <h3>{new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(visibleMonth)}</h3>
+        return <section className="ui-date-range__month" key={`${visibleMonth.getFullYear()}-${visibleMonth.getMonth()}`} aria-label={new Intl.DateTimeFormat(activeLocale, { month: 'long', year: 'numeric' }).format(visibleMonth)}>
+          <h3>{new Intl.DateTimeFormat(activeLocale, { month: 'long', year: 'numeric' }).format(visibleMonth)}</h3>
           <div className="ui-date-range__weekdays" aria-hidden="true">{weekDays.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div>
           <div className="ui-date-range__grid">
             {cells.map((date, index) => {
@@ -128,7 +131,7 @@ export function DateRangeCalendar({
               const selected = Boolean(start && key >= start && key <= (end || start));
               const edge = selected && (key === start || key === (end || start));
               const boundary = key === start ? ' is-start' : key === (end || start) ? ' is-end' : '';
-              const dateLabel = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+              const dateLabel = new Intl.DateTimeFormat(activeLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(date);
               return <button type="button" className={`ui-date-range__day${selected ? ' is-selected' : ''}${edge ? ' is-edge' : ''}${boundary}`} key={key} disabled={isDisabled} aria-pressed={selected} aria-label={dateLabel} onClick={() => selectDate(date)}>{date.getDate()}</button>;
             })}
           </div>
@@ -136,7 +139,7 @@ export function DateRangeCalendar({
       })}
       <Button className="ui-date-range__next" type="button" variant="secondary" size="md" aria-label="Next month" disabled={disabled || shiftMonth(month, 1) >= monthStart(maxDate)} onClick={() => setMonth((current) => shiftMonth(current, 1))}>›</Button>
     </div>
-    {selectedRangeLabel ? <p className="ui-date-range__hint">{selectedRangeLabel} · {rangeDays(start, end) || 1} {rangeDays(start, end) === 1 ? 'day' : 'days'} selected — choose a new start date to change the range</p> : <p className="ui-date-range__hint">Choose a start and end date.</p>}
+    {selectedRangeLabel ? <p className="ui-date-range__hint">{t('calendar.rangeSelected', { range: selectedRangeLabel, days: rangeDays(start, end) || 1 })}</p> : <p className="ui-date-range__hint">{t('calendar.chooseRange')}</p>}
   </section>;
 }
 

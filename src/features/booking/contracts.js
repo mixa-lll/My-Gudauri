@@ -237,6 +237,40 @@ export function estimateBookingTotal(definition, offer, answers) {
   }
 }
 
-export function formatBookingPrice(amount, currency = 'GEL') {
-  return amount > 0 ? `${new Intl.NumberFormat('en').format(amount)} ${currency}` : 'On request';
+export function formatBookingPrice(amount, currency = 'GEL', onRequestLabel = 'On request') {
+  return amount > 0 ? `${new Intl.NumberFormat('en').format(amount)} ${currency}` : onRequestLabel;
+}
+
+const TRANSLATABLE_FIELD_PROPS = ['label', 'singularLabel', 'shortLabel', 'shortSingularLabel', 'placeholder'];
+
+function localizeField(field, flowKey, t) {
+  const base = `booking.flows.${flowKey}.fields.${field.id}`;
+  const localized = { ...field };
+  for (const prop of TRANSLATABLE_FIELD_PROPS) {
+    if (field[prop]) localized[prop] = t(`${base}.${prop}`);
+  }
+  if (field.options) {
+    localized.options = field.options.map((option) => ({ value: option, label: t(`booking.options.${optionKey(option)}`) }));
+  }
+  return localized;
+}
+
+export function optionKey(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+// Answer values stay in English so stored requests remain consistent across languages;
+// only what the guest reads is translated.
+export function localizeBookingDefinition(definition, t) {
+  const base = `booking.flows.${definition.key}`;
+  return {
+    ...definition,
+    title: t(`${base}.title`),
+    priceLabel: t(`${base}.priceLabel`),
+    entryNote: t(`${base}.entryNote`),
+    confirmationText: t(`${base}.confirmationText`),
+    fields: Object.fromEntries(
+      Object.entries(definition.fields).map(([id, field]) => [id, localizeField(field, definition.key, t)])
+    ),
+  };
 }
