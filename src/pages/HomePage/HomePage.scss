@@ -121,10 +121,10 @@
 .home-page .hero-title-main {
   margin: 0 0 14px;
   color: #081c2d;
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: clamp(70px, 8.2vw, 124px);
-  font-weight: var(--fw-bold);
-  letter-spacing: -0.085em;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
   line-height: 0.82;
   -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.38);
   text-shadow:
@@ -545,7 +545,6 @@
 
   .home-page .hero-title-main {
     font-size: clamp(50px, 14vw, 72px);
-    letter-spacing: -0.075em;
   }
 
   .home-page .hero-subtitle {

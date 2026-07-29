@@ -119,15 +119,45 @@
   letter-spacing: -0.045em;
   text-wrap: balance;
 }
-.type-display { font-size: var(--type-display-size); line-height: var(--type-display-line); }
-.type-page-title { font-size: var(--type-page-title-size); line-height: var(--type-page-title-line); }
-.type-section-title { font-size: var(--type-section-title-size); line-height: var(--type-section-title-line); }
-.type-subsection-title { font-size: var(--type-subsection-title-size); line-height: var(--type-subsection-title-line); }
-.type-body-large { font-size: var(--type-body-large-size); line-height: var(--type-body-large-line); }
-.type-body { font-size: var(--type-body-size); line-height: var(--type-body-line); }
-.type-body-small { font-size: var(--type-body-small-size); line-height: var(--type-body-small-line); }
-.type-label { font-size: var(--type-label-size); line-height: var(--type-label-line); }
-.type-caption { font-size: var(--type-caption-size); line-height: var(--type-caption-line); }
-.weight-regular { font-weight: var(--fw-regular); }
-.weight-medium { font-weight: var(--fw-medium); }
-.weight-bold { font-weight: var(--fw-bold); }
+
+/*
+ * Display title face.
+ *
+ * Large titles opt in with `font-family: var(--font-display)` in their own
+ * stylesheet. Paytone One has no Cyrillic or Georgian glyphs, so those two
+ * languages are handed back to the Geist heading face here — with its own
+ * weight and tracking, because Paytone One's single 400 weight would otherwise
+ * leave Russian titles too light. The language switcher writes
+ * document.documentElement.lang, which is what :lang() reads.
+ *
+ * The hero and footer wordmarks are hard-coded Latin, so they are deliberately
+ * absent from this list and keep the display face in every language.
+ */
+:lang(ru),
+:lang(ka) {
+  .type-display,
+  .type-page-title,
+  .type-section-title,
+  .section-heading__title,
+  /* The display variant sets its own weight at the same specificity, so it is
+     listed explicitly rather than relying on source order. */
+  .section-heading--display .section-heading__title,
+  .about-seasons h2,
+  .contacts-section-heading h2,
+  .contacts-response h2,
+  .articles-list__heading h2,
+  .instructor-concierge h2,
+  .legacy-profile-root .profile-title {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.05em;
+  }
+}
+
+.type-display,
+.type-page-title,
+.type-section-title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
+}

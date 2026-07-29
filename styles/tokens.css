@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
   --grey-50: #f6f6f3;
   --grey-100: #eeeeea;
@@ -86,6 +87,7 @@
 
 :root {
   --space-0: 0;
+  --space-100: 4px;
   --space-150: 6px;
   --space-200: 8px;
   --space-300: 12px;
@@ -122,6 +124,12 @@
   --font-heading: Geist, 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-body: Geist, 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-decor: 'Paytone One', var(--font-heading);
+  /* Large titles. Paytone One covers latin, latin-ext and vietnamese but has
+     no Cyrillic or Georgian, so `.uses-display-font` below hands ru/ka back to
+     --font-heading with its own weight and tracking. The face ships a single
+     400 weight — --fw-regular keeps browsers from synthesising bold. */
+  --font-display: 'Paytone One', var(--font-heading);
+  --type-display-tracking: -0.015em;
   --text-xsm: 12px;
   --text-sm: 14px;
   --text-md: 16px;

@@ -117,7 +117,8 @@
 .contacts-response h2 {
   margin: 22px 0 0;
   color: var(--grey-700);
-  font: var(--fw-semibold) clamp(42px, 5vw, 72px) / 0.95 var(--font-heading);
+  font: var(--fw-regular) clamp(42px, 5vw, 72px) / 0.95 var(--font-display);
+  letter-spacing: var(--type-display-tracking);
   letter-spacing: -0.06em;
 }
 

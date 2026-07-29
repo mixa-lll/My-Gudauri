@@ -17,18 +17,18 @@
   max-width: var(--content-narrow);
   margin: 0;
   color: var(--text-primary);
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
   font-size: clamp(44px, 5vw, 68px);
-  font-weight: var(--fw-medium);
-  letter-spacing: -0.055em;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
   line-height: 0.98;
   text-wrap: balance;
 }
 
 .section-heading--display .section-heading__title {
   font-size: var(--type-hero-title-size);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--type-hero-title-tracking);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
   line-height: var(--type-hero-title-line);
 }
 

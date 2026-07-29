@@ -164,7 +164,8 @@
 .instructor-concierge h2 {
   max-width: 650px;
   margin: 10px 0 0;
-  font: var(--fw-medium) clamp(30px, 3.4vw, 50px) / 0.98 var(--font-heading);
+  font: var(--fw-regular) clamp(30px, 3.4vw, 50px) / 0.98 var(--font-display);
+  letter-spacing: var(--type-display-tracking);
   letter-spacing: -0.055em;
 }
 

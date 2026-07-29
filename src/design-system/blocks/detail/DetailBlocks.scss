@@ -57,6 +57,9 @@
 .ds-object-sticky-nav__booking strong { color: var(--text-primary); font: var(--fw-bold) var(--type-body-size) / var(--type-body-line) var(--font-heading); }
 .ds-detail-section, .ds-instructor-certifications, .ds-booking-steps-section, .faq, .ds-booking-widget { scroll-margin-top: var(--layout-object-sticky-offset); }
 
+.ds-object-reviews__heading { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-500); }
+.ds-object-reviews__heading .section-heading__actions { grid-column: 2; grid-row: 1 / -1; margin-top: 0; justify-self: end; align-self: end; }
+
 .ds-reviews { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(var(--space-700), 6vw, var(--space-1000)); row-gap: clamp(var(--space-800), 6vw, var(--space-1200)); }
 .ds-review-card { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-300); background: transparent; }
 .ds-review-card__author { display: flex; align-items: center; gap: var(--space-300); }
@@ -153,6 +156,8 @@
   .ds-object-hero__media, .ds-object-hero--media-first .ds-object-hero__media { grid-column: 1; grid-row: 3; min-height: 320px; }
   .ds-main-tag { min-height: 104px; padding: var(--space-400); gap: var(--space-300); }
   .ds-main-tag dd { font-size: var(--type-body-size); line-height: var(--type-body-line); }
+  .ds-object-reviews__heading { grid-template-columns: minmax(0, 1fr); }
+  .ds-object-reviews__heading .section-heading__actions { grid-column: 1; grid-row: auto; margin-top: var(--space-200); justify-self: start; }
   .ds-reviews { grid-template-columns: 1fr; }
   .ds-route-map dl { grid-template-columns: 1fr; }
   .ds-inclusions-section__grid, .ds-equipment-list ul { grid-template-columns: 1fr; }
