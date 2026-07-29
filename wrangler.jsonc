@@ -10,5 +10,13 @@
       "database_id": "56e270c8-a3ca-4442-a669-55e33638b963",
       "migrations_dir": "./db/migrations"
     }
+  ],
+  // One bucket for every CMS collection. Objects are namespaced by collection
+  // (instructors/…, activities/…), so a new content type needs no new storage.
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "my-gudauri-media"
+    }
   ]
 }

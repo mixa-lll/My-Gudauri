@@ -1,15 +1,24 @@
-import { slugify } from './admin';
+import { ACTIVITY_DEFAULTS, resolveActivity, validateActivity } from '../../src/shared/activityDefaults.js';
+import { collectMediaGarbage, nextSortOrder, resolveUniqueSlug } from './cms.js';
 
 const text = (value, fallback = '') => typeof value === 'string' ? value.trim() : fallback;
 const integer = (value, fallback = 0) => Number.isFinite(Number(value)) ? Math.round(Number(value)) : fallback;
-const decimal = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
-const status = (value) => ['draft', 'published', 'archived'].includes(value) ? value : 'draft';
+const blank = (value) => value === '' || value === null || value === undefined || !Number.isFinite(Number(value));
+const optionalInteger = (value, fallback) => blank(value) ? fallback : Math.round(Number(value));
+const optionalDecimal = (value, fallback) => blank(value) ? fallback : Number(value);
+
+export const activityMediaUrls = (record) => [
+  record?.card_image_url,
+  record?.hero_image_url,
+  ...(Array.isArray(record?.media) ? record.media.map((item) => item.url) : []),
+].filter(Boolean);
 
 export async function listAdminActivities(db) {
   const { results } = await db.prepare(`
-    SELECT a.id, a.slug, a.status, a.name, a.category, a.card_image_url AS image, a.sort_order, a.updated_at,
+    SELECT a.id, a.slug, a.status, a.name, a.category, a.card_image_url AS image, a.price_amount, a.currency,
+      a.rating, a.review_count AS reviews, a.catalog_group, a.sort_order, a.updated_at,
       COALESCE((SELECT json_group_array(item.label) FROM (SELECT label FROM activity_tags WHERE activity_id = a.id ORDER BY sort_order, id LIMIT 3) item), '[]') AS tags_json
-    FROM activities a ORDER BY a.sort_order, a.name
+    FROM activities a ORDER BY a.updated_at DESC, a.sort_order, a.name
   `).all();
   return results.map((item) => ({ ...item, tags: JSON.parse(item.tags_json || '[]') }));
 }
@@ -62,30 +71,46 @@ async function replaceRelations(db, activityId, payload) {
   await db.batch(statements);
 }
 
-export async function saveActivity(db, payload, currentSlug) {
-  const name = text(payload.name);
-  const slug = slugify(payload.slug || name);
-  const category = text(payload.category);
-  const description = text(payload.description);
-  if (!name || !slug || !category || !description) throw new Error('Name, slug, category and description are required. Images are optional.');
+export async function saveActivity(db, payload, currentSlug, { bucket } = {}) {
+  const errors = validateActivity(payload, { publishing: payload.status === 'published' });
+  const firstError = Object.values(errors)[0];
+  if (firstError) throw new Error(firstError);
+
+  const existing = currentSlug ? await db.prepare('SELECT id FROM activities WHERE slug = ?').bind(currentSlug).first() : null;
+  if (currentSlug && !existing) return null;
+  const previousMedia = existing ? activityMediaUrls(await getAdminActivity(db, currentSlug)) : [];
+
+  const resolved = resolveActivity(payload);
+  const slug = await resolveUniqueSlug(db, {
+    table: 'activities',
+    requested: payload.slug,
+    fallback: payload.name,
+    currentId: existing?.id,
+    conflictMessage: (base) => `Адрес /activities/${base} уже занят другой активностью. Выберите другой.`,
+  });
+  const sortOrder = optionalInteger(payload.sort_order, null) ?? await nextSortOrder(db, 'activities');
+
   const values = [
-    slug, status(payload.status), name, category, description,
-    text(payload.card_image_url) || null, text(payload.hero_image_url) || null, text(payload.hero_image_alt) || null,
-    Math.max(0, decimal(payload.price_amount)), text(payload.currency, 'GEL').toUpperCase(), text(payload.price_suffix) || null,
-    Math.max(0, Math.min(5, decimal(payload.rating))), Math.max(0, integer(payload.review_count)),
-    text(payload.catalog_group, 'other'), text(payload.skill_level) || null, text(payload.duration_group) || null, text(payload.format) || null,
-    integer(payload.sort_order)
+    slug, resolved.status, resolved.name, resolved.category, resolved.description,
+    resolved.card_image_url || null, resolved.hero_image_url || null, resolved.hero_image_alt,
+    Math.max(0, optionalDecimal(payload.price_amount, ACTIVITY_DEFAULTS.price_amount)), resolved.currency, resolved.price_suffix,
+    Math.max(0, Math.min(5, optionalDecimal(payload.rating, ACTIVITY_DEFAULTS.rating))), Math.max(0, optionalInteger(payload.review_count, ACTIVITY_DEFAULTS.review_count)),
+    resolved.catalog_group, resolved.skill_level, resolved.duration_group, resolved.format,
+    sortOrder
   ];
+
   let activityId;
-  if (currentSlug) {
-    const existing = await db.prepare('SELECT id FROM activities WHERE slug = ?').bind(currentSlug).first();
-    if (!existing) return null;
+  if (existing) {
     await db.prepare('UPDATE activities SET slug=?, status=?, name=?, category=?, description=?, card_image_url=?, hero_image_url=?, hero_image_alt=?, price_amount=?, currency=?, price_suffix=?, rating=?, review_count=?, catalog_group=?, skill_level=?, duration_group=?, format=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?').bind(...values, existing.id).run();
     activityId = existing.id;
   } else {
     const created = await db.prepare('INSERT INTO activities (slug, status, name, category, description, card_image_url, hero_image_url, hero_image_alt, price_amount, currency, price_suffix, rating, review_count, catalog_group, skill_level, duration_group, format, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').bind(...values).run();
     activityId = created.meta.last_row_id;
   }
+
   await replaceRelations(db, activityId, payload);
-  return getAdminActivity(db, slug);
+  const saved = await getAdminActivity(db, slug);
+  const dropped = previousMedia.filter((url) => !activityMediaUrls(saved).includes(url));
+  if (dropped.length) await collectMediaGarbage(db, bucket, dropped);
+  return saved;
 }

@@ -5,7 +5,12 @@ async function request(path, options = {}) {
     ...options
   });
   const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload.error?.message || 'Request failed.');
+  if (response.status === 401) {
+    const expired = new Error('Сессия истекла — войдите заново.');
+    expired.code = 'unauthorized';
+    throw expired;
+  }
+  if (!response.ok) throw new Error(payload.error?.message || 'Не удалось выполнить запрос.');
   return payload.data;
 }
 

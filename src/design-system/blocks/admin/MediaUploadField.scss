@@ -1,0 +1,29 @@
+.media-upload-field { display: grid; gap: var(--space-200); }
+.media-upload-field__label { font-size: var(--type-label-size); font-weight: var(--fw-medium); }
+.media-upload-field__body { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: var(--space-400); align-items: start; }
+
+.media-upload-field__drop { position: relative; display: grid; place-items: center; overflow: hidden; border: 1px dashed var(--border-default); border-radius: var(--radius-md); background: var(--surface-page); transition: border-color var(--motion-duration-fast) var(--motion-ease-standard), background-color var(--motion-duration-fast) var(--motion-ease-standard); }
+.media-upload-field__drop[data-shape='portrait'] { aspect-ratio: var(--media-portrait); }
+.media-upload-field__drop[data-shape='landscape'] { aspect-ratio: var(--media-landscape); }
+.media-upload-field__drop[data-shape='square'] { aspect-ratio: var(--media-square); }
+.media-upload-field__drop img,
+.media-upload-field__drop .media-placeholder { width: 100%; height: 100%; object-fit: cover; }
+.media-upload-field__drop.is-dragging { border-color: var(--action-accent); border-style: solid; background: var(--status-info-surface); }
+.media-upload-field__drop.is-busy { opacity: var(--opacity-muted); }
+.media-upload-field__progress { position: absolute; inset-inline: var(--space-200); bottom: var(--space-200); padding: var(--space-150) var(--space-200); border-radius: var(--radius-control); background: var(--surface-inverse); color: var(--text-inverse); font-size: var(--type-label-size); text-align: center; }
+
+.media-upload-field__controls { display: grid; gap: var(--space-200); justify-items: start; }
+.media-upload-field__hint { margin: 0; color: var(--text-secondary); font-size: var(--type-caption-size); }
+/* The native control is driven by the buttons, but stays reachable for keyboard
+   and assistive technology instead of being display:none. */
+.media-upload-field__input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.media-upload-field__actions { display: flex; flex-wrap: wrap; gap: var(--space-200); }
+.media-upload-field__url { width: 100%; }
+.media-upload-field__controls .ui-control-wrap { width: 100%; }
+.media-upload-field.is-invalid .media-upload-field__drop { border-color: var(--status-danger); }
+.media-upload-field.is-disabled { opacity: var(--opacity-disabled); }
+
+@media (max-width: 640px) {
+  .media-upload-field__body { grid-template-columns: 1fr; }
+  .media-upload-field__drop { max-width: 180px; }
+}

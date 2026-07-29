@@ -25,7 +25,8 @@
   position: relative;
 }
 
-.profile-object-media > img {
+.profile-object-media > img,
+.profile-object-media > .media-placeholder {
   width: 100%;
   height: 100%;
   display: block;
@@ -165,7 +166,8 @@
   max-width: 9ch;
   margin: 16px 0 0;
   color: var(--grey-700);
-  font: var(--fw-medium) clamp(58px, 5.5vw, 84px) / 0.9 var(--font-heading);
+  font: var(--fw-regular) clamp(58px, 5.5vw, 84px) / 0.9 var(--font-display);
+  letter-spacing: var(--type-display-tracking);
   letter-spacing: -0.065em;
   text-wrap: balance;
 }

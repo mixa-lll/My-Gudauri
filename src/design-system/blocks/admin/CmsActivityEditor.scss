@@ -1,0 +1,11 @@
+/* Only the schedule repeater is activity-specific; everything else comes from
+   the shared editor parts. */
+.cms-activity-editor__schedule-row { grid-template-columns: minmax(90px, .4fr) 1fr 1.4fr auto; }
+
+@media (max-width: 1100px) {
+  .cms-activity-editor__schedule-row { grid-template-columns: minmax(90px, .4fr) 1fr auto; }
+}
+
+@media (max-width: 640px) {
+  .cms-activity-editor__schedule-row { grid-template-columns: 1fr; }
+}

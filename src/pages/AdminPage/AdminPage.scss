@@ -8,11 +8,14 @@
 }
 
 .admin-cms-shell { position: relative; min-height: 100vh; background: var(--surface-page); color: var(--text-primary); }
-.admin-notice--cms { position: fixed; z-index: 10; top: var(--space-400); right: var(--space-400); max-width: min(360px, calc(100vw - var(--space-800))); box-shadow: var(--shadow-card); }
+.admin-notice--cms { position: fixed; z-index: var(--z-toast); top: var(--space-400); right: var(--space-400); margin: 0; max-width: min(360px, calc(100vw - var(--space-800))); box-shadow: var(--shadow-float); }
 .admin-cms-shell .admin-editor { position: relative; z-index: 5; margin: var(--space-600); background: var(--surface-card); }
 
-.admin-login { display: grid; place-items: center; }
-.admin-login form { width: min(100%, 430px); padding: 36px; display: grid; gap: 18px; border-radius: var(--radius-lg); background: var(--grey-white); box-shadow: var(--shadow-card); }
+/* The sign-in screen is the entry point to the CMS, so it uses the same
+   semantic surfaces as the collection list and the editor behind it. */
+.admin-login { display: grid; place-items: center; background: var(--surface-page); color: var(--text-primary); }
+.admin-login form { width: min(100%, 430px); padding: var(--space-800); display: grid; gap: var(--space-400); border-radius: var(--radius-lg); background: var(--surface-card); box-shadow: var(--shadow-card); }
+.admin-login form > p { margin: 0; color: var(--text-secondary); font-size: var(--type-body-small-size); }
 .admin-login h1,
 .admin-top h1,
 .admin-section h2 { margin: 0; font-family: var(--font-heading); letter-spacing: -0.04em; }
@@ -61,7 +64,11 @@
 .admin-list-input button { padding: 5px 10px; }
 .admin-add-inline { width: max-content; }
 .admin-editor__actions { margin-top: 24px; justify-content: flex-start; }
-.admin-notice { margin: 0 0 18px; padding: 12px 14px; border-radius: var(--radius-xsm); background: var(--warning-100); color: var(--warning-700); }
+.admin-notice { margin: 0 0 18px; padding: 12px 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; border-radius: var(--radius-xsm); background: var(--warning-100); color: var(--warning-700); }
+.admin-notice--success { background: var(--status-success-surface); color: var(--status-success); }
+.admin-notice--danger { background: var(--status-danger-surface); color: var(--status-danger); }
+.admin-notice--info { background: var(--status-info-surface); color: var(--status-info); }
+.admin-notice button { padding: 0 4px; border: 0; background: transparent !important; color: inherit !important; font: inherit; line-height: 1; cursor: pointer; }
 .admin-tabs { display: flex; gap: 8px; margin: 0 0 24px; padding: 6px; width: max-content; max-width: 100%; border-radius: var(--radius-md); background: var(--grey-100); }
 .admin-tabs button { background: transparent !important; color: var(--grey-500) !important; }
 .admin-tabs button.is-active { background: var(--grey-600) !important; color: var(--grey-white) !important; }
@@ -78,7 +85,7 @@
 .admin-image-placeholder { width: 46px; height: 46px; display: grid; place-items: center; border-radius: var(--radius-xsm); object-fit: cover; background: var(--grey-150); color: var(--grey-400); }
 .admin-table small { display: block; margin-top: 4px; color: var(--grey-400); }
 .admin-status { display: inline-flex; padding: 4px 8px; border-radius: 999px; font-size: var(--text-xsm); font-weight: var(--fw-bold); text-transform: capitalize; }
-.admin-status--published { background: var(--success-100); color: var(--success-700); }
+.admin-status--published { background: var(--status-success-surface); color: var(--status-success); }
 .admin-status--draft { background: var(--warning-100); color: var(--warning-700); }
 .admin-status--archived { background: var(--grey-150); color: var(--grey-500); }
 .admin-empty { margin: 20px 0 0; color: var(--grey-400); }

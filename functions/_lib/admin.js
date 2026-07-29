@@ -1,6 +1,11 @@
+import { INSTRUCTOR_DEFAULTS, resolveInstructor, validateInstructor } from '../../src/shared/instructorDefaults.js';
+import { collectMediaGarbage, nextSortOrder, resolveUniqueSlug } from './cms.js';
+
 const text = (value, fallback = '') => typeof value === 'string' ? value.trim() : fallback;
 const integer = (value, fallback = 0) => Number.isFinite(Number(value)) ? Math.round(Number(value)) : fallback;
-const decimal = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+const blank = (value) => value === '' || value === null || value === undefined || !Number.isFinite(Number(value));
+const optionalInteger = (value, fallback) => blank(value) ? fallback : Math.round(Number(value));
+const optionalDecimal = (value, fallback) => blank(value) ? fallback : Number(value);
 
 export function slugify(value) {
   return text(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -76,23 +81,76 @@ async function replaceRelations(db, instructorId, payload) {
   await db.batch(statements);
 }
 
-export async function saveInstructor(db, payload, currentSlug) {
-  const displayName = text(payload.display_name);
-  const slug = slugify(payload.slug || displayName);
-  if (!displayName || !slug || !text(payload.card_description) || !text(payload.tagline) || !text(payload.intro) || !text(payload.card_image_url) || !text(payload.hero_image_url) || !text(payload.hero_image_alt) || !text(payload.booking_avatar_url)) throw new Error('Please fill in all required text and image fields.');
-  const values = [slug, ['draft', 'published', 'archived'].includes(payload.status) ? payload.status : 'draft', displayName, ['male', 'female'].includes(payload.gender) ? payload.gender : null, text(payload.role, 'Instructor'), text(payload.card_description), text(payload.tagline), text(payload.intro), text(payload.card_image_url), text(payload.hero_image_url), text(payload.hero_image_alt), text(payload.booking_avatar_url), Math.max(0, integer(payload.experience_years)), Math.max(0, Math.min(5, decimal(payload.rating))), Math.max(0, integer(payload.review_count)), text(payload.availability_label) || null, text(payload.certificate_label) || null, Math.max(0, integer(payload.hourly_rate_gel)), Math.max(1, integer(payload.min_hours, 1)), Math.max(1, integer(payload.max_hours, 1)), Math.max(1, integer(payload.hours_step, 1)), Math.max(1, integer(payload.min_people, 1)), Math.max(1, integer(payload.max_people, 1)), Math.max(1, integer(payload.default_hours, 1)), Math.max(1, integer(payload.default_people, 1)), integer(payload.sort_order)];
+const instructorMediaUrls = (record) => [
+  record?.card_image_url,
+  record?.hero_image_url,
+  record?.booking_avatar_url,
+  ...(Array.isArray(record?.media) ? record.media.map((item) => item.url) : []),
+].filter(Boolean);
+
+export async function saveInstructor(db, payload, currentSlug, { bucket } = {}) {
+  const errors = validateInstructor(payload, { publishing: payload.status === 'published' });
+  const firstError = Object.values(errors)[0];
+  if (firstError) throw new Error(firstError);
+
+  const existing = currentSlug ? await db.prepare('SELECT id FROM instructors WHERE slug = ?').bind(currentSlug).first() : null;
+  if (currentSlug && !existing) return null;
+  const previousMedia = existing ? instructorMediaUrls(await getAdminInstructor(db, currentSlug)) : [];
+
+  const resolved = resolveInstructor(payload);
+  const slug = await resolveUniqueSlug(db, {
+    table: 'instructors',
+    requested: payload.slug,
+    fallback: payload.display_name,
+    currentId: existing?.id,
+    conflictMessage: (base) => `Адрес /instructors/${base} уже занят другим инструктором. Выберите другой.`,
+  });
+  const minHours = Math.max(1, optionalInteger(payload.min_hours, INSTRUCTOR_DEFAULTS.min_hours));
+  const minPeople = Math.max(1, optionalInteger(payload.min_people, INSTRUCTOR_DEFAULTS.min_people));
+  const sortOrder = optionalInteger(payload.sort_order, null) ?? await nextSortOrder(db, 'instructors');
+
+  const values = [
+    slug,
+    resolved.status,
+    resolved.display_name,
+    resolved.gender,
+    resolved.role,
+    resolved.card_description,
+    resolved.tagline,
+    resolved.intro,
+    resolved.card_image_url,
+    resolved.hero_image_url,
+    resolved.hero_image_alt,
+    resolved.booking_avatar_url,
+    Math.max(0, optionalInteger(payload.experience_years, INSTRUCTOR_DEFAULTS.experience_years)),
+    Math.max(0, Math.min(5, optionalDecimal(payload.rating, INSTRUCTOR_DEFAULTS.rating))),
+    Math.max(0, optionalInteger(payload.review_count, INSTRUCTOR_DEFAULTS.review_count)),
+    resolved.availability_label,
+    resolved.certificate_label,
+    Math.max(0, optionalInteger(payload.hourly_rate_gel, INSTRUCTOR_DEFAULTS.hourly_rate_gel)),
+    minHours,
+    Math.max(minHours, optionalInteger(payload.max_hours, INSTRUCTOR_DEFAULTS.max_hours)),
+    Math.max(1, optionalInteger(payload.hours_step, INSTRUCTOR_DEFAULTS.hours_step)),
+    minPeople,
+    Math.max(minPeople, optionalInteger(payload.max_people, INSTRUCTOR_DEFAULTS.max_people)),
+    Math.max(minHours, optionalInteger(payload.default_hours, INSTRUCTOR_DEFAULTS.default_hours)),
+    Math.max(minPeople, optionalInteger(payload.default_people, INSTRUCTOR_DEFAULTS.default_people)),
+    sortOrder,
+  ];
+
   let instructorId;
-  if (currentSlug) {
-    const existing = await db.prepare('SELECT id FROM instructors WHERE slug = ?').bind(currentSlug).first();
-    if (!existing) return null;
+  if (existing) {
     await db.prepare('UPDATE instructors SET slug=?, status=?, display_name=?, gender=?, role=?, card_description=?, tagline=?, intro=?, card_image_url=?, hero_image_url=?, hero_image_alt=?, booking_avatar_url=?, experience_years=?, rating=?, review_count=?, availability_label=?, certificate_label=?, hourly_rate_gel=?, min_hours=?, max_hours=?, hours_step=?, min_people=?, max_people=?, default_hours=?, default_people=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?').bind(...values, existing.id).run();
     instructorId = existing.id;
   } else {
     const result = await db.prepare('INSERT INTO instructors (slug, status, display_name, gender, role, card_description, tagline, intro, card_image_url, hero_image_url, hero_image_alt, booking_avatar_url, experience_years, rating, review_count, availability_label, certificate_label, hourly_rate_gel, min_hours, max_hours, hours_step, min_people, max_people, default_hours, default_people, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').bind(...values).run();
     instructorId = result.meta.last_row_id;
   }
-  await replaceRelations(db, instructorId, payload);
-  return getAdminInstructor(db, slug);
+  await replaceRelations(db, instructorId, { ...payload, about: resolved.about });
+  const saved = await getAdminInstructor(db, slug);
+  const dropped = previousMedia.filter((url) => !instructorMediaUrls(saved).includes(url));
+  if (dropped.length) await collectMediaGarbage(db, bucket, dropped);
+  return saved;
 }
 
 async function getDuplicateSlug(db, sourceSlug) {

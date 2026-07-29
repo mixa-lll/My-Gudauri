@@ -7,6 +7,7 @@ import {
   FaqAccordion,
   InstructorCertifications,
   InstructorObjectPattern,
+  MediaPlaceholder,
   ObjectDescription,
   ObjectDetailPageTemplate,
   ObjectHero,
@@ -114,13 +115,15 @@ export function ProfilePage() {
     badges={sportNames}
     title={instructor.name}
     description={instructor.intro}
-    rating={{ value: instructor.rating, reviewsLabel: `${instructor.reviews} reviews`, href: '#reviews' }}
+    rating={instructor.reviews ? { value: instructor.rating, reviewsLabel: `${instructor.reviews} reviews`, href: '#reviews' } : undefined}
     media={<div className="profile-object-media">
-      <img src={instructor.heroImage} alt={instructor.heroImageAlt} loading="eager" />
-      <Badge className="profile-object-media__availability" mediaOverlay>{instructor.availability}</Badge>
-      <button ref={galleryTriggerRef} className="profile-object-media__gallery" type="button" onClick={openGallery}>
+      {instructor.heroImage
+        ? <img src={instructor.heroImage} alt={instructor.heroImageAlt} loading="eager" />
+        : <MediaPlaceholder kind="instructor" label={instructor.name} />}
+      {instructor.availability ? <Badge className="profile-object-media__availability" mediaOverlay>{instructor.availability}</Badge> : null}
+      {gallery.length ? <button ref={galleryTriggerRef} className="profile-object-media__gallery" type="button" onClick={openGallery}>
         <span><strong>{t('object.openGallery')}</strong><small>{gallery.length} {t('object.photos')}</small></span><span aria-hidden="true">↗</span>
-      </button>
+      </button> : null}
     </div>}
   />;
 
@@ -128,7 +131,7 @@ export function ProfilePage() {
     mainTags={<ObjectMainTags items={facts} />}
     objectDescription={<ObjectDescription kicker={instructor.tagline} title={t('instructor.aboutTitle')} tags={instructor.tags} tagsLabel={t('instructor.tagsLabel')}>{instructor.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</ObjectDescription>}
     certifications={<InstructorCertifications items={instructor.certifications} />}
-    reviews={<ObjectReviews rating={{ value: instructor.rating, label: `${instructor.reviews} reviews` }} reviews={reviews} />}
+    reviews={<ObjectReviews rating={instructor.reviews ? { value: instructor.rating, label: `${instructor.reviews} reviews` } : undefined} reviews={reviews} />}
     faqSection={<FaqAccordion variant="object" />}
     bookingWidget={<BookingConfigurator
       title={t('instructor.configureTitle')}

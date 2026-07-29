@@ -122,7 +122,7 @@ export function ActivityPage() {
     badges={[activity.category]}
     title={activity.name}
     description={activity.description}
-    rating={{ value: activity.rating, reviewsLabel: activity.reviews, href: '#reviews' }}
+    rating={activity.rating ? { value: activity.rating, reviewsLabel: activity.reviews, href: '#reviews' } : undefined}
     media={heroMedia}
   />;
   const content = <ActivityObjectPattern
@@ -133,7 +133,7 @@ export function ActivityPage() {
       ...(activity.included?.length || activity.excluded?.length ? [{ type: 'includedServices', kicker: t('activity.bookingDetailsKicker'), title: t('activity.includedTitle'), includedItems: activity.included, excludedItems: activity.excluded }] : []),
       ...(activity.equipment?.length ? [{ type: 'equipmentList', kicker: t('activity.packKicker'), title: t('activity.packTitle'), items: activity.equipment }] : [])
     ]}
-    reviews={<ObjectReviews kicker={t('activity.reviewsKicker')} title={t('activity.reviewsTitle')} rating={{ value: activity.rating, label: activity.reviews }} reviews={reviews} />}
+    reviews={<ObjectReviews kicker={t('activity.reviewsKicker')} title={t('activity.reviewsTitle')} rating={activity.rating ? { value: activity.rating, label: activity.reviews } : undefined} reviews={reviews} />}
     bookingSteps={<BookingSteps context="object" items={tList('activity.bookingSteps')} />}
     faqSection={<FaqAccordion variant="object" items={tList('catalog.activities.faq')} />}
     relatedListings={<ObjectRelatedListings cardType="activity" title={t('activity.related')} items={related} />}
