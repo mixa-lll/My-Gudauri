@@ -31,3 +31,16 @@
 .star-rating--md {
   font-size: var(--type-body-small-size);
 }
+
+.star-rating--lg {
+  font-size: var(--type-body-large-size);
+  letter-spacing: 0.02em;
+}
+
+.star-rating--accent .star-rating__filled {
+  color: var(--text-accent);
+}
+
+.star-rating--accent .star-rating__empty {
+  color: color-mix(in srgb, var(--text-accent) 26%, transparent);
+}

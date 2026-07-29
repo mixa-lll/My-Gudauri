@@ -154,10 +154,44 @@
   font: var(--fw-semibold) var(--type-body-small-size) / 1 var(--font-body);
 }
 
+.listing-card__rating--md strong {
+  font-size: var(--type-body-size);
+}
+
+.listing-card__rating--lg {
+  align-items: center;
+  gap: var(--space-200);
+}
+
+.listing-card__rating--lg strong {
+  font: var(--fw-semibold) var(--type-body-large-size) / 1 var(--font-heading);
+  letter-spacing: -0.03em;
+}
+
+.listing-card__rating--accent strong {
+  color: var(--text-accent);
+}
+
+.listing-card__rating--plaque {
+  align-items: center;
+  gap: var(--space-200);
+  padding: var(--space-150) var(--space-300);
+  border-radius: var(--radius-full);
+  background: var(--surface-accent-subtle);
+}
+
 .listing-card__rating small,
 .listing-card__price small {
   color: var(--text-secondary);
   font: var(--fw-regular) var(--type-caption-size) / var(--type-caption-line) var(--font-body);
+}
+
+.listing-card__rating--plaque small {
+  color: color-mix(in srgb, var(--text-accent) 78%, transparent);
+}
+
+.listing-card__rating--lg small {
+  font-size: var(--type-body-small-size);
 }
 
 .listing-card__price {

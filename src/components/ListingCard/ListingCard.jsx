@@ -73,10 +73,22 @@ export function ListingCardPill({ children, icon, className, title }) {
   );
 }
 
-export function ListingCardRating({ rating, reviews }) {
+const RATING_SIZES = { sm: 'sm', md: 'md', lg: 'lg' };
+const RATING_TONES = ['neutral', 'accent'];
+const RATING_VARIANTS = ['inline', 'plaque'];
+
+export function ListingCardRating({ rating, reviews, size = 'sm', tone = 'neutral', variant = 'inline', className }) {
+  if (!RATING_SIZES[size]) throw new Error(`Rating: unsupported size “${size}”.`);
+  if (!RATING_TONES.includes(tone)) throw new Error(`Rating: unsupported tone “${tone}”.`);
+  if (!RATING_VARIANTS.includes(variant)) throw new Error(`Rating: unsupported variant “${variant}”.`);
+
   return (
-    <span className="listing-card__rating" role="img" aria-label={`${rating} out of 5 stars${reviews ? `, ${reviews}` : ''}`}>
-      <StarRating value={rating} decorative />
+    <span
+      className={cn('listing-card__rating', `listing-card__rating--${size}`, `listing-card__rating--${tone}`, `listing-card__rating--${variant}`, className)}
+      role="img"
+      aria-label={`${rating} out of 5 stars${reviews ? `, ${reviews}` : ''}`}
+    >
+      <StarRating value={rating} size={RATING_SIZES[size]} tone={tone} decorative />
       <strong aria-hidden="true">{rating}</strong>
       {reviews && <small aria-hidden="true">{reviews}</small>}
     </span>

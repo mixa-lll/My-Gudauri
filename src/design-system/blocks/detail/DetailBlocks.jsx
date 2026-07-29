@@ -17,9 +17,9 @@ import {
 } from '../../../components';
 import './DetailBlocks.scss';
 
-function ObjectSection({ id, kicker, title, description, actions, children, className = '', titleId }) {
+function ObjectSection({ id, kicker, title, description, actions, children, className = '', headingClassName, titleId }) {
   return <section id={id} className={`ds-detail-section ${className}`} aria-labelledby={titleId}>
-    <SectionHeading kicker={kicker} title={title} description={description} actions={actions} size="sm" titleId={titleId} />
+    <SectionHeading className={headingClassName} kicker={kicker} title={title} description={description} actions={actions} size="sm" titleId={titleId} />
     {children}
   </section>;
 }
@@ -31,7 +31,7 @@ export function ObjectHero({ variant = 'split', breadcrumbs, title, description,
     <div className="ds-object-hero__content">
       <div className="ds-object-hero__badges">{badges.map((badge) => <Badge key={badge}>{badge}</Badge>)}</div>
       <SectionHeading headingLevel="h1" size="display" align={variant === 'centered' ? 'center' : 'start'} title={title} titleId={titleId} description={description} />
-      {rating ? <div className="ds-object-hero__rating"><Rating rating={rating.value} />{rating.href ? <a href={rating.href}>{rating.reviewsLabel}</a> : <span>{rating.reviewsLabel}</span>}</div> : null}
+      {rating ? <div className="ds-object-hero__rating"><Rating rating={rating.value} size="md" tone="accent" variant="plaque" />{rating.href ? <a href={rating.href}>{rating.reviewsLabel}</a> : <span>{rating.reviewsLabel}</span>}</div> : null}
     </div>
     {media ? <div className="ds-object-hero__media">{media}</div> : null}
   </section>;
@@ -86,7 +86,7 @@ export function ReviewCard({ author, text = '', meta, dateLabel, contextLabel, r
   const isCollapsed = canTruncate && !expanded;
   return <article className={`ds-review-card ds-review-card--${variant}`}>
     <header className="ds-review-card__author"><ReviewAvatar avatar={avatar} author={author} /><strong>{author}</strong></header>
-    <div className="ds-review-card__proof"><StarRating value={rating} ariaLabel={`${rating} out of 5 stars`} />{dateLabel ? <span>· {dateLabel}</span> : null}{contextLabel ? <span>· {contextLabel}</span> : null}{!dateLabel && !contextLabel && meta ? <span>· {meta}</span> : null}</div>
+    <div className="ds-review-card__proof"><StarRating value={rating} tone="accent" ariaLabel={`${rating} out of 5 stars`} />{dateLabel ? <span>· {dateLabel}</span> : null}{contextLabel ? <span>· {contextLabel}</span> : null}{!dateLabel && !contextLabel && meta ? <span>· {meta}</span> : null}</div>
     <blockquote id={textId}>{isCollapsed ? shortenedReview(text, previewLength) : text}</blockquote>
     {canTruncate ? <Button className="ds-review-card__more" variant="link" aria-expanded={expanded} aria-controls={textId} onClick={() => setExpanded((value) => !value)}>{expanded ? 'Show less' : 'Show more'}</Button> : null}
   </article>;
@@ -110,7 +110,7 @@ export function ObjectReviews({ id = 'reviews', kicker = 'Guest experience', tit
   >
     <div className="ds-reviews-dialog__list">{reviews.map((review) => <ReviewCard key={review.id ?? `${review.author}-${review.text}`} {...review} truncate={false} variant="dialog" />)}</div>
   </Dialog> : null;
-  return <ObjectSection id={id} kicker={kicker} title={title} description={description} actions={rating ? <Rating rating={rating.value} reviews={rating.label} /> : null} titleId={titleId}>
+  return <ObjectSection id={id} kicker={kicker} title={title} description={description} headingClassName="ds-object-reviews__heading" actions={rating ? <Rating rating={rating.value} reviews={rating.label} size="lg" tone="accent" /> : null} titleId={titleId}>
     {visibleReviews.length ? <div className="ds-reviews">{visibleReviews.map((review) => <ReviewCard key={review.id ?? `${review.author}-${review.text}`} {...review} />)}</div> : <p className="ds-reviews__empty">No reviews yet.</p>}
     {allReviews ? <div className="ds-detail-section__footer">{allReviews}</div> : null}
   </ObjectSection>;
