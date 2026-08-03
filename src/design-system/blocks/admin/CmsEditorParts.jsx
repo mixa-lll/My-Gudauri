@@ -55,7 +55,8 @@ export function CmsAdminRail({ active = 'instructors', counts = {}, onNavigate, 
     <div className="cms-editor__nav-children">
       {item('instructors', 'Инструкторы')}
       {item('activities', 'Активности')}
-      <span>Прокат</span><span>Трансфер</span><span>Туры</span><span>Места</span>
+      {item('transfers', 'Трансферы')}
+      <span>Прокат</span><span>Туры</span><span>Места</span>
     </div>
     <nav className="cms-editor__secondary-nav" aria-label="Разделы админки"><span>Заявки</span><span>Отзывы</span><span>Настройки</span></nav>
     <div className="cms-editor__operator"><span aria-hidden="true">А</span><div><strong>Оператор</strong><small>admin</small></div><Button variant="ghost" onClick={onSignOut}>Выйти</Button></div>

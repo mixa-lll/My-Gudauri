@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Container, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar } from '../../design-system';
+import { Badge, Container, FadeUp, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar, WordsPullUp } from '../../design-system';
 import { HomeHeroSearchPanel } from '../../components/product';
-import { FadeUp, WordsPullUp } from '../../components/HomeHero/HeroMotion';
 import { HOME_CATEGORIES } from '../../data/siteCategories';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructors } from '../../services/instructorsApi';

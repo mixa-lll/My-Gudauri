@@ -7,6 +7,7 @@ import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { ACTIVITY_GROUP_LABELS, getActivities } from '../../services/activitiesApi';
 import { getInstructors } from '../../services/instructorsApi';
+import { getTransfers } from '../../services/transfersApi';
 import './DestinationCatalogPage.scss';
 
 
@@ -143,7 +144,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const config = getDestination(section);
   const sectionTitle = t(`categories.${section}.title`);
   const filterConfig = CATALOG_FILTERS[section];
-  const apiBacked = section === 'instructors' || section === 'activities';
+  const apiBacked = ['instructors', 'activities', 'transfers'].includes(section);
   const [items, setItems] = useState(apiBacked ? [] : (config?.items ?? []));
   const [status, setStatus] = useState(apiBacked ? 'loading' : 'ready');
   const [activeCategory, setActiveCategory] = useState('all');
@@ -174,11 +175,11 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     let active = true;
     setItems([]);
     setStatus('loading');
-    const loader = section === 'activities' ? getActivities : getInstructors;
+    const loader = { activities: getActivities, transfers: getTransfers, instructors: getInstructors }[section];
     loader()
       .then((nextItems) => {
         if (!active) return;
-        if (!Array.isArray(nextItems)) throw new Error('Invalid instructor response');
+        if (!Array.isArray(nextItems)) throw new Error(`Invalid ${section} response`);
         setItems(nextItems);
         setStatus('ready');
       })

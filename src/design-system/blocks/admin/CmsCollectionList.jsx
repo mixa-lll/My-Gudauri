@@ -50,6 +50,17 @@ export const CMS_COLLECTIONS = {
       { key: 'rating', label: 'Рейтинг', render: rating },
     ],
   },
+  transfers: {
+    title: 'Трансферы',
+    createLabel: '+ Новый трансфер',
+    publicPath: 'transfers',
+    columns: [
+      { key: 'category', label: 'Маршрут', render: (item) => item.category || '—' },
+      { key: 'vehicle', label: 'Машина', render: (item) => [item.vehicle_class, item.seats ? `${item.seats} мест` : null].filter(Boolean).join(' · ') || '—' },
+      { key: 'price', label: 'Цена', render: (item) => Number(item.price_amount) > 0 ? `${Math.round(item.price_amount)} ${item.currency ?? ''}`.trim() : '—' },
+      { key: 'rating', label: 'Рейтинг', render: rating },
+    ],
+  },
 };
 
 export function CmsCollectionList({

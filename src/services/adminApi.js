@@ -28,5 +28,10 @@ export const getAdminActivity = (slug) => request(`/api/admin/activities/${encod
 export const createActivity = (data) => request('/api/admin/activities', { method: 'POST', body: JSON.stringify(data) });
 export const updateActivity = (slug, data) => request(`/api/admin/activities/${encodeURIComponent(slug)}`, { method: 'PUT', body: JSON.stringify(data) });
 export const deleteActivity = (slug) => request(`/api/admin/activities/${encodeURIComponent(slug)}`, { method: 'DELETE' });
+export const getAdminTransfers = () => request('/api/admin/transfers');
+export const getAdminTransfer = (slug) => request(`/api/admin/transfers/${encodeURIComponent(slug)}`);
+export const createTransfer = (data) => request('/api/admin/transfers', { method: 'POST', body: JSON.stringify(data) });
+export const updateTransfer = (slug, data) => request(`/api/admin/transfers/${encodeURIComponent(slug)}`, { method: 'PUT', body: JSON.stringify(data) });
+export const deleteTransfer = (slug) => request(`/api/admin/transfers/${encodeURIComponent(slug)}`, { method: 'DELETE' });
 export const getCategories = () => request('/api/admin/categories');
 export const updateCategories = (categories) => request('/api/admin/categories', { method: 'PUT', body: JSON.stringify(categories) });

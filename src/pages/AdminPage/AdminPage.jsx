@@ -12,11 +12,16 @@ import {
   getAdminSession,
   login,
   logout,
+  createTransfer,
+  deleteTransfer,
+  getAdminTransfers,
+  getAdminTransfer,
   updateActivity,
   updateInstructor,
+  updateTransfer,
 } from '../../services/adminApi';
 import { uploadMedia } from '../../services/mediaApi';
-import { CmsActivityEditor, CmsCollectionList, CmsInstructorEditor } from '../../design-system';
+import { CmsActivityEditor, CmsCollectionList, CmsInstructorEditor, CmsTransferEditor } from '../../design-system';
 import './AdminPage.scss';
 
 /**
@@ -26,14 +31,15 @@ import './AdminPage.scss';
 const EMPTY = {
   instructors: { slug: '', status: 'draft', display_name: '', role: '', card_description: '', tagline: '', intro: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', booking_avatar_url: '', gender: '', experience_years: '', rating: 0, review_count: 0, availability_label: '', certificate_label: '', hourly_rate_gel: '', min_hours: '', max_hours: '', hours_step: '', min_people: '', max_people: '', default_hours: '', default_people: '', sort_order: '', disciplines: [], languages: [], about: [], tags: [], certifications: [], media: [], reviewsList: [] },
   activities: { slug: '', status: 'draft', name: '', category: '', description: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', price_amount: '', currency: '', price_suffix: '', rating: 0, review_count: 0, catalog_group: '', skill_level: '', duration_group: '', format: '', sort_order: '', tags: [], facts: [], included: [], excluded: [], equipment: [], schedule: [], media: [], reviewsList: [] },
+  transfers: { slug: '', status: 'draft', name: '', category: '', description: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', price_amount: '', currency: '', price_suffix: '', rating: 0, review_count: 0, catalog_group: '', vehicle_class: '', seats: '', duration_label: '', pickup_type: '', sort_order: '', tags: [], facts: [], included: [], media: [], reviewsList: [] },
 };
 
-const TITLE_FIELD = { instructors: 'display_name', activities: 'name' };
+const TITLE_FIELD = { instructors: 'display_name', activities: 'name', transfers: 'name' };
 const snapshot = (data) => JSON.stringify(data ?? null);
 
 export function AdminPage() {
   const [authenticated, setAuthenticated] = useState(null); const [password, setPassword] = useState(''); const [showPassword, setShowPassword] = useState(false);
-  const [tab, setTab] = useState('instructors'); const [instructors, setInstructors] = useState([]); const [activities, setActivities] = useState([]); const [editor, setEditor] = useState(null); const [baseline, setBaseline] = useState(''); const [notice, setNotice] = useState(null); const [busy, setBusy] = useState(false);
+  const [tab, setTab] = useState('instructors'); const [instructors, setInstructors] = useState([]); const [activities, setActivities] = useState([]); const [transfers, setTransfers] = useState([]); const [editor, setEditor] = useState(null); const [baseline, setBaseline] = useState(''); const [notice, setNotice] = useState(null); const [busy, setBusy] = useState(false);
   const [query, setQuery] = useState(''); const [statusFilter, setStatusFilter] = useState('all'); const [categoryFilter, setCategoryFilter] = useState('all'); const [disciplineFilter, setDisciplineFilter] = useState('all'); const [languageFilter, setLanguageFilter] = useState('all'); const [openMenuId, setOpenMenuId] = useState(null);
 
   const report = (text, tone = 'info') => setNotice(text ? { text, tone } : null);
@@ -42,7 +48,12 @@ export function AdminPage() {
   const fail = (error) => { if (error?.code === 'unauthorized') { setAuthenticated(false); setEditor(null); } report(error.message, 'danger'); };
   const openEditorWith = (kind, data) => { setEditor({ kind, data }); setBaseline(snapshot(data)); };
   // A response without a `data` array must not take the whole screen down.
-  const load = async () => { const [nextInstructors, nextActivities] = await Promise.all([getAdminInstructors(), getAdminActivities()]); setInstructors(Array.isArray(nextInstructors) ? nextInstructors : []); setActivities(Array.isArray(nextActivities) ? nextActivities : []); };
+  const load = async () => {
+    const [nextInstructors, nextActivities, nextTransfers] = await Promise.all([getAdminInstructors(), getAdminActivities(), getAdminTransfers()]);
+    setInstructors(Array.isArray(nextInstructors) ? nextInstructors : []);
+    setActivities(Array.isArray(nextActivities) ? nextActivities : []);
+    setTransfers(Array.isArray(nextTransfers) ? nextTransfers : []);
+  };
 
   useEffect(() => { getAdminSession().then(({ authenticated: allowed }) => { setAuthenticated(allowed); if (allowed) load().catch(fail); }).catch(() => setAuthenticated(false)); }, []);
   useEffect(() => { setEditor(null); setQuery(''); setStatusFilter('all'); setCategoryFilter('all'); setDisciplineFilter('all'); setLanguageFilter('all'); setOpenMenuId(null); }, [tab]);
@@ -56,7 +67,11 @@ export function AdminPage() {
   const uploadFor = (collection) => (file) => uploadMedia({ collection, reference: editor?.data?.slug || editor?.data?.[TITLE_FIELD[collection]], file });
 
   const signIn = async (event) => { event.preventDefault(); setBusy(true); try { await login(password); setAuthenticated(true); setPassword(''); setNotice(null); await load(); } catch (error) { report(error.message, 'danger'); } finally { setBusy(false); } };
-  const openEditor = async (slug) => { setBusy(true); try { const data = tab === 'activities' ? await getAdminActivity(slug) : await getAdminInstructor(slug); openEditorWith(tab, { ...data, originalSlug: slug }); } catch (error) { fail(error); } finally { setBusy(false); } };
+  const READERS = { instructors: getAdminInstructor, activities: getAdminActivity, transfers: getAdminTransfer };
+  const CREATORS = { instructors: createInstructor, activities: createActivity, transfers: createTransfer };
+  const UPDATERS = { instructors: updateInstructor, activities: updateActivity, transfers: updateTransfer };
+  const REMOVERS = { instructors: deleteInstructor, activities: deleteActivity, transfers: deleteTransfer };
+  const openEditor = async (slug) => { setBusy(true); try { const data = await READERS[tab](slug); openEditorWith(tab, { ...data, originalSlug: slug }); } catch (error) { fail(error); } finally { setBusy(false); } };
 
   const persist = async (status) => {
     if (!editor) return;
@@ -64,9 +79,7 @@ export function AdminPage() {
     try {
       const { kind } = editor;
       const data = { ...editor.data, status };
-      const create = kind === 'activities' ? createActivity : createInstructor;
-      const update = kind === 'activities' ? updateActivity : updateInstructor;
-      const saved = data.id ? await update(data.originalSlug || data.slug, data) : await create(data);
+      const saved = data.id ? await UPDATERS[kind](data.originalSlug || data.slug, data) : await CREATORS[kind](data);
       openEditorWith(kind, { ...saved, originalSlug: saved.slug });
       await load();
       report(status === 'published' ? 'Опубликовано.' : 'Черновик сохранён.', 'success');
@@ -99,7 +112,7 @@ export function AdminPage() {
     if (!window.confirm(`Удалить «${label}»? Действие нельзя отменить.`)) return;
     setBusy(true);
     try {
-      await (kind === 'activities' ? deleteActivity : deleteInstructor)(data.originalSlug || data.slug);
+      await REMOVERS[kind](data.originalSlug || data.slug);
       setEditor(null);
       await load();
       report('Удалено.', 'success');
@@ -110,25 +123,29 @@ export function AdminPage() {
     }
   };
 
-  const navCounts = { instructors: instructors.length, activities: activities.length };
+  const navCounts = { instructors: instructors.length, activities: activities.length, transfers: transfers.length };
   const matchesQuery = (item) => !query || item.name.toLowerCase().includes(query.toLowerCase());
   const matchesStatus = (item) => statusFilter === 'all' || item.status === statusFilter;
 
   const instructorDisciplines = useMemo(() => [...new Set(instructors.flatMap((item) => item.disciplines || []))], [instructors]);
   const instructorLanguages = useMemo(() => [...new Set(instructors.flatMap((item) => item.languages || []))], [instructors]);
   const activityCategories = useMemo(() => [...new Set(activities.map((item) => item.category).filter(Boolean))], [activities]);
+  const transferCities = useMemo(() => [...new Set(transfers.map((item) => item.catalog_group).filter(Boolean))], [transfers]);
 
-  const visibleItems = useMemo(() => tab === 'activities'
-    ? activities.filter((item) => matchesQuery(item) && matchesStatus(item) && (categoryFilter === 'all' || item.category === categoryFilter))
-    : instructors.filter((item) => matchesQuery(item) && matchesStatus(item) && (disciplineFilter === 'all' || item.disciplines?.includes(disciplineFilter)) && (languageFilter === 'all' || item.languages?.includes(languageFilter))),
-  [activities, categoryFilter, disciplineFilter, instructors, languageFilter, query, statusFilter, tab]);
+  const visibleItems = useMemo(() => {
+    if (tab === 'activities') return activities.filter((item) => matchesQuery(item) && matchesStatus(item) && (categoryFilter === 'all' || item.category === categoryFilter));
+    if (tab === 'transfers') return transfers.filter((item) => matchesQuery(item) && matchesStatus(item) && (categoryFilter === 'all' || item.catalog_group === categoryFilter));
+    return instructors.filter((item) => matchesQuery(item) && matchesStatus(item) && (disciplineFilter === 'all' || item.disciplines?.includes(disciplineFilter)) && (languageFilter === 'all' || item.languages?.includes(languageFilter)));
+  }, [activities, categoryFilter, disciplineFilter, instructors, languageFilter, query, statusFilter, tab, transfers]);
 
   const filters = tab === 'activities'
     ? [{ label: 'Категория', value: categoryFilter, options: activityCategories, onChange: setCategoryFilter }]
-    : [
-      { label: 'Дисциплина', value: disciplineFilter, options: instructorDisciplines, onChange: setDisciplineFilter },
-      { label: 'Язык', value: languageFilter, options: instructorLanguages, onChange: setLanguageFilter },
-    ];
+    : tab === 'transfers'
+      ? [{ label: 'Город', value: categoryFilter, options: transferCities, onChange: setCategoryFilter }]
+      : [
+        { label: 'Дисциплина', value: disciplineFilter, options: instructorDisciplines, onChange: setDisciplineFilter },
+        { label: 'Язык', value: languageFilter, options: instructorLanguages, onChange: setLanguageFilter },
+      ];
 
   const toast = notice ? <p className={`admin-notice admin-notice--cms admin-notice--${notice.tone}`} role={notice.tone === 'danger' ? 'alert' : 'status'}>{notice.text}<button type="button" aria-label="Закрыть уведомление" onClick={() => setNotice(null)}>×</button></p> : null;
 
@@ -151,9 +168,9 @@ export function AdminPage() {
     };
     return <main className="admin-cms-shell">
       {toast}
-      {editor.kind === 'activities'
-        ? <CmsActivityEditor {...shared} onUploadMedia={uploadFor('activities')} />
-        : <CmsInstructorEditor {...shared} onUploadMedia={uploadFor('instructors')} />}
+      {editor.kind === 'activities' ? <CmsActivityEditor {...shared} onUploadMedia={uploadFor('activities')} /> : null}
+      {editor.kind === 'transfers' ? <CmsTransferEditor {...shared} onUploadMedia={uploadFor('transfers')} /> : null}
+      {editor.kind === 'instructors' ? <CmsInstructorEditor {...shared} onUploadMedia={uploadFor('instructors')} /> : null}
     </main>;
   }
 
