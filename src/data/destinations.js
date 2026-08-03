@@ -507,16 +507,16 @@ export const DESTINATIONS = {
     "items": [
       {
         "slug": "tbilisi-airport-gudauri",
-        "name": "Tbilisi Airport → Gudauri",
-        "category": "Airport transfer",
+        "name": "Sedan · up to 3 seats",
+        "category": "Gudauri ↔ Tbilisi Airport",
         "price": "180 GEL",
         "priceSuffix": "per vehicle",
         "rating": "4.9",
         "reviews": "128 rides",
         "tags": [
-          "Sedan",
-          "Up to 3",
-          "~2 hours"
+          "~2 hours",
+          "Meet & greet",
+          "Ski rack"
         ],
         "image": "/assets/design-1/mosaic/transfer-1-144-upd.png",
         "facts": [
@@ -543,20 +543,20 @@ export const DESTINATIONS = {
           "60 min waiting",
           "Ski luggage"
         ],
-        "description": "A private, direct transfer from Tbilisi International Airport to your accommodation in Gudauri."
+        "description": "A private car with a winter-ready driver, door to door, flight tracked on arrival."
       },
       {
         "slug": "tbilisi-minivan-gudauri",
-        "name": "Tbilisi → Gudauri minivan",
-        "category": "Group transfer",
+        "name": "Minivan · up to 7 seats",
+        "category": "Gudauri ↔ Tbilisi city",
         "price": "260 GEL",
         "priceSuffix": "per vehicle",
         "rating": "4.8",
         "reviews": "94 rides",
         "tags": [
-          "Minivan",
-          "Up to 7",
-          "~2 hours"
+          "~2 hours",
+          "Child seats",
+          "Ski rack"
         ],
         "image": "/assets/design-1/service-transfer.png",
         "facts": [
@@ -583,20 +583,20 @@ export const DESTINATIONS = {
           "Ski luggage",
           "Water"
         ],
-        "description": "A spacious private minivan for families and groups travelling from Tbilisi."
+        "description": "Room for a group with skis and boards, with door pickup anywhere in the city."
       },
       {
         "slug": "kutaisi-gudauri",
-        "name": "Kutaisi Airport → Gudauri",
-        "category": "Airport transfer",
+        "name": "Sedan · up to 3 seats",
+        "category": "Gudauri ↔ Kutaisi Airport",
         "price": "420 GEL",
         "priceSuffix": "per vehicle",
         "rating": "4.8",
         "reviews": "57 rides",
         "tags": [
-          "Sedan",
-          "Up to 3",
-          "~4.5 hours"
+          "~4.5 hours",
+          "Meet & greet",
+          "Comfort stop"
         ],
         "image": "/assets/design-1/mosaic/transfer-2104-1385.png",
         "facts": [
@@ -627,16 +627,16 @@ export const DESTINATIONS = {
       },
       {
         "slug": "batumi-gudauri",
-        "name": "Batumi → Gudauri",
-        "category": "Long distance",
+        "name": "Sedan · up to 3 seats",
+        "category": "Gudauri ↔ Batumi",
         "price": "520 GEL",
         "priceSuffix": "per vehicle",
         "rating": "4.7",
         "reviews": "33 rides",
         "tags": [
-          "Sedan",
-          "Up to 3",
-          "~6 hours"
+          "~6 hours",
+          "Two stops",
+          "Ski rack"
         ],
         "image": "/assets/design-1/mosaic/transfer-1-144.png",
         "facts": [
@@ -667,16 +667,16 @@ export const DESTINATIONS = {
       },
       {
         "slug": "kazbegi-gudauri",
-        "name": "Kazbegi ↔ Gudauri",
-        "category": "Regional route",
+        "name": "4×4 · up to 4 seats",
+        "category": "Gudauri ↔ Kazbegi",
         "price": "150 GEL",
         "priceSuffix": "per vehicle",
         "rating": "4.9",
         "reviews": "76 rides",
         "tags": [
-          "4×4",
-          "Up to 4",
-          "~1 hour"
+          "~1 hour",
+          "Cross Pass",
+          "Winter-ready"
         ],
         "image": "/assets/design-1/mosaic/tours-1-117-upd.png",
         "facts": [
@@ -707,16 +707,16 @@ export const DESTINATIONS = {
       },
       {
         "slug": "vladikavkaz-gudauri",
-        "name": "Vladikavkaz → Gudauri",
-        "category": "Border route",
+        "name": "Minivan · up to 6 seats",
+        "category": "Gudauri ↔ Vladikavkaz",
         "price": "390 GEL",
         "priceSuffix": "per vehicle",
         "rating": "4.8",
         "reviews": "44 rides",
         "tags": [
-          "Minivan",
-          "Border",
-          "~3–6 hours"
+          "~3–6 hours",
+          "Border crossing",
+          "Ski rack"
         ],
         "image": "/assets/design-1/service-transfer.png",
         "facts": [

@@ -34,7 +34,11 @@ export const ru = {
     language: 'Язык',
     promoLabel: 'Рекомендуемая категория',
     promoTitle: 'Найдите подходящего лыжного инструктора',
-    promoButton: 'Смотреть инструкторов'
+    promoNote: 'Ответьте на три вопроса',
+    promoButton: 'Смотреть инструкторов',
+    menuInstructorsNote: '{{count}} проверенных тренеров',
+    helpChoose: 'Помочь с выбором',
+    weatherLifts: 'Погода и подъёмники'
   },
   categories: {
     instructors: {
@@ -94,7 +98,40 @@ export const ru = {
     instructorsKicker: 'Проверенные специалисты',
     instructorsTitle: 'Найдите своего инструктора',
     instructorsIntro: 'Сравните опыт, языки и реальные отзывы гостей, чтобы найти подходящий стиль обучения.',
-    instructorsAction: 'Все инструкторы'
+    instructorsAction: 'Все инструкторы',
+    hero: {
+      titleLine1: 'Что вам нужно',
+      titleLine2: 'в Гудаури?',
+      subtitle: 'Проверенные местные: уроки, снаряжение, трансферы и жильё.',
+      searchLabel: 'Поиск по каталогу',
+      categoriesLabel: 'Категории поиска',
+      fieldsLabel: 'Уточните запрос',
+      chipsLabel: 'Быстрый выбор',
+      any: 'Любой',
+      anyone: 'Для всех',
+      show: 'Показать {{count}}',
+      showItems: 'Показать {{count}} {{items}}',
+      clear: 'Сбросить',
+      pickOne: 'Выберите один',
+      allLink: 'Все {{count}} {{items}}',
+      note: 'Заявку подтверждает местный менеджер, обычно в течение 2 часов.',
+      openFilters: 'Открыть фильтры поиска',
+      closeFilters: 'Закрыть фильтры',
+      fields: {
+        discipline: 'Дисциплина',
+        who: 'Для кого',
+        equipment: 'Снаряжение',
+        type: 'Тип',
+        route: 'Маршрут'
+      },
+      conditionsLabel: 'Условия в горах сегодня',
+      conditionTemp: '−7°',
+      conditionSummary: 'Лёгкий снег',
+      conditionSnow: '12 см / 24ч · база 145',
+      conditionSnowShort: '12 см / 24ч',
+      conditionLifts: 'Подъёмники 6 / 7',
+      proof: '{{count}} проверенных инструкторов · ★ {{rating}}'
+    }
   },
   faq: {
     kicker: 'Частые вопросы',
@@ -197,7 +234,8 @@ export const ru = {
       categories: {
         all: { label: 'Все инструкторы', description: 'Проверенные местные специалисты' },
         ski: { label: 'Лыжи', description: 'Трасса и работа над техникой' },
-        snowboard: { label: 'Сноуборд', description: 'Техника и катание по всей горе' }
+        snowboard: { label: 'Сноуборд', description: 'Техника и катание по всей горе' },
+        both: { label: 'Оба направления', description: 'Лыжи и сноуборд в одном профиле' }
       },
       refinements: {
         russian: 'Русский',
@@ -290,15 +328,35 @@ export const ru = {
         { question: 'Есть ли детские кресла?', answer: 'Да. Укажите возраст ребенка в запросе — мы предоставим подходящее кресло бесплатно.' }
       ],
       categories: {
-        all: { label: 'Все маршруты', description: 'Аэропорты и региональные трансферы' },
-        tbilisi: { label: 'Тбилиси ↔ Гудаури', description: 'Из аэропорта и из города' },
-        kutaisi: { label: 'Кутаиси ↔ Гудаури', description: 'Индивидуальный трансфер из аэропорта' },
-        regional: { label: 'Региональные маршруты', description: 'Батуми, Казбеги и Владикавказ' }
+        all: { label: 'Все маршруты', description: 'Все направления из Гудаури и в Гудаури' },
+        tbilisi: { label: 'Тбилиси', description: 'Аэропорт и город · ~2 ч · от 180 GEL' },
+        kutaisi: { label: 'Кутаиси', description: 'Аэропорт · ~4,5 ч · от 420 GEL' },
+        batumi: { label: 'Батуми', description: '~6 ч · две остановки · от 520 GEL' },
+        kazbegi: { label: 'Казбеги', description: '4×4 · ~1 ч · от 150 GEL' },
+        vladikavkaz: { label: 'Владикавказ', description: 'Граница · 3–6 ч · от 390 GEL' }
       },
       refinements: {
         airport: 'Из аэропорта',
         groups: 'Для групп',
         'four-by-four': 'Зимний 4×4'
+      },
+      routePanel: {
+        kicker: 'Ваш маршрут',
+        hint: 'Выберите город — список обновится сразу.',
+        anchorTitle: 'Гудаури',
+        anchorMeta: '2 200 м',
+        fromLabel: 'Откуда',
+        toLabel: 'Куда',
+        swapLabel: 'Поменять направление',
+        listLabel: 'Выбрать город',
+        note: 'Цена одинаковая в обе стороны — направление попадёт в заявку.',
+        directionTo: '{{city}} → Гудаури',
+        directionFrom: 'Гудаури → {{city}}'
+      },
+      otherRoutes: {
+        kicker: 'Другие города',
+        title: 'Ещё {{count}} — из других городов',
+        titleOne: 'Ещё 1 маршрут — из другого города'
       }
     },
     services: {

@@ -1,6 +1,4 @@
 .booking-flow-page { min-height: 100vh; background: var(--surface-card); color: var(--text-primary); }
-.booking-flow-page__nav.site-nav-host { width: 100%; max-width: none; margin: 0; border-bottom: 1px solid var(--border-subtle); background: var(--surface-card); }
-.booking-flow-page__nav.site-nav-host .site-nav { height: 76px; padding-inline: var(--layout-margin); border: 0; border-radius: 0; background: var(--surface-card); box-shadow: none; backdrop-filter: none; }
 .booking-flow-page__nav .site-nav__links,
 .booking-flow-page__nav .site-nav__actions { display: none; }
 .booking-flow-page main { display: grid; gap: var(--space-700); padding-block: var(--space-1000) var(--space-1200); }
@@ -16,7 +14,6 @@
 .booking-flow-page__state { min-height: 60vh; display: grid; place-items: center; padding-block: var(--space-1200); }
 
 @media (max-width: 767px) {
-  .booking-flow-page__nav.site-nav-host .site-nav { height: 64px; }
   .booking-flow-page main { gap: var(--space-600); padding-block: var(--space-700) var(--space-1000); }
   .booking-flow-page__back.ui-back-link { width: var(--control-height-md); min-height: var(--control-height-md); }
   .booking-flow-page__header h1 { font-size: var(--type-subsection-title-size); line-height: 1.08; }

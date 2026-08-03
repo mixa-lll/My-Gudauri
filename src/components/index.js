@@ -3,6 +3,7 @@ export { SiteFooter } from './SiteFooter/SiteFooter';
 export { FaqAccordion } from './FaqAccordion/FaqAccordion';
 export { LanguageSwitcher } from './LanguageSwitcher/LanguageSwitcher';
 export { CategoryTab, CatalogCategoryTabs } from './CatalogCategoryTabs/CatalogCategoryTabs';
+export { CatalogRoutePanel, RouteOption } from './CatalogRoutePanel/CatalogRoutePanel';
 export { DestinationCard } from './DestinationCard/DestinationCard';
 export { MediaPlaceholder } from './MediaPlaceholder/MediaPlaceholder';
 export { ObjectMediaGallery } from './ProfileGallery/ProfileGallery';

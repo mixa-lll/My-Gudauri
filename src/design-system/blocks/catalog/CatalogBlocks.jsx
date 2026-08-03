@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
-import { ActivityCard, CatalogCategoryTabs, EditorialCard, InstructorCard, ListingCardGrid, RentalCard, StayCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
+import { ActivityCard, CatalogCategoryTabs, CatalogRoutePanel, EditorialCard, InstructorCard, ListingCardGrid, RentalCard, StayCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
 import './CatalogBlocks.scss';
 
 export function CatalogHero({ kicker, title, description, align = 'center', titleId }) {
@@ -10,6 +10,8 @@ export function CatalogHero({ kicker, title, description, align = 'center', titl
 }
 
 export function CategoryTabs(props) { return <CatalogCategoryTabs {...props} />; }
+
+export function RoutePanel(props) { return <CatalogRoutePanel {...props} />; }
 
 function CheckIcon() {
   return <svg viewBox="0 0 12 10" aria-hidden="true"><path d="m1 5 3 3 7-7" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>;
@@ -63,6 +65,17 @@ export function ListingGrid({ items = [], cardType = 'activity', columns = 'auto
   const Card = CARD_TYPES[cardType];
   if (!Card) throw new Error(`ListingGrid: unregistered card type “${cardType}”.`);
   return <ListingCardGrid className="ds-listing-grid" columns={columns} ariaLabel={ariaLabel}>{items.map((item) => <Card item={item} key={item.slug} />)}</ListingCardGrid>;
+}
+
+export function MoreResultsCard({ eyebrow, title, description, actionLabel, onAction }) {
+  return (
+    <article className="ds-more-results-card">
+      {eyebrow ? <span className="ds-more-results-card__eyebrow">{eyebrow}</span> : null}
+      <strong>{title}</strong>
+      {description ? <p>{description}</p> : null}
+      {actionLabel ? <button type="button" onClick={onAction}>{actionLabel} <span aria-hidden="true">↗</span></button> : null}
+    </article>
+  );
 }
 
 export function BenefitCard({ icon, title, description }) {

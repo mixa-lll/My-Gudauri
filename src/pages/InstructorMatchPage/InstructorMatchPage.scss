@@ -1,6 +1,4 @@
 .instructor-match-page { min-height: 100vh; background: var(--surface-card); color: var(--text-primary); }
-.instructor-match-page__nav.site-nav-host { width: 100%; max-width: none; margin: 0; border-bottom: 1px solid var(--border-subtle); background: var(--surface-card); }
-.instructor-match-page__nav.site-nav-host .site-nav { height: 76px; padding-inline: var(--layout-margin); border: 0; border-radius: 0; background: var(--surface-card); box-shadow: none; backdrop-filter: none; }
 .instructor-match-page__nav .site-nav__links,
 .instructor-match-page__nav .site-nav__actions { display: none; }
 .instructor-match-page main { display: grid; gap: var(--space-700); padding-block: var(--space-1000) var(--space-1200); }
@@ -13,7 +11,6 @@
 .instructor-match-page__content { min-width: 0; }
 
 @media (max-width: 767px) {
-  .instructor-match-page__nav.site-nav-host .site-nav { height: 64px; }
   .instructor-match-page main { gap: var(--space-600); padding-block: var(--space-700) var(--space-1000); }
   .instructor-match-page__title-row { align-items: center; }
   .instructor-match-page__back.ui-back-link { width: var(--control-height-md); min-height: var(--control-height-md); }

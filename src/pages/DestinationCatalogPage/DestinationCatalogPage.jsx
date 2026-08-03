@@ -1,96 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, SiteFooter, SiteNavbar } from '../../design-system';
+import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
+import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar } from '../../design-system';
+import { CATALOG_FILTERS, matchesActiveRefinements, matchesFilter } from '../../data/catalogFilters';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { ACTIVITY_GROUP_LABELS, getActivities } from '../../services/activitiesApi';
 import { getInstructors } from '../../services/instructorsApi';
 import './DestinationCatalogPage.scss';
 
-const CATALOG_FILTERS = {
-  instructors: {
-    categories: [['all'], ['ski'], ['snowboard']],
-    refinements: [
-      ['russian', 'language'],
-      ['english', 'language'],
-      ['georgian', 'language'],
-      ['male', 'gender'],
-      ['female', 'gender'],
-      ['kids', 'specialty'],
-      ['first-lessons', 'specialty'],
-      ['technique', 'specialty'],
-      ['carving', 'specialty'],
-      ['freeride', 'specialty'],
-      ['freestyle', 'specialty']
-    ]
-  },
-  rental: {
-    categories: [
-      ['all'],
-      ['ski', ['performance-ski-set', 'freeride-ski-set', 'kids-ski-set']],
-      ['snowboard', ['snowboard-set']],
-      ['safety', ['avalanche-set', 'premium-helmet-goggles']]
-    ],
-    refinements: [
-      ['all-levels', 'level', ['snowboard-set', 'kids-ski-set', 'premium-helmet-goggles']],
-      ['advanced', 'level', ['performance-ski-set', 'freeride-ski-set', 'avalanche-set']],
-      ['kids', 'audience', ['kids-ski-set']]
-    ]
-  },
-  transfers: {
-    categories: [
-      ['all'],
-      ['tbilisi', ['tbilisi-airport-gudauri', 'tbilisi-minivan-gudauri']],
-      ['kutaisi', ['kutaisi-gudauri']],
-      ['regional', ['batumi-gudauri', 'kazbegi-gudauri', 'vladikavkaz-gudauri']]
-    ],
-    refinements: [
-      ['airport', 'pickup', ['tbilisi-airport-gudauri', 'kutaisi-gudauri', 'vladikavkaz-gudauri']],
-      ['groups', 'group', ['tbilisi-minivan-gudauri', 'vladikavkaz-gudauri']],
-      ['four-by-four', 'vehicle', ['kazbegi-gudauri']]
-    ]
-  },
-  services: {
-    categories: [
-      ['all'],
-      ['photo', ['mountain-photo-session', 'ski-video-reel']],
-      ['care', ['evening-nanny', 'sports-massage']],
-      ['hosting', ['private-chef', 'event-decor']]
-    ],
-    refinements: [
-      ['at-your-stay', 'location', ['evening-nanny', 'sports-massage', 'private-chef']],
-      ['family', 'audience', ['mountain-photo-session', 'evening-nanny', 'private-chef']],
-      ['custom', 'format', ['private-chef', 'event-decor']]
-    ]
-  },
-  stays: {
-    categories: [
-      ['all'],
-      ['apartments', ['four-seasons-loft', 'neo-family-apartment', 'atrium-ski-in', 'loft-long-stay']],
-      ['chalets', ['panorama-chalet']],
-      ['hotels', ['twins-view-room']]
-    ],
-    refinements: [
-      ['ski-in', 'access', ['four-seasons-loft', 'atrium-ski-in']],
-      ['family', 'guests', ['neo-family-apartment', 'panorama-chalet']],
-      ['two-guests', 'guests', ['twins-view-room', 'loft-long-stay']]
-    ]
-  },
-  places: {
-    categories: [
-      ['all'],
-      ['food', ['drunk-cherry', 'platforma-cafe']],
-      ['bars', ['black-dog-bar']],
-      ['wellness', ['gudauri-lodge-spa', 'smart-market', 'friendship-monument']]
-    ],
-    refinements: [
-      ['late', 'hours', ['drunk-cherry', 'black-dog-bar']],
-      ['new-gudauri', 'location', ['drunk-cherry', 'black-dog-bar', 'platforma-cafe']],
-      ['bookable', 'booking', ['drunk-cherry', 'gudauri-lodge-spa']]
-    ]
-  }
-};
 
 function toCategoryFilters(section, items, t) {
   return items.map(([id, slugs]) => ({
@@ -133,45 +51,6 @@ function activityFilters(items, t) {
   };
 }
 
-const INSTRUCTOR_FILTER_MATCHERS = {
-  russian: (item) => item.languages?.some((language) => language.code === 'Ru'),
-  english: (item) => item.languages?.some((language) => language.code === 'En'),
-  georgian: (item) => item.languages?.some((language) => language.code === 'Ge'),
-  male: (item) => item.gender === 'male',
-  female: (item) => item.gender === 'female',
-  kids: (item) => item.tags?.some((tag) => /kids|children|family/i.test(tag)),
-  'first-lessons': (item) => item.tags?.some((tag) => /first lesson/i.test(tag)),
-  technique: (item) => item.tags?.some((tag) => /technique/i.test(tag)),
-  carving: (item) => item.tags?.some((tag) => /carving/i.test(tag)),
-  freeride: (item) => item.tags?.some((tag) => /freeride|off-piste/i.test(tag)),
-  freestyle: (item) => item.tags?.some((tag) => /freestyle/i.test(tag))
-};
-
-function matchesFilter(section, filter, item) {
-  if (!filter || filter.id === 'all') return true;
-  if (section === 'activities' && filter.field) return item[filter.field] === filter.value;
-  if (section !== 'instructors') return !filter.slugs || filter.slugs.includes(item.slug);
-
-  if (filter.id === 'ski' || filter.id === 'snowboard') {
-    return item.sports?.some((sport) => sport.slug === filter.id);
-  }
-  if (INSTRUCTOR_FILTER_MATCHERS[filter.id]) return INSTRUCTOR_FILTER_MATCHERS[filter.id](item);
-  return true;
-}
-
-function matchesActiveRefinements(section, refinements, activeFilters, item) {
-  const selected = refinements.filter((filter) => activeFilters.includes(filter.id));
-  if (section !== 'instructors' && section !== 'activities') return selected.every((filter) => matchesFilter(section, filter, item));
-
-  const grouped = selected.reduce((groups, filter) => {
-    const group = filter.group || filter.id;
-    groups[group] = [...(groups[group] || []), filter];
-    return groups;
-  }, {});
-
-  return Object.values(grouped).every((filters) => filters.some((filter) => matchesFilter(section, filter, item)));
-}
-
 function PricingInfoPopover({ steps = [], t }) {
   return (
     <Popover.Root>
@@ -197,10 +76,70 @@ function PricingInfoPopover({ steps = [], t }) {
   );
 }
 
+function ConciergeBanner({ t }) {
+  return (
+    <section className="instructor-concierge" aria-label={t('catalog.instructors.concierge.ariaLabel')}>
+      <div className="instructor-concierge__copy">
+        <span>{t('catalog.instructors.concierge.kicker')}</span>
+        <h2>{t('catalog.instructors.concierge.title')}</h2>
+        <p>{t('catalog.instructors.concierge.text')}</p>
+      </div>
+      <Link to="/instructors/match">{t('catalog.instructors.concierge.action')} <span aria-hidden="true">↗</span></Link>
+    </section>
+  );
+}
+
+function PricingBanner({ t, bookingSteps }) {
+  return (
+    <section className="instructor-price-note" aria-label={t('catalog.instructors.pricing.ariaLabel')}>
+      <div className="instructor-price-note__mark" aria-hidden="true">=</div>
+      <div>
+        <span>{t('catalog.instructors.pricing.kicker')}</span>
+        <strong>{t('catalog.instructors.pricing.title')}</strong>
+        <p>{t('catalog.instructors.pricing.text')}</p>
+      </div>
+      <PricingInfoPopover steps={bookingSteps} t={t} />
+    </section>
+  );
+}
+
+function PromiseBanner({ section, t }) {
+  return (
+    <section className="destination-promise" aria-label={t('catalog.common.promiseLabel')}>
+      <div className="destination-promise__icon" aria-hidden="true">i</div>
+      <div><strong>{t(`catalog.${section}.promise`)}</strong><p>{t(`catalog.${section}.promiseNote`)}</p></div>
+      <span>{t(`catalog.${section}.startingPrice`)}</span>
+    </section>
+  );
+}
+
+const CATALOG_BANNERS = { concierge: ConciergeBanner, pricing: PricingBanner, promise: PromiseBanner };
+
+// Banners under the catalog hero are opt-in: a section renders exactly the ones it
+// lists here, in this order. Sections left out (or with an empty list) show the hero
+// alone — that is the current state for every catalog except instructors.
+const CATALOG_HERO_BANNERS = {
+  instructors: ['concierge', 'pricing']
+};
+
+function heroBannersFor(section) {
+  return CATALOG_HERO_BANNERS[section] ?? [];
+}
+
+function CatalogHeroBanners({ banners, section, t, bookingSteps }) {
+  return banners.map((id) => {
+    const Banner = CATALOG_BANNERS[id];
+    if (!Banner) throw new Error(`CatalogHeroBanners: unregistered banner “${id}”.`);
+    return <Banner key={id} section={section} t={t} bookingSteps={bookingSteps} />;
+  });
+}
+
 export function DestinationCatalogPage({ section: sectionProp }) {
   const params = useParams();
+  const [searchParams] = useSearchParams();
   const { t, tList } = useLanguage();
   const section = sectionProp ?? params.section;
+  const searchKey = searchParams.toString();
   const config = getDestination(section);
   const sectionTitle = t(`categories.${section}.title`);
   const filterConfig = CATALOG_FILTERS[section];
@@ -209,6 +148,9 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const [status, setStatus] = useState(apiBacked ? 'loading' : 'ready');
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeFilters, setActiveFilters] = useState([]);
+  // Transfer routes work both ways at the same price, so direction is a
+  // request detail, not a filter: swapping never changes the result set.
+  const [routeDirection, setRouteDirection] = useState('to-gudauri');
 
   useEffect(() => {
     document.body.classList.add('destination-page-body');
@@ -216,8 +158,11 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   }, []);
 
   useEffect(() => {
-    setActiveCategory('all');
-    setActiveFilters([]);
+    // Deep links from the home hero preselect a category tab and refinements.
+    const nextParams = new URLSearchParams(searchKey);
+    setActiveCategory(nextParams.get('category') ?? 'all');
+    setActiveFilters(nextParams.get('filters')?.split(',').filter(Boolean) ?? []);
+    setRouteDirection(nextParams.get('direction') === 'from-gudauri' ? 'from-gudauri' : 'to-gudauri');
     if (config) document.title = `${sectionTitle} — My Gudauri`;
 
     if (!apiBacked) {
@@ -244,7 +189,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     return () => {
       active = false;
     };
-  }, [apiBacked, config, section, sectionTitle]);
+  }, [apiBacked, config, searchKey, section, sectionTitle]);
 
   const dynamicActivityFilters = useMemo(() => section === 'activities' ? activityFilters(items, t) : null, [items, section, t]);
   const categories = useMemo(
@@ -277,8 +222,31 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   })), [categories, items, section]);
 
   const bookingSteps = tList(`catalog.${section}.bookingSteps`, { optional: true });
+  const heroBanners = heroBannersFor(section);
+
+  // Transfers replace the category tabs with the Gudauri ↔ city route panel;
+  // both surfaces drive the same activeCategory from the shared filter contract.
+  const isTransfers = section === 'transfers';
+  const routeCount = (count) => `${count} ${t(count === 1 ? `catalog.${section}.countLabelOne` : `catalog.${section}.countLabel`)}`;
+  const activeRoute = isTransfers ? categoryTabs.find((category) => category.id === activeCategory) : null;
+  const otherRoutesCount = isTransfers ? items.length - categoryItems.length : 0;
+  const showOtherRoutesCard = isTransfers && activeCategory !== 'all' && otherRoutesCount > 0;
+  const fromGudauri = routeDirection === 'from-gudauri';
+  // Card categories are stored as "Gudauri ↔ X"; render them pointed the way
+  // the visitor chose so every badge answers "which direction is this?".
+  const directionalItem = (item) => {
+    if (!isTransfers) return item;
+    const [anchorEnd, cityEnd] = (item.category ?? '').split(' ↔ ');
+    if (!cityEnd) return item;
+    return { ...item, category: fromGudauri ? `${anchorEnd} → ${cityEnd}` : `${cityEnd} → ${anchorEnd}` };
+  };
 
   if (!config) return <Navigate to="/" replace />;
+
+  const selectCategory = (categoryId) => {
+    setActiveCategory(categoryId);
+    setActiveFilters([]);
+  };
 
   const toggleFilter = (filter) => {
     setActiveFilters((current) => current.includes(filter) ? current.filter((item) => item !== filter) : [...current, filter]);
@@ -294,7 +262,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
 
       <main>
         <Container width="wide">
-          <div className={`destination-hero ${section === 'instructors' ? 'destination-hero--instructors' : ''}`.trim()}>
+          <div className={`destination-hero${heroBanners.length ? '' : ' destination-hero--bare'}`}>
             <CatalogHero
               align="center"
               kicker={t(`catalog.${section}.kicker`)}
@@ -302,52 +270,46 @@ export function DestinationCatalogPage({ section: sectionProp }) {
               titleId="destination-title"
               description={t(`catalog.${section}.description`)}
             />
-            {section === 'instructors' ? (
-              <>
-                <section className="instructor-concierge" aria-label={t('catalog.instructors.concierge.ariaLabel')}>
-                  <div className="instructor-concierge__copy">
-                    <span>{t('catalog.instructors.concierge.kicker')}</span>
-                    <h2>{t('catalog.instructors.concierge.title')}</h2>
-                    <p>{t('catalog.instructors.concierge.text')}</p>
-                  </div>
-                  <Link to="/instructors/match">{t('catalog.instructors.concierge.action')} <span aria-hidden="true">↗</span></Link>
-                </section>
-                <section className="instructor-price-note" aria-label={t('catalog.instructors.pricing.ariaLabel')}>
-                  <div className="instructor-price-note__mark" aria-hidden="true">=</div>
-                  <div>
-                    <span>{t('catalog.instructors.pricing.kicker')}</span>
-                    <strong>{t('catalog.instructors.pricing.title')}</strong>
-                    <p>{t('catalog.instructors.pricing.text')}</p>
-                  </div>
-                  <PricingInfoPopover steps={bookingSteps} t={t} />
-                </section>
-              </>
-            ) : (
-              <section className="destination-promise" aria-label={t('catalog.common.promiseLabel')}>
-                <div className="destination-promise__icon" aria-hidden="true">i</div>
-                <div><strong>{t(`catalog.${section}.promise`)}</strong><p>{t(`catalog.${section}.promiseNote`)}</p></div>
-                <span>{t(`catalog.${section}.startingPrice`)}</span>
-              </section>
-            )}
+            <CatalogHeroBanners banners={heroBanners} section={section} t={t} bookingSteps={bookingSteps} />
           </div>
 
           <section className="destination-list" aria-labelledby="destination-list-title">
-            <CatalogCategoryTabs
-              categories={categoryTabs}
-              activeId={activeCategory}
-              columns={section === 'activities' ? 3 : undefined}
-              onChange={(categoryId) => {
-                setActiveCategory(categoryId);
-                setActiveFilters([]);
-              }}
-              label={section === 'instructors' ? t('catalog.instructors.disciplinesLabel') : t('catalog.common.categoriesLabel', { title: sectionTitle })}
-            />
+            {isTransfers ? (
+              <CatalogRoutePanel
+                options={categoryTabs.map((category) => ({ ...category, meta: routeCount(category.count) }))}
+                activeId={activeCategory}
+                onChange={selectCategory}
+                anchor={{
+                  title: t('catalog.transfers.routePanel.anchorTitle'),
+                  meta: t('catalog.transfers.routePanel.anchorMeta')
+                }}
+                direction={fromGudauri ? 'from-anchor' : 'to-anchor'}
+                onDirectionChange={(next) => setRouteDirection(next === 'from-anchor' ? 'from-gudauri' : 'to-gudauri')}
+                fromLabel={t('catalog.transfers.routePanel.fromLabel')}
+                toLabel={t('catalog.transfers.routePanel.toLabel')}
+                swapLabel={t('catalog.transfers.routePanel.swapLabel')}
+                kicker={t('catalog.transfers.routePanel.kicker')}
+                hint={t('catalog.transfers.routePanel.hint')}
+                note={t('catalog.transfers.routePanel.note')}
+                listLabel={t('catalog.transfers.routePanel.listLabel')}
+                label={t('catalog.common.categoriesLabel', { title: sectionTitle })}
+              />
+            ) : (
+              <CatalogCategoryTabs
+                categories={categoryTabs}
+                activeId={activeCategory}
+                columns={section === 'activities' ? 3 : undefined}
+                onChange={selectCategory}
+                label={section === 'instructors' ? t('catalog.instructors.disciplinesLabel') : t('catalog.common.categoriesLabel', { title: sectionTitle })}
+              />
+            )}
             <FilterToolbar
               title={section === 'instructors' ? t('catalog.instructors.filtersTitle') : t('catalog.common.filtersTitle')}
               titleId="destination-list-title"
               ariaLabel={t('catalog.common.filtersAriaLabel', { title: sectionTitle })}
               resultCount={status === 'loading' ? '…' : displayedItems.length}
               resultLabel={displayedItems.length === 1 ? t(`catalog.${section}.countLabelOne`) : t(`catalog.${section}.countLabel`)}
+              resultEyebrow={activeRoute && activeCategory !== 'all' ? t(fromGudauri ? 'catalog.transfers.routePanel.directionFrom' : 'catalog.transfers.routePanel.directionTo', { city: activeRoute.label }) : undefined}
               controls={refinementGroups.map((group) => (
                 <FilterControl id={`${section}-${group.id}`} label={group.label} options={group.filters} selectedValues={activeFilters} onToggle={toggleFilter} onClear={clearFilters} key={group.id} />
               ))}
@@ -360,7 +322,16 @@ export function DestinationCatalogPage({ section: sectionProp }) {
               <p role="alert">{t('catalog.common.error', { items: sectionTitle })}</p>
             ) : displayedItems.length ? (
               <ListingCardGrid className="destination-grid" columns={3} ariaLabel={t('catalog.common.resultsAriaLabel', { title: sectionTitle })}>
-                {displayedItems.map((item) => <DestinationCard item={item} section={section} key={item.slug} />)}
+                {displayedItems.map((item) => <DestinationCard item={directionalItem(item)} section={section} key={item.slug} />)}
+                {showOtherRoutesCard ? (
+                  <MoreResultsCard
+                    eyebrow={t('catalog.transfers.otherRoutes.kicker')}
+                    title={t(otherRoutesCount === 1 ? 'catalog.transfers.otherRoutes.titleOne' : 'catalog.transfers.otherRoutes.title', { count: otherRoutesCount })}
+                    description={categoryTabs.filter((category) => category.id !== 'all' && category.id !== activeCategory).map((category) => category.label).join(' · ')}
+                    actionLabel={t('catalog.transfers.categories.all.label')}
+                    onAction={() => selectCategory('all')}
+                  />
+                ) : null}
               </ListingCardGrid>
             ) : (
               <div className="destination-empty-state">

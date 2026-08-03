@@ -34,7 +34,11 @@ export const en = {
     language: 'Language',
     promoLabel: 'Featured category',
     promoTitle: 'Find the right ski instructor',
-    promoButton: 'Browse instructors'
+    promoNote: 'Answer three questions',
+    promoButton: 'Browse instructors',
+    menuInstructorsNote: '{{count}} verified coaches',
+    helpChoose: 'Help me choose',
+    weatherLifts: 'Weather & lifts'
   },
   categories: {
     instructors: {
@@ -94,7 +98,40 @@ export const en = {
     instructorsKicker: 'Verified professionals',
     instructorsTitle: 'Find your instructor',
     instructorsIntro: 'Compare experience, languages and real guest reviews to find the right teaching style for you.',
-    instructorsAction: 'Show all instructors'
+    instructorsAction: 'Show all instructors',
+    hero: {
+      titleLine1: 'What do you need',
+      titleLine2: 'in Gudauri?',
+      subtitle: 'Verified locals for lessons, gear, rides and stays.',
+      searchLabel: 'Catalog search',
+      categoriesLabel: 'Search categories',
+      fieldsLabel: 'Refine your search',
+      chipsLabel: 'Popular picks',
+      any: 'Any',
+      anyone: 'Anyone',
+      show: 'Show {{count}}',
+      showItems: 'Show {{count}} {{items}}',
+      clear: 'Clear',
+      pickOne: 'Pick one',
+      allLink: 'All {{count}} {{items}}',
+      note: 'Requests are confirmed by a local manager, usually within 2 hours.',
+      openFilters: 'Open search filters',
+      closeFilters: 'Close filters',
+      fields: {
+        discipline: 'Discipline',
+        who: 'Who is it for',
+        equipment: 'Equipment',
+        type: 'Type',
+        route: 'Route'
+      },
+      conditionsLabel: 'Mountain conditions today',
+      conditionTemp: '−7°',
+      conditionSummary: 'Light snow',
+      conditionSnow: '12 cm / 24h · base 145',
+      conditionSnowShort: '12 cm / 24h',
+      conditionLifts: 'Lifts 6 / 7',
+      proof: '{{count}} verified instructors · ★ {{rating}}'
+    }
   },
   faq: {
     kicker: 'Frequently Asked Questions',
@@ -197,7 +234,8 @@ export const en = {
       categories: {
         all: { label: 'All instructors', description: 'Verified local professionals' },
         ski: { label: 'Ski', description: 'Piste and technique lessons' },
-        snowboard: { label: 'Snowboard', description: 'Technique and all-mountain lessons' }
+        snowboard: { label: 'Snowboard', description: 'Technique and all-mountain lessons' },
+        both: { label: 'Teaches both', description: 'Ski and snowboard in one profile' }
       },
       refinements: {
         russian: 'Russian',
@@ -290,15 +328,35 @@ export const en = {
         { question: 'Are child seats available?', answer: 'Yes. Add the child age to your request and we will provide the correct seat free of charge.' }
       ],
       categories: {
-        all: { label: 'All routes', description: 'Airport and regional transfers' },
-        tbilisi: { label: 'Tbilisi ↔ Gudauri', description: 'Airport and city pickup' },
-        kutaisi: { label: 'Kutaisi ↔ Gudauri', description: 'Private airport transfer' },
-        regional: { label: 'Regional routes', description: 'Batumi, Kazbegi and Vladikavkaz' }
+        all: { label: 'All routes', description: 'Every direction to and from Gudauri' },
+        tbilisi: { label: 'Tbilisi', description: 'Airport & city · ~2 h · from 180 GEL' },
+        kutaisi: { label: 'Kutaisi', description: 'Airport · ~4.5 h · from 420 GEL' },
+        batumi: { label: 'Batumi', description: '~6 h · two stops · from 520 GEL' },
+        kazbegi: { label: 'Kazbegi', description: '4×4 · ~1 h · from 150 GEL' },
+        vladikavkaz: { label: 'Vladikavkaz', description: 'Border · 3–6 h · from 390 GEL' }
       },
       refinements: {
         airport: 'Airport pickup',
         groups: 'For groups',
         'four-by-four': 'Winter 4×4'
+      },
+      routePanel: {
+        kicker: 'Your route',
+        hint: 'Pick the city — the grid updates instantly.',
+        anchorTitle: 'Gudauri',
+        anchorMeta: '2 200 m',
+        fromLabel: 'From',
+        toLabel: 'To',
+        swapLabel: 'Swap direction',
+        listLabel: 'Choose a city',
+        note: 'The price is the same in both directions — your direction goes into the request.',
+        directionTo: '{{city}} → Gudauri',
+        directionFrom: 'Gudauri → {{city}}'
+      },
+      otherRoutes: {
+        kicker: 'Other cities',
+        title: '{{count}} more routes from other cities',
+        titleOne: '1 more route from another city'
       }
     },
     services: {

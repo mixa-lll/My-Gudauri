@@ -34,7 +34,11 @@ export const ka = {
     language: 'ენა',
     promoLabel: 'რჩეული კატეგორია',
     promoTitle: 'იპოვეთ შესაფერისი სათხილამურო ინსტრუქტორი',
-    promoButton: 'ინსტრუქტორების ნახვა'
+    promoNote: 'უპასუხეთ სამ კითხვას',
+    promoButton: 'ინსტრუქტორების ნახვა',
+    menuInstructorsNote: '{{count}} გადამოწმებული მწვრთნელი',
+    helpChoose: 'დამეხმარეთ არჩევაში',
+    weatherLifts: 'ამინდი და საბაგიროები'
   },
   categories: {
     instructors: {
@@ -94,7 +98,40 @@ export const ka = {
     instructorsKicker: 'გადამოწმებული პროფესიონალები',
     instructorsTitle: 'იპოვეთ თქვენი ინსტრუქტორი',
     instructorsIntro: 'შეადარეთ გამოცდილება, ენები და სტუმრების რეალური შეფასებები, რომ იპოვოთ სწავლების შესაფერისი სტილი.',
-    instructorsAction: 'ყველა ინსტრუქტორი'
+    instructorsAction: 'ყველა ინსტრუქტორი',
+    hero: {
+      titleLine1: 'რა გჭირდებათ',
+      titleLine2: 'გუდაურში?',
+      subtitle: 'სანდო ადგილობრივები: გაკვეთილები, აღჭურვილობა, ტრანსფერები და საცხოვრებელი.',
+      searchLabel: 'კატალოგში ძებნა',
+      categoriesLabel: 'ძებნის კატეგორიები',
+      fieldsLabel: 'დააზუსტეთ მოთხოვნა',
+      chipsLabel: 'სწრაფი არჩევანი',
+      any: 'ნებისმიერი',
+      anyone: 'ყველასთვის',
+      show: 'ჩვენება {{count}}',
+      showItems: 'ჩვენება {{count}} {{items}}',
+      clear: 'გასუფთავება',
+      pickOne: 'აირჩიეთ ერთი',
+      allLink: 'ყველა {{count}} {{items}}',
+      note: 'მოთხოვნას ადასტურებს ადგილობრივი მენეჯერი, ჩვეულებრივ 2 საათში.',
+      openFilters: 'ძებნის ფილტრების გახსნა',
+      closeFilters: 'ფილტრების დახურვა',
+      fields: {
+        discipline: 'დისციპლინა',
+        who: 'ვისთვის',
+        equipment: 'აღჭურვილობა',
+        type: 'ტიპი',
+        route: 'მარშრუტი'
+      },
+      conditionsLabel: 'პირობები მთაში დღეს',
+      conditionTemp: '−7°',
+      conditionSummary: 'მსუბუქი თოვლი',
+      conditionSnow: '12 სმ / 24სთ · ბაზა 145',
+      conditionSnowShort: '12 სმ / 24სთ',
+      conditionLifts: 'საბაგიროები 6 / 7',
+      proof: '{{count}} გადამოწმებული ინსტრუქტორი · ★ {{rating}}'
+    }
   },
   faq: {
     kicker: 'ხშირად დასმული კითხვები',
@@ -197,7 +234,8 @@ export const ka = {
       categories: {
         all: { label: 'ყველა ინსტრუქტორი', description: 'გადამოწმებული ადგილობრივი პროფესიონალები' },
         ski: { label: 'თხილამურები', description: 'ტრასა და ტექნიკის გაკვეთილები' },
-        snowboard: { label: 'სნოუბორდი', description: 'ტექნიკა და მთელ მთაზე სრიალი' }
+        snowboard: { label: 'სნოუბორდი', description: 'ტექნიკა და მთელ მთაზე სრიალი' },
+        both: { label: 'ორივე მიმართულება', description: 'თხილამური და სნოუბორდი ერთ პროფილში' }
       },
       refinements: {
         russian: 'რუსული',
@@ -290,15 +328,35 @@ export const ka = {
         { question: 'არის თუ არა ბავშვის სავარძლები?', answer: 'დიახ. მიუთითეთ ბავშვის ასაკი მოთხოვნაში და უფასოდ მოგაწოდებთ შესაბამის სავარძელს.' }
       ],
       categories: {
-        all: { label: 'ყველა მარშრუტი', description: 'აეროპორტები და რეგიონული ტრანსფერები' },
-        tbilisi: { label: 'თბილისი ↔ გუდაური', description: 'აეროპორტიდან და ქალაქიდან' },
-        kutaisi: { label: 'ქუთაისი ↔ გუდაური', description: 'ინდივიდუალური ტრანსფერი აეროპორტიდან' },
-        regional: { label: 'რეგიონული მარშრუტები', description: 'ბათუმი, ყაზბეგი და ვლადიკავკაზი' }
+        all: { label: 'ყველა მარშრუტი', description: 'ყველა მიმართულება გუდაურიდან და გუდაურისკენ' },
+        tbilisi: { label: 'თბილისი', description: 'აეროპორტი და ქალაქი · ~2 სთ · 180 GEL-დან' },
+        kutaisi: { label: 'ქუთაისი', description: 'აეროპორტი · ~4,5 სთ · 420 GEL-დან' },
+        batumi: { label: 'ბათუმი', description: '~6 სთ · ორი გაჩერება · 520 GEL-დან' },
+        kazbegi: { label: 'ყაზბეგი', description: '4×4 · ~1 სთ · 150 GEL-დან' },
+        vladikavkaz: { label: 'ვლადიკავკაზი', description: 'საზღვარი · 3–6 სთ · 390 GEL-დან' }
       },
       refinements: {
         airport: 'აეროპორტიდან',
         groups: 'ჯგუფებისთვის',
         'four-by-four': 'ზამთრის 4×4'
+      },
+      routePanel: {
+        kicker: 'თქვენი მარშრუტი',
+        hint: 'აირჩიეთ ქალაქი — შედეგები მაშინვე განახლდება.',
+        anchorTitle: 'გუდაური',
+        anchorMeta: '2 200 მ',
+        fromLabel: 'საიდან',
+        toLabel: 'სად',
+        swapLabel: 'მიმართულების შეცვლა',
+        listLabel: 'აირჩიეთ ქალაქი',
+        note: 'ფასი ერთნაირია ორივე მიმართულებით — მიმართულება მოთხოვნაში აისახება.',
+        directionTo: '{{city}} → გუდაური',
+        directionFrom: 'გუდაური → {{city}}'
+      },
+      otherRoutes: {
+        kicker: 'სხვა ქალაქები',
+        title: 'კიდევ {{count}} მარშრუტი სხვა ქალაქებიდან',
+        titleOne: 'კიდევ 1 მარშრუტი სხვა ქალაქიდან'
       }
     },
     services: {

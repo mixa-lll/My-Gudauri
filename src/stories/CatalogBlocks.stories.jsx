@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BenefitCard, BenefitsSection, BookingStep, BookingSteps, Button, CatalogHero, FilterControl, FilterToolbar, ListingGrid, ResultCount } from '../design-system';
+import { BenefitCard, BenefitsSection, BookingStep, BookingSteps, Button, CatalogHero, FilterControl, FilterToolbar, ListingGrid, MoreResultsCard, ResultCount } from '../design-system';
 import { defineComposition } from '../design-system/architecture/registry';
 
 const listings = [
@@ -21,6 +21,7 @@ export const FilterControlDisabled = { name: 'Filter Control / Disabled', parame
 export const ResultCountComponent = { name: 'Result Count', parameters: composition('ResultCount'), render: () => <div className="sb-canvas"><ResultCount count={18} /></div> };
 export const ListingGridReady = { name: 'Listing Grid / Ready', parameters: composition('ListingGrid'), render: () => <div className="sb-canvas"><ListingGrid items={listings} /></div> };
 export const ListingGridStates = { name: 'Listing Grid / States', parameters: composition('ListingGrid'), render: () => <main className="sb-canvas sb-section"><ListingGrid state="loading" /><ListingGrid items={[]} emptyAction={<Button variant="secondary">Clear filters</Button>} /><ListingGrid state="error" onRetry={() => {}} /></main> };
+export const MoreResultsCardComponent = { name: 'More Results Card', parameters: composition('MoreResultsCard'), render: () => <div className="sb-canvas" style={{ maxWidth: 420 }}><MoreResultsCard eyebrow="Other cities" title="4 more routes from other cities" description="Kutaisi · Batumi · Kazbegi · Vladikavkaz" actionLabel="All routes" onAction={() => {}} /></div> };
 export const Benefits = { name: 'Benefits Section', parameters: composition('BenefitsSection'), render: () => <BenefitsSection title="A calmer way to plan" description="Shared guarantees across every catalog type." items={[{ icon: '✓', title: 'Verified', description: 'Profiles and services are reviewed before publication.' }, { icon: '↗', title: 'Clear terms', description: 'Prices and conditions are visible before contact.' }, { icon: '●', title: 'Local support', description: 'A local operator helps if plans change.' }]} /> };
 export const BenefitCardComponent = { name: 'Benefit Card', parameters: composition('BenefitCard'), render: () => <BenefitCard icon="✓" title="Verified" description="Reviewed before publication." /> };
 export const BookingStepsBlock = { name: 'Booking Steps', parameters: composition('BookingSteps'), render: () => <BookingSteps items={[{ title: 'Choose', description: 'Compare registered offers.' }, { title: 'Request', description: 'Send dates and group details.' }, { title: 'Confirm', description: 'Receive final availability and terms.' }]} /> };

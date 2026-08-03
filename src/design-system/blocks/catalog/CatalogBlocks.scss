@@ -1,4 +1,4 @@
-.ds-catalog-hero { min-height: clamp(300px, 30vw, 440px); padding-block: clamp(var(--space-800), 8vw, var(--space-1200)); display: grid; align-items: end; background: transparent; }
+.ds-catalog-hero { min-height: clamp(240px, 25vw, 360px); padding-block: clamp(var(--space-700), 6vw, var(--space-1000)); display: grid; align-items: end; background: transparent; }
 .ds-catalog-hero__content { width: min(100%, var(--layout-width-detail)); margin-inline: auto; align-self: end; }
 .ds-catalog-hero--center .ds-catalog-hero__content { align-self: center; }
 .ds-catalog-hero .section-heading__kicker { color: var(--text-accent); }
@@ -38,6 +38,14 @@
 .ds-result-count p { margin: var(--space-100) 0 0; color: var(--text-secondary); font-size: var(--type-body-small-size); }
 .ds-result-count strong { color: var(--text-primary); font: var(--fw-medium) var(--type-subsection-title-size) / 1 var(--font-heading); }
 .ds-listing-grid { width: 100%; }
+.ds-more-results-card { min-height: 240px; padding: var(--space-800); display: grid; align-content: center; justify-items: start; gap: var(--space-300); border: 1px dashed var(--border-default); border-radius: var(--radius-card); background: color-mix(in srgb, var(--surface-card) 50%, transparent); }
+.ds-more-results-card__eyebrow { color: var(--text-secondary); font: var(--fw-semibold) 11px / 1.2 var(--font-body); letter-spacing: .09em; text-transform: uppercase; }
+.ds-more-results-card strong { color: var(--text-primary); font: var(--fw-medium) clamp(19px, 1.6vw, 24px) / 1.05 var(--font-heading); letter-spacing: -.04em; }
+.ds-more-results-card p { margin: 0; color: var(--text-secondary); font-size: var(--type-body-small-size); line-height: 1.45; }
+.ds-more-results-card button { margin-top: var(--space-200); min-height: var(--control-height-md); padding: 0 var(--space-500); display: inline-flex; align-items: center; gap: var(--space-300); border: 0; border-radius: var(--radius-control); background: var(--surface-control); color: var(--text-primary); cursor: pointer; font: var(--fw-semibold) var(--type-body-small-size) / 1 var(--font-body); }
+.ds-more-results-card button:hover { background: var(--surface-control-hover); }
+.ds-more-results-card button:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+.ds-more-results-card button span { color: var(--text-secondary); }
 .ds-section { display: grid; gap: var(--space-900); }
 .ds-benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--layout-gutter); }
 .ds-benefit-card { min-height: 220px; padding: var(--space-600); box-shadow: none; }

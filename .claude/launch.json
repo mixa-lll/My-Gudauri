@@ -4,19 +4,31 @@
     {
       "name": "my-gudauri-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 5173
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5173,
+      "autoPort": true
     },
     {
       "name": "my-gudauri-cloudflare",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev:cloudflare"],
+      "runtimeArgs": [
+        "run",
+        "dev:cloudflare"
+      ],
       "port": 8788
     },
     {
       "name": "my-gudauri-storybook",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "storybook", "--", "--no-open"],
+      "runtimeArgs": [
+        "run",
+        "storybook",
+        "--",
+        "--no-open"
+      ],
       "port": 6006
     }
   ]

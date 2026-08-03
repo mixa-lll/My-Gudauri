@@ -9,8 +9,8 @@
   color: var(--grey-600);
 }
 
+/* Width and offsets come from the shared .site-nav-host geometry. */
 .destination-nav-host {
-  width: min(var(--content-inner), calc(100% - 80px));
   margin-inline: auto;
 }
 
@@ -26,6 +26,12 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: clamp(18px, 2vw, 28px);
+}
+
+/* A hero without banners ends on its own padding, so the section rhythm below would
+   stack on top of it and leave far more air under the title than above it. */
+.destination-hero--bare + .destination-list {
+  margin-top: var(--space-350);
 }
 
 .destination-tabs {
@@ -442,10 +448,6 @@
 }
 
 @media (max-width: 820px) {
-  .destination-nav-host {
-    width: calc(100% - 24px);
-  }
-
   .destination-page .site-nav {
     width: 100%;
   }

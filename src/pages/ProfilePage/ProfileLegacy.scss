@@ -10,9 +10,9 @@
   background: var(--grey-white);
 }
 
+/* Width and offsets come from the shared .site-nav-host geometry. */
 .profile-nav-host {
-  width: min(var(--layout-width-detail), calc(100% - (var(--layout-margin) * 2)));
-  margin: 19px auto 0;
+  margin-inline: auto;
 }
 
 .profile-page .site-nav {
@@ -675,8 +675,7 @@
 }
 
 @media (max-width: 1320px) {
-  .profile-main,
-  .profile-nav-host {
+  .profile-main {
     width: min(var(--layout-width-detail), calc(100% - (var(--layout-margin) * 2)));
   }
 
@@ -761,7 +760,6 @@
 
 @media (max-width: 768px) {
   .profile-main,
-  .profile-nav-host,
   .profile-page .site-nav {
     width: calc(100% - 24px);
   }

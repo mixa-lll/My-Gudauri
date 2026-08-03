@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "internal-import:src/pages/HomePage/HomePage.jsx:../../components/HomeHero/HeroMotion",
+    "category": "internal-import",
+    "severity": "warning",
+    "sourcePath": "src/pages/HomePage/HomePage.jsx",
+    "message": "Internal import “../../components/HomeHero/HeroMotion” bypasses a public component barrel."
+  }
+]
