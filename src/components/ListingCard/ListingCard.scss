@@ -353,3 +353,15 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* The route leads the card: a guest scans "where does this go" before anything
+   else, so it outranks the quieter overlay pills beside it. */
+.listing-card__pill.listing-card__pill--route {
+  min-height: 34px;
+  padding: 0 var(--space-400);
+  background: var(--action-accent);
+  color: var(--text-inverse);
+  font: var(--fw-semibold) var(--type-body-small-size) / 1 var(--font-body);
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 10px rgb(24 25 22 / 18%);
+}

@@ -104,11 +104,8 @@ export const RateBanner = (props) => <PromoFrame kind="rate" eyebrow={props.eyeb
 export const SafetyNotice = (props) => <PromoFrame kind="safety" eyebrow={props.eyebrow ?? 'Safety'} {...props} />;
 export const SelectionCTA = (props) => <PromoFrame kind="selection" {...props} />;
 export const ConditionsBanner = (props) => <PromoFrame kind="conditions" {...props} />;
-// A prominent entry into an existing offer (the airport pickup, for example)
-// rather than a duplicate product in the grid.
-export const ShortcutPromo = (props) => <PromoFrame kind="shortcut" {...props} />;
 
-export const PROMO_TYPES = { split: SplitPromo, rate: RateBanner, safety: SafetyNotice, selection: SelectionCTA, conditions: ConditionsBanner, shortcut: ShortcutPromo };
+export const PROMO_TYPES = { split: SplitPromo, rate: RateBanner, safety: SafetyNotice, selection: SelectionCTA, conditions: ConditionsBanner };
 
 export function PromoArea({ promo }) {
   if (!promo) return null;

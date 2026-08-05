@@ -66,9 +66,9 @@ export function ListingCardGrid({ children, columns = 'auto', className, ariaLab
   return <Component className={cn('listing-card-grid', `listing-card-grid--${columns}`, className)} aria-label={ariaLabel}>{children}</Component>;
 }
 
-export function ListingCardPill({ children, icon, className, title }) {
+export function ListingCardPill({ children, icon, className, title, size = 'sm', tone }) {
   return (
-    <Badge className={cn('listing-card__pill', className)} size="sm" mediaOverlay icon={icon} title={title}>
+    <Badge className={cn('listing-card__pill', className)} size={size} tone={tone} mediaOverlay icon={icon} title={title}>
       {children}
     </Badge>
   );

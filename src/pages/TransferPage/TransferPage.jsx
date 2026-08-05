@@ -143,9 +143,9 @@ export function TransferPage() {
   }).slice(0, 3);
   const relatedDirection = (item) => ({ ...item, direction });
   const bookingDefinition = localizeBookingDefinition(getBookingFlowDefinition('transfers'), t);
-  // A ?pickup=airport link (the home-page shortcut) opens this same offer with
-  // the meeting point already chosen, so the airport gets a prominent entry
-  // without becoming a second product.
+  // A ?pickup=airport link — from a campaign or a saved search — opens this same
+  // offer with the kind of meeting point already chosen, so the airport never has
+  // to become a second product.
   const pickupPoints = route.pickupPoints ?? [];
   const requestedPickup = searchParams.get('pickup');
   const presetPoint = pickupPoints.find((point) => point.kind === requestedPickup)

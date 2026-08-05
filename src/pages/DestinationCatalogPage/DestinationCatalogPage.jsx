@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, PromoArea, SiteFooter, SiteNavbar } from '../../design-system';
+import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar } from '../../design-system';
 import { CATALOG_FILTERS, matchesActiveRefinements, matchesFilter } from '../../data/catalogFilters';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -275,8 +275,8 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const otherRoutesCount = isTransfers ? items.length - categoryItems.length : 0;
   const showOtherRoutesCard = isTransfers && activeCategory !== 'all' && otherRoutesCount > 0;
   const fromGudauri = routeDirection === 'from-gudauri';
-  // An airport shortcut lands here with ?pickup=airport; carry it onto every
-  // card so the choice survives into the request form.
+  // A link may land here with ?pickup=airport; carry it onto every card so the
+  // choice survives into the request form.
   const requestedPickup = searchParams.get('pickup') ?? '';
   // Every transfer route serves the same meeting points at one price, so the
   // cards advertise them rather than the catalog listing them as separate rides.
@@ -346,6 +346,9 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                 hint={t('catalog.transfers.routePanel.hint')}
                 note={t('catalog.transfers.routePanel.note')}
                 listLabel={t('catalog.transfers.routePanel.listLabel')}
+                spotlight={activeCategory === 'all'}
+                spotlightHint={t('catalog.transfers.routePanel.startHere')}
+                spotlightDismissLabel={t('catalog.transfers.routePanel.gotIt')}
                 label={t('catalog.common.categoriesLabel', { title: sectionTitle })}
               />
             ) : (
@@ -357,15 +360,6 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                 label={section === 'instructors' ? t('catalog.instructors.disciplinesLabel') : t('catalog.common.categoriesLabel', { title: sectionTitle })}
               />
             )}
-            {isTransfers && !requestedPickup ? (
-              <PromoArea promo={{
-                type: 'shortcut',
-                eyebrow: t('catalog.transfers.airportPromo.kicker'),
-                title: t('catalog.transfers.airportPromo.title'),
-                description: t('catalog.transfers.airportPromo.description'),
-                action: <Link className="ui-button ui-button--accent ui-button--md" to="/transfers?category=tbilisi&amp;pickup=airport">{t('catalog.transfers.airportPromo.action')}</Link>,
-              }} />
-            ) : null}
             <FilterToolbar
               title={section === 'instructors' ? t('catalog.instructors.filtersTitle') : t('catalog.common.filtersTitle')}
               titleId="destination-list-title"

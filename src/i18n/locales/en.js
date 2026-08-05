@@ -358,12 +358,6 @@ export const en = {
         groups: 'For groups',
         'four-by-four': 'Winter 4×4'
       },
-      airportPromo: {
-        kicker: '✈ Airport',
-        title: 'Transfer from Tbilisi Airport to Gudauri',
-        description: 'We meet you by flight number and track delays. The same route and the same price as a city pickup — only the meeting point is already chosen.',
-        action: 'Book an airport transfer'
-      },
       pickup: {
         airport: 'Airport',
         city: 'City',
@@ -378,6 +372,8 @@ export const en = {
         toLabel: 'To',
         swapLabel: 'Swap direction',
         listLabel: 'Choose a city',
+        startHere: 'Start here: choose the city you are travelling from or to.',
+        gotIt: 'Got it',
         note: 'One price in both directions — and the same whether we collect you at the airport or in the city.',
         directionTo: '{{city}} → Gudauri',
         directionFrom: 'Gudauri → {{city}}'

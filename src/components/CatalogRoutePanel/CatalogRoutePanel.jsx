@@ -2,6 +2,8 @@ import { useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import './CatalogRoutePanel.scss';
 
+const ROUTE_HINT_KEY = 'myGudauriRouteHintSeen';
+
 /*
  * Route panel for single-anchor catalogs (transfers). Every route shares one
  * fixed endpoint, so instead of a free from/to search the panel pins the
@@ -49,18 +51,31 @@ export function CatalogRoutePanel({
   hint,
   note,
   listLabel = 'Choose a destination',
+  spotlight = false,
+  spotlightHint,
+  spotlightDismissLabel = 'Got it',
   defaultOpen = false,
   label = 'Choose your route',
   className = ''
 }) {
   if (!['to-anchor', 'from-anchor'].includes(direction)) throw new Error(`CatalogRoutePanel: unknown direction “${direction}”.`);
   const [open, setOpen] = useState(defaultOpen);
+  // Visitors were landing on the catalog without seeing where to start, so the
+  // city field leads until it is used. The nudge is dismissed for good on the
+  // first interaction — a hint that keeps reappearing becomes noise.
+  const [hintDismissed, setHintDismissed] = useState(() => globalThis.localStorage?.getItem(ROUTE_HINT_KEY) === 'seen');
+  const dismissHint = () => {
+    setHintDismissed(true);
+    globalThis.localStorage?.setItem(ROUTE_HINT_KEY, 'seen');
+  };
+  const showHint = spotlight && Boolean(spotlightHint) && !hintDismissed && !open;
   const active = options.find((option) => option.id === activeId) ?? options[0];
   const anchorFirst = direction === 'from-anchor';
 
   const selectOption = (optionId) => {
     onChange(optionId);
     setOpen(false);
+    dismissHint();
   };
 
   const anchorEndpoint = (
@@ -71,9 +86,10 @@ export function CatalogRoutePanel({
   );
 
   const cityEndpoint = (
-    <Popover.Root open={open} onOpenChange={setOpen} key="city">
+    <div className={`catalog-route-panel__city${showHint ? ' has-hint' : ''}`} key="city">
+    <Popover.Root open={open} onOpenChange={(next) => { setOpen(next); if (next) dismissHint(); }}>
       <Popover.Trigger asChild>
-        <button className="catalog-route-panel__endpoint catalog-route-panel__endpoint--city" type="button" aria-label={listLabel}>
+        <button className={`catalog-route-panel__endpoint catalog-route-panel__endpoint--city${showHint ? ' is-spotlit' : ''}`} type="button" aria-label={listLabel}>
           <small>{anchorFirst ? toLabel : fromLabel}</small>
           <span className="catalog-route-panel__value">
             <span className="catalog-route-panel__place"><strong>{active?.label}</strong>{active?.meta ? <small>{active.meta}</small> : null}</span>
@@ -92,6 +108,13 @@ export function CatalogRoutePanel({
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
+    {showHint ? (
+      <p className="catalog-route-panel__hint-bubble" role="note">
+        <span>{spotlightHint}</span>
+        <button type="button" onClick={dismissHint}>{spotlightDismissLabel}</button>
+      </p>
+    ) : null}
+    </div>
   );
 
   const swapControl = onDirectionChange ? (

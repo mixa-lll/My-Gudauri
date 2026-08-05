@@ -294,3 +294,19 @@
     transition-duration: 0.01ms;
   }
 }
+
+/* First-run nudge: the city field leads the page until it has been used. */
+.catalog-route-panel__city { position: relative; min-width: 0; display: grid; }
+.catalog-route-panel__endpoint--city.is-spotlit { border-color: var(--action-accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--action-accent) 16%, transparent); animation: catalog-route-pulse 2.4s var(--motion-ease-standard) infinite; }
+.catalog-route-panel__endpoint--city.is-spotlit > small { color: var(--text-accent); }
+@keyframes catalog-route-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--action-accent) 16%, transparent); }
+  50% { box-shadow: 0 0 0 9px color-mix(in srgb, var(--action-accent) 6%, transparent); }
+}
+.catalog-route-panel__hint-bubble { position: absolute; top: calc(100% + 12px); right: 0; z-index: var(--z-dropdown); max-width: 320px; margin: 0; padding: var(--space-350) var(--space-400); display: flex; align-items: center; gap: var(--space-400); border-radius: var(--radius-md); background: var(--grey-700, var(--action-primary)); color: var(--text-inverse); font-size: var(--type-label-size); line-height: 1.4; box-shadow: var(--shadow-float); }
+.catalog-route-panel__hint-bubble::before { content: ''; position: absolute; top: -6px; right: 34px; width: 12px; height: 12px; transform: rotate(45deg); background: inherit; }
+.catalog-route-panel__hint-bubble span { flex: 1; }
+.catalog-route-panel__hint-bubble button { flex: none; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; font: var(--fw-semibold) var(--type-label-size) / 1 var(--font-body); text-decoration: underline; }
+.catalog-route-panel__hint-bubble button:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+@media (max-width: 640px) { .catalog-route-panel__hint-bubble { right: auto; left: 0; max-width: 100%; } .catalog-route-panel__hint-bubble::before { right: auto; left: 34px; } }
+@media (prefers-reduced-motion: reduce) { .catalog-route-panel__endpoint--city.is-spotlit { animation: none; } }
