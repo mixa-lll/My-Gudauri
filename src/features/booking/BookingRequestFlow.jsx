@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  BookingExtrasPicker,
   BookingFlow,
   BookingFormSection,
   BookingJourneyHeader,
-  BookingPickupChoice,
+  BookingOptionCards,
+  BookingPointDetails,
+  BookingRequestSent,
   BookingRequestSummary,
   Button,
+  Checkbox,
   DateField,
   DateRangeCalendar,
   FilterChip,
@@ -14,9 +16,9 @@ import {
   Input,
   Notice,
   QuantityStepper,
+  SegmentedControl,
   Select,
   Textarea,
-  TimeField,
   TimeSlotPicker,
 } from '../../design-system';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -187,10 +189,12 @@ export function InstructorMatchPreferencesStep({ answers, update, error, actions
 /*
  * Transfer helpers.
  *
- * A route's meeting points always describe its city end. Which end that is
- * depends on the direction the guest chose, so everything below resolves the
- * journey first and only then decides which question to ask.
+ * A route always names its city end first and Gudauri second; which of them is
+ * the departure depends on the direction the guest picked. Everything below
+ * resolves that once and then reads naturally.
  */
+const TRANSFER_TIMES = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00'];
+
 function transferJourney(offer, answers) {
   const route = offer?.route ?? {};
   const anchor = route.destination || 'Gudauri';
@@ -207,122 +211,205 @@ function transferJourney(offer, answers) {
   };
 }
 
-function defaultPoint(points) {
-  return points.find((point) => point.isDefault) ?? points[0] ?? null;
+const isRoundTrip = (answers) => answers.tripType === 'Round trip';
+
+/** Tiles for the city end come from the route; the Gudauri end is always a stay. */
+function endpointOptions(journey, isCityEnd, t) {
+  if (!isCityEnd) return [
+    { id: 'hotel', kind: 'hotel', label: t('booking.transfer.kinds.hotel'), hint: t('booking.transfer.kinds.hotelHint') },
+    { id: 'spot', kind: 'spot', label: t('booking.transfer.kinds.spot'), hint: t('booking.transfer.kinds.spotHint') },
+  ];
+  const kinds = [...new Set(journey.points.map((point) => point.kind))];
+  const available = kinds.length ? kinds : ['city'];
+  return available.map((kind) => ({
+    id: kind,
+    kind,
+    label: t(`booking.transfer.kinds.${kind}`),
+    hint: t(`booking.transfer.kinds.${kind}Hint`),
+  }));
 }
 
-function activePoint(offer, answers) {
-  const points = offer?.route?.pickupPoints ?? [];
-  return points.find((point) => String(point.id) === String(answers.pointId)) ?? defaultPoint(points);
+function detailLabel(kind, t) {
+  if (kind === 'airport') return { label: t('booking.transfer.flightNumber'), hint: t('booking.transfer.flightHint'), later: t('booking.transfer.flightLater') };
+  if (kind === 'hotel') return { label: t('booking.transfer.hotelName'), hint: t('booking.transfer.hotelHint'), later: t('booking.transfer.addressLater') };
+  if (kind === 'spot') return { label: t('booking.transfer.spotName'), hint: t('booking.transfer.spotHint'), later: t('booking.transfer.addressLater') };
+  return { label: t('booking.transfer.address'), hint: t('booking.transfer.addressHint'), later: t('booking.transfer.addressLater') };
 }
 
-function selectedExtras(offer, answers) {
-  return (offer?.extras ?? [])
-    .map((item) => ({ ...item, quantity: Number(answers.extras?.[item.slug]) || 0 }))
-    .filter((item) => item.quantity > 0);
+function selectedOptions(offer, answers) {
+  return (offer?.extras ?? []).filter((item) => Number(answers.options?.[item.slug]) > 0);
 }
 
-function extrasSummary(offer, answers) {
-  return selectedExtras(offer, answers).map((item) => (item.maxQuantity > 1 && item.quantity > 1 ? `${item.label} × ${item.quantity}` : item.label)).join(', ');
+function TimeChoice({ value, onChange, t }) {
+  return <div className="booking-request-flow__time-chips">
+    {TRANSFER_TIMES.map((time) => <FilterChip key={time} selected={value === time} onClick={() => onChange(time)}>{time}</FilterChip>)}
+    <FilterChip selected={!value} onClick={() => onChange('')}>{t('booking.transfer.confirmLater')}</FilterChip>
+  </div>;
 }
 
 export function TransferRouteStep({ answers, update, offer, error, actions, stepNumber }) {
-  const { t } = useLanguage();
+  const { currentLanguage, t } = useLanguage();
   const journey = transferJourney(offer, answers);
-  const point = activePoint(offer, answers);
+  const roundTrip = isRoundTrip(answers);
+  const maxDate = new Date();
+  maxDate.setFullYear(maxDate.getFullYear() + 1);
 
-  // The guest can land here from a card with no point chosen yet; seed the
-  // route's default so the radio group and the stored answer never disagree.
-  useEffect(() => {
-    if (!answers.pointId && point) selectPoint(point);
-  }, [point?.id]);
-
-  function selectPoint(next) {
-    update('pointId', next.id);
-    update('pointKind', next.kind);
-    update('pointLabel', next.label);
-  }
-
-  const swapDirection = () => update('direction', journey.fromGudauri ? 'To Gudauri' : 'From Gudauri');
-  const cityQuestion = t(journey.fromGudauri ? 'booking.transfer.dropoffQuestion' : 'booking.transfer.pickupQuestion', { city: journey.city });
-  const gudauriLabel = t(journey.fromGudauri ? 'booking.transfer.gudauriPickup' : 'booking.transfer.gudauriDropoff');
+  const setTripType = (value) => {
+    update('tripType', value);
+    update('legs', value === 'Round trip' ? 2 : 1);
+    if (value !== 'Round trip') { update('returnDate', ''); update('returnTime', ''); }
+  };
+  // One way shows a single highlighted day, a return trip a range; both speak the
+  // calendar's {start, end} contract so the draft stays serialisable.
+  const calendarValue = roundTrip ? { start: answers.date ?? '', end: answers.returnDate ?? '' } : { start: answers.date ?? '', end: answers.date ?? '' };
+  const onCalendarChange = (range) => {
+    update('date', range.start ?? '');
+    if (roundTrip) update('returnDate', range.end ?? '');
+  };
 
   return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferRoute.title')} description={t('booking.steps.transferRoute.description')} error={error} actions={actions}>
+    <SegmentedControl
+      label={t('booking.transfer.tripLabel')}
+      options={[{ value: 'One way', label: t('booking.transfer.oneWay') }, { value: 'Round trip', label: t('booking.transfer.roundTrip') }]}
+      value={roundTrip ? 'Round trip' : 'One way'}
+      onChange={setTripType}
+    />
     <BookingJourneyHeader
-      fromLabel={t('booking.transfer.from')}
-      toLabel={t('booking.transfer.to')}
+      fromLabel={t('booking.transfer.departurePoint')}
+      toLabel={t('booking.transfer.arrivalPoint')}
       origin={journey.origin}
       destination={journey.destination}
-      meta={journey.duration}
-      note={t('booking.transfer.samePrice')}
+      hint={t('booking.transfer.directionHint')}
       swapLabel={t('booking.transfer.swap')}
-      onSwap={swapDirection}
+      onSwap={() => update('direction', journey.fromGudauri ? 'To Gudauri' : 'From Gudauri')}
     />
-    <BookingPickupChoice
-      label={cityQuestion}
-      options={journey.points.map((item) => ({ id: item.id, kind: item.kind, label: item.label, hint: item.hint }))}
-      value={point?.id ?? ''}
-      onChange={(id) => {
-        const next = journey.points.find((item) => String(item.id) === String(id));
-        if (next) selectPoint(next);
-      }}
-    />
-    {point?.requiresFlight ? <FormField label={t(journey.fromGudauri ? 'booking.transfer.flightDeparture' : 'booking.transfer.flightArrival')} hint={t('booking.transfer.flightHint')}>
-      <Input value={answers.flightNumber ?? ''} placeholder="A9 641" onChange={(event) => update('flightNumber', event.target.value)} />
-    </FormField> : null}
-    {point?.requiresAddress ? <FormField label={t('booking.transfer.cityAddress', { city: journey.city })} required>
-      <Input value={answers.cityAddress ?? ''} onChange={(event) => update('cityAddress', event.target.value)} />
-    </FormField> : null}
-    {point && !point.requiresFlight && !point.requiresAddress ? <FormField label={t('booking.transfer.meetingNotes')} required>
-      <Input value={answers.meetingNotes ?? ''} onChange={(event) => update('meetingNotes', event.target.value)} />
-    </FormField> : null}
-    <FormField label={gudauriLabel} required hint={t('booking.transfer.gudauriHint')}>
-      <Input value={answers.gudauriAddress ?? ''} onChange={(event) => update('gudauriAddress', event.target.value)} />
+    <div className="booking-request-flow__calendar">
+      <DateRangeCalendar
+        label={t(roundTrip ? 'booking.transfer.dates' : 'booking.transfer.date')}
+        value={calendarValue}
+        min={toDateKey(new Date())}
+        max={toDateKey(maxDate)}
+        onChange={onCalendarChange}
+      />
+    </div>
+    <fieldset className="booking-request-flow__choice-group">
+      <legend>{t('booking.transfer.pickupTimeOptional')}</legend>
+      <TimeChoice value={answers.time ?? ''} onChange={(value) => update('time', value)} t={t} />
+    </fieldset>
+    {roundTrip ? <section className="booking-request-flow__return">
+      <header><b>{t('booking.transfer.returnTrip')}</b><span>{t('booking.transfer.returnMirrored')}</span></header>
+      <p className="booking-request-flow__return-mirror">{`${journey.destination} → ${journey.origin}`}<i>{answers.returnDate || t('booking.transfer.pickReturnDate')}</i></p>
+      <fieldset className="booking-request-flow__choice-group">
+        <legend>{t('booking.transfer.returnTimeOptional')}</legend>
+        <TimeChoice value={answers.returnTime ?? ''} onChange={(value) => update('returnTime', value)} t={t} />
+      </fieldset>
+    </section> : null}
+  </BookingFormSection>;
+}
+
+export function TransferPointsStep({ answers, update, offer, error, actions, stepNumber }) {
+  const { t } = useLanguage();
+  const journey = transferJourney(offer, answers);
+  // The city end is the departure unless the guest is leaving Gudauri.
+  const departureIsCity = !journey.fromGudauri;
+  const fromOptions = endpointOptions(journey, departureIsCity, t);
+  const toOptions = endpointOptions(journey, !departureIsCity, t);
+  const fromCopy = detailLabel(answers.fromKind, t);
+  const toCopy = detailLabel(answers.toKind, t);
+
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferPoints.title')} description={t('booking.steps.transferPoints.description')} error={error} actions={actions}>
+    <BookingPointDetails
+      badge="A"
+      title={t('booking.transfer.departureAt', { place: journey.origin })}
+      question={t('booking.transfer.departureQuestion')}
+      options={fromOptions}
+      value={answers.fromKind}
+      onChange={(value) => update('fromKind', value)}
+    >
+      {answers.fromKind ? <>
+        <FormField label={fromCopy.label} hint={fromCopy.hint}>
+          <Input value={answers.fromDetail ?? ''} disabled={Boolean(answers.fromLater)} onChange={(event) => update('fromDetail', event.target.value)} />
+        </FormField>
+        <Checkbox label={fromCopy.later} checked={Boolean(answers.fromLater)} onChange={(event) => update('fromLater', event.target.checked)} />
+      </> : null}
+    </BookingPointDetails>
+    <BookingPointDetails
+      badge="B"
+      title={t('booking.transfer.arrivalAt', { place: journey.destination })}
+      question={t('booking.transfer.arrivalQuestion')}
+      options={toOptions}
+      value={answers.toKind}
+      onChange={(value) => update('toKind', value)}
+    >
+      {answers.toKind ? <>
+        <FormField label={toCopy.label} hint={toCopy.hint}>
+          <Input value={answers.toDetail ?? ''} disabled={Boolean(answers.toLater)} onChange={(event) => update('toDetail', event.target.value)} />
+        </FormField>
+        <Checkbox label={toCopy.later} checked={Boolean(answers.toLater)} onChange={(event) => update('toLater', event.target.checked)} />
+      </> : null}
+    </BookingPointDetails>
+    {offer?.extras?.length ? <BookingOptionCards
+      label={t('booking.transfer.optionsOptional')}
+      items={offer.extras.map((item) => ({
+        slug: item.slug,
+        label: item.label,
+        glyph: item.slug === 'extra-stop' ? 'spot' : 'hotel',
+        priceLabel: item.priceAmount > 0 ? `${t('booking.transfer.from')} ${item.priceAmount} ${item.currency}` : t('booking.transfer.free'),
+      }))}
+      value={answers.options ?? {}}
+      onChange={(value) => update('options', value)}
+    /> : null}
+  </BookingFormSection>;
+}
+
+export function TransferPassengersStep({ answers, update, definition, error, actions, stepNumber }) {
+  const { t } = useLanguage();
+  const adults = Math.max(1, Number(answers.adultsCount) || 1);
+  const children = Math.max(0, Number(answers.childrenCount) || 0);
+  const maximum = definition.fields.passengers.max;
+  const setCounts = (nextAdults, nextChildren) => {
+    update('adultsCount', nextAdults);
+    update('childrenCount', nextChildren);
+    // The vehicle is chosen on headcount, so keep the priced field in step.
+    update('passengers', nextAdults + nextChildren);
+  };
+
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferPassengers.title')} description={t('booking.steps.transferPassengers.description')} error={error} actions={actions}>
+    <div className="booking-request-flow__counter-grid">
+      <div className="booking-request-flow__counter-field"><span>{t('booking.group.adults')}</span><div><p><strong>{adults}</strong><small>{t('booking.group.adultsShort')}</small></p><QuantityStepper variant="booking" label={t('booking.group.adults')} value={adults} min={1} max={Math.max(1, maximum - children)} onChange={(value) => setCounts(value, children)} /></div></div>
+      <div className="booking-request-flow__counter-field"><span>{t('booking.group.kids')}</span><div><p><strong>{children}</strong><small>{t('booking.group.kidsShort')}</small></p><QuantityStepper variant="booking" label={t('booking.group.kids')} value={children} min={0} max={Math.max(0, maximum - adults)} onChange={(value) => setCounts(adults, value)} /></div></div>
+    </div>
+    {children > 0 ? <div className="booking-request-flow__ask">
+      <div><b>{t('booking.transfer.childSeatQuestion')}</b><p>{t('booking.transfer.childSeatNote')}</p></div>
+      <SegmentedControl
+        label={t('booking.transfer.childSeatQuestion')}
+        options={[{ value: 'Yes', label: t('booking.transfer.yes') }, { value: 'No', label: t('booking.transfer.no') }]}
+        value={answers.childSeat || 'No'}
+        onChange={(value) => update('childSeat', value)}
+      />
+    </div> : null}
+    <FormField label={t('booking.transfer.commentOptional')}>
+      <Textarea rows="2" value={answers.comment ?? ''} onChange={(event) => update('comment', event.target.value)} placeholder={t('booking.transfer.commentPlaceholder')} />
     </FormField>
   </BookingFormSection>;
 }
 
-export function TransferTripStep({ answers, update, definition, offer, error, actions, stepNumber }) {
+/** Phone plus a messenger is enough to run a transfer; email stays optional. */
+export function TransferContactStep({ answers, update, error, actions, stepNumber }) {
   const { t } = useLanguage();
-  const journey = transferJourney(offer, answers);
-  const point = activePoint(offer, answers);
-  const isFlight = Boolean(point?.requiresFlight);
-  const fields = definition.fields;
-  const counters = [fields.passengers, fields.suitcases, fields.skis];
-
-  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferTrip.title')} description={t('booking.steps.transferTrip.description')} error={error} actions={actions}>
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferContact.title')} description={t('booking.steps.transferContact.description')} error={error} actions={actions}>
     <div className="booking-request-flow__field-grid">
-      <FormField label={t(isFlight && !journey.fromGudauri ? 'booking.transfer.arrivalDate' : 'booking.transfer.date')} required>
-        <DateField value={answers.date ?? ''} min={toDateKey(new Date())} onChange={(event) => update('date', event.target.value)} />
-      </FormField>
-      <FormField label={t(isFlight && !journey.fromGudauri ? 'booking.transfer.arrivalTime' : 'booking.transfer.time')} hint={t(isFlight ? 'booking.transfer.timeHintFlight' : 'booking.transfer.timeHint')}>
-        <TimeField value={answers.time ?? ''} onChange={(event) => update('time', event.target.value)} />
-      </FormField>
+      <FormField label={t('booking.fields.name')} required><Input autoComplete="name" value={answers.contactName ?? ''} onChange={(event) => update('contactName', event.target.value)} /></FormField>
+      <FormField label={t('booking.fields.phone')} required><Input type="tel" autoComplete="tel" value={answers.contactPhone ?? ''} onChange={(event) => update('contactPhone', event.target.value)} /></FormField>
     </div>
-    <div className="booking-request-flow__counter-grid">
-      {counters.map((field) => <div className="booking-request-flow__counter-field" key={field.id}>
-        <span>{field.label}</span>
-        <div>
-          <p><strong>{Number(answers[field.id]) || 0}</strong></p>
-          <QuantityStepper variant="booking" label={field.label} value={Number(answers[field.id]) || 0} min={field.min} max={field.max} onChange={(value) => update(field.id, value)} />
-        </div>
-      </div>)}
-    </div>
-    {offer?.extras?.length ? <BookingExtrasPicker
-      label={t('booking.transfer.extrasLabel')}
-      description={t('booking.transfer.extrasDescription')}
-      items={offer.extras.map((item) => ({
-        ...item,
-        priceLabel: item.priceAmount > 0 ? `${item.priceAmount} ${item.currency}` : t('booking.transfer.free'),
-        addLabel: t('booking.transfer.addExtra'),
-        selectedLabel: t('booking.transfer.extraAdded'),
-      }))}
-      value={answers.extras ?? {}}
-      onChange={(value) => update('extras', value)}
-    /> : null}
-    <FormField label={t('booking.fields.additionalDetails')}>
-      <Textarea rows="3" value={answers.comment ?? ''} onChange={(event) => update('comment', event.target.value)} placeholder={t('booking.transfer.commentPlaceholder')} />
+    <fieldset className="booking-request-flow__choice-group">
+      <legend>{t('booking.transfer.messengerLabel')}</legend>
+      <div>{MESSENGERS.map((option) => <FilterChip key={option} selected={answers.messenger === option} onClick={() => update('messenger', option)}>{option}</FilterChip>)}</div>
+    </fieldset>
+    <FormField label={t('booking.transfer.emailOptional')}>
+      <Input type="email" autoComplete="email" value={answers.contactEmail ?? ''} onChange={(event) => update('contactEmail', event.target.value)} />
     </FormField>
+    <p className="booking-request-flow__privacy">{t('booking.transfer.contactNote')}</p>
   </BookingFormSection>;
 }
 
@@ -347,12 +434,8 @@ export function RequestReviewStep({ answers, definition, offer, error, actions, 
   return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.review.title')} description={t('booking.steps.review.description')} error={error} actions={actions}>
     <dl className="booking-request-flow__review">
       <div><dt>{t('booking.review.offer')}</dt><dd>{offer.object.name}</dd></div>
-      {offer.route ? <div><dt>{t('booking.transfer.directionLabel')}</dt><dd>{`${transferJourney(offer, answers).origin} → ${transferJourney(offer, answers).destination}`}</dd></div> : null}
-      {answers.pointLabel ? <div><dt>{t(answers.direction === 'From Gudauri' ? 'booking.transfer.dropoffLabel' : 'booking.transfer.pickupLabel')}</dt><dd>{answers.pointLabel}</dd></div> : null}
-      {answers.flightNumber ? <div><dt>{t('booking.transfer.flightLabel')}</dt><dd>{answers.flightNumber}</dd></div> : null}
       {answers.dateRange?.start ? <div><dt>{t('booking.review.dates')}</dt><dd>{formatDateRange(answers.dateRange, locale)}</dd></div> : null}
       {!answers.dateRange?.start && answers.date ? <div><dt>{t('booking.review.date')}</dt><dd>{[answers.date, answers.time].filter(Boolean).join(' · ')}</dd></div> : null}
-      {extrasSummary(offer, answers) ? <div><dt>{t('booking.transfer.extrasLabel')}</dt><dd>{extrasSummary(offer, answers)}</dd></div> : null}
       {matchHours(answers) ? <div><dt>{t('booking.review.preferredTime')}</dt><dd>{t('booking.review.hoursSelected', { hours: matchHours(answers) })}</dd></div> : null}
       {answers.duration ? <div><dt>{t('booking.review.duration')}</dt><dd>{t('booking.review.hours', { hours: answers.duration })}</dd></div> : null}
       {answers.participants ? <div><dt>{t('booking.review.participants')}</dt><dd>{answers.participants}</dd></div> : null}
@@ -471,37 +554,51 @@ export const BOOKING_STEP_REGISTRY = Object.freeze({
     labelKey: 'booking.steps.transferRoute.label',
     scope: ['transfers'],
     Component: TransferRouteStep,
-    validate: (answers, t, definition, offer) => {
-      const point = activePoint(offer, answers);
-      if (!point) return t('booking.validation.transferPoint');
-      if (point.requiresAddress && !required(answers.cityAddress)) return t('booking.validation.transferCityAddress');
-      if (!point.requiresAddress && !point.requiresFlight && !required(answers.meetingNotes)) return t('booking.validation.transferMeeting');
-      return required(answers.gudauriAddress) ? '' : t('booking.validation.transferGudauriAddress');
+    validate: (answers, t) => {
+      if (!required(answers.date)) return t('booking.validation.transferDate');
+      return isRoundTrip(answers) && !required(answers.returnDate) ? t('booking.validation.transferReturnDate') : '';
     },
-    compactSummary: ({ answers, offer }) => {
+    compactSummary: ({ answers, offer, locale }) => {
       const journey = transferJourney(offer, answers);
-      return [`${journey.origin} → ${journey.destination}`, answers.pointLabel].filter(Boolean).join(' · ');
+      return [`${journey.origin} → ${journey.destination}`, formatDateRange({ start: answers.date, end: isRoundTrip(answers) ? answers.returnDate : answers.date }, locale)].filter(Boolean).join(' · ');
     },
-    summaryRows: ({ answers, offer, t }) => {
-      const journey = transferJourney(offer, answers);
-      return [
-        { label: t('booking.transfer.directionLabel'), value: `${journey.origin} → ${journey.destination}`, emphasis: true },
-        { label: t(journey.fromGudauri ? 'booking.transfer.dropoffLabel' : 'booking.transfer.pickupLabel'), value: answers.pointLabel || t('booking.notSelected'), muted: !answers.pointLabel },
-        { label: t('booking.transfer.flightLabel'), value: answers.flightNumber || null },
-      ];
-    },
+    summaryRows: () => [],
   },
-  'transfer-trip': {
-    labelKey: 'booking.steps.transferTrip.label',
+  'transfer-points': {
+    labelKey: 'booking.steps.transferPoints.label',
     scope: ['transfers'],
-    Component: TransferTripStep,
-    validate: (answers, t) => required(answers.date) && Number(answers.passengers) > 0 ? '' : t('booking.validation.transferTrip'),
-    compactSummary: ({ answers, t }) => [answers.date, answers.time, t('booking.review.people', { count: Number(answers.passengers) || 0 })].filter(Boolean).join(' · '),
+    // Every field here is optional on purpose: a guest without a hotel booked yet
+    // must still be able to send the request.
+    validate: () => '',
+    Component: TransferPointsStep,
+    compactSummary: ({ answers, t }) => [answers.fromDetail, answers.toDetail].filter(Boolean).join(' · ') || t('booking.transfer.detailsLater'),
     summaryRows: ({ answers, offer, currentStep, stepIndex, t }) => currentStep >= stepIndex ? [
-      { label: t('booking.transfer.whenLabel'), value: [answers.date, answers.time].filter(Boolean).join(' · ') || t('booking.notSelected'), muted: !answers.date },
-      { label: t('booking.transfer.groupLabel'), value: t('booking.review.people', { count: Number(answers.passengers) || 0 }) },
-      { label: t('booking.transfer.extrasLabel'), value: extrasSummary(offer, answers) || null },
+      { label: t('booking.transfer.departureLabel'), value: answers.fromDetail || (answers.fromLater ? t('booking.transfer.later') : null) },
+      { label: t('booking.transfer.arrivalLabel'), value: answers.toDetail || (answers.toLater ? t('booking.transfer.later') : null) },
+      { label: t('booking.transfer.optionsLabel'), value: selectedOptions(offer, answers).map((item) => item.label).join(', ') || null },
     ] : [],
+  },
+  'transfer-passengers': {
+    labelKey: 'booking.steps.transferPassengers.label',
+    scope: ['transfers'],
+    Component: TransferPassengersStep,
+    validate: (answers, t) => Number(answers.adultsCount) > 0 ? '' : t('booking.validation.transferPassengers'),
+    compactSummary: ({ answers, t }) => t('booking.review.people', { count: (Number(answers.adultsCount) || 0) + (Number(answers.childrenCount) || 0) }),
+    summaryRows: ({ answers, currentStep, stepIndex, t }) => currentStep >= stepIndex ? [
+      { label: t('booking.transfer.passengersLabel'), value: `${t('booking.review.adultsCount', { count: Number(answers.adultsCount) || 0 })}${Number(answers.childrenCount) ? ` · ${t('booking.review.kidsCount', { count: Number(answers.childrenCount) })}` : ''}` },
+      { label: t('booking.transfer.childSeatLabel'), value: answers.childSeat === 'Yes' ? t('booking.transfer.included') : null },
+    ] : [],
+  },
+  'transfer-contact': {
+    labelKey: 'booking.steps.transferContact.label',
+    scope: ['transfers'],
+    Component: TransferContactStep,
+    validate: (answers, t) => {
+      if (!required(answers.contactName) || !required(answers.contactPhone) || !required(answers.messenger)) return t('booking.validation.transferContact');
+      return answers.contactEmail && !validEmail(answers.contactEmail) ? t('booking.validation.transferEmail') : '';
+    },
+    compactSummary: contactSummary,
+    summaryRows: ({ answers, currentStep, stepIndex, t }) => currentStep >= stepIndex && answers.contactName ? [{ label: t('booking.review.contact'), value: `${answers.contactName} · ${answers.messenger}` }] : [],
   },
   'activity-details': detailsStep('booking.steps.activityDetails', ['activities']),
   'rental-details': detailsStep('booking.steps.rentalDetails', ['rental']),
@@ -531,8 +628,33 @@ export function getBookingStepPresentation(stepId, { definition, offer, answers,
   };
 }
 
+/**
+ * The rail shows a transfer as the rides it actually is: one block per leg, and
+ * a fare line per leg, so a return trip reads as two rides rather than a total
+ * that silently doubled.
+ */
+function transferRail({ definition, offer, answers, total, t, locale }) {
+  if (definition.pricingPolicy !== 'transfer-fixed-v1' || !offer?.route) return {};
+  const journey = transferJourney(offer, answers);
+  const roundTrip = isRoundTrip(answers);
+  const when = (date, time) => [date ? formatDateRange({ start: date, end: date }, locale) : t('booking.transfer.dateNotSet'), time || t('booking.transfer.timeNotSet')].join(' · ');
+  const fare = formatBookingPrice(offer.basePrice, offer.currency, t('booking.onRequest'));
+  return {
+    legs: [
+      { kicker: t('booking.transfer.legTransfer'), title: `${journey.origin} → ${journey.destination}`, meta: when(answers.date, answers.time) },
+      ...(roundTrip ? [{ kicker: t('booking.transfer.legReturn'), title: `${journey.destination} → ${journey.origin}`, meta: when(answers.returnDate, answers.returnTime) }] : []),
+    ],
+    breakdown: [
+      { label: t('booking.transfer.legTransfer'), value: fare },
+      ...(roundTrip ? [{ label: t('booking.transfer.legReturn'), value: fare }] : []),
+      ...(answers.childSeat === 'Yes' ? [{ label: t('booking.transfer.childSeatLabel'), value: t('booking.transfer.included') }] : []),
+    ],
+    note: t('booking.transfer.priceNote'),
+  };
+}
+
 export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswersChange, onSubmit, onBack }) {
-  const { currentLanguage, t } = useLanguage();
+  const { currentLanguage, t, tList } = useLanguage();
   const locale = currentLanguage.intlLocale;
   const [answers, setAnswers] = useState(() => createInitialBookingAnswers(definition, initialAnswers));
   const [currentStep, setCurrentStep] = useState(0);
@@ -568,10 +690,21 @@ export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswer
     }
   };
   const summaryRows = steps.flatMap((step, stepIndex) => step.summaryRows?.({ definition, offer, answers, currentStep, stepIndex, t, locale }) ?? []);
+  const rail = transferRail({ definition, offer, answers, total, t, locale });
   const matchingHours = definition.presentation === 'operator-match' ? matchHours(answers) : 0;
   const matchingHasPrice = definition.presentation === 'operator-match' && currentStep > 0 && matchingHours > 0;
 
-  if (submitState.status === 'success') return <Notice tone="info" title={t('booking.received')}><p>{submitState.message}</p>{submitState.requestCode ? <p>{t('booking.reference')} <strong>{submitState.requestCode}</strong></p> : null}<Button variant="secondary" onClick={onBack}>{t(offer.object?.name ? 'booking.actions.backToOffer' : 'booking.actions.backToInstructors')}</Button></Notice>;
+  if (submitState.status === 'success') return <BookingRequestSent
+    title={t('booking.sent.title')}
+    requestCode={submitState.requestCode}
+    referenceLabel={t('booking.sent.referenceLabel')}
+    copyLabel={t('booking.sent.copy')}
+    copiedLabel={t('booking.sent.copied')}
+    saveNote={t('booking.sent.saveNote')}
+    nextTitle={t('booking.sent.nextTitle')}
+    steps={tList('booking.sent.steps', { optional: true })}
+    action={<Button variant="secondary" onClick={onBack}>{t(offer.object?.name ? 'booking.actions.backToOffer' : 'booking.actions.backToInstructors')}</Button>}
+  />;
 
   const actions = <div className={`booking-request-flow__actions${currentStep === 0 ? ' booking-request-flow__actions--forward-only' : ''}`}>
     {currentStep > 0 ? <Button className="booking-request-flow__back-action" variant="ghost" onClick={() => goTo(currentStep - 1)}>← {t('booking.actions.back')}</Button> : null}
@@ -586,7 +719,7 @@ export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswer
       const StepComponent = step.Component;
       return <StepComponent key={step.id} answers={answers} update={update} definition={definition} offer={offer} stepNumber={index + 1} actions={actions} error={error || (submitState.status === 'error' ? submitState.message : '')} />;
     })}</div>}
-    summary={<BookingRequestSummary title={t('booking.summaryTitle')} object={definition.presentation === 'operator-match' ? null : offer.object} rows={summaryRows} priceLabel={definition.presentation === 'operator-match' ? t('booking.forHours', { hours: matchingHours }) : definition.priceLabel} totalLabel={definition.presentation === 'operator-match' ? (matchingHasPrice ? formatBookingPrice(total, offer.currency, t('booking.onRequest')) : null) : formatBookingPrice(total, offer.currency, t('booking.onRequest'))} note={definition.presentation === 'operator-match' ? (matchingHasPrice ? t('booking.sameRateNote') : t('booking.priceLaterNote')) : undefined} />}
+    summary={<BookingRequestSummary title={t('booking.summaryTitle')} object={definition.presentation === 'operator-match' ? null : offer.object} rows={summaryRows} {...rail} priceLabel={definition.presentation === 'operator-match' ? t('booking.forHours', { hours: matchingHours }) : definition.priceLabel} totalLabel={definition.presentation === 'operator-match' ? (matchingHasPrice ? formatBookingPrice(total, offer.currency, t('booking.onRequest')) : null) : formatBookingPrice(total, offer.currency, t('booking.onRequest'))} note={definition.presentation === 'operator-match' ? (matchingHasPrice ? t('booking.sameRateNote') : t('booking.priceLaterNote')) : undefined} />}
     status={submitState.status === 'error' ? <Notice tone="danger">{submitState.message}</Notice> : null}
   />;
 }

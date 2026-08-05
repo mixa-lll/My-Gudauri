@@ -36,3 +36,16 @@
   .booking-request-flow__actions { flex-direction: column-reverse; }
   .booking-request-flow__actions .ui-button { width: 100%; }
 }
+
+/* Transfer flow: time chips, the mirrored return block and the child-seat ask. */
+.booking-request-flow__time-chips { display: flex; flex-wrap: wrap; gap: var(--space-200); }
+.booking-request-flow__calendar { display: grid; }
+.booking-request-flow__return { padding: var(--space-450, var(--space-400)) var(--space-500); display: grid; gap: var(--space-350); border: 1px solid var(--border-default); border-radius: var(--radius-md); background: var(--surface-tint-cool); }
+.booking-request-flow__return header { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-300); }
+.booking-request-flow__return header b { color: var(--text-primary); font: var(--fw-semibold) var(--type-body-size) / 1 var(--font-body); }
+.booking-request-flow__return header span { color: var(--text-secondary); font-size: var(--type-body-small-size); }
+.booking-request-flow__return-mirror { margin: 0; padding: var(--space-300) var(--space-400); display: flex; align-items: center; gap: var(--space-300); border: 1px solid var(--border-subtle); border-radius: var(--radius-control); background: var(--surface-card); color: var(--text-primary); font-size: var(--type-body-size); }
+.booking-request-flow__return-mirror i { margin-left: auto; color: var(--text-secondary); font-size: var(--type-body-small-size); font-style: normal; }
+.booking-request-flow__ask { padding: var(--space-400) var(--space-450, var(--space-400)); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-400); border: 1px solid var(--border-default); border-radius: var(--radius-md); }
+.booking-request-flow__ask b { color: var(--text-primary); font: var(--fw-semibold) var(--type-body-size) / 1.3 var(--font-body); }
+.booking-request-flow__ask p { margin: var(--space-100) 0 0; color: var(--text-secondary); font-size: var(--type-caption-size); }

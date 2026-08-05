@@ -4,7 +4,7 @@ export { Pill } from './Pill/Pill';
 export { Badge } from './Badge/Badge';
 export { FilterChip } from './FilterChip/FilterChip';
 export { BackLink, Breadcrumbs, Dialog, Divider, EmptyState, ErrorState, Icon, Link, LoadingState, Notice, Pagination, Skeleton, Surface } from './Core/Core';
-export { Checkbox, DateField, DateRangeCalendar, FieldMessage, FormField, FormSummary, Input, QuantityStepper, Radio, Select, Textarea, TimeField, TimeSlotPicker } from './Forms/Forms';
+export { Checkbox, DateField, DateRangeCalendar, FieldMessage, FormField, FormSummary, Input, QuantityStepper, Radio, SegmentedControl, Select, Textarea, TimeField, TimeSlotPicker } from './Forms/Forms';
 export { Accordion, AccordionItem } from './Accordion/Accordion';
 export { SectionHeading } from './SectionHeading/SectionHeading';
 export { HoverArrow } from './HoverArrow/HoverArrow';

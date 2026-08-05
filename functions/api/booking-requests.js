@@ -5,7 +5,8 @@ import { apiError, json } from '../_lib/http';
 const FLOWS = Object.freeze({
   'activity-request-v1': { category: 'activities', version: 1 },
   'rental-request-v1': { category: 'rental', version: 1 },
-  'transfer-request-v2': { category: 'transfers', version: 2 },
+  // A transfer is arranged by phone and messenger, so email stays optional.
+  'transfer-request-v3': { category: 'transfers', version: 3, requiresEmail: false },
   'stay-request-v1': { category: 'stays', version: 1 },
   'service-request-v1': { category: 'services', version: 1 },
   'place-request-v1': { category: 'places', version: 1 },
@@ -45,7 +46,8 @@ export async function onRequestPost({ request, env }) {
 
   if (!flow || flow.category !== category || flow.version !== flowVersion) return apiError('Unsupported booking flow.', 400);
   if (!objectId || !objectSlug || !objectName || !answersJson) return apiError('Offer details are incomplete.', 400);
-  if (!contactName || !contactPhone || !contactEmail || !messenger) return apiError('Please add your contact details.', 400);
+  if (!contactName || !contactPhone || !messenger) return apiError('Please add your contact details.', 400);
+  if (flow.requiresEmail !== false && !contactEmail) return apiError('Please add your contact details.', 400);
 
   const requestCode = `MG-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
   try {

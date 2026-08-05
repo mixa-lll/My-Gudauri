@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Checkbox, DateField, DateRangeCalendar, FormField, FormSummary, Input, QuantityStepper, Radio, Select, Textarea, TimeSlotPicker } from '../design-system';
+import { Checkbox, DateField, DateRangeCalendar, FormField, FormSummary, Input, QuantityStepper, Radio, SegmentedControl, Select, Textarea, TimeSlotPicker } from '../design-system';
 import { defineComposition } from '../design-system/architecture/registry';
 
 export default { title: 'Components/Forms', tags: ['autodocs'], parameters: { controls: { disable: true } } };
@@ -16,3 +16,9 @@ export const DateRangeDisabled = { parameters: composition('DateRangeCalendar'),
 function TimeSlotExample({ disabled = false }) { const [value, setValue] = useState({ '2026-12-14': ['morning'], '2026-12-15': ['morning', 'midday'], '2026-12-16': ['morning'] }); return <div className="sb-canvas" style={{ maxWidth: 760 }}><TimeSlotPicker disabled={disabled} days={[{ id: '2026-12-14', label: '14.12.26' }, { id: '2026-12-15', label: '15.12.26' }, { id: '2026-12-16', label: '16.12.26' }]} slots={[{ id: 'morning', label: '10:00–12:00', meta: 'slot 1 · 2h' }, { id: 'midday', label: '12:30–14:30', meta: 'slot 2 · 2h' }, { id: 'afternoon', label: '15:00–17:00', meta: 'slot 3 · 2h' }]} value={value} onChange={setValue} /></div>; }
 export const TimeSlots = { parameters: composition('TimeSlotPicker'), render: () => <TimeSlotExample /> };
 export const TimeSlotsDisabled = { parameters: composition('TimeSlotPicker'), render: () => <TimeSlotExample disabled /> };
+
+function SegmentedHarness() {
+  const [value, setValue] = useState('One way');
+  return <SegmentedControl label="Trip type" options={[{ value: 'One way', label: 'One way' }, { value: 'Round trip', label: 'Round trip' }]} value={value} onChange={setValue} />;
+}
+export const SegmentedControlStory = { name: 'Segmented Control', parameters: { composition: defineComposition({ root: 'SegmentedControl' }) }, render: () => <div className="sb-canvas sb-row"><SegmentedHarness /></div> };

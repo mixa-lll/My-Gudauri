@@ -23,7 +23,9 @@ export {
   InstructorMatchPreferencesStep,
   InstructorParticipantsStep,
   RequestReviewStep,
+  TransferContactStep,
+  TransferPassengersStep,
+  TransferPointsStep,
   TransferRouteStep,
-  TransferTripStep,
   getBookingStepPresentation,
 } from './BookingRequestFlow';

@@ -49,6 +49,30 @@ export const TimeField = forwardRef(function TimeField(props, ref) {
   return <Input ref={ref} type="time" {...props} />;
 });
 
+/**
+ * Two or three mutually exclusive options shown side by side, for choices the
+ * guest should see in full rather than open a menu for — one way vs round trip,
+ * yes vs no. Values stay opaque strings so callers own their vocabulary.
+ */
+export function SegmentedControl({ label, options = [], value, onChange, name, className }) {
+  if (options.length < 2) throw new Error('SegmentedControl: needs at least two options.');
+  return <div className={cn('ui-segmented', className)} role="radiogroup" aria-label={label}>
+    {options.map((option) => {
+      const optionValue = option.value ?? option;
+      const selected = optionValue === value;
+      return <button
+        type="button"
+        role="radio"
+        aria-checked={selected}
+        className={cn('ui-segmented__option', selected && 'is-selected')}
+        key={optionValue}
+        name={name}
+        onClick={() => onChange?.(optionValue)}
+      >{option.icon ?? null}{option.label ?? optionValue}</button>;
+    })}
+  </div>;
+}
+
 function dateKey(date) {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
 }

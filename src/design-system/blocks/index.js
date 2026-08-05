@@ -8,7 +8,7 @@ export { CmsInstructorEditor } from './admin/CmsInstructorEditor';
 export { CmsPricingEditor, pricingPreviewRange } from './admin/CmsPricingEditor';
 export { CmsTransferEditor } from './admin/CmsTransferEditor';
 export { MediaUploadField } from './admin/MediaUploadField';
-export { BookingConfigurator, BookingExtrasPicker, BookingFormSection, BookingJourneyHeader, BookingPickupChoice, BookingProgress, BookingRequestSummary, BookingWidget, StickyBookingWidget } from './booking/BookingBlocks';
+export { BookingConfigurator, BookingFormSection, BookingJourneyHeader, BookingOptionCards, BookingPointDetails, BookingProgress, BookingRequestSent, BookingRequestSummary, BookingWidget, StickyBookingWidget } from './booking/BookingBlocks';
 export {
   ADDITIONAL_SECTION_REGISTRY,
   ActivitySchedule,

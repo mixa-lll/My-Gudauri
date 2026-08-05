@@ -67,7 +67,9 @@ export const PRICING_POLICIES = Object.freeze({
     roundTo: 1,
     dimensions: Object.freeze([dimension('nights', PRICING_MODES.MULTIPLY), dimension('guests', PRICING_MODES.SURCHARGE)]),
   }),
-  'transfer-fixed-v1': Object.freeze({ roundTo: 1, dimensions: Object.freeze([]) }),
+  // A transfer is a flat price per ride, so the only dimension is how many
+  // rides were booked: a return trip is the same vehicle driven twice.
+  'transfer-fixed-v1': Object.freeze({ roundTo: 1, dimensions: Object.freeze([dimension('legs', PRICING_MODES.MULTIPLY, [])]) }),
   'request-only-v1': Object.freeze({ roundTo: 1, dimensions: Object.freeze([]) }),
 });
 

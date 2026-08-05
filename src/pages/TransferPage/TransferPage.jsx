@@ -168,9 +168,9 @@ export function TransferPage() {
       answers: {
         direction: fromGudauri ? 'From Gudauri' : 'To Gudauri',
         ...answers,
-        pointId: presetPoint?.id ?? '',
-        pointKind: presetPoint?.kind ?? '',
-        pointLabel: presetPoint?.label ?? '',
+        // A ?pickup=airport link preselects the kind of place the guest starts
+        // from; the detail fields for it stay optional in step two.
+        ...(presetPoint ? { [fromGudauri ? 'toKind' : 'fromKind']: presetPoint.kind } : {}),
       },
     }));
     navigate(`/booking/transfers/${transfer.slug}`);

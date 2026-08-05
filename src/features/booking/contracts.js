@@ -103,44 +103,50 @@ export const BOOKING_FLOW_REGISTRY = Object.freeze({
     pricingPolicy: 'rental-daily-v1',
     requestKind: 'inquiry',
   }),
-  // One route serves every pickup point, so the flow — not the catalog — is where
-  // the guest says whether the driver meets them at arrivals or at a city address.
-  // Direction and pickup never change the price; they change what we must ask.
-  'transfer-request-v2': Object.freeze({
-    key: 'transfer-request-v2',
-    version: 2,
+  // A transfer request answers four questions in order: where and when, then
+  // the optional detail of each end, then how many people, then who to call.
+  // Everything in step two may stay blank — the operator collects it before the
+  // ride — so an unsure guest can still send a request in under a minute.
+  'transfer-request-v3': Object.freeze({
+    key: 'transfer-request-v3',
+    version: 3,
     category: 'transfers',
-    title: 'Request a transfer',
-    priceLabel: 'Estimated transfer total',
-    entryNote: 'The price is the same in both directions, from the airport or from the city.',
-    confirmationText: 'Choose your pickup point and travel details. The manager confirms the driver and the exact time.',
+    title: 'Book a transfer',
+    priceLabel: 'Total',
+    entryNote: 'Price is per vehicle, not per passenger. Nothing is charged now.',
+    confirmationText: 'Choose the day and direction. Addresses and flight details come later and stay optional.',
     entryFields: ['direction', 'passengers'],
     fields: Object.freeze({
       direction: { id: 'direction', label: 'Direction', control: 'select', initial: 'To Gudauri', options: ['To Gudauri', 'From Gudauri'], required: true },
-      // The route's meeting points describe its city end. Which end that is
-      // depends on the direction, so the fields are named after the place
-      // rather than after pickup or drop-off.
-      pointId: { id: 'pointId', initial: '' },
-      pointKind: { id: 'pointKind', initial: '' },
-      pointLabel: { id: 'pointLabel', label: 'Meeting point', initial: '' },
-      flightNumber: { id: 'flightNumber', label: 'Flight number', control: 'text', initial: '', placeholder: 'For example A9 641' },
-      cityAddress: { id: 'cityAddress', label: 'Address', control: 'text', initial: '', placeholder: 'Hotel, apartment or street address' },
-      meetingNotes: { id: 'meetingNotes', label: 'Where should the driver wait?', control: 'text', initial: '', placeholder: 'Describe the meeting point' },
-      gudauriAddress: { id: 'gudauriAddress', label: 'Address in Gudauri', control: 'text', initial: '', placeholder: 'Hotel or apartment name' },
+      tripType: { id: 'tripType', label: 'Trip', initial: 'One way', options: ['One way', 'Round trip'] },
+      // How many rides are being booked. The pricing engine multiplies the flat
+      // fare by this, so a return trip costs exactly two rides.
+      legs: { id: 'legs', initial: 1, affectsPrice: true },
       date: { id: 'date', label: 'Date', control: 'date', initial: '', required: true },
-      time: { id: 'time', label: 'Time', control: 'time', initial: '' },
+      time: { id: 'time', label: 'Pickup time', control: 'time', initial: '' },
+      returnDate: { id: 'returnDate', label: 'Return date', control: 'date', initial: '' },
+      returnTime: { id: 'returnTime', label: 'Return time', control: 'time', initial: '' },
+      // Each end of the journey: what kind of place it is, the one detail that
+      // kind needs, and an explicit "I will send it later" escape hatch.
+      fromKind: { id: 'fromKind', initial: '' },
+      fromDetail: { id: 'fromDetail', label: 'Departure detail', control: 'text', initial: '' },
+      fromLater: { id: 'fromLater', initial: false },
+      toKind: { id: 'toKind', initial: '' },
+      toDetail: { id: 'toDetail', label: 'Arrival detail', control: 'text', initial: '' },
+      toLater: { id: 'toLater', initial: false },
+      // { [extraSlug]: quantity } — priced by the operator, never in the estimate.
+      options: { id: 'options', initial: {} },
       passengers: { id: 'passengers', label: 'Passengers', singularLabel: 'Passenger', shortLabel: 'ppl', shortSingularLabel: 'person', control: 'quantity', min: 1, max: 16, step: 1, initial: 2 },
-      suitcases: { id: 'suitcases', label: 'Suitcases', singularLabel: 'Suitcase', control: 'quantity', min: 0, max: 16, step: 1, initial: 2 },
-      skis: { id: 'skis', label: 'Skis or snowboards', singularLabel: 'Ski or snowboard', control: 'quantity', min: 0, max: 16, step: 1, initial: 0 },
-      // { [extraSlug]: quantity } — the catalog of extras comes from the CMS.
-      extras: { id: 'extras', initial: {} },
+      adultsCount: { id: 'adultsCount', initial: 2 },
+      childrenCount: { id: 'childrenCount', initial: 0 },
+      childSeat: { id: 'childSeat', initial: '' },
       comment: { id: 'comment', initial: '' },
       contactName: { id: 'contactName', initial: '' },
       contactPhone: { id: 'contactPhone', initial: '' },
       contactEmail: { id: 'contactEmail', initial: '' },
       messenger: { id: 'messenger', initial: 'WhatsApp' },
     }),
-    steps: ['transfer-route', 'transfer-trip', COMMON_CONTACT_STEP, COMMON_REVIEW_STEP],
+    steps: ['transfer-route', 'transfer-points', 'transfer-passengers', 'transfer-contact'],
     pricingPolicy: 'transfer-fixed-v1',
     requestKind: 'inquiry',
   }),
@@ -201,7 +207,7 @@ export const CATEGORY_BOOKING_REGISTRY = Object.freeze({
   instructors: { flowKey: 'instructor-lesson-v1', objectPatternKey: 'instructor' },
   activities: { flowKey: 'activity-request-v1', objectPatternKey: 'activity' },
   rental: { flowKey: 'rental-request-v1', objectPatternKey: 'rental' },
-  transfers: { flowKey: 'transfer-request-v2', objectPatternKey: 'transfer' },
+  transfers: { flowKey: 'transfer-request-v3', objectPatternKey: 'transfer' },
   stays: { flowKey: 'stay-request-v1', objectPatternKey: 'stay' },
   services: { flowKey: 'service-request-v1', objectPatternKey: 'activity' },
   places: { flowKey: 'place-request-v1', objectPatternKey: 'activity' },
@@ -266,6 +272,7 @@ const MATCH_SLOT_HOURS = 2;
  * adults and children.
  */
 function pricingQuantities(definition, answers = {}) {
+  if (definition.pricingPolicy === 'transfer-fixed-v1') return { ...answers, legs: Math.max(1, Number(answers.legs) || 1) };
   if (definition.pricingPolicy !== 'operator-match-v1') return answers;
   const adults = Math.max(1, Number(answers.adultsCount) || 1);
   const children = Math.max(0, Number(answers.childrenCount) || 0);

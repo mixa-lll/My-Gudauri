@@ -255,17 +255,25 @@ export function BookingFormSection({ title, description, children, actions, erro
   </section>;
 }
 
-export function BookingRequestSummary({ title = 'Your request', object, rows = [], priceLabel = 'Estimated total', totalLabel = 'On request', note, status }) {
+export function BookingRequestSummary({ title = 'Your request', object, objectAction, legs = [], rows = [], breakdown = [], priceLabel = 'Estimated total', totalLabel = 'On request', note, status }) {
   const hasObject = Boolean(object?.name);
   return <Surface as="section" className={`ds-booking-request-summary ${hasObject ? 'ds-booking-request-summary--object' : 'ds-booking-request-summary--match'}`} padding="md" aria-label="Request summary">
-    <h2 className="ds-booking-request-summary__heading">{title ?? t('configurator.title')}</h2>
+    <h2 className="ds-booking-request-summary__heading">{title}</h2>
+    {legs.map((leg) => <div className="ds-booking-request-summary__leg" key={leg.kicker ?? leg.title}>
+      {leg.kicker ? <small>{leg.kicker}</small> : null}
+      <strong>{leg.title}</strong>
+      {leg.meta ? <span>{leg.meta}</span> : null}
+    </div>)}
+    <dl>{rows.filter((row) => row?.value !== undefined && row?.value !== null && row?.value !== '').map((row) => <div className={`${row.emphasis ? 'is-emphasis' : ''}${row.muted ? ' is-muted' : ''}`} key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl>
     {hasObject ? <div className="ds-booking-request-summary__object">
       {object.image
         ? <img src={object.image} alt="" />
         : <span className="ds-booking-request-summary__object-fallback" aria-hidden="true">{object.name.slice(0, 1)}</span>}
-      <div><small>{object.typeLabel ?? title}</small><h3>{object.name}</h3></div>
+      <div><h3>{object.name}</h3>{objectAction ?? (object.typeLabel ? <small>{object.typeLabel}</small> : null)}</div>
     </div> : null}
-    <dl>{rows.filter((row) => row?.value !== undefined && row?.value !== null && row?.value !== '').map((row) => <div className={`${row.emphasis ? 'is-emphasis' : ''}${row.muted ? ' is-muted' : ''}`} key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl>
+    {breakdown.length ? <div className="ds-booking-request-summary__breakdown">
+      {breakdown.map((line) => <div key={line.label}><span>{line.label}</span><b>{line.value}</b></div>)}
+    </div> : null}
     {totalLabel ? <div className="ds-booking-request-summary__total"><span>{priceLabel}</span><strong>{totalLabel}</strong></div> : null}
     {note ? <p className="ds-booking-request-summary__note">{note}</p> : null}
     {status ? <div className="ds-booking-request-summary__status" role="status">{status}</div> : null}
@@ -275,73 +283,124 @@ export function BookingRequestSummary({ title = 'Your request', object, rows = [
 /*
  * Transfer request blocks.
  *
- * Every transfer route runs both ways at one price and can start at an airport,
- * a city address or an agreed spot. That makes direction and pickup properties
- * of the request rather than separate offers, so these three blocks carry them:
- * the journey header states and flips the direction, the pickup choice picks the
- * meeting point, and the extras list collects add-ons like a child seat.
+ * The flow asks "where and when" first and keeps every address, flight number
+ * and add-on optional in a later step, because a guest who has not booked their
+ * hotel yet must still be able to send a request. These blocks carry that:
+ * a journey header that names and reverses the two ends, a per-end detail block
+ * whose fields follow the kind of place chosen, an option grid the operator
+ * prices later, and the confirmation panel.
  */
 
-function PickupGlyph({ kind }) {
-  if (kind === 'airport') return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6c.72 0 1.3.58 1.3 1.3v4.35l6.2 3.6v1.7l-6.2-1.95v3.9l2.1 1.5v1.4L10 16.6l-3.4.8v-1.4l2.1-1.5v-3.9L2.5 12.55v-1.7l6.2-3.6V2.9c0-.72.58-1.3 1.3-1.3Z" fill="currentColor" /></svg>;
-  if (kind === 'city') return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17h14M5 17V6.5l5-3 5 3V17M8.5 9.5h3M8.5 13h3" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17.5s5.5-5 5.5-9a5.5 5.5 0 1 0-11 0c0 4 5.5 9 5.5 9Z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /><circle cx="10" cy="8.5" r="2" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>;
+function PointGlyph({ kind }) {
+  if (kind === 'airport') return <svg viewBox="0 0 24 24" aria-hidden="true" className="ds-booking-glyph"><path d="M12 3c.8 0 1.2.8 1.2 1.8v4.3l7 3.9v1.7l-7-2.1v3.7l2.3 1.7v1.3L12 19l-3.5 1.3v-1.3l2.3-1.7v-3.7l-7 2.1v-1.7l7-3.9V4.8C10.8 3.8 11.2 3 12 3z" /></svg>;
+  if (kind === 'city') return <svg viewBox="0 0 24 24" aria-hidden="true" className="ds-booking-glyph ds-booking-glyph--stroke"><path d="M3 21V9.5L9 6v15M9 21h12V13h-6M13 17h1.5M17 17h1.5M13 9.5h5.5M5.5 12.5h1M5.5 16.5h1" /></svg>;
+  if (kind === 'hotel') return <svg viewBox="0 0 24 24" aria-hidden="true" className="ds-booking-glyph ds-booking-glyph--stroke"><path d="M3.5 18v-6.5a2 2 0 012-2h8a3.5 3.5 0 013.5 3.5v5M3.5 15h13.5M20.5 18v-3.5M6.5 9.5V7h11v2.5" /></svg>;
+  return <svg viewBox="0 0 24 24" aria-hidden="true" className="ds-booking-glyph ds-booking-glyph--stroke"><path d="M12 21s6.5-6 6.5-10.5a6.5 6.5 0 10-13 0C5.5 15 12 21 12 21z" /><circle cx="12" cy="10.3" r="2.3" /></svg>;
+}
+
+function LockGlyph() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true" className="ds-booking-glyph ds-booking-glyph--stroke"><rect x="5" y="10.5" width="14" height="9" rx="2" /><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5" /></svg>;
 }
 
 function SwapGlyph() {
-  return <svg viewBox="0 0 20 14" aria-hidden="true"><path d="M4.5 1 1.5 4l3 3M1.5 4h13M15.5 7l3 3-3 3M18.5 10h-13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg viewBox="0 0 24 24" aria-hidden="true" className="ds-booking-glyph ds-booking-glyph--stroke"><path d="M4 9h15l-3.5-3.5M20 15H5l3.5 3.5" /></svg>;
 }
 
-export function BookingJourneyHeader({ fromLabel = 'From', toLabel = 'To', origin, destination, meta, note, swapLabel = 'Swap direction', onSwap }) {
+export function BookingJourneyHeader({ fromLabel = 'Departure point', toLabel = 'Arrival point', origin, destination, hint, swapLabel = 'Swap direction', onSwap }) {
   if (!origin || !destination) throw new Error('BookingJourneyHeader: origin and destination are required.');
   return <section className="ds-booking-journey" aria-label={`${origin} → ${destination}`}>
     <div className="ds-booking-journey__board">
-      <div className="ds-booking-journey__end"><small>{fromLabel}</small><strong>{origin}</strong></div>
+      <div className="ds-booking-journey__end">
+        <span><s aria-hidden="true">A</s>{fromLabel}</span>
+        <div className="ds-booking-journey__place">{origin}<LockGlyph /></div>
+      </div>
       {onSwap
         ? <button className="ds-booking-journey__swap" type="button" onClick={onSwap} aria-label={swapLabel} title={swapLabel}><SwapGlyph /></button>
-        : <span className="ds-booking-journey__arrow" aria-hidden="true">→</span>}
-      <div className="ds-booking-journey__end"><small>{toLabel}</small><strong>{destination}</strong></div>
+        : <span className="ds-booking-journey__swap ds-booking-journey__swap--static" aria-hidden="true">→</span>}
+      <div className="ds-booking-journey__end">
+        <span><s aria-hidden="true">B</s>{toLabel}</span>
+        <div className="ds-booking-journey__place">{destination}<LockGlyph /></div>
+      </div>
     </div>
-    {meta || note ? <div className="ds-booking-journey__meta">{meta ? <span>{meta}</span> : null}{note ? <p>{note}</p> : null}</div> : null}
+    {hint ? <p className="ds-booking-journey__hint">{hint}</p> : null}
   </section>;
 }
 
-export function BookingPickupChoice({ label, options = [], value, onChange, name = 'pickup-point' }) {
-  return <fieldset className="ds-booking-pickup">
-    {label ? <legend>{label}</legend> : null}
-    <div className="ds-booking-pickup__options">
+/**
+ * One end of the journey. The tiles say what kind of place it is; the field
+ * underneath asks for the single detail that kind needs, and the checkbox lets
+ * the guest defer it without blocking the request.
+ */
+export function BookingPointDetails({ badge, title, question, options = [], value, onChange, children }) {
+  return <section className="ds-booking-point">
+    <header className="ds-booking-point__head">
+      <span className="ds-booking-point__pin" aria-hidden="true"><PointGlyph kind="spot" /></span>
+      <div><b>{badge ? `${badge} · ` : ''}{title}</b>{question ? <p>{question}</p> : null}</div>
+    </header>
+    <div className="ds-booking-point__tiles" role="radiogroup" aria-label={question ?? title}>
       {options.map((option) => {
-        const selected = value === option.id;
-        return <label className={`ds-booking-pickup__option${selected ? ' is-selected' : ''}`} key={option.id}>
-          <input type="radio" name={name} value={option.id} checked={selected} onChange={() => onChange?.(option.id)} />
-          <span className="ds-booking-pickup__glyph" aria-hidden="true"><PickupGlyph kind={option.kind} /></span>
-          <span className="ds-booking-pickup__text"><strong>{option.label}</strong>{option.hint ? <small>{option.hint}</small> : null}</span>
-        </label>;
+        const selected = option.id === value;
+        return <button
+          type="button"
+          role="radio"
+          aria-checked={selected}
+          className={`ds-booking-point__tile${selected ? ' is-selected' : ''}`}
+          key={option.id}
+          onClick={() => onChange?.(option.id)}
+        >
+          <PointGlyph kind={option.kind ?? option.id} />
+          <span><b>{option.label}</b>{option.hint ? <small>{option.hint}</small> : null}</span>
+        </button>;
+      })}
+    </div>
+    {children ? <div className="ds-booking-point__reveal">{children}</div> : null}
+  </section>;
+}
+
+export function BookingOptionCards({ label, items = [], value = {}, onChange }) {
+  const toggle = (slug) => onChange?.({ ...value, [slug]: value[slug] ? 0 : 1 });
+  return <fieldset className="ds-booking-options">
+    {label ? <legend>{label}</legend> : null}
+    <div className="ds-booking-options__grid">
+      {items.map((item) => {
+        const selected = Boolean(value[item.slug]);
+        return <button
+          type="button"
+          aria-pressed={selected}
+          className={`ds-booking-options__card${selected ? ' is-selected' : ''}`}
+          key={item.slug}
+          onClick={() => toggle(item.slug)}
+        >
+          <span className="ds-booking-options__icon" aria-hidden="true"><PointGlyph kind={item.glyph ?? 'spot'} /></span>
+          <span><b>{item.label}</b>{item.priceLabel ? <small>{item.priceLabel}</small> : null}</span>
+        </button>;
       })}
     </div>
   </fieldset>;
 }
 
-export function BookingExtrasPicker({ label, description, items = [], value = {}, onChange, freeLabel = 'Free' }) {
-  const setQuantity = (slug, quantity) => onChange?.({ ...value, [slug]: quantity });
-  return <fieldset className="ds-booking-extras">
-    {label ? <legend>{label}</legend> : null}
-    {description ? <p className="ds-booking-extras__description">{description}</p> : null}
-    <ul>
-      {items.map((item) => {
-        const quantity = Number(value[item.slug]) || 0;
-        const single = (item.maxQuantity ?? 1) <= 1;
-        return <li className={quantity ? 'is-selected' : ''} key={item.slug}>
-          <div className="ds-booking-extras__text">
-            <strong>{item.label}</strong>
-            {item.description ? <small>{item.description}</small> : null}
-            <span className="ds-booking-extras__price">{item.priceLabel ?? freeLabel}</span>
-          </div>
-          {single
-            ? <Button type="button" variant={quantity ? 'accent' : 'secondary'} onClick={() => setQuantity(item.slug, quantity ? 0 : 1)} aria-pressed={quantity > 0}>{quantity ? item.selectedLabel ?? 'Added' : item.addLabel ?? 'Add'}</Button>
-            : <QuantityStepper variant="booking" label={item.label} value={quantity} min={0} max={item.maxQuantity ?? 4} onChange={(next) => setQuantity(item.slug, next)} />}
-        </li>;
-      })}
-    </ul>
-  </fieldset>;
+/** The confirmation screen: a reference to quote, and what happens next. */
+export function BookingRequestSent({ title, requestCode, referenceLabel, copyLabel = 'Copy', copiedLabel = 'Copied', saveNote, nextTitle, steps = [], action }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    globalThis.navigator?.clipboard?.writeText?.(requestCode);
+    setCopied(true);
+  };
+  return <Surface as="section" className="ds-booking-sent" padding="lg" aria-label={title}>
+    <span className="ds-booking-sent__mark" aria-hidden="true">✓</span>
+    <h2>{title}</h2>
+    {requestCode ? <>
+      <small className="ds-booking-sent__reference">{referenceLabel}</small>
+      <div className="ds-booking-sent__code">
+        <strong>{requestCode}</strong>
+        <Button type="button" variant="secondary" size="sm" onClick={copy}>{copied ? copiedLabel : copyLabel}</Button>
+      </div>
+      {saveNote ? <p className="ds-booking-sent__note">{saveNote}</p> : null}
+    </> : null}
+    {steps.length ? <div className="ds-booking-sent__next">
+      <h3>{nextTitle}</h3>
+      <ol>{steps.map((step) => <li key={step}>{step}</li>)}</ol>
+    </div> : null}
+    {action ? <div className="ds-booking-sent__action">{action}</div> : null}
+  </Surface>;
 }
