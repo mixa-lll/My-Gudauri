@@ -64,8 +64,8 @@
   top: -4%;
   width: 80%;
   height: 58%;
-  background: radial-gradient(50% 50% at 50% 60%, rgba(255, 219, 156, 0.7) 0%, rgba(255, 219, 156, 0) 70%);
-  animation: hero-glow 16s ease-in-out infinite alternate;
+  background: radial-gradient(50% 50% at 50% 60%, rgba(255, 224, 166, 0.95) 0%, rgba(255, 221, 158, 0.34) 46%, rgba(255, 219, 156, 0) 76%);
+  animation: hero-glow 8s ease-in-out infinite alternate;
 }
 
 /* Cloud bands are seamless fractal-noise tiles that drift sideways forever;
@@ -108,7 +108,7 @@
   top: 4%;
   height: 20%;
   opacity: 0.5;
-  --tile: 1600px;
+  --tile: 900px;
   --drift: 240s;
   --cloud: url('/assets/design-1/clouds/sky-high.webp');
 }
@@ -118,7 +118,7 @@
   top: 10%;
   height: 24%;
   opacity: 0.72;
-  --tile: 1500px;
+  --tile: 850px;
   --drift: 185s;
   --cloud: url('/assets/design-1/clouds/sky-far.webp');
 }
@@ -128,7 +128,7 @@
   top: 17%;
   height: 24%;
   opacity: 0.9;
-  --tile: 1400px;
+  --tile: 800px;
   --drift: 135s;
   --cloud: url('/assets/design-1/clouds/sky-mid.webp');
 }
@@ -138,7 +138,7 @@
   top: 25%;
   height: 22%;
   opacity: 1;
-  --tile: 1250px;
+  --tile: 750px;
   --drift: 95s;
   --cloud: url('/assets/design-1/clouds/sky-near.webp');
 }
@@ -151,7 +151,7 @@
   height: 24%;
   z-index: 2;
   opacity: 0.95;
-  --tile: 2200px;
+  --tile: 1100px;
   --drift: 62s;
   --cloud: url('/assets/design-1/clouds/sky-mid.webp');
 }
@@ -162,9 +162,24 @@
   height: 22%;
   z-index: 2;
   opacity: 0.82;
-  --tile: 2600px;
+  --tile: 1300px;
   --drift: 44s;
   --cloud: url('/assets/design-1/clouds/sky-near.webp');
+}
+
+/* Every band is a permanently composited layer of (viewport + --tile) by its
+   own height, so the tile width is a memory budget, not just a look. At the
+   original sizes the six bands wanted ~85MB of layer memory on a 3x phone —
+   past what mobile Safari gives a tab, so it evicted them mid-scroll and
+   repainted once scrolling stopped. That is why they blanked out on the
+   published site but never on a desktop localhost. */
+@media (max-width: 820px) {
+  /* The two widest, fastest bands go first: they cost the most and read the
+     least on a small screen. */
+  .home-cover__cloud--high,
+  .home-cover__cloud--front-low {
+    display: none;
+  }
 }
 
 /* Both plates are cut from the same photograph and share an aspect ratio, so
@@ -204,13 +219,14 @@
      for the parallax to register in the first moments of the scroll. The height
      grows by the same amount so the bottom edge stays put. */
   --lift: 7%;
+  /* Spare height below the frame. The rise below is a share of the plate's own
+     height, so the plate has to overhang by more than it travels — otherwise
+     the bottom edge climbs into view at the end of the scroll. */
+  --overhang: 6%;
   top: calc(var(--plate-top) - var(--lift));
-  height: calc(var(--plate-height) + var(--lift));
+  height: calc(var(--plate-height) + var(--lift) + var(--overhang));
   z-index: 3;
-  /* Rise is a share of the plate's own height, not a pixel count: the plate
-     only overhangs the frame by (plate-top + plate-height - 100%), so a fixed
-     offset would lift its bottom edge into view on a short viewport. */
-  transform: translate3d(0, calc(var(--cover-scroll, 0) * -4.5%), 0);
+  transform: translate3d(0, calc(var(--cover-scroll, 0) * -8%), 0);
 }
 
 /* Film grain over the whole scene.
@@ -246,13 +262,13 @@
 
 @keyframes hero-glow {
   from {
-    opacity: 0.75;
-    transform: scale(0.98);
+    opacity: 0.62;
+    transform: scale(0.95);
   }
 
   to {
     opacity: 1;
-    transform: scale(1.04);
+    transform: scale(1.09);
   }
 }
 

@@ -10,7 +10,7 @@ export async function onRequestGet({ request, env }) { return json({ data: { aut
 export async function onRequestPost({ request, env }) {
   const { password } = await request.json().catch(() => ({}));
   if (password !== ADMIN_PASSWORD) return apiError('Incorrect password.', 401);
-  return json({ data: { authenticated: true } }, { headers: { 'set-cookie': sessionCookie(await createSession(SESSION_SECRET)) }, cacheControl: 'no-store' });
+  return json({ data: { authenticated: true } }, { headers: { 'set-cookie': sessionCookie(await createSession(SESSION_SECRET), request) }, cacheControl: 'no-store' });
 }
 
-export function onRequestDelete() { return json({ data: { authenticated: false } }, { headers: { 'set-cookie': expiredSessionCookie }, cacheControl: 'no-store' }); }
+export function onRequestDelete({ request }) { return json({ data: { authenticated: false } }, { headers: { 'set-cookie': expiredSessionCookie(request) }, cacheControl: 'no-store' }); }

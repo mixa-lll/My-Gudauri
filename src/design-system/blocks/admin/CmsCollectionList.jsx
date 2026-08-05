@@ -69,6 +69,7 @@ export function CmsCollectionList({
   counts: navCounts,
   onCollectionChange,
   onCreate,
+  onOpenSettings,
   onEdit,
   onDuplicate,
   onOpenMenu,
@@ -111,6 +112,7 @@ export function CmsCollectionList({
         <div><h1>{collection.title}</h1><p>{counts.all} объектов · {counts.published} опубликовано · {counts.draft} в черновиках</p></div>
         <div className="cms-collection-list__header-actions">
           <label className="cms-collection-list__search"><span className="visually-hidden">Поиск по названию</span><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder="Поиск по названию…" /></label>
+          {onOpenSettings ? <Button variant="secondary" size="md" onClick={onOpenSettings}>⚙ Настройки категории</Button> : null}
           <Button variant="accent" size="md" onClick={onCreate}>{collection.createLabel}</Button>
         </div>
       </header>

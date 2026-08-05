@@ -1,0 +1,43 @@
+.cms-category-settings { display: grid; grid-template-columns: auto minmax(0, 1fr); min-height: 100vh; background: var(--surface-page); }
+
+.cms-category-settings__main { display: flex; flex-direction: column; min-width: 0; }
+
+.cms-category-settings__header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  min-height: 70px;
+  padding: var(--space-300) var(--space-600);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-card);
+}
+.cms-category-settings__header > span[aria-hidden] { color: var(--text-secondary); }
+.cms-category-settings__header strong { font: var(--fw-semibold) var(--type-body-size) / var(--type-body-line) var(--font-body); }
+.cms-category-settings__breadcrumb {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--text-secondary);
+  font: var(--fw-regular) var(--type-body-size) / var(--type-body-line) var(--font-body);
+  cursor: pointer;
+}
+.cms-category-settings__breadcrumb:hover { color: var(--text-primary); }
+.cms-category-settings__dirty { color: var(--status-warning); font-size: var(--type-label-size); }
+.cms-category-settings__header-actions { margin-left: auto; display: flex; gap: var(--space-300); }
+
+.cms-category-settings__content { width: min(1040px, calc(100% - var(--space-800))); margin: 0 auto; padding: var(--space-600) 0 var(--space-900); display: grid; gap: var(--space-500); }
+
+.cms-category-settings__summary { display: grid; gap: var(--space-150); }
+.cms-category-settings__kicker { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--type-caption-size); }
+.cms-category-settings__summary h1 { margin: 0; font: var(--fw-semibold) var(--text-h3) / var(--lh-h3) var(--font-heading); letter-spacing: -0.03em; }
+.cms-category-settings__summary p { max-width: 70ch; margin: 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+
+.cms-category-settings__footer-actions { display: flex; gap: var(--space-300); }
+
+@media (max-width: 900px) {
+  .cms-category-settings { grid-template-columns: minmax(0, 1fr); }
+  .cms-category-settings__content { width: calc(100% - var(--space-500)); }
+}

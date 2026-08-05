@@ -9,12 +9,7 @@ const instructor = {
   card_image_url: '/assets/design-2/card-mikhail.png', hero_image_url: '/assets/design-3/hero-main.png',
   hero_image_alt: 'Mikhail Andreev on a ski slope', booking_avatar_url: '/assets/design-3/avatar-booking.jpg',
   experience_years: 8, availability_label: 'Available this week', certificate_label: 'Verified Instructor',
-  hourly_rate_gel: 345, min_hours: 2, max_hours: 12, hours_step: 2, min_people: 1, max_people: 6, sort_order: 10,
-  price_round_to: 5,
-  price_tiers: {
-    duration: [{ from: 1, percent: 0 }, { from: 4, percent: 8 }, { from: 8, percent: 15 }],
-    participants: [{ from: 2, percent: 35 }, { from: 3, percent: 25 }, { from: 5, percent: 15 }],
-  },
+  min_people: 1, max_people: 6, sort_order: 10,
   disciplines: ['snowboard', 'ski'], languages: ['Ge', 'En', 'Ru'],
   about: ['Сертифицированный инструктор с восьмилетним опытом.', 'Занятия адаптируются под уровень и цели гостя.'],
   tags: ['Новички', 'Карвинг', 'Дети'],
@@ -27,9 +22,22 @@ const blankInstructor = {
   slug: '', status: 'draft', display_name: '', role: '', card_description: '', tagline: '', intro: '',
   card_image_url: '', hero_image_url: '', hero_image_alt: '', booking_avatar_url: '', gender: '',
   experience_years: '', rating: 0, review_count: 0, availability_label: '', certificate_label: '',
-  hourly_rate_gel: '', min_hours: '', max_hours: '', hours_step: '', min_people: '', max_people: '',
-  default_hours: '', default_people: '', price_round_to: '', price_tiers: {}, sort_order: '',
+  min_people: '', max_people: '', sort_order: '',
   disciplines: [], languages: [], about: [], tags: [], certifications: [], media: [], reviewsList: [],
+};
+
+const TIERS = {
+  duration: [{ from: 1, percent: 0 }, { from: 4, percent: 8 }, { from: 8, percent: 15 }],
+  participants: [{ from: 2, percent: 35 }, { from: 3, percent: 25 }, { from: 5, percent: 15 }],
+};
+
+/** What `/api/admin/pricing/instructors` returns — the settings a card inherits. */
+const categoryPricing = {
+  collection: 'instructors', policyKey: 'instructor-hourly-v1', currency: 'GEL',
+  baseRate: 345, minUnits: 2, maxUnits: 12, unitsStep: 2, defaultUnits: 8, defaultGroup: 2, roundTo: 5,
+  unitField: 'duration', groupField: 'participants',
+  tiers: TIERS,
+  rules: { roundTo: 5, tiers: TIERS },
 };
 
 /** Stands in for `uploadMedia({ collection: 'instructors', file })`. */
@@ -39,7 +47,7 @@ const fakeUpload = (file) => new Promise((resolve) => {
 
 function EditorHarness({ initial = instructor, busy = false, dirty = false }) {
   const [value, setValue] = useState(initial);
-  return <CmsInstructorEditor value={value} onChange={setValue} onSave={() => {}} onPublish={() => setValue((current) => ({ ...current, status: 'published' }))} onDelete={() => {}} onBack={() => {}} onSignOut={() => {}} onUploadMedia={fakeUpload} instructorCount={8} busy={busy} dirty={dirty} />;
+  return <CmsInstructorEditor value={value} onChange={setValue} onSave={() => {}} onPublish={() => setValue((current) => ({ ...current, status: 'published' }))} onDelete={() => {}} onBack={() => {}} onSignOut={() => {}} onUploadMedia={fakeUpload} categoryPricing={categoryPricing} onOpenCategorySettings={() => {}} instructorCount={8} busy={busy} dirty={dirty} />;
 }
 
 export default { title: 'Blocks/Admin/CMS Instructor Editor', component: CmsInstructorEditor, tags: ['autodocs'], parameters: { composition: defineComposition({ root: 'CmsInstructorEditor', children: ['Badge', 'Button', 'ChoiceControls', 'FormField', 'Input', 'MediaPlaceholder', 'MediaUploadField'] }) } };

@@ -1,4 +1,4 @@
-import { groupPricingTiers } from '../../src/shared/pricing.js';
+import { getCollectionPricing } from './collectionPricing.js';
 
 function parseJson(value) {
   try {
@@ -86,17 +86,17 @@ export async function getInstructor(db, slug) {
     db.prepare('SELECT label FROM instructor_tags WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT title, level, file_url FROM instructor_certifications WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT media_type, url, thumbnail_url, alt, is_featured FROM instructor_media WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
-    db.prepare("SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position FROM instructor_reviews WHERE instructor_id = ? AND is_published = 1 ORDER BY sort_order, id").bind(instructor.id),
-    db.prepare('SELECT dimension, from_units, percent FROM instructor_price_tiers WHERE instructor_id = ? ORDER BY dimension, from_units').bind(instructor.id)
+    db.prepare("SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position FROM instructor_reviews WHERE instructor_id = ? AND is_published = 1 ORDER BY sort_order, id").bind(instructor.id)
   ]);
 
+  // Sequential on purpose: `getCollectionPricing` issues its own batch, and two
+  // concurrent operations on one D1 binding intermittently fail the request.
   const detail = await db.prepare(`
     SELECT role, tagline, intro, hero_image_url, hero_image_alt, booking_avatar_url,
-      experience_years, availability_label, certificate_label, hourly_rate_gel,
-      min_hours, max_hours, hours_step, min_people, max_people, default_hours, default_people,
-      price_round_to
+      experience_years, availability_label, certificate_label, min_people, max_people
     FROM instructors WHERE id = ?
   `).bind(instructor.id).first();
+  const categoryPricing = await getCollectionPricing(db, 'instructors');
 
   return {
     ...mapSummary(instructor),
@@ -132,21 +132,21 @@ export async function getInstructor(db, slug) {
       avatar: item.avatar_url,
       avatarPosition: item.avatar_position
     })),
+    // The rate, the bookable hours and the ladders come from the category —
+    // every instructor works on one official tariff. Only the group size this
+    // coach personally takes is their own. The shape is unchanged, so the
+    // booking card and the request flow need to know none of this.
     pricing: {
-      hourlyRateGel: detail.hourly_rate_gel,
-      minHours: detail.min_hours,
-      maxHours: detail.max_hours,
-      hoursStep: detail.hours_step,
+      hourlyRateGel: categoryPricing.baseRate,
+      minHours: categoryPricing.minUnits,
+      maxHours: categoryPricing.maxUnits,
+      hoursStep: categoryPricing.unitsStep,
+      defaultHours: categoryPricing.defaultUnits,
       minPeople: detail.min_people,
       maxPeople: detail.max_people,
-      defaultHours: detail.default_hours,
-      defaultPeople: detail.default_people,
-      // Volume ladders; an empty map lets the shared engine fall back to the
-      // platform defaults instead of silently quoting a flat rate.
-      rules: {
-        roundTo: detail.price_round_to,
-        tiers: groupPricingTiers(priceTiersResult.results)
-      }
+      defaultPeople: Math.min(detail.max_people, Math.max(detail.min_people, categoryPricing.defaultGroup)),
+      currency: categoryPricing.currency,
+      rules: categoryPricing.rules
     }
   };
 }

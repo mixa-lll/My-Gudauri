@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge, Button, Checkbox, FormField, FormSummary, Input, MediaPlaceholder, Select, Textarea } from '../../../components';
+import { PRICING_FIELD_LABELS, PRICING_MODES, resolvePricingRules } from '../../../shared/pricing';
 import { cn } from '../../../utils/cn';
 import { MediaUploadField } from './MediaUploadField';
 import './CmsEditorParts.scss';
@@ -158,6 +159,54 @@ export function ParagraphEditor({ label, value = [], onChange, auto, hint }) {
     label={<>{label}{blank ? <span className="cms-editor__auto-chip">авто</span> : null}</>}
     hint={blank ? `Оставите пустым — сохраним «${auto}»` : (hint ?? 'Разделяйте абзацы пустой строкой — каждый станет отдельным блоком.')}
   ><Textarea className="cms-editor__paragraphs" value={draft} placeholder={auto} onChange={handleChange} /></FormField>;
+}
+
+/**
+ * A read-only block for settings this object inherits from its category.
+ *
+ * Showing them beats hiding them: an operator still needs to know the price
+ * they are selling at, but must not be able to fork it from inside one card.
+ * The action is the honest way out — go and change it for everyone.
+ */
+export function InheritedSettings({ title, note, items = [], actionLabel, onAction }) {
+  if (!items.length) return null;
+  return <section className="cms-editor__inherited">
+    <div className="cms-editor__inherited-head">
+      <strong>{title}</strong>
+      {note ? <p>{note}</p> : null}
+    </div>
+    <dl>{items.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl>
+    {onAction ? <Button variant="secondary" size="md" onClick={onAction}>{actionLabel} →</Button> : null}
+  </section>;
+}
+
+const priceFormatter = new Intl.NumberFormat('ru-RU');
+
+/**
+ * Category pricing as label/value rows for `InheritedSettings`. Reads the
+ * resolved settings the API returns, so the card echoes exactly what the site
+ * charges rather than a second interpretation of the same ladders.
+ */
+export function describeCategoryPricing(pricing) {
+  if (!pricing?.policyKey) return [];
+  const unit = PRICING_FIELD_LABELS[pricing.unitField];
+  const currency = pricing.currency ?? 'GEL';
+  const rows = [
+    { label: 'Тариф', value: `${priceFormatter.format(Math.round(pricing.baseRate))} ${currency} за ${unit?.per ?? 'единицу'}` },
+    { label: 'Диапазон', value: `${pricing.minUnits}–${pricing.maxUnits} ${unit?.unit ?? ''}, шаг ${pricing.unitsStep}`.replace('  ', ' ') },
+  ];
+  for (const dimension of resolvePricingRules(pricing.policyKey, pricing.rules).dimensions) {
+    const steps = dimension.tiers.filter((tier) => tier.percent > 0);
+    if (!steps.length) continue;
+    const labels = PRICING_FIELD_LABELS[dimension.field];
+    const surcharge = dimension.mode === PRICING_MODES.SURCHARGE;
+    rows.push({
+      label: surcharge ? 'Надбавка за гостя' : 'Скидка за объём',
+      value: steps.map((tier) => `${surcharge ? '+' : '−'}${tier.percent}% с ${tier.from} ${labels?.unit ?? ''}`.trim()).join(' · '),
+    });
+  }
+  rows.push({ label: 'Округление итога', value: `до ${pricing.rules?.roundTo ?? 1} ${currency}` });
+  return rows;
 }
 
 /** Generic repeater: rows of the same shape plus a dashed add action. */

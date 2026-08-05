@@ -43,26 +43,26 @@ const BANDS = [
   {
     name: 'sky-high',
     cx: 5, cy: 3, octaves: 5, persistence: 0.5,
-    seed: 41, contrast: 2.1, bias: -0.85,
-    clumpCells: 2, clumpLow: 0.44, clumpHigh: 0.76,
+    seed: 41, contrast: 2.15, bias: -0.8,
+    clumpCells: 2, clumpLow: 0.4, clumpHigh: 0.72,
   },
   {
     name: 'sky-far',
     cx: 4, cy: 2, octaves: 5, persistence: 0.55,
-    seed: 8, contrast: 2.2, bias: -0.88,
-    clumpCells: 2, clumpLow: 0.42, clumpHigh: 0.74,
+    seed: 8, contrast: 2.25, bias: -0.84,
+    clumpCells: 2, clumpLow: 0.38, clumpHigh: 0.7,
   },
   {
     name: 'sky-mid',
     cx: 6, cy: 3, octaves: 6, persistence: 0.58,
-    seed: 17, contrast: 2.7, bias: -1.04,
-    clumpCells: 3, clumpLow: 0.37, clumpHigh: 0.67,
+    seed: 17, contrast: 2.72, bias: -1.0,
+    clumpCells: 3, clumpLow: 0.34, clumpHigh: 0.64,
   },
   {
     name: 'sky-near',
     cx: 8, cy: 4, octaves: 6, persistence: 0.6,
-    seed: 29, contrast: 2.95, bias: -1.16,
-    clumpCells: 3, clumpLow: 0.335, clumpHigh: 0.635,
+    seed: 29, contrast: 2.96, bias: -1.12,
+    clumpCells: 3, clumpLow: 0.3, clumpHigh: 0.6,
   },
 ];
 

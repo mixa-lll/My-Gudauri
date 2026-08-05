@@ -33,5 +33,7 @@ export const getAdminTransfer = (slug) => request(`/api/admin/transfers/${encode
 export const createTransfer = (data) => request('/api/admin/transfers', { method: 'POST', body: JSON.stringify(data) });
 export const updateTransfer = (slug, data) => request(`/api/admin/transfers/${encodeURIComponent(slug)}`, { method: 'PUT', body: JSON.stringify(data) });
 export const deleteTransfer = (slug) => request(`/api/admin/transfers/${encodeURIComponent(slug)}`, { method: 'DELETE' });
+export const getCollectionPricing = (collection) => request(`/api/admin/pricing/${encodeURIComponent(collection)}`);
+export const updateCollectionPricing = (collection, data) => request(`/api/admin/pricing/${encodeURIComponent(collection)}`, { method: 'PUT', body: JSON.stringify(data) });
 export const getCategories = () => request('/api/admin/categories');
 export const updateCategories = (categories) => request('/api/admin/categories', { method: 'PUT', body: JSON.stringify(categories) });

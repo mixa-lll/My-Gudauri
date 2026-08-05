@@ -45,8 +45,27 @@ export async function isAuthenticated(request) {
   }
 }
 
-export function sessionCookie(token) {
-  return `mg_admin=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${SESSION_TTL_SECONDS}; Secure`;
+/**
+ * `Secure` is right for production and wrong for `http://localhost`: Safari
+ * drops such a cookie outright, so sign-in appeared to work and the very next
+ * request came back 401 as “сессия истекла”. Deriving the flag from the request
+ * keeps production strict — every deployed origin is https — while local
+ * development works in every browser rather than only in Chrome.
+ */
+const isSecureRequest = (request) => {
+  try {
+    return new URL(request.url).protocol === 'https:';
+  } catch {
+    return true;
+  }
+};
+
+const cookie = (value, maxAge, request) => `mg_admin=${value}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${isSecureRequest(request) ? '; Secure' : ''}`;
+
+export function sessionCookie(token, request) {
+  return cookie(token, SESSION_TTL_SECONDS, request);
 }
 
-export const expiredSessionCookie = 'mg_admin=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0; Secure';
+export function expiredSessionCookie(request) {
+  return cookie('', 0, request);
+}

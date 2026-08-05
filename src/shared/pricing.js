@@ -90,6 +90,23 @@ export function getPricingPolicy(policyKey) {
 }
 
 /**
+ * Collections whose rate, bookable range and ladders belong to the category
+ * rather than to each object. An instructor does not set their own tariff —
+ * every coach works on one official rate, so a price change is one edit.
+ *
+ * Collections outside this list price per object (a transfer costs what that
+ * vehicle costs) and keep their amount in the card.
+ */
+export const CATEGORY_PRICED_COLLECTIONS = Object.freeze(['instructors']);
+
+/** Category settings applied when a collection has no stored row yet. */
+export const COLLECTION_PRICING_DEFAULTS = Object.freeze({
+  instructors: Object.freeze({ currency: 'GEL', baseRate: 345, minUnits: 2, maxUnits: 12, unitsStep: 2, defaultUnits: 8, defaultGroup: 2, roundTo: 5 }),
+});
+
+const FALLBACK_COLLECTION_PRICING = Object.freeze({ currency: 'GEL', baseRate: 0, minUnits: 1, maxUnits: 1, unitsStep: 1, defaultUnits: 1, defaultGroup: 1, roundTo: 1 });
+
+/**
  * Dimension labels for the CMS, which is Russian-only — the public site
  * translates its own through the booking flow definitions.
  * `one/few/many` are the Russian plural forms; `per` is the “за …” form.
@@ -179,6 +196,59 @@ export function resolvePricingRules(policyKey, rules) {
       return { ...item, tiers: normalizeTiers(override, item.mode) };
     }),
   };
+}
+
+/**
+ * Everything a category decides about price, with defaults filled in.
+ *
+ * `unitField` / `groupField` name the booking fields the policy prices on, so
+ * the settings screen can label “Часы” or “Ночи” without knowing the category.
+ * The returned `rules` is exactly what `calculatePrice` expects.
+ */
+export function resolveCollectionPricing(collection, stored) {
+  const policyKey = COLLECTION_PRICING_POLICIES[collection] ?? null;
+  const defaults = COLLECTION_PRICING_DEFAULTS[collection] ?? FALLBACK_COLLECTION_PRICING;
+  const pick = (value, fallback, min = 1) => Math.max(min, Math.round(finite(value) ?? fallback));
+  const dimensions = getPricingPolicy(policyKey).dimensions;
+
+  const minUnits = pick(stored?.minUnits, defaults.minUnits);
+  const roundTo = pick(stored?.roundTo, defaults.roundTo);
+  const maxUnits = Math.max(minUnits, pick(stored?.maxUnits, defaults.maxUnits));
+  // Resolved once and shared: `tiers` is what the settings screen edits and
+  // `rules` is what the engine quotes on. Two shapes of the same numbers would
+  // be two chances for the preview and the price to disagree.
+  const tiers = Object.fromEntries(resolvePricingRules(policyKey, { roundTo, tiers: stored?.tiers ?? {} })
+    .dimensions.map((item) => [item.field, item.tiers]));
+
+  return {
+    collection,
+    policyKey,
+    currency: (typeof stored?.currency === 'string' && stored.currency.trim() ? stored.currency : defaults.currency).toUpperCase(),
+    baseRate: Math.max(0, finite(stored?.baseRate) ?? defaults.baseRate),
+    minUnits,
+    maxUnits,
+    unitsStep: pick(stored?.unitsStep, defaults.unitsStep),
+    // Defaults must sit inside the range the operator actually sells, or the
+    // booking card opens on a value its own stepper refuses to keep.
+    defaultUnits: Math.min(maxUnits, Math.max(minUnits, pick(stored?.defaultUnits, defaults.defaultUnits))),
+    defaultGroup: pick(stored?.defaultGroup, defaults.defaultGroup),
+    roundTo,
+    unitField: dimensions.find((item) => item.mode === PRICING_MODES.MULTIPLY)?.field ?? null,
+    groupField: dimensions.find((item) => item.mode === PRICING_MODES.SURCHARGE)?.field ?? null,
+    tiers,
+    rules: { roundTo, tiers },
+  };
+}
+
+export function validateCollectionPricing(collection, stored) {
+  const errors = {};
+  const policyKey = COLLECTION_PRICING_POLICIES[collection] ?? null;
+  if (!(finite(stored?.baseRate) > 0)) errors.baseRate = 'Укажите тариф больше нуля — по нему считается вся категория.';
+  const min = finite(stored?.minUnits);
+  const max = finite(stored?.maxUnits);
+  if (min !== null && max !== null && min > max) errors.maxUnits = 'Максимум не может быть меньше минимума.';
+  if (finite(stored?.unitsStep) !== null && finite(stored.unitsStep) < 1) errors.unitsStep = 'Шаг не может быть меньше 1.';
+  return { ...errors, ...validatePricingRules(policyKey, { tiers: stored?.tiers ?? {} }) };
 }
 
 /**

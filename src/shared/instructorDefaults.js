@@ -7,30 +7,26 @@
  * placeholders honest: what the operator previews is what the site renders.
  */
 
-import { COLLECTION_PRICING_POLICIES, resolvePricingRules, validatePricingRules } from './pricing.js';
 import { toSlug } from './slug.js';
 
 const DISCIPLINE_LABELS = { ski: 'Ski', snowboard: 'Snowboard' };
 
-/** Which pricing ladders an instructor card configures. */
-export const INSTRUCTOR_PRICING_POLICY = COLLECTION_PRICING_POLICIES.instructors;
-
-/** Numeric and enum defaults applied whenever the operator leaves a field empty. */
+/**
+ * Numeric and enum defaults applied whenever the operator leaves a field empty.
+ *
+ * The tariff, the bookable hours and the volume ladders are NOT here: they
+ * belong to the instructors category, not to one coach — see
+ * `resolveCollectionPricing` in ./pricing.js. What stays per instructor is the
+ * group size they personally take.
+ */
 export const INSTRUCTOR_DEFAULTS = {
   status: 'draft',
   role: 'Instructor',
   experience_years: 0,
   rating: 0,
   review_count: 0,
-  hourly_rate_gel: 345,
-  min_hours: 2,
-  max_hours: 12,
-  hours_step: 2,
   min_people: 1,
   max_people: 10,
-  default_hours: 2,
-  default_people: 1,
-  price_round_to: 5,
   sort_order: 100,
 };
 
@@ -50,18 +46,6 @@ export function describeDisciplines(disciplines = []) {
   // Matches the existing catalog copy: “Ski & snowboard”, not “Ski & Snowboard”.
   const tail = labels.slice(1).map((label) => label.toLowerCase());
   return `${labels[0]} & ${tail.join(' & ')}`;
-}
-
-/**
- * The ladders this instructor prices on, with the platform defaults filled in
- * for every dimension the operator has not configured. The editor renders the
- * result as the editable value, so what an operator sees is what is charged.
- */
-export function resolveInstructorPricing(input = {}) {
-  return resolvePricingRules(INSTRUCTOR_PRICING_POLICY, {
-    roundTo: input.price_round_to,
-    tiers: input.price_tiers ?? {},
-  });
 }
 
 export function describeExperience(years) {
@@ -110,9 +94,6 @@ export function resolveInstructor(input = {}) {
     disciplines: Array.isArray(input.disciplines) ? input.disciplines.filter(Boolean) : [],
     languages: Array.isArray(input.languages) ? input.languages.filter(Boolean) : [],
     tags: Array.isArray(input.tags) ? input.tags.map((item) => text(item)).filter(Boolean) : [],
-    // Normalized here rather than at the database boundary so the editor
-    // preview, the saved rows and the quoted price cannot drift apart.
-    price_tiers: Object.fromEntries(resolveInstructorPricing(input).dimensions.map((item) => [item.field, item.tiers])),
     certifications: Array.isArray(input.certifications) ? input.certifications : [],
     media: Array.isArray(input.media) ? input.media : [],
     reviewsList: Array.isArray(input.reviewsList) ? input.reviewsList : [],
@@ -134,7 +115,10 @@ export function validateInstructor(input = {}, { publishing = false } = {}) {
   if (!text(input.display_name)) errors.display_name = 'Укажите имя инструктора.';
   else if (!toSlug(input.slug) && !toSlug(input.display_name)) errors.slug = 'Из имени не получается адрес страницы — заполните поле «Адрес страницы» латиницей.';
   if (publishing && !(Array.isArray(input.disciplines) ? input.disciplines : []).length) errors.disciplines = 'Перед публикацией выберите хотя бы одну дисциплину.';
-  const pricing = validatePricingRules(INSTRUCTOR_PRICING_POLICY, { tiers: input.price_tiers ?? {} });
-  for (const [field, message] of Object.entries(pricing)) errors[`price_tiers.${field}`] = message;
+  const minPeople = Number(input.min_people);
+  const maxPeople = Number(input.max_people);
+  if (Number.isFinite(minPeople) && Number.isFinite(maxPeople) && minPeople > maxPeople) {
+    errors.max_people = 'Максимум гостей не может быть меньше минимума.';
+  }
   return errors;
 }

@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Button, FormField, Input, Select } from '../../../components';
-import { AUTOFILLED_FIELDS, INSTRUCTOR_DEFAULTS, INSTRUCTOR_PRICING_POLICY, listAutofilledFields, resolveInstructor, validateInstructor } from '../../../shared/instructorDefaults';
-import { AutoField, ChoiceGroup, CmsEditorShell, FieldGroup, GalleryEditor, ListEditor, ParagraphEditor, Repeater, isBlank } from './CmsEditorParts';
-import { CmsPricingEditor, pricingPreviewRange } from './CmsPricingEditor';
+import { AUTOFILLED_FIELDS, INSTRUCTOR_DEFAULTS, listAutofilledFields, resolveInstructor, validateInstructor } from '../../../shared/instructorDefaults';
+import { AutoField, ChoiceGroup, CmsEditorShell, FieldGroup, GalleryEditor, InheritedSettings, ListEditor, ParagraphEditor, Repeater, describeCategoryPricing, isBlank } from './CmsEditorParts';
 import { MediaUploadField } from './MediaUploadField';
 import './CmsInstructorEditor.scss';
 
@@ -30,6 +29,8 @@ export function CmsInstructorEditor({
   onNavigate,
   onUploadMedia,
   onDeleteMedia,
+  onOpenCategorySettings,
+  categoryPricing,
   counts,
   instructorCount = 0,
   busy = false,
@@ -45,12 +46,9 @@ export function CmsInstructorEditor({
   const autofilled = useMemo(() => listAutofilledFields(value), [value]);
   const visibleErrors = submitted ? validateInstructor(value, { publishing: submitted === 'publish' || isPublished }) : {};
 
-  // The price preview walks the range this instructor actually sells, so the
-  // operator reads their own ladder rather than a generic example.
-  const setting = (name) => Number(value[name]) > 0 ? Math.round(Number(value[name])) : INSTRUCTOR_DEFAULTS[name];
-  const hourlyRate = setting('hourly_rate_gel');
-  const hourPreview = useMemo(() => pricingPreviewRange(setting('min_hours'), setting('max_hours'), setting('hours_step')), [value.min_hours, value.max_hours, value.hours_step]);
-  const peoplePreview = useMemo(() => pricingPreviewRange(setting('min_people'), setting('max_people'), 1), [value.min_people, value.max_people]);
+  // Read-only echo of what this instructor inherits, so an operator can see the
+  // price they are selling at without being able to fork it by accident.
+  const categorySummary = useMemo(() => describeCategoryPricing(categoryPricing), [categoryPricing]);
 
   const submit = (action) => {
     setSubmitted(action);
@@ -138,29 +136,17 @@ export function CmsInstructorEditor({
       <GalleryEditor value={value.media} previewLabel={value.display_name} placeholderKind="instructor" onChange={(next) => field('media', next)} onUploadMedia={onUploadMedia} onDeleteMedia={onDeleteMedia} />
     </FieldGroup>
 
-    <FieldGroup collapsible feeds="BookingConfigurator" title="Бронирование и цена" description="Значения по умолчанию подходят большинству инструкторов — меняйте только при необходимости.">
-      <div className="cms-editor__grid">
-        <FormField label="Тариф, GEL/час"><Input type="number" min="0" value={value.hourly_rate_gel ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.hourly_rate_gel}`} onChange={input('hourly_rate_gel')} /></FormField>
-        <FormField label="Мин. часов"><Input type="number" min="1" value={value.min_hours ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.min_hours}`} onChange={input('min_hours')} /></FormField>
-        <FormField label="Макс. часов"><Input type="number" min="1" value={value.max_hours ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.max_hours}`} onChange={input('max_hours')} /></FormField>
-        <FormField label="Шаг часов"><Input type="number" min="1" value={value.hours_step ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.hours_step}`} onChange={input('hours_step')} /></FormField>
+    <FieldGroup collapsible feeds="BookingConfigurator" title="Бронирование" description="Личное у инструктора — только размер группы, которую он берёт. Тариф, часы и скидки едины для всей категории.">
+      <div className="cms-editor__two-columns">
         <FormField label="Мин. гостей"><Input type="number" min="1" value={value.min_people ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.min_people}`} onChange={input('min_people')} /></FormField>
-        <FormField label="Макс. гостей"><Input type="number" min="1" value={value.max_people ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.max_people}`} onChange={input('max_people')} /></FormField>
-        <FormField label="Часов по умолчанию"><Input type="number" min="1" value={value.default_hours ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.default_hours}`} onChange={input('default_hours')} /></FormField>
-        <FormField label="Гостей по умолчанию"><Input type="number" min="1" value={value.default_people ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.default_people}`} onChange={input('default_people')} /></FormField>
+        <FormField label="Макс. гостей" error={visibleErrors.max_people}><Input type="number" min="1" value={value.max_people ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.max_people}`} onChange={input('max_people')} /></FormField>
       </div>
-    </FieldGroup>
-
-    <FieldGroup collapsible feeds="BookingConfigurator" title="Шкалы цены" description="Насколько дешевеет урок с ростом числа часов и гостей. Таблицы ниже пересчитываются на лету — это ровно те суммы, которые увидит гость.">
-      <CmsPricingEditor
-        policyKey={INSTRUCTOR_PRICING_POLICY}
-        basePrice={hourlyRate}
-        roundTo={value.price_round_to}
-        value={value.price_tiers ?? {}}
-        onChange={(next) => field('price_tiers', next)}
-        onRoundToChange={(next) => field('price_round_to', next)}
-        previewRanges={{ duration: hourPreview, participants: peoplePreview }}
-        errors={visibleErrors}
+      <InheritedSettings
+        title="Из настроек категории «Инструкторы»"
+        note="Одинаково у всех инструкторов. Изменение здесь затронет всю категорию."
+        items={categorySummary}
+        actionLabel="Открыть настройки категории"
+        onAction={onOpenCategorySettings}
       />
     </FieldGroup>
 

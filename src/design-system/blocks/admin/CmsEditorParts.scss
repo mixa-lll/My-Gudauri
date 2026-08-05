@@ -109,3 +109,13 @@
   .cms-editor__summary-media { max-width: 120px; }
   .cms-editor__two-columns, .cms-editor__gallery-meta, .cms-editor__facts-row { grid-template-columns: 1fr; }
 }
+
+/* Settings an object inherits from its category: visible, but not editable here */
+.cms-editor__inherited { display: grid; gap: var(--space-350); padding: var(--space-400); border-radius: var(--radius-md); background: var(--surface-subtle); }
+.cms-editor__inherited-head strong { font: var(--fw-semibold) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+.cms-editor__inherited-head p { max-width: 64ch; margin: var(--space-150) 0 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-label-size) / var(--type-label-line) var(--font-body); }
+.cms-editor__inherited dl { display: grid; gap: var(--space-200); margin: 0; }
+.cms-editor__inherited dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-300); }
+.cms-editor__inherited dt { color: var(--text-secondary); font-size: var(--type-label-size); line-height: var(--type-label-line); }
+.cms-editor__inherited dd { margin: 0; font-size: var(--type-label-size); line-height: var(--type-label-line); font-variant-numeric: tabular-nums; text-align: right; }
+.cms-editor__inherited .ui-button { justify-self: start; }
