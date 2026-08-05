@@ -534,6 +534,10 @@ export const ru = {
     ]
   },
   transfer: {
+    upToSeats: 'до {{count}} мест',
+    fixedPriceBadge: 'Фиксированная цена за машину',
+    toAnchor: 'В {{place}}',
+    fromAnchor: 'Из {{place}}',
     loading: 'Загружаем трансфер…',
     notFound: 'Трансфер не найден',
     backToList: 'Ко всем трансферам',

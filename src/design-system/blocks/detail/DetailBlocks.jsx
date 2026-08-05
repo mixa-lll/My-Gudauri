@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { Fragment, isValidElement, useCallback, useEffect, useId, useRef, useState } from 'react';
 import {
   ActivityCard,
   Badge,
@@ -98,7 +98,10 @@ export function ObjectHero({ variant = 'split', mediaVariant = 'default', breadc
   return <section className={`ds-object-hero ds-object-hero--${variant} ${media ? 'ds-object-hero--with-media' : 'ds-object-hero--without-media'}`}>
     {breadcrumbs ? <div className="ds-object-hero__back">{breadcrumbs}</div> : null}
     <div className="ds-object-hero__content">
-      <div className="ds-object-hero__badges">{badges.map((badge) => {
+      <div className="ds-object-hero__badges">{badges.map((badge, index) => {
+        // A category may need its own eyebrow element — a vehicle-type tag, say —
+        // beside the plain labels, so a ready node is passed straight through.
+        if (isValidElement(badge)) return <Fragment key={badge.key ?? index}>{badge}</Fragment>;
         const item = typeof badge === 'string' ? { label: badge } : badge;
         return <Badge key={item.label} tone={item.tone} size={item.size}>{item.label}</Badge>;
       })}</div>

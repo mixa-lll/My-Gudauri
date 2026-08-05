@@ -534,6 +534,10 @@ export const ka = {
     ]
   },
   transfer: {
+    upToSeats: '{{count}} ადგილამდე',
+    fixedPriceBadge: 'ფიქსირებული ფასი ავტომობილზე',
+    toAnchor: '{{place}}-ში',
+    fromAnchor: '{{place}}-დან',
     loading: 'ტრანსფერი იტვირთება…',
     notFound: 'ტრანსფერი ვერ მოიძებნა',
     backToList: 'ყველა ტრანსფერი',

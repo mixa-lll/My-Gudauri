@@ -534,6 +534,10 @@ export const en = {
     ]
   },
   transfer: {
+    upToSeats: 'up to {{count}} seats',
+    fixedPriceBadge: 'Fixed price per vehicle',
+    toAnchor: 'To {{place}}',
+    fromAnchor: 'From {{place}}',
     loading: 'Loading transfer…',
     notFound: 'Transfer not found',
     backToList: 'Back to transfers',

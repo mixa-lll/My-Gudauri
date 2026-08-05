@@ -11,11 +11,13 @@ import {
   ObjectHeroGallery,
   ObjectMainTags,
   ObjectReviews,
+  SegmentedControl,
   SiteFooter,
   SiteNavbar,
   TransferConditions,
   TransferObjectPattern,
   TransferRelatedOffers,
+  VehicleTypeTag,
 } from '../../design-system';
 import { createBookingDraft, createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -47,7 +49,7 @@ function factValue(facts, labels) {
 export function TransferPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { language, t, tList } = useLanguage();
   const [transfer, setTransfer] = useState(null);
   const [related, setRelated] = useState([]);
@@ -175,14 +177,49 @@ export function TransferPage() {
     }));
     navigate(`/booking/transfers/${transfer.slug}`);
   };
+  // The hero answers the three questions a transfer page opens with — which car,
+  // which way, and what it costs — before any scrolling. Direction is a control
+  // here rather than a URL the guest has to guess at.
+  const bodyTypeLabel = transfer.vehicle?.bodyType ? t(`catalog.transfers.vehicleTypes.${transfer.vehicle.bodyType}`) : null;
+  const modelLine = [
+    [transfer.vehicle?.make, transfer.vehicle?.model].filter(Boolean).join(' ') || vehicle.name,
+    transfer.seats ? t('transfer.upToSeats', { count: transfer.seats }) : null,
+  ].filter(Boolean).join(' · ');
+  const journeyNote = [
+    route.zoneType,
+    route.distanceKm ? `≈${route.distanceKm} ${t('transfer.km')}` : null,
+    route.duration,
+  ].filter(Boolean).join(' · ');
+  const setDirection = (next) => {
+    const params = new URLSearchParams(searchParams);
+    if (next === 'from-gudauri') params.set('direction', 'from-gudauri');
+    else params.delete('direction');
+    setSearchParams(params, { replace: true });
+  };
   const hero = <ObjectHero
-    variant="centered"
+    variant="split"
     mediaVariant="gallery"
     breadcrumbs={<BackLink to="/transfers">{t('transfer.backToList')}</BackLink>}
-    badges={transfer.category ? [{ label: transfer.category, tone: 'accent' }] : []}
-    title={vehicle.name || transfer.name}
+    badges={[
+      ...(bodyTypeLabel ? [<VehicleTypeTag key="body" type={transfer.vehicle.bodyType} label={bodyTypeLabel} />] : []),
+      { label: routeLabel },
+      { label: t('transfer.fixedPriceBadge'), tone: 'accent' },
+    ]}
+    title={<>{bodyTypeLabel ?? vehicle.name ?? transfer.name}{modelLine ? <small>{modelLine}</small> : null}</>}
     description={transfer.description}
     rating={transfer.rating ? { value: transfer.rating, reviewsLabel: transfer.reviews, href: '#reviews' } : undefined}
+    details={<div className="transfer-hero-controls">
+      {journeyNote ? <p className="transfer-hero-controls__note">{journeyNote}</p> : null}
+      {route.bidirectional === false ? null : <SegmentedControl
+        label={t('transfer.directionLabel')}
+        options={[
+          { value: 'to-gudauri', label: t('transfer.toAnchor', { place: route.destination }) },
+          { value: 'from-gudauri', label: t('transfer.fromAnchor', { place: route.destination }) },
+        ]}
+        value={direction}
+        onChange={setDirection}
+      />}
+    </div>}
     media={<ObjectHeroGallery
       images={gallery}
       objectName={vehicle.name || transfer.name}
