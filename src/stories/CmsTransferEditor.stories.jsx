@@ -8,10 +8,12 @@ const transfer = {
   card_image_url: '/assets/design-1/mosaic/transfer-1-144-upd.png', hero_image_url: '/assets/design-1/mosaic/transfer-1-144-upd.png',
   hero_image_alt: 'Gudauri ↔ Tbilisi Airport', price_amount: 180, currency: 'GEL', price_suffix: 'per vehicle',
   rating: 4.9, review_count: 128, catalog_group: 'tbilisi', vehicle_class: 'Comfort', seats: 3,
-  duration_label: '~2 hours', pickup_type: 'airport', sort_order: 10,
+  large_bags: 3, carry_on_bags: 2, ski_capacity: 2, vehicle_options: ['Winter tyres', 'Climate control'],
+  duration_label: '~2 hours', distance_km: 120, pickup_type: 'airport', road_notice: 'Journey time depends on winter road conditions.', sort_order: 10,
   tags: ['~2 hours', 'Meet & greet', 'Ski rack'],
   facts: [{ label: 'Class', value: 'Comfort' }, { label: 'Seats', value: 'Up to 3' }, { label: 'Journey', value: '~2 hours' }],
   included: ['Meet & greet', 'Flight tracking', '60 min waiting', 'Ski luggage'],
+  conditions: [{ label: 'Waiting', value: '60 minutes after landing' }, { label: 'Stops', value: 'On request' }],
   media: [{ type: 'image', url: '/assets/design-1/mosaic/transfer-1-144-upd.png', alt: 'Transfer car', featured: true }],
   reviewsList: [],
 };
@@ -20,7 +22,7 @@ const transfer = {
 const blankTransfer = {
   slug: '', status: 'draft', name: '', category: '', description: '', card_image_url: '', hero_image_url: '',
   hero_image_alt: '', price_amount: '', currency: '', price_suffix: '', rating: 0, review_count: 0,
-  catalog_group: '', vehicle_class: '', seats: '', duration_label: '', pickup_type: '', sort_order: '',
+  catalog_group: '', vehicle_class: '', seats: '', large_bags: '', carry_on_bags: '', ski_capacity: '', vehicle_options: [], duration_label: '', distance_km: '', pickup_type: '', road_notice: '', conditions: [], sort_order: '',
   tags: [], facts: [], included: [], media: [], reviewsList: [],
 };
 

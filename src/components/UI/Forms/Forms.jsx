@@ -45,6 +45,10 @@ export const DateField = forwardRef(function DateField(props, ref) {
   return <Input ref={ref} type="date" {...props} />;
 });
 
+export const TimeField = forwardRef(function TimeField(props, ref) {
+  return <Input ref={ref} type="time" {...props} />;
+});
+
 function dateKey(date) {
   return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
 }

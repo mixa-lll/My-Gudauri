@@ -1,7 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
+  BookingExtrasPicker,
   BookingFlow,
   BookingFormSection,
+  BookingJourneyHeader,
+  BookingPickupChoice,
   BookingRequestSummary,
   Button,
   DateField,
@@ -13,6 +16,7 @@ import {
   QuantityStepper,
   Select,
   Textarea,
+  TimeField,
   TimeSlotPicker,
 } from '../../design-system';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -125,7 +129,7 @@ export function InquiryDetailsStep({ answers, update, definition, error, actions
   const { t } = useLanguage();
   return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.inquiryDetails.title')} description={t('booking.steps.inquiryDetails.description')} error={error} actions={actions}>
     <FormField label={t('booking.fields.preferredDate')} required><DateField value={answers.date ?? ''} onChange={(event) => update('date', event.target.value)} /></FormField>
-    {Object.values(definition.fields).filter((field) => !definition.entryFields.includes(field.id)).map((field) => <FormField label={field.label} key={field.id}><Input value={answers[field.id] ?? ''} onChange={(event) => update(field.id, event.target.value)} /></FormField>)}
+    {Object.values(definition.fields).filter((field) => !definition.entryFields.includes(field.id)).map((field) => <FormField label={field.label} required={field.required} key={field.id}><Input required={field.required} placeholder={field.placeholder} value={answers[field.id] ?? ''} onChange={(event) => update(field.id, event.target.value)} /></FormField>)}
     <FormField label={t('booking.fields.additionalDetails')}><Textarea value={answers.details ?? ''} onChange={(event) => update('details', event.target.value)} /></FormField>
   </BookingFormSection>;
 }
@@ -180,6 +184,148 @@ export function InstructorMatchPreferencesStep({ answers, update, error, actions
   </BookingFormSection>;
 }
 
+/*
+ * Transfer helpers.
+ *
+ * A route's meeting points always describe its city end. Which end that is
+ * depends on the direction the guest chose, so everything below resolves the
+ * journey first and only then decides which question to ask.
+ */
+function transferJourney(offer, answers) {
+  const route = offer?.route ?? {};
+  const anchor = route.destination || 'Gudauri';
+  const city = route.origin || '';
+  const fromGudauri = answers.direction === 'From Gudauri';
+  return {
+    fromGudauri,
+    anchor,
+    city,
+    origin: fromGudauri ? anchor : city,
+    destination: fromGudauri ? city : anchor,
+    points: route.pickupPoints ?? [],
+    duration: route.duration,
+  };
+}
+
+function defaultPoint(points) {
+  return points.find((point) => point.isDefault) ?? points[0] ?? null;
+}
+
+function activePoint(offer, answers) {
+  const points = offer?.route?.pickupPoints ?? [];
+  return points.find((point) => String(point.id) === String(answers.pointId)) ?? defaultPoint(points);
+}
+
+function selectedExtras(offer, answers) {
+  return (offer?.extras ?? [])
+    .map((item) => ({ ...item, quantity: Number(answers.extras?.[item.slug]) || 0 }))
+    .filter((item) => item.quantity > 0);
+}
+
+function extrasSummary(offer, answers) {
+  return selectedExtras(offer, answers).map((item) => (item.maxQuantity > 1 && item.quantity > 1 ? `${item.label} × ${item.quantity}` : item.label)).join(', ');
+}
+
+export function TransferRouteStep({ answers, update, offer, error, actions, stepNumber }) {
+  const { t } = useLanguage();
+  const journey = transferJourney(offer, answers);
+  const point = activePoint(offer, answers);
+
+  // The guest can land here from a card with no point chosen yet; seed the
+  // route's default so the radio group and the stored answer never disagree.
+  useEffect(() => {
+    if (!answers.pointId && point) selectPoint(point);
+  }, [point?.id]);
+
+  function selectPoint(next) {
+    update('pointId', next.id);
+    update('pointKind', next.kind);
+    update('pointLabel', next.label);
+  }
+
+  const swapDirection = () => update('direction', journey.fromGudauri ? 'To Gudauri' : 'From Gudauri');
+  const cityQuestion = t(journey.fromGudauri ? 'booking.transfer.dropoffQuestion' : 'booking.transfer.pickupQuestion', { city: journey.city });
+  const gudauriLabel = t(journey.fromGudauri ? 'booking.transfer.gudauriPickup' : 'booking.transfer.gudauriDropoff');
+
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferRoute.title')} description={t('booking.steps.transferRoute.description')} error={error} actions={actions}>
+    <BookingJourneyHeader
+      fromLabel={t('booking.transfer.from')}
+      toLabel={t('booking.transfer.to')}
+      origin={journey.origin}
+      destination={journey.destination}
+      meta={journey.duration}
+      note={t('booking.transfer.samePrice')}
+      swapLabel={t('booking.transfer.swap')}
+      onSwap={swapDirection}
+    />
+    <BookingPickupChoice
+      label={cityQuestion}
+      options={journey.points.map((item) => ({ id: item.id, kind: item.kind, label: item.label, hint: item.hint }))}
+      value={point?.id ?? ''}
+      onChange={(id) => {
+        const next = journey.points.find((item) => String(item.id) === String(id));
+        if (next) selectPoint(next);
+      }}
+    />
+    {point?.requiresFlight ? <FormField label={t(journey.fromGudauri ? 'booking.transfer.flightDeparture' : 'booking.transfer.flightArrival')} hint={t('booking.transfer.flightHint')}>
+      <Input value={answers.flightNumber ?? ''} placeholder="A9 641" onChange={(event) => update('flightNumber', event.target.value)} />
+    </FormField> : null}
+    {point?.requiresAddress ? <FormField label={t('booking.transfer.cityAddress', { city: journey.city })} required>
+      <Input value={answers.cityAddress ?? ''} onChange={(event) => update('cityAddress', event.target.value)} />
+    </FormField> : null}
+    {point && !point.requiresFlight && !point.requiresAddress ? <FormField label={t('booking.transfer.meetingNotes')} required>
+      <Input value={answers.meetingNotes ?? ''} onChange={(event) => update('meetingNotes', event.target.value)} />
+    </FormField> : null}
+    <FormField label={gudauriLabel} required hint={t('booking.transfer.gudauriHint')}>
+      <Input value={answers.gudauriAddress ?? ''} onChange={(event) => update('gudauriAddress', event.target.value)} />
+    </FormField>
+  </BookingFormSection>;
+}
+
+export function TransferTripStep({ answers, update, definition, offer, error, actions, stepNumber }) {
+  const { t } = useLanguage();
+  const journey = transferJourney(offer, answers);
+  const point = activePoint(offer, answers);
+  const isFlight = Boolean(point?.requiresFlight);
+  const fields = definition.fields;
+  const counters = [fields.passengers, fields.suitcases, fields.skis];
+
+  return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.transferTrip.title')} description={t('booking.steps.transferTrip.description')} error={error} actions={actions}>
+    <div className="booking-request-flow__field-grid">
+      <FormField label={t(isFlight && !journey.fromGudauri ? 'booking.transfer.arrivalDate' : 'booking.transfer.date')} required>
+        <DateField value={answers.date ?? ''} min={toDateKey(new Date())} onChange={(event) => update('date', event.target.value)} />
+      </FormField>
+      <FormField label={t(isFlight && !journey.fromGudauri ? 'booking.transfer.arrivalTime' : 'booking.transfer.time')} hint={t(isFlight ? 'booking.transfer.timeHintFlight' : 'booking.transfer.timeHint')}>
+        <TimeField value={answers.time ?? ''} onChange={(event) => update('time', event.target.value)} />
+      </FormField>
+    </div>
+    <div className="booking-request-flow__counter-grid">
+      {counters.map((field) => <div className="booking-request-flow__counter-field" key={field.id}>
+        <span>{field.label}</span>
+        <div>
+          <p><strong>{Number(answers[field.id]) || 0}</strong></p>
+          <QuantityStepper variant="booking" label={field.label} value={Number(answers[field.id]) || 0} min={field.min} max={field.max} onChange={(value) => update(field.id, value)} />
+        </div>
+      </div>)}
+    </div>
+    {offer?.extras?.length ? <BookingExtrasPicker
+      label={t('booking.transfer.extrasLabel')}
+      description={t('booking.transfer.extrasDescription')}
+      items={offer.extras.map((item) => ({
+        ...item,
+        priceLabel: item.priceAmount > 0 ? `${item.priceAmount} ${item.currency}` : t('booking.transfer.free'),
+        addLabel: t('booking.transfer.addExtra'),
+        selectedLabel: t('booking.transfer.extraAdded'),
+      }))}
+      value={answers.extras ?? {}}
+      onChange={(value) => update('extras', value)}
+    /> : null}
+    <FormField label={t('booking.fields.additionalDetails')}>
+      <Textarea rows="3" value={answers.comment ?? ''} onChange={(event) => update('comment', event.target.value)} placeholder={t('booking.transfer.commentPlaceholder')} />
+    </FormField>
+  </BookingFormSection>;
+}
+
 export function ContactDetailsStep({ answers, update, definition, error, actions, stepNumber }) {
   const { t } = useLanguage();
   const isMatch = definition.presentation === 'operator-match';
@@ -201,8 +347,12 @@ export function RequestReviewStep({ answers, definition, offer, error, actions, 
   return <BookingFormSection stepNumber={stepNumber} title={t('booking.steps.review.title')} description={t('booking.steps.review.description')} error={error} actions={actions}>
     <dl className="booking-request-flow__review">
       <div><dt>{t('booking.review.offer')}</dt><dd>{offer.object.name}</dd></div>
+      {offer.route ? <div><dt>{t('booking.transfer.directionLabel')}</dt><dd>{`${transferJourney(offer, answers).origin} → ${transferJourney(offer, answers).destination}`}</dd></div> : null}
+      {answers.pointLabel ? <div><dt>{t(answers.direction === 'From Gudauri' ? 'booking.transfer.dropoffLabel' : 'booking.transfer.pickupLabel')}</dt><dd>{answers.pointLabel}</dd></div> : null}
+      {answers.flightNumber ? <div><dt>{t('booking.transfer.flightLabel')}</dt><dd>{answers.flightNumber}</dd></div> : null}
       {answers.dateRange?.start ? <div><dt>{t('booking.review.dates')}</dt><dd>{formatDateRange(answers.dateRange, locale)}</dd></div> : null}
-      {!answers.dateRange?.start && answers.date ? <div><dt>{t('booking.review.date')}</dt><dd>{answers.date}</dd></div> : null}
+      {!answers.dateRange?.start && answers.date ? <div><dt>{t('booking.review.date')}</dt><dd>{[answers.date, answers.time].filter(Boolean).join(' · ')}</dd></div> : null}
+      {extrasSummary(offer, answers) ? <div><dt>{t('booking.transfer.extrasLabel')}</dt><dd>{extrasSummary(offer, answers)}</dd></div> : null}
       {matchHours(answers) ? <div><dt>{t('booking.review.preferredTime')}</dt><dd>{t('booking.review.hoursSelected', { hours: matchHours(answers) })}</dd></div> : null}
       {answers.duration ? <div><dt>{t('booking.review.duration')}</dt><dd>{t('booking.review.hours', { hours: answers.duration })}</dd></div> : null}
       {answers.participants ? <div><dt>{t('booking.review.participants')}</dt><dd>{answers.participants}</dd></div> : null}
@@ -239,7 +389,11 @@ const detailsStep = (labelKey, scope) => ({
   labelKey,
   scope,
   Component: InquiryDetailsStep,
-  validate: (answers, t) => required(answers.date) ? '' : t('booking.validation.date'),
+  validate: (answers, t, definition) => {
+    if (!required(answers.date)) return t('booking.validation.date');
+    const missing = Object.values(definition.fields).filter((field) => !definition.entryFields.includes(field.id) && field.required && !required(answers[field.id]));
+    return missing.length ? t('booking.validation.details') : '';
+  },
   compactSummary: inquiryCompactSummary,
   summaryRows: inquirySummaryRows,
 });
@@ -313,9 +467,44 @@ export const BOOKING_STEP_REGISTRY = Object.freeze({
       muted: !answers.activities?.length,
     }] : [],
   },
+  'transfer-route': {
+    labelKey: 'booking.steps.transferRoute.label',
+    scope: ['transfers'],
+    Component: TransferRouteStep,
+    validate: (answers, t, definition, offer) => {
+      const point = activePoint(offer, answers);
+      if (!point) return t('booking.validation.transferPoint');
+      if (point.requiresAddress && !required(answers.cityAddress)) return t('booking.validation.transferCityAddress');
+      if (!point.requiresAddress && !point.requiresFlight && !required(answers.meetingNotes)) return t('booking.validation.transferMeeting');
+      return required(answers.gudauriAddress) ? '' : t('booking.validation.transferGudauriAddress');
+    },
+    compactSummary: ({ answers, offer }) => {
+      const journey = transferJourney(offer, answers);
+      return [`${journey.origin} → ${journey.destination}`, answers.pointLabel].filter(Boolean).join(' · ');
+    },
+    summaryRows: ({ answers, offer, t }) => {
+      const journey = transferJourney(offer, answers);
+      return [
+        { label: t('booking.transfer.directionLabel'), value: `${journey.origin} → ${journey.destination}`, emphasis: true },
+        { label: t(journey.fromGudauri ? 'booking.transfer.dropoffLabel' : 'booking.transfer.pickupLabel'), value: answers.pointLabel || t('booking.notSelected'), muted: !answers.pointLabel },
+        { label: t('booking.transfer.flightLabel'), value: answers.flightNumber || null },
+      ];
+    },
+  },
+  'transfer-trip': {
+    labelKey: 'booking.steps.transferTrip.label',
+    scope: ['transfers'],
+    Component: TransferTripStep,
+    validate: (answers, t) => required(answers.date) && Number(answers.passengers) > 0 ? '' : t('booking.validation.transferTrip'),
+    compactSummary: ({ answers, t }) => [answers.date, answers.time, t('booking.review.people', { count: Number(answers.passengers) || 0 })].filter(Boolean).join(' · '),
+    summaryRows: ({ answers, offer, currentStep, stepIndex, t }) => currentStep >= stepIndex ? [
+      { label: t('booking.transfer.whenLabel'), value: [answers.date, answers.time].filter(Boolean).join(' · ') || t('booking.notSelected'), muted: !answers.date },
+      { label: t('booking.transfer.groupLabel'), value: t('booking.review.people', { count: Number(answers.passengers) || 0 }) },
+      { label: t('booking.transfer.extrasLabel'), value: extrasSummary(offer, answers) || null },
+    ] : [],
+  },
   'activity-details': detailsStep('booking.steps.activityDetails', ['activities']),
   'rental-details': detailsStep('booking.steps.rentalDetails', ['rental']),
-  'transfer-details': detailsStep('booking.steps.transferDetails', ['transfers']),
   'stay-details': detailsStep('booking.steps.stayDetails', ['stays']),
   'service-details': detailsStep('booking.steps.serviceDetails', ['services']),
   'place-details': detailsStep('booking.steps.placeDetails', ['places']),
@@ -330,10 +519,10 @@ export const BOOKING_STEP_REGISTRY = Object.freeze({
   'request-review': { labelKey: 'booking.steps.review.label', scope: ['shared'], Component: RequestReviewStep, validate: () => '', compactSummary: ({ t }) => t('booking.readyToSend'), summaryRows: () => [] },
 });
 
-export function getBookingStepPresentation(stepId, { definition, answers, currentStep = 0, stepIndex = 0, t, locale }) {
+export function getBookingStepPresentation(stepId, { definition, offer, answers, currentStep = 0, stepIndex = 0, t, locale }) {
   const step = BOOKING_STEP_REGISTRY[stepId];
   if (!step) throw new Error(`Booking flow: unregistered step “${stepId}”.`);
-  const context = { definition, answers, currentStep, stepIndex, t, locale };
+  const context = { definition, offer, answers, currentStep, stepIndex, t, locale };
   return {
     label: t(step.labelKey),
     scope: step.scope,
@@ -363,12 +552,12 @@ export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswer
   });
   const goTo = (index) => { setError(''); setCurrentStep(index); };
   const next = () => {
-    const validationError = active.validate(answers, t);
+    const validationError = active.validate(answers, t, definition, offer);
     if (validationError) { setError(validationError); return; }
     goTo(Math.min(currentStep + 1, steps.length - 1));
   };
   const submit = async () => {
-    const validationError = active.validate(answers, t);
+    const validationError = active.validate(answers, t, definition, offer);
     if (validationError) { setError(validationError); return; }
     setSubmitState({ status: 'loading', message: '', requestCode: '' });
     try {
@@ -378,7 +567,7 @@ export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswer
       setSubmitState({ status: 'error', message: submitError.message, requestCode: '' });
     }
   };
-  const summaryRows = steps.flatMap((step, stepIndex) => step.summaryRows?.({ definition, answers, currentStep, stepIndex, t, locale }) ?? []);
+  const summaryRows = steps.flatMap((step, stepIndex) => step.summaryRows?.({ definition, offer, answers, currentStep, stepIndex, t, locale }) ?? []);
   const matchingHours = definition.presentation === 'operator-match' ? matchHours(answers) : 0;
   const matchingHasPrice = definition.presentation === 'operator-match' && currentStep > 0 && matchingHours > 0;
 
@@ -393,7 +582,7 @@ export function BookingRequestFlow({ definition, offer, initialAnswers, onAnswer
 
   return <BookingFlow
     step={<div className="booking-request-flow__steps">{steps.map((step, index) => {
-      if (index !== currentStep) return <BookingFormSection key={step.id} compact stepNumber={index + 1} title={t(step.labelKey)} summary={index < currentStep ? step.compactSummary?.({ definition, answers, currentStep, stepIndex: index, t, locale }) : ''} onEdit={index < currentStep ? () => goTo(index) : undefined} />;
+      if (index !== currentStep) return <BookingFormSection key={step.id} compact stepNumber={index + 1} title={t(step.labelKey)} summary={index < currentStep ? step.compactSummary?.({ definition, offer, answers, currentStep, stepIndex: index, t, locale }) : ''} onEdit={index < currentStep ? () => goTo(index) : undefined} />;
       const StepComponent = step.Component;
       return <StepComponent key={step.id} answers={answers} update={update} definition={definition} offer={offer} stepNumber={index + 1} actions={actions} error={error || (submitState.status === 'error' ? submitState.message : '')} />;
     })}</div>}

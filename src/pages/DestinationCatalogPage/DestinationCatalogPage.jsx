@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar } from '../../design-system';
+import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, PromoArea, SiteFooter, SiteNavbar } from '../../design-system';
 import { CATALOG_FILTERS, matchesActiveRefinements, matchesFilter } from '../../data/catalogFilters';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -275,6 +275,16 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const otherRoutesCount = isTransfers ? items.length - categoryItems.length : 0;
   const showOtherRoutesCard = isTransfers && activeCategory !== 'all' && otherRoutesCount > 0;
   const fromGudauri = routeDirection === 'from-gudauri';
+  // An airport shortcut lands here with ?pickup=airport; carry it onto every
+  // card so the choice survives into the request form.
+  const requestedPickup = searchParams.get('pickup') ?? '';
+  // Every transfer route serves the same meeting points at one price, so the
+  // cards advertise them rather than the catalog listing them as separate rides.
+  const pickupLabels = {
+    airport: t('catalog.transfers.pickup.airport'),
+    city: t('catalog.transfers.pickup.city'),
+    custom: t('catalog.transfers.pickup.custom'),
+  };
   // Card categories are stored as "Gudauri ↔ X"; render them pointed the way
   // the visitor chose so every badge answers "which direction is this?".
   const directionalItem = (item) => {
@@ -282,7 +292,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     const [anchorEnd, cityEnd] = (item.category ?? '').split(' ↔ ');
     if (!cityEnd) return item;
     const route = fromGudauri ? `${anchorEnd} → ${cityEnd}` : `${cityEnd} → ${anchorEnd}`;
-    return { ...item, category: route, route, direction: routeDirection };
+    return { ...item, category: route, route, direction: routeDirection, pickup: requestedPickup };
   };
 
   if (!config) return <Navigate to="/" replace />;
@@ -347,6 +357,15 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                 label={section === 'instructors' ? t('catalog.instructors.disciplinesLabel') : t('catalog.common.categoriesLabel', { title: sectionTitle })}
               />
             )}
+            {isTransfers && !requestedPickup ? (
+              <PromoArea promo={{
+                type: 'shortcut',
+                eyebrow: t('catalog.transfers.airportPromo.kicker'),
+                title: t('catalog.transfers.airportPromo.title'),
+                description: t('catalog.transfers.airportPromo.description'),
+                action: <Link className="ui-button ui-button--accent ui-button--md" to="/transfers?category=tbilisi&amp;pickup=airport">{t('catalog.transfers.airportPromo.action')}</Link>,
+              }} />
+            ) : null}
             <FilterToolbar
               title={section === 'instructors' ? t('catalog.instructors.filtersTitle') : t('catalog.common.filtersTitle')}
               titleId="destination-list-title"
@@ -366,7 +385,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
               <p role="alert">{t('catalog.common.error', { items: sectionTitle })}</p>
             ) : displayedItems.length ? (
               <ListingCardGrid className="destination-grid" columns={3} ariaLabel={t('catalog.common.resultsAriaLabel', { title: sectionTitle })}>
-                {displayedItems.map((item) => <DestinationCard item={directionalItem(item)} section={section} key={item.slug} />)}
+                {displayedItems.map((item) => <DestinationCard item={directionalItem(item)} section={section} pickupLabels={isTransfers ? pickupLabels : undefined} key={item.slug} />)}
                 {showOtherRoutesCard ? (
                   <MoreResultsCard
                     eyebrow={t('catalog.transfers.otherRoutes.kicker')}

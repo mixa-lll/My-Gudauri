@@ -16,8 +16,7 @@
 .catalog-route-panel__kicker {
   color: var(--text-accent);
   font: var(--fw-semibold) var(--type-caption-size) / 1.2 var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 
 .catalog-route-panel__heading > p:last-child {
@@ -54,8 +53,7 @@
 .catalog-route-panel__endpoint > small {
   color: var(--text-secondary);
   font: var(--fw-semibold) 11px / 1.2 var(--font-body);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 
 .catalog-route-panel__endpoint--city {

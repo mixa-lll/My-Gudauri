@@ -7,7 +7,15 @@ const meta = {
   component: FaqAccordion,
   tags: ['autodocs'],
   args: { items: en.faq.items, initialOpen: 0, kicker: 'Frequently asked questions', title: 'FAQ' },
-  parameters: { composition: defineComposition({ root: 'FaqAccordion' }) }
+  parameters: {
+    composition: defineComposition({ root: 'FaqAccordion' }),
+    docs: {
+      description: {
+        component:
+          'The standard FAQ block, used on every page that answers questions. The open item is a white card that lifts off the page; closed rows are flat warm-grey blocks with a dark plus, and the open one turns accent with a single bar. Header follows the standard section heading: accent kicker, display title, supporting copy. The dark `object` variant is the only opt-out.'
+      }
+    }
+  }
 };
 
 export default meta;

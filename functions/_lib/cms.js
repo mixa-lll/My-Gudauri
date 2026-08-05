@@ -17,6 +17,7 @@ const MEDIA_REFERENCES = [
   { table: 'activity_media', columns: ['url'] },
   { table: 'transfers', columns: ['card_image_url', 'hero_image_url'] },
   { table: 'transfer_media', columns: ['url'] },
+  { table: 'transfer_vehicle_media', columns: ['url'] },
 ];
 
 /**

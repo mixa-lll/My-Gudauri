@@ -38,10 +38,23 @@ export function RentalCard({ item, basePath = '/rental', ...props }) {
 
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,route?:string,direction?:'to-gudauri'|'from-gudauri',duration?:string,vehicle?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} TransferCardData */
 /** @param {{item: TransferCardData, basePath?: string, layout?: 'vertical'|'horizontal'|'featured', headingLevel?: number, className?: string, loading?: 'lazy'|'eager'}} props */
-export function TransferCard({ item, basePath = '/transfers', ...props }) {
+// One route serves every meeting point at one price, so the card advertises the
+// pickup options it covers instead of splitting into look-alike offers.
+const PICKUP_GLYPHS = { airport: '✈', city: '⌂', custom: '⌖' };
+
+function PickupMarkers({ points = [], labels = {} }) {
+  const kinds = [...new Set(points.map((point) => point.kind))];
+  if (kinds.length < 2) return null;
+  return kinds.map((kind) => <ListingCardPill key={kind} title={labels[kind]}>{PICKUP_GLYPHS[kind] ?? '⌖'} {labels[kind] ?? kind}</ListingCardPill>);
+}
+
+export function TransferCard({ item, basePath = '/transfers', pickupLabels, ...props }) {
   const tags = item.tags?.length ? item.tags : [item.duration, item.vehicle];
-  const direction = item.direction ? `?direction=${encodeURIComponent(item.direction)}` : '';
-  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} to={`${basePath}/${item.slug}${direction}`} mediaTop={<ListingCardPill>{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={<Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
+  // A preselected direction or meeting point rides along to the offer page, so
+  // an airport shortcut keeps its choice whichever vehicle the guest opens.
+  const query = new URLSearchParams(Object.entries({ direction: item.direction, pickup: item.pickup }).filter(([, value]) => value)).toString();
+  const markers = <PickupMarkers points={item.routeEntity?.pickupPoints} labels={pickupLabels} />;
+  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} to={`${basePath}/${item.slug}${query ? `?${query}` : ''}`} mediaTop={<ListingCardPill>{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={markers ?? <Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
 }
 
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} StayCardData */

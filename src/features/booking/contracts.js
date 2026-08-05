@@ -103,20 +103,44 @@ export const BOOKING_FLOW_REGISTRY = Object.freeze({
     pricingPolicy: 'rental-daily-v1',
     requestKind: 'inquiry',
   }),
-  'transfer-request-v1': Object.freeze({
-    key: 'transfer-request-v1',
-    version: 1,
+  // One route serves every pickup point, so the flow — not the catalog — is where
+  // the guest says whether the driver meets them at arrivals or at a city address.
+  // Direction and pickup never change the price; they change what we must ask.
+  'transfer-request-v2': Object.freeze({
+    key: 'transfer-request-v2',
+    version: 2,
     category: 'transfers',
     title: 'Request a transfer',
     priceLabel: 'Estimated transfer total',
-    entryNote: 'The final route and pickup time are confirmed by the manager.',
-    confirmationText: 'Continue to add your travel details. The manager confirms the vehicle and exact pickup time.',
-    entryFields: ['passengers', 'pickup'],
+    entryNote: 'The price is the same in both directions, from the airport or from the city.',
+    confirmationText: 'Choose your pickup point and travel details. The manager confirms the driver and the exact time.',
+    entryFields: ['direction', 'passengers'],
     fields: Object.freeze({
+      direction: { id: 'direction', label: 'Direction', control: 'select', initial: 'To Gudauri', options: ['To Gudauri', 'From Gudauri'], required: true },
+      // The route's meeting points describe its city end. Which end that is
+      // depends on the direction, so the fields are named after the place
+      // rather than after pickup or drop-off.
+      pointId: { id: 'pointId', initial: '' },
+      pointKind: { id: 'pointKind', initial: '' },
+      pointLabel: { id: 'pointLabel', label: 'Meeting point', initial: '' },
+      flightNumber: { id: 'flightNumber', label: 'Flight number', control: 'text', initial: '', placeholder: 'For example A9 641' },
+      cityAddress: { id: 'cityAddress', label: 'Address', control: 'text', initial: '', placeholder: 'Hotel, apartment or street address' },
+      meetingNotes: { id: 'meetingNotes', label: 'Where should the driver wait?', control: 'text', initial: '', placeholder: 'Describe the meeting point' },
+      gudauriAddress: { id: 'gudauriAddress', label: 'Address in Gudauri', control: 'text', initial: '', placeholder: 'Hotel or apartment name' },
+      date: { id: 'date', label: 'Date', control: 'date', initial: '', required: true },
+      time: { id: 'time', label: 'Time', control: 'time', initial: '' },
       passengers: { id: 'passengers', label: 'Passengers', singularLabel: 'Passenger', shortLabel: 'ppl', shortSingularLabel: 'person', control: 'quantity', min: 1, max: 16, step: 1, initial: 2 },
-      pickup: { id: 'pickup', label: 'Pickup point', control: 'text', initial: '', placeholder: 'Tbilisi airport', required: true },
+      suitcases: { id: 'suitcases', label: 'Suitcases', singularLabel: 'Suitcase', control: 'quantity', min: 0, max: 16, step: 1, initial: 2 },
+      skis: { id: 'skis', label: 'Skis or snowboards', singularLabel: 'Ski or snowboard', control: 'quantity', min: 0, max: 16, step: 1, initial: 0 },
+      // { [extraSlug]: quantity } — the catalog of extras comes from the CMS.
+      extras: { id: 'extras', initial: {} },
+      comment: { id: 'comment', initial: '' },
+      contactName: { id: 'contactName', initial: '' },
+      contactPhone: { id: 'contactPhone', initial: '' },
+      contactEmail: { id: 'contactEmail', initial: '' },
+      messenger: { id: 'messenger', initial: 'WhatsApp' },
     }),
-    steps: ['transfer-details', COMMON_CONTACT_STEP, COMMON_REVIEW_STEP],
+    steps: ['transfer-route', 'transfer-trip', COMMON_CONTACT_STEP, COMMON_REVIEW_STEP],
     pricingPolicy: 'transfer-fixed-v1',
     requestKind: 'inquiry',
   }),
@@ -177,7 +201,7 @@ export const CATEGORY_BOOKING_REGISTRY = Object.freeze({
   instructors: { flowKey: 'instructor-lesson-v1', objectPatternKey: 'instructor' },
   activities: { flowKey: 'activity-request-v1', objectPatternKey: 'activity' },
   rental: { flowKey: 'rental-request-v1', objectPatternKey: 'rental' },
-  transfers: { flowKey: 'transfer-request-v1', objectPatternKey: 'transfer' },
+  transfers: { flowKey: 'transfer-request-v2', objectPatternKey: 'transfer' },
   stays: { flowKey: 'stay-request-v1', objectPatternKey: 'stay' },
   services: { flowKey: 'service-request-v1', objectPatternKey: 'activity' },
   places: { flowKey: 'place-request-v1', objectPatternKey: 'activity' },
@@ -212,9 +236,13 @@ export function resolveEntryFields(definition, offer) {
   });
 }
 
-export function createBookingOffer({ definition, object, currency = 'GEL', basePrice = 0, constraints = {}, availability, pricingRules }) {
+export function createBookingOffer({ definition, object, currency = 'GEL', basePrice = 0, constraints = {}, availability, pricingRules, route, extras }) {
   return Object.freeze({
     object,
+    // Transfers carry the route (with its meeting points) and the add-on
+    // catalog so the flow asks the right questions without refetching.
+    route: route ?? null,
+    extras: extras ?? [],
     flowKey: definition.key,
     flowVersion: definition.version,
     pricingPolicyKey: definition.pricingPolicy,

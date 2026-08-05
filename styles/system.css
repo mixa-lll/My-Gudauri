@@ -64,6 +64,9 @@
   --border-default: var(--grey-200);
   --border-strong: var(--grey-500);
   --border-media-overlay: rgba(32, 33, 30, 0.12);
+  /* Rule that opens a section header. Tinted rather than a grey step so it
+     stays a hairline against both the page and card surfaces. */
+  --border-hairline: rgba(32, 33, 30, 0.14);
   --action-primary: var(--grey-700);
   --action-primary-hover: var(--grey-800);
   --action-primary-pressed: var(--grey-600);
@@ -245,6 +248,7 @@
   --layout-object-sticky-offset: calc(var(--control-height-lg) + var(--space-700));
   --media-landscape: 4 / 3;
   --media-wide: 16 / 9;
+  --media-panorama: 21 / 9;
   --media-portrait: 3 / 4;
   --media-square: 1 / 1;
 }

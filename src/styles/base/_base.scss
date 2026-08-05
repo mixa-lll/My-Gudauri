@@ -13,3 +13,27 @@ body.is-scroll-locked {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--layout-gutter);
 }
+
+/* Shared card affordance from the home page language: on hover the card draws
+   a hairline ring inside its own radius and shifts its accent colour, which
+   the ↗ badge inherits through currentColor. An inset ring is used rather than
+   a border so nothing reflows, and rather than a lift so neighbouring cards in
+   a tight grid stay aligned. */
+.hover-card {
+  cursor: pointer;
+  transition:
+    box-shadow var(--motion-duration-base, 220ms) var(--motion-ease-standard, ease),
+    color var(--motion-duration-base, 220ms) var(--motion-ease-standard, ease);
+}
+
+.hover-card:hover,
+.hover-card:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(32, 33, 30, 0.18);
+  color: var(--text-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-card {
+    transition: none;
+  }
+}

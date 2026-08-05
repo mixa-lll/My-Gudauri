@@ -18,6 +18,8 @@ export function createBookingDraft({ definition, offer, answers = {} }) {
       constraints: offer.constraints,
       availability: offer.availability,
       pricingPolicyKey: offer.pricingPolicyKey,
+      route: offer.route ?? null,
+      extras: offer.extras ?? [],
     },
     answers: createInitialBookingAnswers(definition, answers),
     updatedAt: new Date().toISOString(),

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import {
   ActivityCard,
   Badge,
@@ -8,6 +8,7 @@ import {
   InstructorCard,
   ListingCardGrid,
   Notice,
+  ObjectMediaGallery,
   Rating,
   RentalCard,
   SectionHeading,
@@ -15,6 +16,7 @@ import {
   StayCard,
   TransferCard,
 } from '../../../components';
+import { TransferConditions, TransferRouteDetails, TransferVehicleDetails } from './transfer/TransferDetailBlocks';
 import './DetailBlocks.scss';
 
 function ObjectSection({ id, kicker, title, description, actions, children, className = '', headingClassName, titleId }) {
@@ -24,16 +26,87 @@ function ObjectSection({ id, kicker, title, description, actions, children, clas
   </section>;
 }
 
-export function ObjectHero({ variant = 'split', breadcrumbs, title, description, media, badges = [], rating, titleId }) {
+export function ObjectHeroGallery({
+  images = [],
+  objectName,
+  objectLabel = 'Object media',
+  openLabel = 'Open gallery',
+  photosLabel = 'photos',
+  placeholderKind,
+}) {
+  const galleryImages = images.filter((image) => image?.src && image?.type !== 'video');
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const galleryTriggerRef = useRef(null);
+
+  useEffect(() => {
+    if (galleryIndex >= galleryImages.length) setGalleryIndex(0);
+  }, [galleryImages.length, galleryIndex]);
+
+  const openGallery = (index, trigger) => {
+    galleryTriggerRef.current = trigger;
+    setGalleryIndex(index);
+    setIsGalleryOpen(true);
+  };
+  const closeGallery = useCallback(() => {
+    setIsGalleryOpen(false);
+    requestAnimationFrame(() => galleryTriggerRef.current?.focus({ preventScroll: true }));
+  }, []);
+
+  if (!galleryImages.length) return <MediaPlaceholder kind={placeholderKind} label={objectName} />;
+
+  const mainImage = galleryImages[0];
+  const previewImages = galleryImages.slice(1, 5);
+  return <div className="ds-object-hero-gallery">
+    <button
+      className="ds-object-hero-gallery__main"
+      type="button"
+      aria-label={`${openLabel}: ${objectName}`}
+      onClick={(event) => openGallery(0, event.currentTarget)}
+    >
+      <img src={mainImage.src} alt={mainImage.alt || objectName} loading="eager" />
+      <span className="ds-object-hero-gallery__open" aria-hidden="true">
+        <span><strong>{openLabel}</strong><small>{galleryImages.length} {photosLabel}</small></span>
+        <span>↗</span>
+      </span>
+    </button>
+    {previewImages.length ? <div className="ds-object-hero-gallery__thumbs" aria-label={objectLabel}>
+      {previewImages.map((image, index) => <button
+        type="button"
+        aria-label={`${openLabel}: ${index + 2}`}
+        onClick={(event) => openGallery(index + 1, event.currentTarget)}
+        key={`${image.src}-${index}`}
+      >
+        <img src={image.thumbnail || image.src} alt="" aria-hidden="true" loading="lazy" />
+      </button>)}
+    </div> : null}
+    <ObjectMediaGallery
+      images={galleryImages}
+      index={galleryIndex}
+      objectName={objectName}
+      objectLabel={objectLabel}
+      isOpen={isGalleryOpen}
+      onClose={closeGallery}
+      onIndexChange={setGalleryIndex}
+    />
+  </div>;
+}
+
+export function ObjectHero({ variant = 'split', mediaVariant = 'default', breadcrumbs, title, description, media, badges = [], rating, details, titleId }) {
   if (!['split', 'centered', 'media-first'].includes(variant)) throw new Error(`ObjectHero: unknown variant “${variant}”.`);
+  if (!['default', 'gallery'].includes(mediaVariant)) throw new Error(`ObjectHero: unknown media variant “${mediaVariant}”.`);
   return <section className={`ds-object-hero ds-object-hero--${variant} ${media ? 'ds-object-hero--with-media' : 'ds-object-hero--without-media'}`}>
     {breadcrumbs ? <div className="ds-object-hero__back">{breadcrumbs}</div> : null}
     <div className="ds-object-hero__content">
-      <div className="ds-object-hero__badges">{badges.map((badge) => <Badge key={badge}>{badge}</Badge>)}</div>
+      <div className="ds-object-hero__badges">{badges.map((badge) => {
+        const item = typeof badge === 'string' ? { label: badge } : badge;
+        return <Badge key={item.label} tone={item.tone} size={item.size}>{item.label}</Badge>;
+      })}</div>
       <SectionHeading headingLevel="h1" size="display" align={variant === 'centered' ? 'center' : 'start'} title={title} titleId={titleId} description={description} />
       {rating ? <div className="ds-object-hero__rating"><Rating rating={rating.value} size="md" tone="accent" variant="plaque" />{rating.href ? <a href={rating.href}>{rating.reviewsLabel}</a> : <span>{rating.reviewsLabel}</span>}</div> : null}
+      {details ? <div className="ds-object-hero__details">{details}</div> : null}
     </div>
-    {media ? <div className="ds-object-hero__media">{media}</div> : null}
+    {media ? <div className={`ds-object-hero__media ds-object-hero__media--${mediaVariant}`}>{media}</div> : null}
   </section>;
 }
 
@@ -273,7 +346,17 @@ export function RouteMap({ id = 'route-map', kicker = 'Navigation', title = 'Rou
   </ObjectSection>;
 }
 
-export const ADDITIONAL_SECTION_REGISTRY = { routeProgram: RouteProgram, activitySchedule: ActivitySchedule, routeMap: RouteMap, includedServices: IncludedServices, equipmentList: EquipmentList, safetyRequirements: SafetyRequirements };
+export const ADDITIONAL_SECTION_REGISTRY = {
+  routeProgram: RouteProgram,
+  activitySchedule: ActivitySchedule,
+  routeMap: RouteMap,
+  includedServices: IncludedServices,
+  equipmentList: EquipmentList,
+  safetyRequirements: SafetyRequirements,
+  transferVehicle: TransferVehicleDetails,
+  transferRoute: TransferRouteDetails,
+  transferConditions: TransferConditions,
+};
 
 export function RegisteredAdditionalSections({ sections = [] }) {
   return <>{sections.map((section, index) => { const Component = ADDITIONAL_SECTION_REGISTRY[section.type]; if (!Component) throw new Error(`Object detail: unregistered additional section “${section.type}”.`); return <Component key={section.id ?? `${section.type}-${index}`} {...section} />; })}</>;

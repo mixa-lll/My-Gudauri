@@ -1,7 +1,7 @@
 .faq {
   display: grid;
-  grid-template-columns: minmax(220px, 0.36fr) minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 56px);
+  grid-template-columns: minmax(260px, 0.6fr) minmax(0, 1.4fr);
+  gap: clamp(28px, 4vw, 64px);
 }
 
 .faq__head {
@@ -10,22 +10,59 @@
 
 .faq__list {
   display: grid;
-  gap: var(--space-300);
+  gap: 10px;
   align-content: start;
 }
 
+/* Standard FAQ treatment: the open answer is a white card that lifts off the
+   page, every closed row a flat warm-grey block. The weight difference is what
+   marks the open one as the answer rather than just another row. The dark
+   object-detail variant below opts out. */
+.faq .ui-accordion__item {
+  padding-inline: 28px;
+  border-radius: 20px;
+  background: var(--grey-150);
+  box-shadow: none;
+}
+
+.faq .ui-accordion__item:hover {
+  background: var(--grey-200);
+}
+
+.faq .ui-accordion__item.is-open {
+  background: var(--grey-white);
+  box-shadow:
+    0 2px 4px rgba(24, 25, 22, 0.05),
+    0 16px 40px rgba(24, 25, 22, 0.08);
+}
+
+.faq .ui-accordion__item button {
+  min-height: 84px;
+  font: var(--fw-semibold) 20px / 1.4 var(--font-body);
+}
+
+/* Closed rows carry a dark plus; the open one turns accent and drops to a
+   single bar. */
+.faq .ui-accordion__icon {
+  width: 40px;
+  height: 40px;
+  background: var(--grey-700);
+  color: var(--grey-white);
+}
+
+.faq .ui-accordion__item.is-open .ui-accordion__icon {
+  background: var(--accent-600);
+}
+
+/* Object-detail pages keep their own padding and rounding, but no longer
+   invert: the questions read the same here as everywhere else, which is the
+   point of having one FAQ standard. */
 .faq--object {
   padding: clamp(var(--space-700), 4vw, var(--space-1000));
   border-radius: var(--radius-lg);
-  background: var(--surface-inverse);
-}
-
-.faq--object .section-heading__kicker {
-  color: color-mix(in srgb, var(--text-inverse) 72%, transparent);
-}
-
-.faq--object .section-heading__title {
-  color: var(--text-inverse);
+  /* Page tint, not white: the open answer is white, so a white block behind it
+     would erase the contrast the standard depends on. */
+  background: var(--surface-page);
 }
 
 @media (max-width: 860px) {
@@ -41,5 +78,16 @@
 @media (max-width: 520px) {
   .faq {
     gap: var(--space-500);
+  }
+}
+
+@media (max-width: 860px) {
+  .faq .ui-accordion__item {
+    padding-inline: 20px;
+  }
+
+  .faq .ui-accordion__item button {
+    min-height: 68px;
+    font-size: 17px;
   }
 }

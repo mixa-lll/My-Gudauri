@@ -1,16 +1,67 @@
+@charset "UTF-8";
 .section-heading {
+  display: grid;
+  min-width: 0;
+}
+
+.section-heading__lead {
   display: grid;
   justify-items: start;
   gap: 10px;
   min-width: 0;
 }
 
+/* Title left, supporting copy right, both meeting the same baseline. The left
+   column is the wider of the two so a long title breaks before the paragraph
+   does. */
+.section-heading--split {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: end;
+}
+
+.section-heading--split .section-heading__lead {
+  gap: 28px;
+}
+
+.section-heading--split .section-heading__aside {
+  display: grid;
+  justify-items: end;
+  justify-self: end;
+  gap: 20px;
+  text-align: right;
+}
+
+.section-heading--split .section-heading__description {
+  max-width: 380px;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.section-heading--split .section-heading__actions {
+  margin: 0;
+}
+
+/* Hairline that opens a section. Sits above the header rather than between
+   sections so the rule lines up with the grid, not the padding. */
+.section-heading--divided {
+  padding-top: 26px;
+  border-top: 1px solid var(--border-hairline, rgba(32, 33, 30, 0.14));
+}
+
+.section-heading--kicker-accent .section-heading__kicker {
+  color: var(--text-accent);
+}
+
+/* Sentence case, not caps. Set in the brand red at label size, the kicker
+   already reads as a separate tier above the title — uppercase on top of that
+   made it shout, and at display sizes the tracking needed for caps left it
+   looking wider than the heading it introduces. */
 .section-heading__kicker {
   margin: 0;
   color: var(--text-secondary);
   font: var(--fw-semibold) var(--type-label-size)/var(--type-label-line) var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
 
 .section-heading__title {
@@ -54,7 +105,7 @@
   line-height: 1;
 }
 
-.section-heading--center {
+.section-heading--center .section-heading__lead {
   justify-items: center;
   text-align: center;
 }
@@ -66,6 +117,18 @@
   gap: var(--space-300);
 }
 
+@media (max-width: 900px) {
+  .section-heading--split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .section-heading--split .section-heading__aside {
+    justify-items: start;
+    justify-self: start;
+    text-align: left;
+  }
+}
 @media (max-width: 640px) {
   .section-heading__title {
     font-size: 36px;

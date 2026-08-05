@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 import { MediaPlaceholder } from '../MediaPlaceholder/MediaPlaceholder';
 import { Badge } from '../UI/Badge/Badge';
+import { HoverArrow } from '../UI/HoverArrow/HoverArrow';
 import { StarRating } from '../UI/StarRating/StarRating';
 import './ListingCard.scss';
 
@@ -36,7 +37,7 @@ export function ListingCard({
   if (!Number.isInteger(headingLevel) || headingLevel < 2 || headingLevel > 6) throw new Error('ListingCard: headingLevel must be between 2 and 6.');
 
   return (
-    <Link className={cn('listing-card', `listing-card--${layout}`, `listing-card--media-${mediaPosition}`, className)} to={to}>
+    <Link className={cn('listing-card', 'hover-card', `listing-card--${layout}`, `listing-card--media-${mediaPosition}`, className)} to={to}>
       <div className="listing-card__media">
         {image && !imageFailed ? (
           <img src={image} alt={imageAlt} loading={loading} onError={() => setImageFailed(true)} />
@@ -105,7 +106,7 @@ export function ListingCardPrice({ price, suffix }) {
 }
 
 export function ListingCardAction({ children = 'View details' }) {
-  return <span className="listing-card__action">{children}<i aria-hidden="true">↗</i></span>;
+  return <span className="listing-card__action">{children}<HoverArrow /></span>;
 }
 
 export const ListingCardFrame = ListingCard;

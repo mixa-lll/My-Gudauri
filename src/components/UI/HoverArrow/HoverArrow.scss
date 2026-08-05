@@ -1,0 +1,72 @@
+.hover-arrow {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Clips the glyph while it is outside the badge, so the arrow appears to
+     leave and enter through the edge rather than floating over the card. */
+  overflow: hidden;
+}
+
+.hover-arrow__glyph {
+  display: inline-block;
+  font-style: normal;
+  line-height: 1;
+  transform: translate(0, 0);
+}
+
+.hover-arrow--pill {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-pill);
+  /* currentColor, so the badge picks up the card's hover colour for free. */
+  background: currentColor;
+}
+
+.hover-arrow--pill .hover-arrow__glyph {
+  color: var(--grey-white);
+  font-size: 16px;
+}
+
+.hover-arrow--inline .hover-arrow__glyph {
+  font-size: inherit;
+}
+
+/* Out through the top-right, back in from the bottom-left. The two halves are
+   split by a single frame at zero opacity — that is where the glyph is
+   teleported across, so the return never reads as a rewind. */
+@keyframes hover-arrow-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  42% {
+    opacity: 0;
+    transform: translate(85%, -85%);
+  }
+
+  43% {
+    opacity: 0;
+    transform: translate(-85%, 85%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+.hover-card:hover .hover-arrow__glyph,
+.hover-card:focus-visible .hover-arrow__glyph,
+.hover-arrow:hover .hover-arrow__glyph {
+  animation: hover-arrow-fly 620ms var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-card:hover .hover-arrow__glyph,
+  .hover-card:focus-visible .hover-arrow__glyph,
+  .hover-arrow:hover .hover-arrow__glyph {
+    animation: none;
+  }
+}

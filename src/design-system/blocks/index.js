@@ -8,7 +8,7 @@ export { CmsInstructorEditor } from './admin/CmsInstructorEditor';
 export { CmsPricingEditor, pricingPreviewRange } from './admin/CmsPricingEditor';
 export { CmsTransferEditor } from './admin/CmsTransferEditor';
 export { MediaUploadField } from './admin/MediaUploadField';
-export { BookingConfigurator, BookingFormSection, BookingProgress, BookingRequestSummary, BookingWidget, StickyBookingWidget } from './booking/BookingBlocks';
+export { BookingConfigurator, BookingExtrasPicker, BookingFormSection, BookingJourneyHeader, BookingPickupChoice, BookingProgress, BookingRequestSummary, BookingWidget, StickyBookingWidget } from './booking/BookingBlocks';
 export {
   ADDITIONAL_SECTION_REGISTRY,
   ActivitySchedule,
@@ -16,6 +16,7 @@ export {
   IncludedServices,
   MainTag,
   ObjectHero,
+  ObjectHeroGallery,
   ObjectDescription,
   ObjectMainTags,
   ObjectRelatedListings,
@@ -27,5 +28,6 @@ export {
   SafetyRequirements,
 } from './detail/DetailBlocks';
 export { InstructorBookingSteps, InstructorCertifications, INSTRUCTOR_BOOKING_STEPS } from './detail/instructor/InstructorDetailBlocks';
+export { TransferConditions, TransferDirectionSwitch, TransferRelatedOffers, TransferRouteDetails, TransferVehicleDetails } from './detail/transfer/TransferDetailBlocks';
 export * from './editorial/EditorialBlocks';
 export * from './marketing/MarketingBlocks';

@@ -271,3 +271,77 @@ export function BookingRequestSummary({ title = 'Your request', object, rows = [
     {status ? <div className="ds-booking-request-summary__status" role="status">{status}</div> : null}
   </Surface>;
 }
+
+/*
+ * Transfer request blocks.
+ *
+ * Every transfer route runs both ways at one price and can start at an airport,
+ * a city address or an agreed spot. That makes direction and pickup properties
+ * of the request rather than separate offers, so these three blocks carry them:
+ * the journey header states and flips the direction, the pickup choice picks the
+ * meeting point, and the extras list collects add-ons like a child seat.
+ */
+
+function PickupGlyph({ kind }) {
+  if (kind === 'airport') return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.6c.72 0 1.3.58 1.3 1.3v4.35l6.2 3.6v1.7l-6.2-1.95v3.9l2.1 1.5v1.4L10 16.6l-3.4.8v-1.4l2.1-1.5v-3.9L2.5 12.55v-1.7l6.2-3.6V2.9c0-.72.58-1.3 1.3-1.3Z" fill="currentColor" /></svg>;
+  if (kind === 'city') return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 17h14M5 17V6.5l5-3 5 3V17M8.5 9.5h3M8.5 13h3" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17.5s5.5-5 5.5-9a5.5 5.5 0 1 0-11 0c0 4 5.5 9 5.5 9Z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /><circle cx="10" cy="8.5" r="2" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>;
+}
+
+function SwapGlyph() {
+  return <svg viewBox="0 0 20 14" aria-hidden="true"><path d="M4.5 1 1.5 4l3 3M1.5 4h13M15.5 7l3 3-3 3M18.5 10h-13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
+export function BookingJourneyHeader({ fromLabel = 'From', toLabel = 'To', origin, destination, meta, note, swapLabel = 'Swap direction', onSwap }) {
+  if (!origin || !destination) throw new Error('BookingJourneyHeader: origin and destination are required.');
+  return <section className="ds-booking-journey" aria-label={`${origin} → ${destination}`}>
+    <div className="ds-booking-journey__board">
+      <div className="ds-booking-journey__end"><small>{fromLabel}</small><strong>{origin}</strong></div>
+      {onSwap
+        ? <button className="ds-booking-journey__swap" type="button" onClick={onSwap} aria-label={swapLabel} title={swapLabel}><SwapGlyph /></button>
+        : <span className="ds-booking-journey__arrow" aria-hidden="true">→</span>}
+      <div className="ds-booking-journey__end"><small>{toLabel}</small><strong>{destination}</strong></div>
+    </div>
+    {meta || note ? <div className="ds-booking-journey__meta">{meta ? <span>{meta}</span> : null}{note ? <p>{note}</p> : null}</div> : null}
+  </section>;
+}
+
+export function BookingPickupChoice({ label, options = [], value, onChange, name = 'pickup-point' }) {
+  return <fieldset className="ds-booking-pickup">
+    {label ? <legend>{label}</legend> : null}
+    <div className="ds-booking-pickup__options">
+      {options.map((option) => {
+        const selected = value === option.id;
+        return <label className={`ds-booking-pickup__option${selected ? ' is-selected' : ''}`} key={option.id}>
+          <input type="radio" name={name} value={option.id} checked={selected} onChange={() => onChange?.(option.id)} />
+          <span className="ds-booking-pickup__glyph" aria-hidden="true"><PickupGlyph kind={option.kind} /></span>
+          <span className="ds-booking-pickup__text"><strong>{option.label}</strong>{option.hint ? <small>{option.hint}</small> : null}</span>
+        </label>;
+      })}
+    </div>
+  </fieldset>;
+}
+
+export function BookingExtrasPicker({ label, description, items = [], value = {}, onChange, freeLabel = 'Free' }) {
+  const setQuantity = (slug, quantity) => onChange?.({ ...value, [slug]: quantity });
+  return <fieldset className="ds-booking-extras">
+    {label ? <legend>{label}</legend> : null}
+    {description ? <p className="ds-booking-extras__description">{description}</p> : null}
+    <ul>
+      {items.map((item) => {
+        const quantity = Number(value[item.slug]) || 0;
+        const single = (item.maxQuantity ?? 1) <= 1;
+        return <li className={quantity ? 'is-selected' : ''} key={item.slug}>
+          <div className="ds-booking-extras__text">
+            <strong>{item.label}</strong>
+            {item.description ? <small>{item.description}</small> : null}
+            <span className="ds-booking-extras__price">{item.priceLabel ?? freeLabel}</span>
+          </div>
+          {single
+            ? <Button type="button" variant={quantity ? 'accent' : 'secondary'} onClick={() => setQuantity(item.slug, quantity ? 0 : 1)} aria-pressed={quantity > 0}>{quantity ? item.selectedLabel ?? 'Added' : item.addLabel ?? 'Add'}</Button>
+            : <QuantityStepper variant="booking" label={item.label} value={quantity} min={0} max={item.maxQuantity ?? 4} onChange={(next) => setQuantity(item.slug, next)} />}
+        </li>;
+      })}
+    </ul>
+  </fieldset>;
+}

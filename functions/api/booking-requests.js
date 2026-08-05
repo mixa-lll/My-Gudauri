@@ -1,12 +1,14 @@
 import { apiError, json } from '../_lib/http';
 
-const FLOW_CATEGORIES = Object.freeze({
-  'activity-request-v1': 'activities',
-  'rental-request-v1': 'rental',
-  'transfer-request-v1': 'transfers',
-  'stay-request-v1': 'stays',
-  'service-request-v1': 'services',
-  'place-request-v1': 'places',
+// Each accepted flow pins its own version, so a flow can be revised without
+// forcing every other category to move at the same time.
+const FLOWS = Object.freeze({
+  'activity-request-v1': { category: 'activities', version: 1 },
+  'rental-request-v1': { category: 'rental', version: 1 },
+  'transfer-request-v2': { category: 'transfers', version: 2 },
+  'stay-request-v1': { category: 'stays', version: 1 },
+  'service-request-v1': { category: 'services', version: 1 },
+  'place-request-v1': { category: 'places', version: 1 },
 });
 
 const MESSENGERS = ['WhatsApp', 'Telegram', 'Viber'];
@@ -28,7 +30,7 @@ export async function onRequestPost({ request, env }) {
 
   const flowKey = cleanText(payload.flowKey, 80);
   const category = cleanText(payload.category, 40);
-  const expectedCategory = FLOW_CATEGORIES[flowKey];
+  const flow = FLOWS[flowKey];
   const flowVersion = Number.parseInt(payload.flowVersion, 10);
   const objectId = cleanText(payload.objectId, 120);
   const objectSlug = cleanText(payload.objectSlug, 120);
@@ -41,7 +43,7 @@ export async function onRequestPost({ request, env }) {
   const estimatedTotal = Number.isFinite(Number(payload.estimatedTotal)) ? Math.max(0, Number(payload.estimatedTotal)) : null;
   const currency = cleanText(payload.currency, 8) || 'GEL';
 
-  if (!expectedCategory || expectedCategory !== category || flowVersion !== 1) return apiError('Unsupported booking flow.', 400);
+  if (!flow || flow.category !== category || flow.version !== flowVersion) return apiError('Unsupported booking flow.', 400);
   if (!objectId || !objectSlug || !objectName || !answersJson) return apiError('Offer details are incomplete.', 400);
   if (!contactName || !contactPhone || !contactEmail || !messenger) return apiError('Please add your contact details.', 400);
 

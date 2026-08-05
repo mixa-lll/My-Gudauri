@@ -12,6 +12,7 @@ import {
 } from '../../features/booking';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructor } from '../../services/instructorsApi';
+import { getTransfer } from '../../services/transfersApi';
 import { createBookingRequest } from '../../services/bookingRequestsApi';
 import { createInstructorRequest } from '../../services/instructorRequestsApi';
 import './BookingFlowPage.scss';
@@ -47,6 +48,39 @@ async function loadInstructorDraft(slug, t) {
     },
   });
   return createBookingDraft({ definition, offer, answers: { duration: instructor.pricing.defaultHours, participants: instructor.pricing.defaultPeople } });
+}
+
+/*
+ * Reloading the booking page must not lose the request, so a transfer draft can
+ * be rebuilt from the slug alone. The route carries its meeting points, so the
+ * first step can ask about pickup without a second fetch.
+ */
+async function loadTransferDraft(slug, t) {
+  const transfer = await getTransfer(slug);
+  if (!transfer) return null;
+  const definition = localizeBookingDefinition(getBookingFlowDefinition('transfers'), t);
+  const route = transfer.routeEntity ?? { origin: transfer.city, destination: 'Gudauri', duration: transfer.duration, pickupPoints: [] };
+  const points = route.pickupPoints ?? [];
+  const preset = points.find((point) => point.isDefault) ?? points[0] ?? null;
+  const offer = createBookingOffer({
+    definition,
+    object: {
+      id: `transfer:${transfer.id ?? transfer.slug}`,
+      slug: transfer.slug,
+      name: transfer.name,
+      typeLabel: `${route.origin} → ${route.destination}`,
+      image: transfer.image,
+    },
+    basePrice: transfer.priceAmount,
+    currency: transfer.currency,
+    route,
+    extras: transfer.extras ?? [],
+  });
+  return createBookingDraft({
+    definition,
+    offer,
+    answers: { pointId: preset?.id ?? '', pointKind: preset?.kind ?? '', pointLabel: preset?.label ?? '' },
+  });
 }
 
 function instructorPayload({ offer, answers }) {
@@ -97,8 +131,9 @@ export function BookingFlowPage() {
       return () => { active = false; };
     }
 
-    if ((category === 'instructors' || !category) && slug) {
-      loadInstructorDraft(slug, t)
+    const loader = category === 'transfers' ? loadTransferDraft : (category === 'instructors' || !category) ? loadInstructorDraft : null;
+    if (loader && slug) {
+      loader(slug, t)
         .then((draft) => {
           if (!active) return;
           if (!draft) { setState({ status: 'error', draft: null, error: t('booking.page.instructorNotFound') }); return; }

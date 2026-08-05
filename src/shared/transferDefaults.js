@@ -58,6 +58,8 @@ export function resolveTransfer(input = {}) {
     tags: Array.isArray(input.tags) ? input.tags.map((item) => text(item)).filter(Boolean) : [],
     facts: Array.isArray(input.facts) ? input.facts : [],
     included: Array.isArray(input.included) ? input.included.map((item) => text(item)).filter(Boolean) : [],
+    vehicle_options: Array.isArray(input.vehicle_options) ? input.vehicle_options.map((item) => text(item)).filter(Boolean) : [],
+    conditions: Array.isArray(input.conditions) ? input.conditions : [],
     media: Array.isArray(input.media) ? input.media : [],
     reviewsList: Array.isArray(input.reviewsList) ? input.reviewsList : [],
   };

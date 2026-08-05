@@ -135,15 +135,41 @@ export function CmsTransferEditor({
     <FieldGroup
       collapsible
       title="Машина"
-      description="Поля, по которым трансфер отличается от других разделов: класс, вместимость, время и точка подачи."
-      badge={[value.vehicle_class, value.seats, value.duration_label].filter(Boolean).length || null}
+      description="Сущность автомобиля переиспользуется на разных маршрутах: характеристики, галерея и отзывы остаются общими."
+      badge={[value.vehicle_class, value.seats, value.large_bags, value.ski_capacity].filter(Boolean).length || null}
     >
       <div className="cms-editor__grid">
         <FormField label="Класс"><Input value={value.vehicle_class ?? ''} placeholder="Comfort" onChange={input('vehicle_class')} /></FormField>
         <FormField label="Мест"><Input type="number" min="1" value={value.seats ?? ''} placeholder="3" onChange={input('seats')} /></FormField>
-        <FormField label="Время в пути"><Input value={value.duration_label ?? ''} placeholder="~2 hours" onChange={input('duration_label')} /></FormField>
-        <FormField label="Подача"><Select value={value.pickup_type ?? ''} onChange={input('pickup_type')}>{pickupOptions.map((option) => <option value={option.value} key={option.value || 'none'}>{option.label}</option>)}</Select></FormField>
+        <FormField label="Больших чемоданов"><Input type="number" min="0" value={value.large_bags ?? ''} placeholder="3" onChange={input('large_bags')} /></FormField>
+        <FormField label="Ручной клади"><Input type="number" min="0" value={value.carry_on_bags ?? ''} placeholder="2" onChange={input('carry_on_bags')} /></FormField>
+        <FormField label="Комплектов лыж / досок"><Input type="number" min="0" value={value.ski_capacity ?? ''} placeholder="2" onChange={input('ski_capacity')} /></FormField>
       </div>
+      <ListEditor label="Опции машины" value={value.vehicle_options} placeholder="Winter tyres" hint="Одинаковы во всех предложениях с этой машиной." onChange={(next) => field('vehicle_options', next)} />
+    </FieldGroup>
+
+    <FieldGroup
+      collapsible
+      title="Маршрут"
+      description="Двунаправленный путь переиспользуется с разными машинами; точные адреса гость укажет в заявке."
+      badge={[value.duration_label, value.distance_km, value.pickup_type].filter(Boolean).length || null}
+    >
+      <div className="cms-editor__grid">
+        <FormField label="Время в пути"><Input value={value.duration_label ?? ''} placeholder="~2 hours" onChange={input('duration_label')} /></FormField>
+        <FormField label="Расстояние, км"><Input type="number" min="1" step="0.1" value={value.distance_km ?? ''} placeholder="120" onChange={input('distance_km')} /></FormField>
+        <FormField label="Зона подачи"><Select value={value.pickup_type ?? ''} onChange={input('pickup_type')}>{pickupOptions.map((option) => <option value={option.value} key={option.value || 'none'}>{option.label}</option>)}</Select></FormField>
+        <FormField label="Примечание о дороге"><Input value={value.road_notice ?? ''} placeholder="Время зависит от погоды и трафика" onChange={input('road_notice')} /></FormField>
+      </div>
+    </FieldGroup>
+
+    <FieldGroup
+      feeds="TransferConditions"
+      title="Условия поездки"
+      description="Ожидание, остановки, отмена и особые запросы именно для этого предложения."
+      collapsible
+      badge={value.conditions?.length || null}
+    >
+      <FactsEditor value={value.conditions} onChange={(next) => field('conditions', next)} hint="Каждая строка — название условия и его значение." />
     </FieldGroup>
 
     <FieldGroup

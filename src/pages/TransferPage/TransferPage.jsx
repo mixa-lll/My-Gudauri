@@ -5,16 +5,17 @@ import {
   BookingConfigurator,
   BookingSteps,
   FaqAccordion,
-  MediaPlaceholder,
   ObjectDescription,
   ObjectDetailPageTemplate,
   ObjectHero,
+  ObjectHeroGallery,
   ObjectMainTags,
-  ObjectRelatedListings,
   ObjectReviews,
   SiteFooter,
   SiteNavbar,
+  TransferConditions,
   TransferObjectPattern,
+  TransferRelatedOffers,
 } from '../../design-system';
 import { createBookingDraft, createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -38,6 +39,11 @@ function reviewDateLabel(value, language) {
   return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(language, { month: 'long', year: 'numeric' }).format(date);
 }
 
+function factValue(facts, labels) {
+  const match = facts.find((item) => labels.some((label) => String(item?.label ?? item?.[0] ?? '').toLowerCase().includes(label)));
+  return match?.value ?? match?.[1];
+}
+
 export function TransferPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -55,7 +61,7 @@ export function TransferPage() {
       .then(([item, all]) => {
         if (!active) return;
         setTransfer(item);
-        setRelated(all.filter((candidate) => candidate.slug !== slug).slice(0, 3));
+        setRelated(all.filter((candidate) => candidate.slug !== slug));
         setStatus(item ? 'ready' : 'not-found');
       })
       .catch(() => active && setStatus('error'));
@@ -77,61 +83,143 @@ export function TransferPage() {
     rating: review.rating,
     avatar: review.avatar || undefined,
   })), [language, transfer]);
+  const gallery = useMemo(() => {
+    const items = [
+      transfer?.heroImage ? { src: transfer.heroImage, alt: transfer.heroImageAlt || transfer.name, featured: true } : null,
+      ...(transfer?.vehicle?.media ?? transfer?.media ?? []),
+    ].filter((item) => item?.src && item?.type !== 'video');
+    const sources = new Set();
+    return items.filter((item) => {
+      if (sources.has(item.src)) return false;
+      sources.add(item.src);
+      return true;
+    });
+  }, [transfer]);
 
   if (status === 'loading') return <main className="transfer-data-state" aria-live="polite">{t('transfer.loading')}</main>;
   if (status === 'not-found') return <main className="transfer-data-state"><h1>{t('transfer.notFound')}</h1><Link to="/transfers">{t('transfer.backToList')}</Link></main>;
   if (status === 'error' || !transfer) return <main className="transfer-data-state"><h1>{t('transfer.unavailable')}</h1><p>{t('object.unavailableText')}</p></main>;
 
-  const { start, finish } = journeyEnds(transfer.category, transfer.city, fromGudauri);
+  const legacyEnds = journeyEnds(transfer.category, transfer.city, fromGudauri);
+  const route = transfer.routeEntity ?? {
+    origin: fromGudauri ? legacyEnds.finish : legacyEnds.start,
+    destination: fromGudauri ? legacyEnds.start : legacyEnds.finish,
+    duration: transfer.duration,
+    zoneType: transfer.pickupType,
+  };
+  const direction = fromGudauri ? 'from-gudauri' : 'to-gudauri';
+  const start = fromGudauri ? route.destination : route.origin;
+  const finish = fromGudauri ? route.origin : route.destination;
   const routeLabel = `${start} → ${finish}`;
   const sourceFacts = (transfer.facts ?? []).map(factPair).filter((item) => item?.label && item?.value);
+  const luggageValue = factValue(sourceFacts, ['bag', 'багаж', 'luggage']);
   const fallbackFacts = [
-    transfer.vehicleClass ? { label: t('transfer.vehicle'), value: transfer.vehicleClass } : null,
     transfer.seats ? { label: t('transfer.seats'), value: String(transfer.seats) } : null,
-    transfer.duration ? { label: t('transfer.duration'), value: transfer.duration } : null,
+    luggageValue ? { label: t('transfer.luggage'), value: luggageValue } : null,
+    route.distanceKm ? { label: t('transfer.distance'), value: `${route.distanceKm} ${t('transfer.km')}` } : null,
+    route.duration ? { label: t('transfer.duration'), value: route.duration } : null,
   ].filter(Boolean);
-  const facts = (sourceFacts.length ? sourceFacts : fallbackFacts).slice(0, 3).map((item) => ({
+  const facts = (fallbackFacts.length >= 3 ? fallbackFacts : sourceFacts).slice(0, 3).map((item) => ({
     label: item.label,
     value: String(item.value).split(/\s*·\s*/).filter(Boolean),
   }));
+  const vehicle = transfer.vehicle ?? {
+    name: transfer.name,
+    className: transfer.vehicleClass,
+    seats: transfer.seats,
+    luggage: { large: luggageValue },
+    skiCapacity: luggageValue,
+    options: transfer.tags,
+    media: transfer.media,
+    isExact: false,
+  };
+  const sameVehicle = related.filter((item) => {
+    if (transfer.vehicle?.id && item.vehicle?.id) return item.vehicle.id === transfer.vehicle.id && item.routeEntity?.id !== transfer.routeEntity?.id;
+    return item.vehicleClass === transfer.vehicleClass && item.seats === transfer.seats && item.category !== transfer.category;
+  }).slice(0, 3);
+  const sameRoute = related.filter((item) => {
+    if (transfer.routeEntity?.id && item.routeEntity?.id) return item.routeEntity.id === transfer.routeEntity.id && item.vehicle?.id !== transfer.vehicle?.id;
+    return item.category === transfer.category && (item.vehicleClass !== transfer.vehicleClass || item.seats !== transfer.seats);
+  }).slice(0, 3);
+  const relatedDirection = (item) => ({ ...item, direction });
   const bookingDefinition = localizeBookingDefinition(getBookingFlowDefinition('transfers'), t);
+  // A ?pickup=airport link (the home-page shortcut) opens this same offer with
+  // the meeting point already chosen, so the airport gets a prominent entry
+  // without becoming a second product.
+  const pickupPoints = route.pickupPoints ?? [];
+  const requestedPickup = searchParams.get('pickup');
+  const presetPoint = pickupPoints.find((point) => point.kind === requestedPickup)
+    ?? pickupPoints.find((point) => point.isDefault)
+    ?? pickupPoints[0]
+    ?? null;
   const bookingOffer = createBookingOffer({
     definition: bookingDefinition,
     object: { id: `transfer:${transfer.id ?? transfer.slug}`, slug: transfer.slug, name: transfer.name, typeLabel: routeLabel, image: transfer.image },
     basePrice: transfer.priceAmount,
     currency: transfer.currency,
     availability: t('object.requestAvailability'),
+    route,
+    extras: transfer.extras ?? [],
   });
   const startBooking = (answers) => {
-    saveBookingDraft(createBookingDraft({ definition: bookingDefinition, offer: bookingOffer, answers: { ...answers, direction: fromGudauri ? 'from-gudauri' : 'to-gudauri', route: routeLabel } }));
+    saveBookingDraft(createBookingDraft({
+      definition: bookingDefinition,
+      offer: bookingOffer,
+      answers: {
+        direction: fromGudauri ? 'From Gudauri' : 'To Gudauri',
+        ...answers,
+        pointId: presetPoint?.id ?? '',
+        pointKind: presetPoint?.kind ?? '',
+        pointLabel: presetPoint?.label ?? '',
+      },
+    }));
     navigate(`/booking/transfers/${transfer.slug}`);
   };
-  const heroMedia = transfer.heroImage
-    ? <img className="transfer-object-media" src={transfer.heroImage} alt={transfer.heroImageAlt || transfer.name} loading="eager" />
-    : <MediaPlaceholder label={transfer.name} kind="transfer" />;
   const hero = <ObjectHero
     variant="centered"
+    mediaVariant="gallery"
     breadcrumbs={<BackLink to="/transfers">{t('transfer.backToList')}</BackLink>}
-    badges={[routeLabel]}
-    title={transfer.name}
+    badges={transfer.category ? [{ label: transfer.category, tone: 'accent' }] : []}
+    title={vehicle.name || transfer.name}
     description={transfer.description}
     rating={transfer.rating ? { value: transfer.rating, reviewsLabel: transfer.reviews, href: '#reviews' } : undefined}
-    media={heroMedia}
+    media={<ObjectHeroGallery
+      images={gallery}
+      objectName={vehicle.name || transfer.name}
+      objectLabel={t('transfer.galleryLabel')}
+      openLabel={t('object.openGallery')}
+      photosLabel={t('object.photos')}
+      placeholderKind="transfer"
+    />}
   />;
   const content = <TransferObjectPattern
     mainTags={<ObjectMainTags items={facts} />}
     objectDescription={<ObjectDescription kicker={t('transfer.aboutKicker')} title={t('object.aboutTitle')} tags={transfer.tags} tagsLabel={t('object.tagsLabel')}><p>{transfer.description}</p></ObjectDescription>}
     additionalSections={[
       {
-        type: 'routeMap',
+        type: 'transferVehicle',
+        kicker: t('transfer.vehicleKicker'),
+        title: t('transfer.vehicleTitle'),
+        description: t('transfer.vehicleDescription'),
+        vehicle,
+        labels: {
+          classLabel: t('transfer.vehicleClass'), seats: t('transfer.seats'), largeBags: t('transfer.largeBags'),
+          carryOn: t('transfer.carryOn'), skis: t('transfer.skis'), gallery: t('transfer.galleryLabel'),
+          model: t('transfer.makeModel'), options: t('transfer.options'), analogueNotice: t('transfer.analogueNotice'),
+        },
+      },
+      {
+        type: 'transferRoute',
         kicker: t('transfer.routeKicker'),
         title: routeLabel,
-        description: transfer.duration ? t('transfer.routeDescription', { duration: transfer.duration }) : t('transfer.routeDescriptionFallback'),
-        start,
-        finish,
-        startLabel: t('transfer.startLabel'),
-        finishLabel: t('transfer.finishLabel'),
-        confirmationLabel: t('transfer.confirmationLabel'),
+        description: route.duration ? t('transfer.routeDescription', { duration: route.duration }) : t('transfer.routeDescriptionFallback'),
+        route,
+        direction,
+        labels: {
+          map: t('transfer.mapLabel', { route: routeLabel }), openMap: t('transfer.openMap'), direction: t('transfer.directionLabel'),
+          from: t('transfer.startLabel'), to: t('transfer.finishLabel'), distance: t('transfer.distance'), duration: t('transfer.duration'),
+          zone: t('transfer.zone'), addressNotice: t('transfer.addressNotice'),
+        },
       },
       ...(transfer.included?.length ? [{
         type: 'includedServices',
@@ -143,12 +231,27 @@ export function TransferPage() {
         excludedLabel: t('transfer.excludedLabel'),
         emptyExcludedLabel: t('transfer.noExclusions'),
       }] : []),
+      {
+        type: 'transferConditions',
+        kicker: t('transfer.conditionsKicker'),
+        title: t('transfer.conditionsTitle'),
+        description: t('transfer.conditionsDescription'),
+        items: transfer.conditions?.length ? transfer.conditions : tList('transfer.defaultConditions'),
+      },
     ]}
-    reviews={<ObjectReviews kicker={t('transfer.reviewsKicker')} title={t('transfer.reviewsTitle')} rating={transfer.rating ? { value: transfer.rating, label: transfer.reviews } : undefined} reviews={reviews} />}
+    reviews={<ObjectReviews kicker={t('transfer.reviewsKicker')} title={t('transfer.reviewsTitle')} description={t('transfer.reviewsDescription', { vehicle: vehicle.name || transfer.name })} rating={transfer.rating ? { value: transfer.rating, label: transfer.reviews } : undefined} reviews={reviews} />}
     bookingSteps={<BookingSteps context="object" items={tList('transfer.bookingSteps')} />}
     faqSection={<FaqAccordion variant="object" items={tList('catalog.transfers.faq')} />}
-    relatedListings={<ObjectRelatedListings cardType="transfer" title={t('transfer.related')} items={related.map((item) => ({ ...item, direction: fromGudauri ? 'from-gudauri' : 'to-gudauri' }))} />}
+    relatedListings={<TransferRelatedOffers
+      sameVehicle={sameVehicle.map(relatedDirection)}
+      sameRoute={sameRoute.map(relatedDirection)}
+      sameVehicleTitle={t('transfer.sameVehicleTitle')}
+      sameVehicleDescription={t('transfer.sameVehicleDescription')}
+      sameRouteTitle={t('transfer.sameRouteTitle')}
+      sameRouteDescription={t('transfer.sameRouteDescription')}
+    />}
     bookingWidget={<BookingConfigurator
+      key={direction}
       title={bookingDefinition.title}
       priceLabel={bookingDefinition.priceLabel}
       object={bookingOffer.object}
@@ -157,7 +260,7 @@ export function TransferPage() {
       availability={bookingOffer.availability}
       entryNote={bookingDefinition.entryNote}
       confirmationText={bookingDefinition.confirmationText}
-      defaultValues={{ passengers: 2, pickup: start }}
+      defaultValues={{ passengers: 2, direction: fromGudauri ? 'From Gudauri' : 'To Gudauri', luggage: 'Standard' }}
       estimate={(answers) => estimateBookingPrice(bookingDefinition, bookingOffer, answers)}
       actionLabel={t('object.continueRequest')}
       onContinue={startBooking}

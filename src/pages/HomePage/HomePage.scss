@@ -109,7 +109,7 @@
   height: 20%;
   opacity: 0.5;
   --tile: 900px;
-  --drift: 240s;
+  --drift: 120s;
   --cloud: url('/assets/design-1/clouds/sky-high.webp');
 }
 
@@ -119,7 +119,7 @@
   height: 24%;
   opacity: 0.72;
   --tile: 850px;
-  --drift: 185s;
+  --drift: 92s;
   --cloud: url('/assets/design-1/clouds/sky-far.webp');
 }
 
@@ -129,7 +129,7 @@
   height: 24%;
   opacity: 0.9;
   --tile: 800px;
-  --drift: 135s;
+  --drift: 68s;
   --cloud: url('/assets/design-1/clouds/sky-mid.webp');
 }
 
@@ -139,7 +139,7 @@
   height: 22%;
   opacity: 1;
   --tile: 750px;
-  --drift: 95s;
+  --drift: 48s;
   --cloud: url('/assets/design-1/clouds/sky-near.webp');
 }
 
@@ -152,7 +152,7 @@
   z-index: 2;
   opacity: 0.95;
   --tile: 1100px;
-  --drift: 62s;
+  --drift: 32s;
   --cloud: url('/assets/design-1/clouds/sky-mid.webp');
 }
 
@@ -163,7 +163,7 @@
   z-index: 2;
   opacity: 0.82;
   --tile: 1300px;
-  --drift: 44s;
+  --drift: 22s;
   --cloud: url('/assets/design-1/clouds/sky-near.webp');
 }
 
@@ -563,8 +563,11 @@
   padding: clamp(64px, 7vw, 104px) 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: auto repeat(3, 280px);
-  gap: var(--layout-gutter);
+  /* Rows carry the card height, and the tall Instructors plate spans two of
+     them: 616px = 300 + 16 + 300. Any mismatch and the cards overflow their
+     cells, which closes up the gaps between them. */
+  grid-template-rows: auto repeat(3, 300px);
+  gap: 16px;
 }
 
 .home-page .service-grid-intro {
@@ -597,64 +600,97 @@
   line-height: 1.45;
 }
 
+/* Category tiles: white plates on the page tint, with the artwork bleeding off
+   the right edge. Hover behaviour comes from the shared .hover-card utility —
+   a hairline ring and an accent shift, no lift, so the mosaic stays aligned. */
 .home-page .service-card {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 300px;
   min-height: 0;
   padding: 0;
   overflow: hidden;
-  border: 1px solid rgba(32, 33, 30, 0.06);
-  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 28px;
   background: var(--grey-white);
   box-shadow: none;
-  transform: translateZ(0);
-  transition:
-    transform var(--motion-duration-slow) var(--motion-ease-standard),
-    border-color var(--motion-duration-base) var(--motion-ease-standard),
-    box-shadow var(--motion-duration-slow) var(--motion-ease-standard);
+  color: var(--text-primary);
 }
 
-.home-page .service-card.instructors { grid-column: 1; grid-row: 2 / span 2; height: 580px; background: var(--surface-tint-cool); }
-.home-page .service-card.tours { grid-column: 2; grid-row: 2; background: var(--sand-50); }
-.home-page .service-card.rental { grid-column: 3; grid-row: 2; background: var(--olive-50); }
-.home-page .service-card.places { grid-column: 2 / span 2; grid-row: 3; background: var(--grey-white); }
-.home-page .service-card.services { grid-column: 1; grid-row: 4; background: var(--rad-100); }
-.home-page .service-card.transfer { grid-column: 2; grid-row: 4; background: var(--grey-white); }
-.home-page .service-card.real-estate { grid-column: 3; grid-row: 4; background: var(--grey-700); }
+.home-page .service-card.instructors { grid-column: 1; grid-row: 2 / span 2; height: 616px; }
+.home-page .service-card.tours { grid-column: 2; grid-row: 2; }
+.home-page .service-card.rental { grid-column: 3; grid-row: 2; }
+.home-page .service-card.places { grid-column: 2 / span 2; grid-row: 3; }
+.home-page .service-card.services { grid-column: 1; grid-row: 4; }
+.home-page .service-card.transfer { grid-column: 2; grid-row: 4; }
+.home-page .service-card.real-estate { grid-column: 3; grid-row: 4; }
 
-.home-page .service-card:hover {
-  border-color: rgba(32, 33, 30, 0.14);
-  box-shadow: var(--shadow-card);
-  transform: translateY(-4px);
-}
-
-.home-page .service-card h2,
-.home-page .service-card p {
-  position: absolute;
+.home-page .service-card__head {
+  position: relative;
   z-index: 2;
-  margin: 0;
+  padding: 26px 26px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.home-page .service-card__text {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
 }
 
 .home-page .service-card h2 {
-  top: 22px;
-  left: 24px;
+  margin: 0;
   color: var(--grey-600);
-  font: var(--fw-semibold) clamp(26px, 2.3vw, 36px) / 1 var(--font-heading);
-  letter-spacing: -0.045em;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
+  line-height: 1.1;
 }
 
 .home-page .service-card p {
-  top: 66px;
-  left: 25px;
-  width: min(58%, 300px);
-  color: var(--grey-400);
+  margin: 0;
+  max-width: 240px;
+  color: var(--grey-500);
   font-size: 14px;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
-.home-page .service-card.real-estate h2 { color: var(--grey-white); }
-.home-page .service-card.real-estate p { color: var(--grey-300); }
+.home-page .service-card .tags-row {
+  /* Overrides the legacy absolute placement further down, which pinned tags
+     over the artwork. They now sit in flow at the foot of the plate, so the
+     inset offsets have to be cleared too. */
+  position: relative;
+  inset: auto;
+  z-index: 3;
+  max-width: none;
+  margin-top: auto;
+  padding: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Filled pills against the white plate. The leading tag takes the warm accent
+   tint, the rest stay neutral — the pattern the reference uses on every tile. */
+.home-page .service-card .tags-row .ui-badge {
+  min-height: 30px;
+  padding: 0 13px;
+  border: 0;
+  background: var(--grey-100);
+  color: var(--grey-700);
+  font: var(--fw-medium) 13px / 1.25 var(--font-body);
+  backdrop-filter: none;
+}
+
+.home-page .service-card .tags-row .ui-badge:first-child {
+  background: var(--accent-100);
+}
 
 .home-page .service-art {
   position: absolute;
@@ -663,13 +699,13 @@
   transition: transform var(--motion-duration-slow) var(--motion-ease-standard);
 }
 
-.home-page .service-card:hover .service-art { transform: scale(1.025); }
-.home-page .service-art.instructors-art { right: -12px; top: 94px; width: 86%; height: auto; }
-.home-page .service-art.tours-art { right: -30px; top: 54px; width: 88%; height: auto; }
-.home-page .service-art.rental-art { right: -42px; top: 34px; width: 78%; height: auto; }
-.home-page .service-art.places-art { right: -15px; top: 14px; width: 58%; height: auto; }
-.home-page .service-art.services-art { right: -18px; top: 62px; width: 54%; height: auto; }
-.home-page .service-art.transfer-art { right: -20px; top: 78px; width: 67%; height: auto; }
+
+.home-page .service-art.instructors-art { right: -12px; top: 110px; width: 86%; height: auto; }
+.home-page .service-art.tours-art { right: -30px; top: 66px; width: 88%; height: auto; }
+.home-page .service-art.rental-art { right: -42px; top: 46px; width: 78%; height: auto; }
+.home-page .service-art.places-art { right: 40px; top: 14px; width: 52%; height: auto; }
+.home-page .service-art.services-art { right: -18px; top: 74px; width: 54%; height: auto; }
+.home-page .service-art.transfer-art { right: -20px; top: 92px; width: 67%; height: auto; }
 
 .home-page .tags-row {
   position: absolute;
@@ -687,22 +723,20 @@
 }
 
 .home-page .instructors-layout {
+  display: grid;
   row-gap: clamp(40px, 6vw, 80px);
 }
 
-.home-page .instructors-heading,
+/* Three cards across, matching the mosaic above. The intro copy and the "show
+   all" link moved into the section header, so the grid no longer carries a
+   fourth, text-only tile. */
 .home-page .instructors-grid {
-  grid-column: 1 / -1;
   width: 100%;
-}
-
-.home-page .instructors-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--layout-gutter);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
 
-.home-page .cta-card,
 .home-page .instructors-grid > .listing-card {
   min-height: 420px;
   border: 1px solid var(--grey-150);
@@ -764,6 +798,12 @@
     grid-template-rows: auto repeat(4, 260px);
   }
 
+  /* Cards shrink with the rows here — at the desktop 300px they would spill
+     into the 16px gaps and the grid would look gapless. */
+  .home-page .service-card {
+    height: 260px;
+  }
+
   .home-page .service-grid-intro {
     grid-template-columns: 0.7fr 1.3fr;
   }
@@ -772,7 +812,7 @@
     grid-column: 2;
   }
 
-  .home-page .service-card.instructors { grid-column: 1; grid-row: 2 / span 2; height: 540px; }
+  .home-page .service-card.instructors { grid-column: 1; grid-row: 2 / span 2; height: 536px; }
   .home-page .service-card.tours { grid-column: 2; grid-row: 2; }
   .home-page .service-card.rental { grid-column: 2; grid-row: 3; }
   .home-page .service-card.places { grid-column: 1 / -1; grid-row: 4; }
@@ -849,4 +889,299 @@
     padding-bottom: 32px;
   }
 
+}
+
+/* ---- Shared home-page button -------------------------------------------- */
+
+/* Dark pill that turns accent on hover. Used as the section-level call to
+   action, so it lives here rather than in Button — it is a link, not a form
+   control, and it carries the HoverArrow. */
+.home-page .pill-btn {
+  min-height: 48px;
+  padding-inline: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--grey-600);
+  color: var(--grey-white);
+  font: var(--fw-medium) var(--text-md) / 1.25 var(--font-body);
+  text-decoration: none;
+  transition: background var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+.home-page .pill-btn:hover,
+.home-page .pill-btn:focus-visible {
+  background: var(--accent-600);
+  color: var(--grey-white);
+}
+
+/* ---- Activities ---------------------------------------------------------- */
+
+.activities-block {
+  padding: 112px 0 0;
+}
+
+.activities-layout {
+  display: grid;
+  row-gap: 48px;
+}
+
+.activity-rows {
+  display: grid;
+  gap: 10px;
+}
+
+/* Fixed outer columns with the title taking the slack: names differ wildly in
+   length, but category, facts and price stay aligned down the whole list, which
+   is what makes the rows comparable at a glance. */
+.activity-row {
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) 300px 150px 42px;
+  gap: 28px;
+  align-items: center;
+  border-radius: 24px;
+  background: var(--grey-white);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.activity-row__category {
+  color: var(--accent-600);
+  font: var(--fw-semibold) 13px / 1.25 var(--font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.activity-row__title {
+  margin: 0;
+  color: var(--grey-700);
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
+  line-height: 1.1;
+}
+
+.activity-row__facts {
+  color: var(--grey-500);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.activity-row__price {
+  display: grid;
+  gap: 2px;
+}
+
+.activity-row__price strong {
+  color: var(--grey-700);
+  font: var(--fw-semibold) 18px / 1.2 var(--font-body);
+}
+
+.activity-row__price small {
+  color: var(--grey-400);
+  font-size: 12px;
+}
+
+.activity-row__arrow {
+  justify-self: end;
+}
+
+.activities-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.activities-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---- About Gudauri ------------------------------------------------------- */
+
+.about-block {
+  padding: 112px 0 0;
+}
+
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.about-lead {
+  display: grid;
+  justify-items: start;
+  gap: 22px;
+}
+
+.about-lead .section-heading {
+  width: 100%;
+}
+
+.about-text {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--grey-500);
+  font-size: 17px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.about-stats {
+  width: 100%;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-stat {
+  padding: 20px;
+  display: grid;
+  gap: 6px;
+  border-radius: 20px;
+  background: var(--grey-150);
+}
+
+.about-stat--accent {
+  background: var(--accent-100);
+}
+
+.about-stat strong {
+  color: var(--grey-700);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--type-display-tracking);
+  line-height: 1;
+}
+
+.about-stat span {
+  color: var(--grey-500);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.about-map {
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.about-map__frame {
+  position: relative;
+  height: 520px;
+  overflow: hidden;
+  display: block;
+  border-radius: var(--radius-lg);
+  background: var(--grey-white);
+}
+
+.about-map__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 4%;
+}
+
+.about-map__badge,
+.about-map__action {
+  position: absolute;
+  top: 18px;
+  min-height: 34px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.about-map__badge {
+  left: 18px;
+  background: var(--surface-media-overlay);
+  color: var(--grey-700);
+  font-weight: var(--fw-semibold);
+}
+
+.about-map__action {
+  right: 18px;
+  background: var(--grey-700);
+  color: var(--grey-white);
+  font-weight: var(--fw-medium);
+}
+
+.about-map figcaption {
+  margin: 0;
+  color: var(--grey-500);
+  font-size: 14px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+@media (max-width: 1100px) {
+  .activity-row {
+    grid-template-columns: 150px minmax(0, 1fr) 150px 42px;
+  }
+
+  .activity-row__facts {
+    display: none;
+  }
+
+  .about-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+
+@media (max-width: 760px) {
+  .activities-block,
+  .about-block {
+    padding-top: 72px;
+  }
+
+  /* Rows become stacked blocks: five columns cannot survive a phone, and the
+     arrow moves up beside the title so the price keeps the full width. */
+  .activity-row {
+    grid-template-columns: minmax(0, 1fr) 42px;
+    gap: 8px 16px;
+    padding: 20px;
+  }
+
+  .activity-row__category { grid-column: 1; }
+  .activity-row__title { grid-column: 1; font-size: 24px; }
+  .activity-row__price { grid-column: 1; }
+  .activity-row__arrow { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+
+  .about-map__frame {
+    height: 320px;
+  }
+
+  .about-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The shared .hover-card rule in base lives in an earlier stylesheet and ties
+   on specificity with `.home-page .service-card`, so the card's resting colour
+   would win and the hover would never take. Restated here to settle it — the
+   ↗ badge is filled with currentColor, so this is what turns it accent. */
+.home-page .service-card.hover-card:hover,
+.home-page .service-card.hover-card:focus-visible {
+  color: var(--text-accent);
+  box-shadow: inset 0 0 0 1px rgba(32, 33, 30, 0.18);
+}
+
+.home-page .service-card.hover-card:hover h2,
+.home-page .service-card.hover-card:focus-visible h2 {
+  color: var(--text-accent);
 }

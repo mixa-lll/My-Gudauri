@@ -119,4 +119,4 @@ export const Layout = {
   )
 };
 
-export const FocusLayeringAndMedia = { render: () => <main className="sb-canvas sb-section"><StoryHeader title="System tokens">Focus, z-index, opacity, icon sizes, control heights and media ratios are part of the public foundation.</StoryHeader><div className="sb-grid">{['focus-ring', 'z-sticky', 'z-dialog', 'opacity-disabled', 'icon-size-md', 'control-height-xs', 'control-height-md', 'media-landscape', 'media-wide', 'media-portrait'].map((token) => <div className="sb-radius-sample" key={token}><code>--{token}</code></div>)}</div></main> };
+export const FocusLayeringAndMedia = { render: () => <main className="sb-canvas sb-section"><StoryHeader title="System tokens">Focus, z-index, opacity, icon sizes, control heights and media ratios are part of the public foundation.</StoryHeader><div className="sb-grid">{['focus-ring', 'z-sticky', 'z-dialog', 'opacity-disabled', 'icon-size-md', 'control-height-xs', 'control-height-md', 'media-landscape', 'media-wide', 'media-panorama', 'media-portrait'].map((token) => <div className="sb-radius-sample" key={token}><code>--{token}</code></div>)}</div></main> };

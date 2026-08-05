@@ -16,6 +16,9 @@ const meta = {
   argTypes: {
     size: { control: 'select', options: ['display', 'lg', 'md', 'sm'] },
     align: { control: 'select', options: ['start', 'center'] },
+    layout: { control: 'select', options: ['stack', 'split'] },
+    tone: { control: 'select', options: ['muted', 'accent'] },
+    divider: { control: 'boolean' },
     headingLevel: { control: 'select', options: ['h1', 'h2', 'h3'] }
   }
 };
@@ -39,4 +42,35 @@ export const WithActions = { render: () => <SectionHeading kicker="Optional acti
 
 export const OptionalContent = {
   render: () => <main className="sb-canvas"><section className="sb-section"><SectionHeading title="Title only" size="md" /></section><section className="sb-section"><SectionHeading kicker="Frequently asked" title="With kicker" size="md" /></section><section className="sb-section"><SectionHeading title="With description" description="Description can be supplied independently from the kicker." size="md" /></section></main>
+};
+
+/* The home page opens every section this way: a hairline, an accent kicker, and
+   the supporting copy pushed to the right so it lands on the title's baseline. */
+export const SplitWithDivider = {
+  args: {
+    layout: 'split',
+    divider: true,
+    tone: 'accent',
+    kicker: 'Verified professionals',
+    title: 'Find your instructor',
+    description: 'Compare experience, languages and real guest reviews to find the right teaching style for you.'
+  }
+};
+
+export const SplitWithAction = {
+  render: () => (
+    <main className="sb-canvas">
+      <section className="sb-section">
+        <SectionHeading
+          layout="split"
+          divider
+          tone="accent"
+          kicker="Beyond the pistes"
+          title="Every kind of mountain day"
+          description="From an eight-hour road trip to Kazbegi to a heli drop above the Caucasus."
+          actions={<Button variant="primary">All activities</Button>}
+        />
+      </section>
+    </main>
+  )
 };
