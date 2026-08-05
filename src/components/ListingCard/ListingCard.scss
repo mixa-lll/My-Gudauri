@@ -355,13 +355,25 @@
 }
 
 /* The route leads the card: a guest scans "where does this go" before anything
-   else, so it outranks the quieter overlay pills beside it. */
+   else. It earns that with size and a deeper frosted pane than the pills beside
+   it — the photo still reads through, so the badge sits on the image rather
+   than covering it. */
 .listing-card__pill.listing-card__pill--route {
   min-height: 34px;
   padding: 0 var(--space-400);
-  background: var(--action-accent);
-  color: var(--text-inverse);
+  border-color: rgb(255 255 255 / 55%);
+  background: rgb(255 255 255 / 52%);
+  color: var(--text-primary);
   font: var(--fw-semibold) var(--type-body-small-size) / 1 var(--font-body);
   letter-spacing: -0.01em;
-  box-shadow: 0 2px 10px rgb(24 25 22 / 18%);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 45%) inset, 0 6px 18px rgb(24 25 22 / 14%);
+}
+
+/* Without a backdrop filter the pane would be a translucent smear over the
+   photo, so it falls back to the solid overlay the other pills use. */
+@supports not (backdrop-filter: blur(1px)) {
+  .listing-card__pill.listing-card__pill--route {
+    background: var(--surface-media-overlay);
+  }
 }
