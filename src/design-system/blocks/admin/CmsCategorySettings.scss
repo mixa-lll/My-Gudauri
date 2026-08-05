@@ -41,3 +41,13 @@
   .cms-category-settings { grid-template-columns: minmax(0, 1fr); }
   .cms-category-settings__content { width: calc(100% - var(--space-500)); }
 }
+
+/* Transfer direction rows (CmsRouteSettings shares this shell). */
+.cms-route-settings__route { grid-template-columns: minmax(0, 1fr); }
+.cms-route-settings__route-head { display: grid; grid-template-columns: 1.4fr 1fr .8fr .6fr; gap: var(--space-300); align-items: end; }
+.cms-route-settings__route-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-300); }
+.cms-route-settings__route-usage { color: var(--text-secondary); font-size: var(--type-caption-size); }
+.cms-route-settings__route-foot .ui-button { margin-left: auto; }
+
+@media (max-width: 900px) { .cms-route-settings__route-head { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .cms-route-settings__route-head { grid-template-columns: 1fr; } }

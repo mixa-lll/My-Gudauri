@@ -17,13 +17,15 @@ import {
   getAdminTransfers,
   getAdminTransfer,
   getCollectionPricing,
+  getTransferRoutes,
   updateCollectionPricing,
+  updateTransferRoutes,
   updateActivity,
   updateInstructor,
   updateTransfer,
 } from '../../services/adminApi';
 import { uploadMedia } from '../../services/mediaApi';
-import { CmsActivityEditor, CmsCategorySettings, CmsCollectionList, CmsInstructorEditor, CmsTransferEditor } from '../../design-system';
+import { CmsActivityEditor, CmsCategorySettings, CmsCollectionList, CmsInstructorEditor, CmsRouteSettings, CmsTransferEditor } from '../../design-system';
 import { CATEGORY_PRICED_COLLECTIONS } from '../../shared/pricing';
 import './AdminPage.scss';
 
@@ -34,7 +36,7 @@ import './AdminPage.scss';
 const EMPTY = {
   instructors: { slug: '', status: 'draft', display_name: '', role: '', card_description: '', tagline: '', intro: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', booking_avatar_url: '', gender: '', experience_years: '', rating: 0, review_count: 0, availability_label: '', certificate_label: '', min_people: '', max_people: '', sort_order: '', disciplines: [], languages: [], about: [], tags: [], certifications: [], media: [], reviewsList: [] },
   activities: { slug: '', status: 'draft', name: '', category: '', description: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', price_amount: '', currency: '', price_suffix: '', rating: 0, review_count: 0, catalog_group: '', skill_level: '', duration_group: '', format: '', sort_order: '', tags: [], facts: [], included: [], excluded: [], equipment: [], schedule: [], media: [], reviewsList: [] },
-  transfers: { slug: '', status: 'draft', name: '', category: '', description: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', price_amount: '', currency: '', price_suffix: '', rating: 0, review_count: 0, catalog_group: '', vehicle_class: '', seats: '', large_bags: '', carry_on_bags: '', ski_capacity: '', vehicle_options: [], duration_label: '', distance_km: '', pickup_type: '', road_notice: '', conditions: [], sort_order: '', tags: [], facts: [], included: [], media: [], reviewsList: [] },
+  transfers: { slug: '', status: 'draft', name: '', body_type: '', class_name: '', seats: '', large_bags: '', carry_on_bags: '', ski_capacity: '', description: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', exact_vehicle: false, sort_order: '', vehicle_options: [], included: [], offers: [], media: [], reviewsList: [] },
 };
 
 const TITLE_FIELD = { instructors: 'display_name', activities: 'name', transfers: 'name' };
@@ -44,6 +46,7 @@ export function AdminPage() {
   const [authenticated, setAuthenticated] = useState(null); const [password, setPassword] = useState(''); const [showPassword, setShowPassword] = useState(false);
   const [tab, setTab] = useState('instructors'); const [instructors, setInstructors] = useState([]); const [activities, setActivities] = useState([]); const [transfers, setTransfers] = useState([]); const [editor, setEditor] = useState(null); const [baseline, setBaseline] = useState(''); const [notice, setNotice] = useState(null); const [busy, setBusy] = useState(false);
   const [settings, setSettings] = useState(null); const [settingsBaseline, setSettingsBaseline] = useState('');
+  const [transferRoutes, setTransferRoutes] = useState([]);
   const [categoryPricing, setCategoryPricing] = useState({});
   const [query, setQuery] = useState(''); const [statusFilter, setStatusFilter] = useState('all'); const [categoryFilter, setCategoryFilter] = useState('all'); const [disciplineFilter, setDisciplineFilter] = useState('all'); const [languageFilter, setLanguageFilter] = useState('all'); const [openMenuId, setOpenMenuId] = useState(null);
 
@@ -65,6 +68,7 @@ export function AdminPage() {
     setInstructors(Array.isArray(nextInstructors) ? nextInstructors : []);
     setActivities(Array.isArray(nextActivities) ? nextActivities : []);
     setTransfers(Array.isArray(nextTransfers) ? nextTransfers : []);
+    getTransferRoutes().then((nextRoutes) => setTransferRoutes(Array.isArray(nextRoutes) ? nextRoutes : [])).catch(() => setTransferRoutes([]));
     setCategoryPricing(Object.fromEntries(CATEGORY_PRICED_COLLECTIONS.map((collection, index) => [collection, pricing[index]]).filter(([, item]) => item)));
   };
 
@@ -107,7 +111,7 @@ export function AdminPage() {
   const openSettings = async () => {
     setBusy(true);
     try {
-      const data = await getCollectionPricing(tab);
+      const data = tab === 'transfers' ? await getTransferRoutes() : await getCollectionPricing(tab);
       setSettings({ collection: tab, data });
       setSettingsBaseline(snapshot(data));
     } catch (error) { fail(error); } finally { setBusy(false); }
@@ -121,11 +125,20 @@ export function AdminPage() {
     if (!settings) return;
     setBusy(true);
     try {
-      const saved = await updateCollectionPricing(settings.collection, settings.data);
-      setSettings({ ...settings, data: saved });
-      setSettingsBaseline(snapshot(saved));
-      setCategoryPricing((current) => ({ ...current, [settings.collection]: saved }));
-      report('Настройки категории сохранены — цена обновилась у всех объектов.', 'success');
+      if (settings.collection === 'transfers') {
+        const saved = await updateTransferRoutes(settings.data);
+        setSettings({ ...settings, data: saved });
+        setSettingsBaseline(snapshot(saved));
+        setTransferRoutes(saved);
+        await load();
+        report('Направления сохранены — карточки маршрутов обновлены.', 'success');
+      } else {
+        const saved = await updateCollectionPricing(settings.collection, settings.data);
+        setSettings({ ...settings, data: saved });
+        setSettingsBaseline(snapshot(saved));
+        setCategoryPricing((current) => ({ ...current, [settings.collection]: saved }));
+        report('Настройки категории сохранены — цена обновилась у всех объектов.', 'success');
+      }
     } catch (error) { fail(error); } finally { setBusy(false); }
   };
 
@@ -169,18 +182,18 @@ export function AdminPage() {
   const instructorDisciplines = useMemo(() => [...new Set(instructors.flatMap((item) => item.disciplines || []))], [instructors]);
   const instructorLanguages = useMemo(() => [...new Set(instructors.flatMap((item) => item.languages || []))], [instructors]);
   const activityCategories = useMemo(() => [...new Set(activities.map((item) => item.category).filter(Boolean))], [activities]);
-  const transferCities = useMemo(() => [...new Set(transfers.map((item) => item.catalog_group).filter(Boolean))], [transfers]);
+  const transferBodyTypes = useMemo(() => [...new Set(transfers.map((item) => item.body_type).filter(Boolean))], [transfers]);
 
   const visibleItems = useMemo(() => {
     if (tab === 'activities') return activities.filter((item) => matchesQuery(item) && matchesStatus(item) && (categoryFilter === 'all' || item.category === categoryFilter));
-    if (tab === 'transfers') return transfers.filter((item) => matchesQuery(item) && matchesStatus(item) && (categoryFilter === 'all' || item.catalog_group === categoryFilter));
+    if (tab === 'transfers') return transfers.filter((item) => matchesQuery(item) && matchesStatus(item) && (categoryFilter === 'all' || item.body_type === categoryFilter));
     return instructors.filter((item) => matchesQuery(item) && matchesStatus(item) && (disciplineFilter === 'all' || item.disciplines?.includes(disciplineFilter)) && (languageFilter === 'all' || item.languages?.includes(languageFilter)));
   }, [activities, categoryFilter, disciplineFilter, instructors, languageFilter, query, statusFilter, tab, transfers]);
 
   const filters = tab === 'activities'
     ? [{ label: 'Категория', value: categoryFilter, options: activityCategories, onChange: setCategoryFilter }]
     : tab === 'transfers'
-      ? [{ label: 'Город', value: categoryFilter, options: transferCities, onChange: setCategoryFilter }]
+      ? [{ label: 'Кузов', value: categoryFilter, options: transferBodyTypes, onChange: setCategoryFilter }]
       : [
         { label: 'Дисциплина', value: disciplineFilter, options: instructorDisciplines, onChange: setDisciplineFilter },
         { label: 'Язык', value: languageFilter, options: instructorLanguages, onChange: setLanguageFilter },
@@ -192,6 +205,22 @@ export function AdminPage() {
   if (!authenticated) return <main className="admin-login"><form onSubmit={signIn}><p className="admin-kicker">My Gudauri</p><h1>Админка</h1><p>Введите пароль администратора, чтобы управлять контентом.</p><label><span>Пароль</span><span className="admin-password-field"><input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} autoFocus required /><button className="admin-password-toggle" type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>{showPassword ? 'Скрыть' : 'Показать'}</button></span></label>{notice && <p className={`admin-notice admin-notice--${notice.tone}`} role="alert">{notice.text}</p>}<button disabled={busy}>{busy ? 'Проверяем…' : 'Войти'}</button></form></main>;
 
   if (settings) {
+    if (settings.collection === 'transfers') {
+      return <main className="admin-cms-shell">
+        {toast}
+        <CmsRouteSettings
+          value={settings.data}
+          onChange={(data) => setSettings({ ...settings, data })}
+          onSave={persistSettings}
+          onBack={closeSettings}
+          onNavigate={(collection) => { if (collection !== 'transfers') { setSettings(null); setTab(collection); } else closeSettings(); }}
+          onSignOut={signOut}
+          counts={navCounts}
+          busy={busy}
+          dirty={settingsDirty}
+        />
+      </main>;
+    }
     return <main className="admin-cms-shell">
       {toast}
       <CmsCategorySettings
@@ -227,7 +256,7 @@ export function AdminPage() {
     return <main className="admin-cms-shell">
       {toast}
       {editor.kind === 'activities' ? <CmsActivityEditor {...shared} onUploadMedia={uploadFor('activities')} /> : null}
-      {editor.kind === 'transfers' ? <CmsTransferEditor {...shared} onUploadMedia={uploadFor('transfers')} /> : null}
+      {editor.kind === 'transfers' ? <CmsTransferEditor {...shared} onUploadMedia={uploadFor('transfers')} routes={transferRoutes} onOpenCategorySettings={() => { setEditor(null); openSettings(); }} /> : null}
       {editor.kind === 'instructors' ? <CmsInstructorEditor {...shared} onUploadMedia={uploadFor('instructors')} categoryPricing={categoryPricing.instructors} onOpenCategorySettings={() => { setEditor(null); openSettings(); }} /> : null}
     </main>;
   }
@@ -240,7 +269,7 @@ export function AdminPage() {
       counts={navCounts}
       onCollectionChange={setTab}
       onCreate={() => openEditorWith(tab, { ...EMPTY[tab] })}
-      onOpenSettings={CATEGORY_PRICED_COLLECTIONS.includes(tab) ? openSettings : undefined}
+      onOpenSettings={CATEGORY_PRICED_COLLECTIONS.includes(tab) || tab === 'transfers' ? openSettings : undefined}
       onEdit={openEditor}
       onDuplicate={tab === 'instructors' ? duplicate : undefined}
       openMenuId={openMenuId}

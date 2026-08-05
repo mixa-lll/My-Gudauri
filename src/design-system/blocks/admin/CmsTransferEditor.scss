@@ -1,0 +1,15 @@
+/* Only the offers repeater is transfer-specific; everything else comes from
+   the shared editor parts. */
+.cms-transfer-editor__offer { grid-template-columns: minmax(0, 1fr); }
+.cms-transfer-editor__offer-fields { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(120px, .8fr) auto auto; align-items: end; gap: var(--space-300); }
+.cms-transfer-editor__offer-fields .ui-choice { margin-bottom: var(--space-200); }
+.cms-transfer-editor__offer-preview { margin: 0; color: var(--text-secondary); font-size: var(--type-caption-size); }
+.cms-transfer-editor__offer-preview strong { color: var(--text-primary); font-weight: var(--fw-medium); }
+
+@media (max-width: 900px) {
+  .cms-transfer-editor__offer-fields { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  .cms-transfer-editor__offer-fields { grid-template-columns: 1fr; }
+}

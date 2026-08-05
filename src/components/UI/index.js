@@ -11,3 +11,4 @@ export { HoverArrow } from './HoverArrow/HoverArrow';
 export { StarRating } from './StarRating/StarRating';
 export { FlagIcon } from './FlagIcon/FlagIcon';
 export { VEHICLE_TYPES, VehicleTypeIcon, VehicleTypeTag } from './VehicleTypeIcon/VehicleTypeIcon';
+export { ACTIVITY_CATEGORIES, ActivityCategoryIcon } from './ActivityCategoryIcon/ActivityCategoryIcon';

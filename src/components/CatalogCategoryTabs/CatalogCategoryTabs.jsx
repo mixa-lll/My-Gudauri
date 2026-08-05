@@ -3,6 +3,7 @@ import './CatalogCategoryTabs.scss';
 export function CategoryTab({ category, active = false, onSelect }) {
   return (
     <button className={active ? 'is-active' : ''} type="button" aria-pressed={active} onClick={() => onSelect(category.id)}>
+      {category.icon ? <span className="catalog-category-tabs__icon">{category.icon}</span> : null}
       <span><strong>{category.label}</strong>{category.description ? <small>{category.description}</small> : null}</span>
       {typeof category.count === 'number' ? <b aria-label={`${category.count} results`}>{category.count}</b> : null}
     </button>

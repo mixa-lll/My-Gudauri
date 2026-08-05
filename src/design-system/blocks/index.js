@@ -1,6 +1,7 @@
 export { SiteFooter, SiteNavbar } from '../../components';
 export * from './catalog/CatalogBlocks';
 export { CmsCollectionList } from './admin/CmsCollectionList';
+export { CmsRouteSettings } from './admin/CmsRouteSettings';
 export { CmsActivityEditor } from './admin/CmsActivityEditor';
 export { CMS_PAGE_BLOCKS, describeCategoryPricing } from './admin/CmsEditorParts';
 export { CmsCategorySettings } from './admin/CmsCategorySettings';

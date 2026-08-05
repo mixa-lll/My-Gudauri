@@ -38,6 +38,7 @@ export const CMS_PAGE_BLOCKS = {
   ActivitySchedule: { label: 'ActivitySchedule — расписание', scope: 'unique' },
   IncludedServices: { label: 'IncludedServices — что входит', scope: 'unique' },
   EquipmentList: { label: 'EquipmentList — что взять с собой', scope: 'unique' },
+  TransferRoutes: { label: 'Панель направлений — карточки маршрутов', scope: 'unique' },
 };
 
 /** Left-hand navigation, identical in the list and in every editor. */

@@ -55,6 +55,11 @@ export function HomePage() {
           <div className="home-cover__media" aria-hidden="true">
             <div className="home-cover__sky">
               <span className="home-cover__glow" />
+              <span className="home-cover__lift" aria-hidden="true">
+                <i className="home-cover__lift-cable home-cover__lift-cable--upper" />
+                <i className="home-cover__lift-cable" />
+                <img className="home-cover__lift-cabin" src="/assets/design-1/lift-cabin.webp" alt="" />
+              </span>
               <span className="home-cover__cloud home-cover__cloud--high" />
               <span className="home-cover__cloud home-cover__cloud--far" />
               <span className="home-cover__cloud home-cover__cloud--mid" />

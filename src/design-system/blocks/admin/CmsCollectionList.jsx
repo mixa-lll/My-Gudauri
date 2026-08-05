@@ -20,6 +20,8 @@ function SelectFilter({ label, value, options, onChange }) {
   return <label className="cms-collection-list__filter"><span>{label}</span><select value={value} onChange={(event) => onChange(event.target.value)}><option value="all">Все</option>{options.map((option) => <option value={option.value ?? option} key={option.value ?? option}>{option.label ?? option}</option>)}</select></label>;
 }
 
+const TRANSFER_BODY_LABELS = { sedan: 'Седан', hatchback: 'Хэтчбек', suv: '4×4', minivan: 'Минивэн', minibus: 'Микроавтобус' };
+
 const badges = (items) => items?.length ? <span className="cms-collection-list__badges">{items.map((item) => <Badge key={item} size="sm">{item}</Badge>)}</span> : '—';
 const rating = (item) => item.rating ? <span className="cms-collection-list__rating"><span aria-hidden="true">★</span> {Number(item.rating).toFixed(1)}</span> : '—';
 
@@ -52,12 +54,12 @@ export const CMS_COLLECTIONS = {
   },
   transfers: {
     title: 'Трансферы',
-    createLabel: '+ Новый трансфер',
+    createLabel: '+ Новая машина',
     publicPath: 'transfers',
     columns: [
-      { key: 'category', label: 'Маршрут', render: (item) => item.category || '—' },
-      { key: 'vehicle', label: 'Машина', render: (item) => [item.vehicle_class, item.seats ? `${item.seats} мест` : null].filter(Boolean).join(' · ') || '—' },
-      { key: 'price', label: 'Цена', render: (item) => Number(item.price_amount) > 0 ? `${Math.round(item.price_amount)} ${item.currency ?? ''}`.trim() : '—' },
+      { key: 'vehicle', label: 'Машина', render: (item) => [TRANSFER_BODY_LABELS[item.body_type] ?? item.class_name, item.seats ? `${item.seats} мест` : null].filter(Boolean).join(' · ') || '—' },
+      { key: 'routes', label: 'Маршруты', render: (item) => item.offers_count ? badges((item.routes ?? []).slice(0, 3).concat(item.offers_count > 3 ? [`+${item.offers_count - 3}`] : [])) : '—' },
+      { key: 'price', label: 'Цена от', render: (item) => Number(item.price_from) > 0 ? `от ${Math.round(item.price_from)} ${item.currency ?? ''}`.trim() : '—' },
       { key: 'rating', label: 'Рейтинг', render: rating },
     ],
   },

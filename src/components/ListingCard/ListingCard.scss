@@ -354,11 +354,11 @@
   }
 }
 
-/* The route leads the card: a guest scans "where does this go" before anything
-   else. It earns that with size and a deeper frosted pane than the pills beside
-   it — the photo still reads through, so the badge sits on the image rather
-   than covering it. */
-.listing-card__pill.listing-card__pill--route {
+/* One pill leads each card — the route on a transfer, the sport on an activity.
+   A guest scans "what is this" before anything else, so it earns size and a
+   deeper frosted pane than the pills beside it; the photo still reads through,
+   so the badge sits on the image rather than covering it. */
+.listing-card__pill.listing-card__pill--lead {
   min-height: 34px;
   padding: 0 var(--space-400);
   border-color: rgb(255 255 255 / 55%);
@@ -370,10 +370,16 @@
   box-shadow: 0 1px 0 rgb(255 255 255 / 45%) inset, 0 6px 18px rgb(24 25 22 / 14%);
 }
 
+/* The drawing pulls the eye first, so it sits closer to the pane's edge than
+   the text does. */
+.listing-card__pill--lead:has(.ui-activity-icon) {
+  padding-left: var(--space-300);
+}
+
 /* Without a backdrop filter the pane would be a translucent smear over the
    photo, so it falls back to the solid overlay the other pills use. */
 @supports not (backdrop-filter: blur(1px)) {
-  .listing-card__pill.listing-card__pill--route {
+  .listing-card__pill.listing-card__pill--lead {
     background: var(--surface-media-overlay);
   }
 }

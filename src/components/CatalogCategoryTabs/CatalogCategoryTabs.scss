@@ -35,6 +35,7 @@
 }
 
 .catalog-category-tabs button {
+  position: relative;
   min-height: 112px;
   padding: var(--space-500);
   display: flex;
@@ -72,6 +73,17 @@
 .catalog-category-tabs button > span {
   display: grid;
   gap: var(--space-200);
+}
+
+/* The drawing sits in the empty corner diagonally opposite the count, so the
+   tile reads name-first and takes the tile's colour — accent once chosen. */
+.catalog-category-tabs__icon {
+  --activity-icon-size: 36px;
+
+  position: absolute;
+  top: var(--space-500);
+  right: var(--space-500);
+  display: flex;
 }
 
 .catalog-category-tabs strong {
@@ -130,5 +142,12 @@
     min-height: 102px;
     padding: var(--space-400);
     border-radius: var(--radius-sm);
+  }
+
+  .catalog-category-tabs__icon {
+    --activity-icon-size: var(--icon-size-xl);
+
+    top: var(--space-350);
+    right: var(--space-400);
   }
 }

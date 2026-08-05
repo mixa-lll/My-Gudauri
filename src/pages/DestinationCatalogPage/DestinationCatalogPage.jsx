@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar, VehicleTypeFilter } from '../../design-system';
+import { ActivityCategoryIcon, BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar, VehicleTypeFilter } from '../../design-system';
 import { CATALOG_FILTERS, matchesActiveRefinements, matchesFilter } from '../../data/catalogFilters';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -42,7 +42,7 @@ function activityFilters(items, t) {
   return {
     categories: [
       { id: 'all', label: t('catalog.activities.categories.all.label'), description: t('catalog.activities.categories.all.description') },
-      ...options('catalogGroup').map((item) => ({ ...item, label: ACTIVITY_GROUP_LABELS[item.value] || item.value }))
+      ...options('catalogGroup').map((item) => ({ ...item, label: ACTIVITY_GROUP_LABELS[item.value] || item.value, icon: <ActivityCategoryIcon group={item.value} /> }))
     ],
     refinements: [
       ...options('skillLevel', 'level'),

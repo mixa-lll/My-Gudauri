@@ -2,28 +2,34 @@ import { useState } from 'react';
 import { CmsTransferEditor } from '../design-system';
 import { defineComposition } from '../design-system/architecture/registry';
 
-const transfer = {
-  id: 1, slug: 'tbilisi-airport-gudauri', status: 'published', name: 'Sedan · up to 3 seats',
-  category: 'Gudauri ↔ Tbilisi Airport', description: 'A private car with a winter-ready driver, door to door, flight tracked on arrival.',
-  card_image_url: '/assets/design-1/mosaic/transfer-1-144-upd.png', hero_image_url: '/assets/design-1/mosaic/transfer-1-144-upd.png',
-  hero_image_alt: 'Gudauri ↔ Tbilisi Airport', price_amount: 180, currency: 'GEL', price_suffix: 'per vehicle',
-  rating: 4.9, review_count: 128, catalog_group: 'tbilisi', vehicle_class: 'Comfort', seats: 3,
-  large_bags: 3, carry_on_bags: 2, ski_capacity: 2, vehicle_options: ['Winter tyres', 'Climate control'],
-  duration_label: '~2 hours', distance_km: 120, pickup_type: 'airport', road_notice: 'Journey time depends on winter road conditions.', sort_order: 10,
-  tags: ['~2 hours', 'Meet & greet', 'Ski rack'],
-  facts: [{ label: 'Class', value: 'Comfort' }, { label: 'Seats', value: 'Up to 3' }, { label: 'Journey', value: '~2 hours' }],
+/** The directions category settings provide; the editor only references them. */
+const routes = [
+  { id: 1, slug: 'tbilisi-gudauri', origin_name: 'Tbilisi', city: 'tbilisi', duration_label: '~2 hours', zone_type: 'City & airport', distance_km: 120, offers_count: 4 },
+  { id: 2, slug: 'kutaisi-airport-gudauri', origin_name: 'Kutaisi Airport', city: 'kutaisi', duration_label: '~4.5 hours', zone_type: 'Airport', distance_km: 310, offers_count: 2 },
+  { id: 3, slug: 'kazbegi-gudauri', origin_name: 'Kazbegi', city: 'kazbegi', duration_label: '~1 hour', zone_type: 'City', distance_km: 35, offers_count: 2 },
+];
+
+const vehicle = {
+  id: 1, slug: 'toyota-camry', status: 'published', name: 'Toyota Camry', body_type: 'sedan', class_name: 'Comfort',
+  seats: 3, large_bags: 3, carry_on_bags: 2, ski_capacity: 2,
+  description: 'Toyota Camry — a winter-ready sedan for up to three passengers with full ski luggage.',
+  card_image_url: '/assets/transfers/sedan-black-road.jpg', hero_image_url: '/assets/transfers/winter-road-peaks.jpg',
+  hero_image_alt: 'Toyota Camry on a mountain road', exact_vehicle: false, sort_order: 10,
+  vehicle_options: ['Winter tyres', 'Climate control', 'Child seat on request'],
   included: ['Meet & greet', 'Flight tracking', '60 min waiting', 'Ski luggage'],
-  conditions: [{ label: 'Waiting', value: '60 minutes after landing' }, { label: 'Stops', value: 'On request' }],
-  media: [{ type: 'image', url: '/assets/design-1/mosaic/transfer-1-144-upd.png', alt: 'Transfer car', featured: true }],
+  offers: [
+    { id: 11, slug: 'tbilisi-toyota-camry', route_id: 1, price_amount: 180, currency: 'GEL', published: true },
+    { id: 12, slug: 'kazbegi-toyota-camry', route_id: 3, price_amount: 150, currency: 'GEL', published: true },
+  ],
+  media: [{ type: 'image', url: '/assets/transfers/sedan-black-road.jpg', alt: 'Sedan on the road', featured: true }],
   reviewsList: [],
 };
 
-/** Matches the payload AdminPage hands the editor for “+ Новый трансфер”. */
-const blankTransfer = {
-  slug: '', status: 'draft', name: '', category: '', description: '', card_image_url: '', hero_image_url: '',
-  hero_image_alt: '', price_amount: '', currency: '', price_suffix: '', rating: 0, review_count: 0,
-  catalog_group: '', vehicle_class: '', seats: '', large_bags: '', carry_on_bags: '', ski_capacity: '', vehicle_options: [], duration_label: '', distance_km: '', pickup_type: '', road_notice: '', conditions: [], sort_order: '',
-  tags: [], facts: [], included: [], media: [], reviewsList: [],
+/** Matches the payload AdminPage hands the editor for “+ Новая машина”. */
+const blankVehicle = {
+  slug: '', status: 'draft', name: '', body_type: '', class_name: '', seats: '', large_bags: '', carry_on_bags: '',
+  ski_capacity: '', description: '', card_image_url: '', hero_image_url: '', hero_image_alt: '', exact_vehicle: false,
+  sort_order: '', vehicle_options: [], included: [], offers: [], media: [], reviewsList: [],
 };
 
 /** Stands in for `uploadMedia({ collection: 'transfers', file })`. */
@@ -31,7 +37,7 @@ const fakeUpload = (file) => new Promise((resolve) => {
   setTimeout(() => resolve({ url: URL.createObjectURL(file) }), 600);
 });
 
-function EditorHarness({ initial = transfer, busy = false, dirty = false }) {
+function EditorHarness({ initial = vehicle, busy = false, dirty = false }) {
   const [value, setValue] = useState(initial);
   return <CmsTransferEditor
     value={value}
@@ -43,7 +49,9 @@ function EditorHarness({ initial = transfer, busy = false, dirty = false }) {
     onSignOut={() => {}}
     onNavigate={() => {}}
     onUploadMedia={fakeUpload}
-    counts={{ instructors: 8, activities: 9, transfers: 6 }}
+    onOpenCategorySettings={() => {}}
+    routes={routes}
+    counts={{ instructors: 8, activities: 9, transfers: 5 }}
     busy={busy}
     dirty={dirty}
   />;
@@ -56,12 +64,13 @@ export default {
   parameters: { composition: defineComposition({ root: 'CmsTransferEditor', children: ['FormField', 'Input', 'CmsEditorShell', 'MediaUploadField'] }) },
 };
 
-export const ExistingTransfer = { name: 'Existing Transfer', render: () => <EditorHarness /> };
+/** A vehicle with two priced routes — each row previews its catalog card. */
+export const ExistingVehicle = { name: 'Existing Vehicle', render: () => <EditorHarness /> };
 
-/** Only the name is required — the route follows from the chosen city. */
-export const NewTransfer = { name: 'New Transfer', render: () => <EditorHarness initial={blankTransfer} /> };
+/** Only the vehicle name is required; routes are attached with a price each. */
+export const NewVehicle = { name: 'New Vehicle', render: () => <EditorHarness initial={blankVehicle} /> };
 
-/** A name and a city are enough: slug, route, alt and description follow. */
-export const NameAndCity = { name: 'Name And City', render: () => <EditorHarness initial={{ ...blankTransfer, name: 'Минивэн · до 7 мест', catalog_group: 'kutaisi' }} /> };
+/** A name alone fills class, luggage, ski capacity and description. */
+export const NameOnly = { name: 'Name Only', render: () => <EditorHarness initial={{ ...blankVehicle, name: 'Hyundai Staria', body_type: 'minivan', seats: 7 }} /> };
 
 export const UnsavedChanges = { name: 'Unsaved Changes', render: () => <EditorHarness dirty /> };

@@ -68,6 +68,77 @@
   animation: hero-glow 8s ease-in-out infinite alternate;
 }
 
+/* Cable car crossing the sky. No rotated wrapper: the first version tilted a
+   full-width container and animated the cabin inside it, and that combination
+   (rotated container, clipped by the sky, with a per-frame animated child)
+   forced the whole sky subtree to re-rasterise on every scroll frame — clouds
+   and cabin blanked out while scrolling, exactly like the old mask bug. Now
+   the cables are independent static hairlines, each rotated about its own
+   centre, and the cabin's transform computes the slope itself: for a 12° line,
+   dy = dx * tan(12°) = dx * 0.2126. Nothing here owns a big layer; the only
+   animated element is the ~100px cabin. */
+.home-cover__lift {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Low on the right, climbing to the left. Both lines share the angle, so they
+   stay parallel; the centre of this one passes through (50%, 20%) — the point
+   the cabin's maths is anchored to. */
+.home-cover__lift-cable {
+  position: absolute;
+  top: 20%;
+  left: -14%;
+  width: 128%;
+  height: 2px;
+  transform: rotate(12deg);
+  background: linear-gradient(
+    90deg,
+    rgba(23, 30, 40, 0) 0%,
+    rgba(23, 30, 40, 0.42) 12%,
+    rgba(23, 30, 40, 0.42) 88%,
+    rgba(23, 30, 40, 0) 100%
+  );
+}
+
+.home-cover__lift-cable--upper {
+  top: 9%;
+  opacity: 0.45;
+}
+
+.home-cover__lift-cabin {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: clamp(84px, 9vw, 150px);
+  height: auto;
+  /* Rides the line from upper-left to lower-right, unhurried. X is the journey
+     along the horizontal; Y follows the cable's slope; the final translation
+     anchors the grip — at 42.7% / 10.8% of the bitmap — onto the line. */
+  transform:
+    translate3d(
+      calc(-14vw + var(--cover-scroll, 0) * 30vw),
+      calc((-14vw + var(--cover-scroll, 0) * 30vw) * 0.2126),
+      0
+    )
+    translate(-42.7%, -10.8%);
+}
+
+@media (max-width: 820px) {
+  /* A phone shows a third of the cable run, so the same journey would barely
+     register — start further left and travel further. */
+  .home-cover__lift-cabin {
+    transform:
+      translate3d(
+        calc(-26vw + var(--cover-scroll, 0) * 56vw),
+        calc((-26vw + var(--cover-scroll, 0) * 56vw) * 0.2126),
+        0
+      )
+      translate(-42.7%, -10.8%);
+  }
+}
+
 /* Cloud bands are seamless fractal-noise tiles that drift sideways forever;
    the mountain cut-out occludes them for depth. Baked to WebP by
    scripts/generate-cloud-textures.mjs rather than run as a live feTurbulence

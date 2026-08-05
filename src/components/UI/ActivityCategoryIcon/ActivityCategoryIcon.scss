@@ -1,0 +1,11 @@
+/* `--activity-icon-size` is read from whatever holds the icon — a badge sets it
+   small, a category tile sets it large. */
+.ui-activity-icon {
+  width: var(--activity-icon-size, var(--icon-size-md));
+  height: var(--activity-icon-size, var(--icon-size-md));
+  flex: none;
+  display: block;
+  background: currentColor;
+  mask: var(--activity-icon-src) center / contain no-repeat;
+  -webkit-mask: var(--activity-icon-src) center / contain no-repeat;
+}

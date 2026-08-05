@@ -1,3 +1,4 @@
+import { ActivityCategoryIcon } from '../UI/ActivityCategoryIcon/ActivityCategoryIcon';
 import { Badge } from '../UI/Badge/Badge';
 import { VehicleTypeTag } from '../UI/VehicleTypeIcon/VehicleTypeIcon';
 import { ListingCardFrame, ListingCardAction, ListingCardPill, Price, Rating } from './ListingCard';
@@ -28,7 +29,10 @@ function CommerceFooter({ item }) {
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} ActivityCardData */
 /** @param {{item: ActivityCardData, basePath?: string, layout?: 'vertical'|'horizontal'|'featured', headingLevel?: number, className?: string, loading?: 'lazy'|'eager'}} props */
 export function ActivityCard({ item, basePath = '/activities', ...props }) {
-  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: props.placeholderKind ?? item.placeholderKind ?? 'activity' })} to={`${basePath}/${item.slug}`} mediaTop={<ListingCardPill>{item.catalogGroupLabel ?? item.catalogGroup ?? item.category ?? 'Activity'}</ListingCardPill>} mediaBottom={<Tags items={item.tags} />} footer={<CommerceFooter item={item} />} />;
+  // The catalog group leads the card the way the route leads a transfer: same
+  // frosted plate, same size, with the drawing of the sport in front of it.
+  const group = <ListingCardPill size="md" className="listing-card__pill--lead"><ActivityCategoryIcon group={item.catalogGroup} />{item.catalogGroupLabel ?? item.catalogGroup ?? item.category ?? 'Activity'}</ListingCardPill>;
+  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: props.placeholderKind ?? item.placeholderKind ?? 'activity' })} to={`${basePath}/${item.slug}`} mediaTop={group} mediaBottom={<Tags items={item.tags} />} footer={<CommerceFooter item={item} />} />;
 }
 
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,equipmentType?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,unit?:string,availability?:string,tags?:string[]}} RentalCardData */
@@ -58,7 +62,7 @@ export function TransferCard({ item, basePath = '/transfers', pickupLabels, vehi
   // an airport shortcut keeps its choice whichever vehicle the guest opens.
   const query = new URLSearchParams(Object.entries({ direction: item.direction, pickup: item.pickup }).filter(([, value]) => value)).toString();
   const markers = <PickupMarkers points={item.routeEntity?.pickupPoints} labels={pickupLabels} />;
-  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} title={vehicleName || item.name} titleMeta={item.bodyType ? <VehicleTypeTag type={item.bodyType} label={vehicleTypeLabels?.[item.bodyType] ?? item.bodyType} /> : null} description={capacity || item.description} to={`${basePath}/${item.slug}${query ? `?${query}` : ''}`} mediaTop={<ListingCardPill size="md" tone="accent" className="listing-card__pill--route">{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={markers ?? <Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
+  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} title={vehicleName || item.name} titleMeta={item.bodyType ? <VehicleTypeTag type={item.bodyType} label={vehicleTypeLabels?.[item.bodyType] ?? item.bodyType} /> : null} description={capacity || item.description} to={`${basePath}/${item.slug}${query ? `?${query}` : ''}`} mediaTop={<ListingCardPill size="md" className="listing-card__pill--lead">{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={markers ?? <Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
 }
 
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} StayCardData */
