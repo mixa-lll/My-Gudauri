@@ -542,3 +542,6 @@
     transition-duration: 1ms !important;
   }
 }
+
+/* The illustrated body-type row sits between the route panel and the toolbar. */
+.destination-vehicle-filter { margin-bottom: clamp(var(--space-600), 3vw, var(--space-800)); }

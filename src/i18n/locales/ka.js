@@ -358,6 +358,14 @@ export const ka = {
         groups: 'ჯგუფებისთვის',
         'four-by-four': 'ზამთრის 4×4'
       },
+      vehicleTypesLabel: 'ავტომობილის ზომა',
+      vehicleTypes: {
+        sedan: 'სედანი',
+        hatchback: 'ჰეჩბეკი',
+        suv: 'ჯიპი 4×4',
+        minivan: 'მინივენი',
+        minibus: 'მიკროავტობუსი'
+      },
       pickup: {
         airport: 'აეროპორტი',
         city: 'ქალაქი',

@@ -358,6 +358,14 @@ export const ru = {
         groups: 'Для групп',
         'four-by-four': 'Зимний 4×4'
       },
+      vehicleTypesLabel: 'Размер машины',
+      vehicleTypes: {
+        sedan: 'Седан',
+        hatchback: 'Хэтчбек',
+        suv: 'Внедорожник',
+        minivan: 'Минивэн',
+        minibus: 'Микроавтобус'
+      },
       pickup: {
         airport: 'Аэропорт',
         city: 'Город',

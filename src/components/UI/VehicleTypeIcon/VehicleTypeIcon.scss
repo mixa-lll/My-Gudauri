@@ -1,0 +1,32 @@
+/* The artwork ships on a warm off-white plate. Rather than cut five files out,
+   whatever holds the drawing paints itself the same colour, so the edge of the
+   plate disappears into the chip or the button around it. */
+:root { --vehicle-plate: #faf7f2; }
+
+.ui-vehicle-icon {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--vehicle-plate);
+}
+
+.ui-vehicle-tag {
+  flex: none;
+  padding-right: var(--space-300);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  border-radius: var(--radius-pill);
+  background: var(--vehicle-plate);
+  color: var(--text-secondary);
+}
+
+.ui-vehicle-tag .ui-vehicle-icon {
+  width: 52px;
+  flex: none;
+}
+
+.ui-vehicle-tag b {
+  font: var(--fw-semibold) var(--type-caption-size) / 1 var(--font-body);
+  white-space: nowrap;
+}

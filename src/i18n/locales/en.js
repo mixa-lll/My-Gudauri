@@ -358,6 +358,14 @@ export const en = {
         groups: 'For groups',
         'four-by-four': 'Winter 4×4'
       },
+      vehicleTypesLabel: 'Vehicle size',
+      vehicleTypes: {
+        sedan: 'Sedan',
+        hatchback: 'Hatchback',
+        suv: 'SUV 4×4',
+        minivan: 'Minivan',
+        minibus: 'Minibus'
+      },
       pickup: {
         airport: 'Airport',
         city: 'City',

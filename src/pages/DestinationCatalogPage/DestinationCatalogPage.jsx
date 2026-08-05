@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar } from '../../design-system';
+import { BenefitsSection, BookingSteps, Button, CatalogCategoryTabs, CatalogHero, CatalogRoutePanel, Container, DestinationCard, FaqAccordion, FilterControl, FilterToolbar, ListingCardGrid, MoreResultsCard, SiteFooter, SiteNavbar, VehicleTypeFilter } from '../../design-system';
 import { CATALOG_FILTERS, matchesActiveRefinements, matchesFilter } from '../../data/catalogFilters';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -84,7 +84,7 @@ function transferFilters(items, t) {
       }))
     ],
     refinements: [
-      ...options('vehicleClass', 'vehicle'),
+      ...options('bodyType', 'vehicle').map((item) => ({ ...item, label: label(`catalog.transfers.vehicleTypes.${item.value}`, item.value) })),
       ...options('pickupType', 'pickup')
     ]
   };
@@ -244,13 +244,19 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     [dynamicFilters, filterConfig, section, t]
   );
   const availableRefinements = refinements;
-  const refinementGroups = useMemo(() => availableRefinements.reduce((groups, filter) => {
+  // Transfers show body type as an illustrated row, so the toolbar must not
+  // offer the same refinement a second time as a dropdown.
+  const toolbarRefinements = useMemo(
+    () => section === 'transfers' ? availableRefinements.filter((filter) => filter.group !== 'vehicle') : availableRefinements,
+    [availableRefinements, section]
+  );
+  const refinementGroups = useMemo(() => toolbarRefinements.reduce((groups, filter) => {
     const groupId = filter.group || 'filters';
     const current = groups.find((group) => group.id === groupId);
     if (current) current.filters.push(filter);
     else groups.push({ id: groupId, label: filter.groupLabel || t('catalog.groups.filters'), filters: [filter] });
     return groups;
-  }, []), [availableRefinements, t]);
+  }, []), [toolbarRefinements, t]);
   const categoryItems = useMemo(() => {
     const category = categories.find((item) => item.id === activeCategory);
     return items.filter((item) => matchesFilter(section, category, item));
@@ -280,6 +286,12 @@ export function DestinationCatalogPage({ section: sectionProp }) {
   const requestedPickup = searchParams.get('pickup') ?? '';
   // Every transfer route serves the same meeting points at one price, so the
   // cards advertise them rather than the catalog listing them as separate rides.
+  const vehicleTypeLabels = Object.fromEntries(['sedan', 'hatchback', 'suv', 'minivan', 'minibus'].map((type) => [type, t(`catalog.transfers.vehicleTypes.${type}`)]));
+  const vehicleTypeOptions = isTransfers
+    ? availableRefinements
+      .filter((filter) => filter.group === 'vehicle')
+      .map((filter) => ({ ...filter, type: filter.value, count: categoryItems.filter((item) => item.bodyType === filter.value).length }))
+    : [];
   const pickupLabels = {
     airport: t('catalog.transfers.pickup.airport'),
     city: t('catalog.transfers.pickup.city'),
@@ -360,6 +372,15 @@ export function DestinationCatalogPage({ section: sectionProp }) {
                 label={section === 'instructors' ? t('catalog.instructors.disciplinesLabel') : t('catalog.common.categoriesLabel', { title: sectionTitle })}
               />
             )}
+            {isTransfers && vehicleTypeOptions.length > 1 ? (
+              <VehicleTypeFilter
+                className="destination-vehicle-filter"
+                label={t('catalog.transfers.vehicleTypesLabel')}
+                options={vehicleTypeOptions}
+                selectedValues={activeFilters}
+                onToggle={toggleFilter}
+              />
+            ) : null}
             <FilterToolbar
               title={section === 'instructors' ? t('catalog.instructors.filtersTitle') : t('catalog.common.filtersTitle')}
               titleId="destination-list-title"
@@ -379,7 +400,7 @@ export function DestinationCatalogPage({ section: sectionProp }) {
               <p role="alert">{t('catalog.common.error', { items: sectionTitle })}</p>
             ) : displayedItems.length ? (
               <ListingCardGrid className="destination-grid" columns={3} ariaLabel={t('catalog.common.resultsAriaLabel', { title: sectionTitle })}>
-                {displayedItems.map((item) => <DestinationCard item={directionalItem(item)} section={section} pickupLabels={isTransfers ? pickupLabels : undefined} key={item.slug} />)}
+                {displayedItems.map((item) => <DestinationCard item={directionalItem(item)} section={section} pickupLabels={isTransfers ? pickupLabels : undefined} vehicleTypeLabels={isTransfers ? vehicleTypeLabels : undefined} key={item.slug} />)}
                 {showOtherRoutesCard ? (
                   <MoreResultsCard
                     eyebrow={t('catalog.transfers.otherRoutes.kicker')}

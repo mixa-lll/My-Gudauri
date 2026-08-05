@@ -10,3 +10,4 @@ export { SectionHeading } from './SectionHeading/SectionHeading';
 export { HoverArrow } from './HoverArrow/HoverArrow';
 export { StarRating } from './StarRating/StarRating';
 export { FlagIcon } from './FlagIcon/FlagIcon';
+export { VEHICLE_TYPES, VehicleTypeIcon, VehicleTypeTag } from './VehicleTypeIcon/VehicleTypeIcon';

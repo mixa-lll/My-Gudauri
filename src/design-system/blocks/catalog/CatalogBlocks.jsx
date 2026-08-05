@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
-import { ActivityCard, CatalogCategoryTabs, CatalogRoutePanel, EditorialCard, InstructorCard, ListingCardGrid, RentalCard, StayCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface } from '../../../components';
+import { ActivityCard, CatalogCategoryTabs, CatalogRoutePanel, EditorialCard, InstructorCard, ListingCardGrid, RentalCard, StayCard, TransferCard, Badge, Button, EmptyState, ErrorState, LoadingState, SectionHeading, Surface, VehicleTypeIcon } from '../../../components';
 import './CatalogBlocks.scss';
 
 export function CatalogHero({ kicker, title, description, align = 'center', titleId }) {
@@ -65,6 +65,35 @@ export function ListingGrid({ items = [], cardType = 'activity', columns = 'auto
   const Card = CARD_TYPES[cardType];
   if (!Card) throw new Error(`ListingGrid: unregistered card type “${cardType}”.`);
   return <ListingCardGrid className="ds-listing-grid" columns={columns} ariaLabel={ariaLabel}>{items.map((item) => <Card item={item} key={item.slug} />)}</ListingCardGrid>;
+}
+
+/**
+ * Picking a vehicle by its shape. Body type is the one dimension a guest judges
+ * on sight, so it gets drawings and a permanent row rather than a word inside a
+ * dropdown; the options are the same refinement objects the rest of the catalog
+ * filters on, so counts and results never drift apart.
+ */
+export function VehicleTypeFilter({ label, options = [], selectedValues = [], onToggle, className = '' }) {
+  if (!options.length) return null;
+  return <section className={`ds-vehicle-filter ${className}`.trim()} aria-label={label}>
+    {label ? <p className="ds-vehicle-filter__label">{label}</p> : null}
+    <div className="ds-vehicle-filter__options" role="group" aria-label={label}>
+      {options.map((option) => {
+        const selected = selectedValues.includes(option.id);
+        return <button
+          type="button"
+          aria-pressed={selected}
+          className={`ds-vehicle-filter__option${selected ? ' is-selected' : ''}`}
+          key={option.id}
+          onClick={() => onToggle?.(option.id)}
+          disabled={option.count === 0}
+        >
+          <VehicleTypeIcon type={option.type} />
+          <span><b>{option.label}</b>{typeof option.count === 'number' ? <small>{option.count}</small> : null}</span>
+        </button>;
+      })}
+    </div>
+  </section>;
 }
 
 export function MoreResultsCard({ eyebrow, title, description, actionLabel, onAction }) {

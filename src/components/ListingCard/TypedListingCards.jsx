@@ -1,4 +1,5 @@
 import { Badge } from '../UI/Badge/Badge';
+import { VehicleTypeTag } from '../UI/VehicleTypeIcon/VehicleTypeIcon';
 import { ListingCardFrame, ListingCardAction, ListingCardPill, Price, Rating } from './ListingCard';
 
 function Tags({ items = [] }) {
@@ -48,7 +49,7 @@ function PickupMarkers({ points = [], labels = {} }) {
   return kinds.map((kind) => <ListingCardPill key={kind} title={labels[kind]}>{PICKUP_GLYPHS[kind] ?? '⌖'} {labels[kind] ?? kind}</ListingCardPill>);
 }
 
-export function TransferCard({ item, basePath = '/transfers', pickupLabels, ...props }) {
+export function TransferCard({ item, basePath = '/transfers', pickupLabels, vehicleTypeLabels, ...props }) {
   const tags = item.tags?.length ? item.tags : [item.duration, item.vehicle];
   // CMS names read "Minivan · up to 7 seats". Capacity is the fact a guest scans
   // for, so it gets the line under the name instead of the sales description.
@@ -57,7 +58,7 @@ export function TransferCard({ item, basePath = '/transfers', pickupLabels, ...p
   // an airport shortcut keeps its choice whichever vehicle the guest opens.
   const query = new URLSearchParams(Object.entries({ direction: item.direction, pickup: item.pickup }).filter(([, value]) => value)).toString();
   const markers = <PickupMarkers points={item.routeEntity?.pickupPoints} labels={pickupLabels} />;
-  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} title={vehicleName || item.name} description={capacity || item.description} to={`${basePath}/${item.slug}${query ? `?${query}` : ''}`} mediaTop={<ListingCardPill size="md" tone="accent" className="listing-card__pill--route">{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={markers ?? <Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
+  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} title={vehicleName || item.name} titleMeta={item.bodyType ? <VehicleTypeTag type={item.bodyType} label={vehicleTypeLabels?.[item.bodyType] ?? item.bodyType} /> : null} description={capacity || item.description} to={`${basePath}/${item.slug}${query ? `?${query}` : ''}`} mediaTop={<ListingCardPill size="md" tone="accent" className="listing-card__pill--route">{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={markers ?? <Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
 }
 
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} StayCardData */
