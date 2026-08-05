@@ -67,3 +67,16 @@
   font: var(--fw-semibold) var(--type-caption-size) / 1 var(--font-body);
   letter-spacing: 0;
 }
+
+/* One frame beside the heading rather than a strip above the page: a panorama
+   crop leaves the car as a sliver and a wedge of empty column beside the text,
+   so the transfer hero takes a near-square and lets the vehicle fill it. */
+.transfer-detail .ds-object-hero--split .ds-object-hero-gallery__main {
+  aspect-ratio: var(--media-square);
+}
+
+@media (max-width: 900px) {
+  .transfer-detail .ds-object-hero--split .ds-object-hero-gallery__main {
+    aspect-ratio: var(--media-landscape);
+  }
+}
