@@ -19,18 +19,6 @@
   letter-spacing: 0;
 }
 
-.transfer-hero-controls {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-400);
-}
-
-.transfer-hero-controls__note {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: var(--type-body-small-size);
-  line-height: 1.45;
-}
 
 /* A display size tuned for a full-width heading breaks a two-word body type
    across lines in half the width, so the split hero takes its own scale. */

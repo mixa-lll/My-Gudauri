@@ -11,7 +11,6 @@ import {
   ObjectHeroGallery,
   ObjectMainTags,
   ObjectReviews,
-  SegmentedControl,
   SiteFooter,
   SiteNavbar,
   TransferConditions,
@@ -49,7 +48,7 @@ function factValue(facts, labels) {
 export function TransferPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { language, t, tList } = useLanguage();
   const [transfer, setTransfer] = useState(null);
   const [related, setRelated] = useState([]);
@@ -183,17 +182,6 @@ export function TransferPage() {
   const bodyTypeLabel = transfer.vehicle?.bodyType ? t(`catalog.transfers.vehicleTypes.${transfer.vehicle.bodyType}`) : null;
   // The heading names the actual car; its class and capacity sit under it.
   const modelName = [transfer.vehicle?.make, transfer.vehicle?.model].filter(Boolean).join(' ') || vehicle.name || transfer.name;
-  const journeyNote = [
-    route.zoneType,
-    route.distanceKm ? `≈${route.distanceKm} ${t('transfer.km')}` : null,
-    route.duration,
-  ].filter(Boolean).join(' · ');
-  const setDirection = (next) => {
-    const params = new URLSearchParams(searchParams);
-    if (next === 'from-gudauri') params.set('direction', 'from-gudauri');
-    else params.delete('direction');
-    setSearchParams(params, { replace: true });
-  };
   const hero = <ObjectHero
     variant="split"
     mediaVariant="gallery"
@@ -212,18 +200,6 @@ export function TransferPage() {
     </>}
     description={transfer.description}
     rating={transfer.rating ? { value: transfer.rating, reviewsLabel: transfer.reviews, href: '#reviews' } : undefined}
-    details={<div className="transfer-hero-controls">
-      {journeyNote ? <p className="transfer-hero-controls__note">{journeyNote}</p> : null}
-      {route.bidirectional === false ? null : <SegmentedControl
-        label={t('transfer.directionLabel')}
-        options={[
-          { value: 'to-gudauri', label: t('transfer.toAnchor', { place: route.destination }) },
-          { value: 'from-gudauri', label: t('transfer.fromAnchor', { place: route.destination }) },
-        ]}
-        value={direction}
-        onChange={setDirection}
-      />}
-    </div>}
     media={<ObjectHeroGallery
       showPreviews={false}
       images={gallery}

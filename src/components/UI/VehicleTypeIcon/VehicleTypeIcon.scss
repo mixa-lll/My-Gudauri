@@ -1,28 +1,25 @@
-/* The artwork ships on a warm off-white plate. Rather than cut five files out,
-   whatever holds the drawing paints itself the same colour, so the edge of the
-   plate disappears into the chip or the button around it. */
-:root { --vehicle-plate: #faf7f2; }
-
+/* The artwork is cut out, so the drawing sits directly on whatever surface
+   holds it — a card, a tinted chip, a filter button — with no plate to hide. */
 .ui-vehicle-icon {
   width: 100%;
   height: auto;
   display: block;
-  background: var(--vehicle-plate);
 }
 
 .ui-vehicle-tag {
   flex: none;
-  padding-right: var(--space-300);
+  min-height: 32px;
+  padding: 0 var(--space-350) 0 var(--space-200);
   display: inline-flex;
   align-items: center;
   gap: var(--space-200);
   border-radius: var(--radius-pill);
-  background: var(--vehicle-plate);
-  color: var(--text-secondary);
+  background: var(--surface-tint-cool);
+  color: var(--text-primary);
 }
 
 .ui-vehicle-tag .ui-vehicle-icon {
-  width: 52px;
+  width: 46px;
   flex: none;
 }
 
