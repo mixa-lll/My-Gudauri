@@ -38,3 +38,44 @@
   font-size: clamp(38px, 4.4vw, 62px);
   line-height: 1.02;
 }
+
+/* The route plaque leads the hero, stated both ways. */
+.transfer-hero-route {
+  min-height: 44px;
+  padding: 0 var(--space-500);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-300);
+  border-radius: var(--radius-pill);
+  background: var(--surface-tint-cool-strong);
+  color: var(--text-primary);
+  font: var(--fw-medium) clamp(16px, 1.4vw, 20px) / 1 var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.transfer-hero-route i {
+  color: var(--text-secondary);
+  font-style: normal;
+}
+
+/* Class and capacity read as one plaque under the model name. */
+.transfer-detail .ds-object-hero--split .section-heading__title .transfer-hero-spec {
+  margin-top: var(--space-400);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-300);
+  font: inherit;
+}
+
+.transfer-hero-spec b {
+  min-height: 30px;
+  padding: 0 var(--space-350);
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--surface-tint-cool);
+  color: var(--text-secondary);
+  font: var(--fw-semibold) var(--type-caption-size) / 1 var(--font-body);
+  letter-spacing: 0;
+}

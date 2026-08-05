@@ -181,10 +181,8 @@ export function TransferPage() {
   // which way, and what it costs — before any scrolling. Direction is a control
   // here rather than a URL the guest has to guess at.
   const bodyTypeLabel = transfer.vehicle?.bodyType ? t(`catalog.transfers.vehicleTypes.${transfer.vehicle.bodyType}`) : null;
-  const modelLine = [
-    [transfer.vehicle?.make, transfer.vehicle?.model].filter(Boolean).join(' ') || vehicle.name,
-    transfer.seats ? t('transfer.upToSeats', { count: transfer.seats }) : null,
-  ].filter(Boolean).join(' · ');
+  // The heading names the actual car; its class and capacity sit under it.
+  const modelName = [transfer.vehicle?.make, transfer.vehicle?.model].filter(Boolean).join(' ') || vehicle.name || transfer.name;
   const journeyNote = [
     route.zoneType,
     route.distanceKm ? `≈${route.distanceKm} ${t('transfer.km')}` : null,
@@ -201,11 +199,17 @@ export function TransferPage() {
     mediaVariant="gallery"
     breadcrumbs={<BackLink to="/transfers">{t('transfer.backToList')}</BackLink>}
     badges={[
-      ...(bodyTypeLabel ? [<VehicleTypeTag key="body" type={transfer.vehicle.bodyType} label={bodyTypeLabel} />] : []),
-      { label: routeLabel },
-      { label: t('transfer.fixedPriceBadge'), tone: 'accent' },
+      // The route is the one thing worth stating above the name, and it reads
+      // both ways because the price and the car are the same either direction.
+      <span className="transfer-hero-route" key="route">{route.origin}<i aria-hidden="true">↔</i>{route.destination}</span>,
     ]}
-    title={<>{bodyTypeLabel ?? vehicle.name ?? transfer.name}{modelLine ? <small>{modelLine}</small> : null}</>}
+    title={<>
+      {modelName}
+      <small className="transfer-hero-spec">
+        {bodyTypeLabel ? <VehicleTypeTag type={transfer.vehicle.bodyType} label={bodyTypeLabel} /> : null}
+        {transfer.seats ? <b>{t('transfer.upToSeats', { count: transfer.seats })}</b> : null}
+      </small>
+    </>}
     description={transfer.description}
     rating={transfer.rating ? { value: transfer.rating, reviewsLabel: transfer.reviews, href: '#reviews' } : undefined}
     details={<div className="transfer-hero-controls">
@@ -221,6 +225,7 @@ export function TransferPage() {
       />}
     </div>}
     media={<ObjectHeroGallery
+      showPreviews={false}
       images={gallery}
       objectName={vehicle.name || transfer.name}
       objectLabel={t('transfer.galleryLabel')}

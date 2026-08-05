@@ -33,6 +33,9 @@ export function ObjectHeroGallery({
   openLabel = 'Open gallery',
   photosLabel = 'photos',
   placeholderKind,
+  // Some heroes want one clean frame rather than a contact sheet; the whole
+  // set is still one click away behind the same trigger.
+  showPreviews = true,
 }) {
   const galleryImages = images.filter((image) => image?.src && image?.type !== 'video');
   const [galleryIndex, setGalleryIndex] = useState(0);
@@ -56,7 +59,7 @@ export function ObjectHeroGallery({
   if (!galleryImages.length) return <MediaPlaceholder kind={placeholderKind} label={objectName} />;
 
   const mainImage = galleryImages[0];
-  const previewImages = galleryImages.slice(1, 5);
+  const previewImages = showPreviews ? galleryImages.slice(1, 5) : [];
   return <div className="ds-object-hero-gallery">
     <button
       className="ds-object-hero-gallery__main"
