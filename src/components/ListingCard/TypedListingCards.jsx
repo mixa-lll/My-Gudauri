@@ -36,11 +36,12 @@ export function RentalCard({ item, basePath = '/rental', ...props }) {
   return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'rental' })} to={`${basePath}/${item.slug}`} mediaTop={<ListingCardPill>{item.equipmentType ?? item.category ?? 'Rental'}</ListingCardPill>} mediaBottom={item.availability ? <Badge tone="success" mediaOverlay>{item.availability}</Badge> : <Tags items={item.tags} />} footer={<CommerceFooter item={item} />} />;
 }
 
-/** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,route?:string,duration?:string,vehicle?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} TransferCardData */
+/** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,route?:string,direction?:'to-gudauri'|'from-gudauri',duration?:string,vehicle?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} TransferCardData */
 /** @param {{item: TransferCardData, basePath?: string, layout?: 'vertical'|'horizontal'|'featured', headingLevel?: number, className?: string, loading?: 'lazy'|'eager'}} props */
 export function TransferCard({ item, basePath = '/transfers', ...props }) {
   const tags = item.tags?.length ? item.tags : [item.duration, item.vehicle];
-  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} to={`${basePath}/${item.slug}`} mediaTop={<ListingCardPill>{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={<Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
+  const direction = item.direction ? `?direction=${encodeURIComponent(item.direction)}` : '';
+  return <ListingCardFrame {...sharedProps(item, { ...props, placeholderKind: 'transfer' })} to={`${basePath}/${item.slug}${direction}`} mediaTop={<ListingCardPill>{item.route ?? item.category ?? 'Transfer'}</ListingCardPill>} mediaBottom={<Tags items={tags} />} footer={<CommerceFooter item={item} />} />;
 }
 
 /** @typedef {{slug:string,title?:string,name?:string,image?:string,description?:string,category?:string,rating?:number|string,reviews?:number|string,price?:string,priceSuffix?:string,tags?:string[]}} StayCardData */

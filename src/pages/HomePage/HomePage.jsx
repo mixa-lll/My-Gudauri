@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Container, FadeUp, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar, WordsPullUp } from '../../design-system';
+import { Badge, Container, FadeUp, FaqAccordion, InstructorCard, SectionHeading, SiteFooter, SiteNavbar, useCoverParallax, WordsPullUp } from '../../design-system';
 import { HomeHeroSearchPanel } from '../../components/product';
 import { HOME_CATEGORIES } from '../../data/siteCategories';
 import { useLanguage } from '../../i18n/LanguageContext';
@@ -10,6 +10,9 @@ import './HomePage.scss';
 export function HomePage() {
   const { t, tList } = useLanguage();
   const [instructors, setInstructors] = useState([]);
+  const coverRef = useRef(null);
+
+  useCoverParallax(coverRef);
 
   useEffect(() => {
     document.body.classList.add('home-page-body');
@@ -35,18 +38,20 @@ export function HomePage() {
   return (
     <>
       <div className="home-page">
-        <section className="home-cover">
+        <section className="home-cover" ref={coverRef}>
           <div className="home-cover__frame">
           <div className="home-cover__media" aria-hidden="true">
             <div className="home-cover__sky">
               <span className="home-cover__glow" />
-              <span className="home-cover__cloud home-cover__cloud--far" />
               <span className="home-cover__cloud home-cover__cloud--high" />
+              <span className="home-cover__cloud home-cover__cloud--far" />
               <span className="home-cover__cloud home-cover__cloud--mid" />
               <span className="home-cover__cloud home-cover__cloud--near" />
-              <span className="home-cover__cloud home-cover__cloud--band" />
             </div>
             <img className="home-cover__mountain" src="/assets/design-1/hero-gudauri-cutout.webp" alt="" />
+            <span className="home-cover__cloud home-cover__cloud--front" />
+            <span className="home-cover__cloud home-cover__cloud--front-low" />
+            <img className="home-cover__foreground" src="/assets/design-1/hero-gudauri-foreground.webp" alt="" />
             <span className="home-cover__noise" />
           </div>
 

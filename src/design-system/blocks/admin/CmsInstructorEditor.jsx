@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Button, FormField, Input, Select } from '../../../components';
-import { AUTOFILLED_FIELDS, INSTRUCTOR_DEFAULTS, listAutofilledFields, resolveInstructor, validateInstructor } from '../../../shared/instructorDefaults';
+import { AUTOFILLED_FIELDS, INSTRUCTOR_DEFAULTS, INSTRUCTOR_PRICING_POLICY, listAutofilledFields, resolveInstructor, validateInstructor } from '../../../shared/instructorDefaults';
 import { AutoField, ChoiceGroup, CmsEditorShell, FieldGroup, GalleryEditor, ListEditor, ParagraphEditor, Repeater, isBlank } from './CmsEditorParts';
+import { CmsPricingEditor, pricingPreviewRange } from './CmsPricingEditor';
 import { MediaUploadField } from './MediaUploadField';
 import './CmsInstructorEditor.scss';
 
@@ -43,6 +44,13 @@ export function CmsInstructorEditor({
   const auto = useMemo(() => resolveInstructor(value), [value]);
   const autofilled = useMemo(() => listAutofilledFields(value), [value]);
   const visibleErrors = submitted ? validateInstructor(value, { publishing: submitted === 'publish' || isPublished }) : {};
+
+  // The price preview walks the range this instructor actually sells, so the
+  // operator reads their own ladder rather than a generic example.
+  const setting = (name) => Number(value[name]) > 0 ? Math.round(Number(value[name])) : INSTRUCTOR_DEFAULTS[name];
+  const hourlyRate = setting('hourly_rate_gel');
+  const hourPreview = useMemo(() => pricingPreviewRange(setting('min_hours'), setting('max_hours'), setting('hours_step')), [value.min_hours, value.max_hours, value.hours_step]);
+  const peoplePreview = useMemo(() => pricingPreviewRange(setting('min_people'), setting('max_people'), 1), [value.min_people, value.max_people]);
 
   const submit = (action) => {
     setSubmitted(action);
@@ -141,6 +149,19 @@ export function CmsInstructorEditor({
         <FormField label="Часов по умолчанию"><Input type="number" min="1" value={value.default_hours ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.default_hours}`} onChange={input('default_hours')} /></FormField>
         <FormField label="Гостей по умолчанию"><Input type="number" min="1" value={value.default_people ?? ''} placeholder={`${INSTRUCTOR_DEFAULTS.default_people}`} onChange={input('default_people')} /></FormField>
       </div>
+    </FieldGroup>
+
+    <FieldGroup collapsible feeds="BookingConfigurator" title="Шкалы цены" description="Насколько дешевеет урок с ростом числа часов и гостей. Таблицы ниже пересчитываются на лету — это ровно те суммы, которые увидит гость.">
+      <CmsPricingEditor
+        policyKey={INSTRUCTOR_PRICING_POLICY}
+        basePrice={hourlyRate}
+        roundTo={value.price_round_to}
+        value={value.price_tiers ?? {}}
+        onChange={(next) => field('price_tiers', next)}
+        onRoundToChange={(next) => field('price_round_to', next)}
+        previewRanges={{ duration: hourPreview, participants: peoplePreview }}
+        errors={visibleErrors}
+      />
     </FieldGroup>
 
     <FieldGroup collapsible title="Служебные поля" description="Адрес страницы, роль и порядок в каталоге. Обычно их менять не нужно.">

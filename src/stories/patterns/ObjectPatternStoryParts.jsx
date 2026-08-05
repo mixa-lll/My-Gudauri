@@ -1,5 +1,5 @@
 import { BookingConfigurator, BookingSteps, FaqAccordion, InstructorCertifications, ObjectDescription, ObjectMainTags, ObjectRelatedListings, ObjectReviews } from '../../design-system';
-import { createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields } from '../../features/booking';
+import { createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, resolveEntryFields } from '../../features/booking';
 
 const facts = [{ label: 'Duration', value: '2–6 hours' }, { label: 'Languages', value: 'EN · RU · KA' }, { label: 'Group', value: '1–6 guests' }];
 const reviews = [{ author: 'Anna', text: 'Clear, patient and perfectly paced.', meta: 'February 2026', verified: true }, { author: 'Sam', text: 'A confident first day on skis.', meta: 'January 2026' }];
@@ -18,8 +18,15 @@ export function objectPatternProps(category) {
     bookingSteps: category === 'instructor' ? undefined : <BookingSteps context="object" items={steps} />,
     relatedListings: <ObjectRelatedListings items={[...related, { ...related[0], slug: 'snow-evening', title: 'Evening snow tour' }]} />,
     faqSection: <FaqAccordion variant="object" title="Common questions" kicker="Good to know" items={faq} />,
-    bookingWidget: <BookingConfigurator title={definition.title} priceLabel={definition.priceLabel} object={offer.object} fields={resolveEntryFields(definition, offer)} basePrice={basePrice} availability={offer.availability} entryNote={definition.entryNote} confirmationText={definition.confirmationText} estimate={(answers) => estimateBookingTotal(definition, offer, answers)} />,
+    bookingWidget: <BookingConfigurator title={definition.title} priceLabel={definition.priceLabel} object={offer.object} fields={resolveEntryFields(definition, offer)} basePrice={basePrice} availability={offer.availability} entryNote={definition.entryNote} confirmationText={definition.confirmationText} estimate={(answers) => estimateBookingPrice(definition, offer, answers)} />,
     certifications: category === 'instructor' ? <InstructorCertifications items={[{ title: 'APUL D Snowboard Instructor Licence', level: 'Valid until 2028', fileUrl: '/assets/design-3/certificates/mikhail-apul-d.jpg' }]} /> : undefined,
-    additionalSections: category === 'activity' ? [{ type: 'routeProgram', items: [{ title: 'Meet', description: 'Confirm equipment and conditions.' }, { title: 'Go', description: 'Follow the agreed route.' }] }] : [],
+    additionalSections: category === 'activity'
+      ? [{ type: 'routeProgram', items: [{ title: 'Meet', description: 'Confirm equipment and conditions.' }, { title: 'Go', description: 'Follow the agreed route.' }] }]
+      : category === 'transfer'
+        ? [
+          { type: 'routeMap', kicker: 'Your journey', title: 'Tbilisi Airport → Gudauri', description: 'A direct, winter-ready route with the exact pickup time confirmed after the request.', start: 'Tbilisi Airport', finish: 'Gudauri' },
+          { type: 'includedServices', kicker: 'One fixed price', title: 'Included in the transfer', includedItems: ['Meet & greet', 'Flight tracking', 'Ski luggage', '60 minutes waiting'], excludedItems: [] },
+        ]
+        : [],
   };
 }

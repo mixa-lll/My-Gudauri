@@ -21,6 +21,17 @@
       "port": 8788
     },
     {
+      "name": "gudauri-video-studio",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "../gudauri-video",
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
       "name": "my-gudauri-storybook",
       "runtimeExecutable": "npm",
       "runtimeArgs": [

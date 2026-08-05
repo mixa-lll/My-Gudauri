@@ -17,7 +17,7 @@ import {
   SiteFooter,
   SiteNavbar,
 } from '../../design-system';
-import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
+import { createBookingDraft, createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { getDestination } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { getActivities, getActivity } from '../../services/activitiesApi';
@@ -146,7 +146,7 @@ export function ActivityPage() {
       availability={bookingOffer.availability}
       entryNote={bookingDefinition.entryNote}
       confirmationText={bookingDefinition.confirmationText}
-      estimate={(answers) => estimateBookingTotal(bookingDefinition, bookingOffer, answers)}
+      estimate={(answers) => estimateBookingPrice(bookingDefinition, bookingOffer, answers)}
       actionLabel={t('object.continueRequest')}
       onContinue={startBooking}
     />}

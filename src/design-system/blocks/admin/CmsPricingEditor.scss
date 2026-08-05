@@ -1,0 +1,34 @@
+.cms-pricing { display: grid; gap: var(--space-600); }
+
+.cms-pricing__empty { margin: 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); }
+
+.cms-pricing__dimension { display: grid; gap: var(--space-350); }
+.cms-pricing__dimension-head h3 { margin: 0; font: var(--fw-semibold) var(--type-body-size) / var(--type-body-line) var(--font-body); }
+.cms-pricing__dimension-head p { max-width: 68ch; margin: var(--space-150) 0 0; color: var(--text-secondary); font: var(--fw-regular) var(--type-label-size) / var(--type-label-line) var(--font-body); }
+
+.cms-pricing__error { margin: 0; color: var(--status-danger); font: var(--fw-regular) var(--type-label-size) / var(--type-label-line) var(--font-body); }
+
+.cms-pricing__rows { display: grid; gap: var(--space-250); }
+.cms-pricing__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: var(--space-300); }
+
+@media (max-width: 720px) {
+  .cms-pricing__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .cms-pricing__row .cms-pricing__remove { grid-column: 1 / -1; justify-self: end; }
+}
+
+.cms-pricing__rounding { max-width: 22ch; }
+
+.cms-pricing__previews { display: grid; gap: var(--space-500); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+.cms-pricing__preview { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.cms-pricing__preview caption { margin-bottom: var(--space-250); color: var(--text-secondary); text-align: left; font: var(--fw-regular) var(--type-label-size) / var(--type-label-line) var(--font-body); }
+.cms-pricing__preview th,
+.cms-pricing__preview td { padding: var(--space-200) var(--space-250); text-align: right; font: var(--fw-regular) var(--type-label-size) / var(--type-label-line) var(--font-body); }
+.cms-pricing__preview thead th { color: var(--text-secondary); border-bottom: 1px solid var(--border-default); }
+.cms-pricing__preview tbody th { font-weight: var(--fw-semibold); }
+.cms-pricing__preview th:first-child,
+.cms-pricing__preview td:first-child { text-align: left; }
+.cms-pricing__preview tbody tr + tr th,
+.cms-pricing__preview tbody tr + tr td { border-top: 1px solid var(--border-subtle); }
+
+.cms-pricing__saving { color: var(--status-success); }

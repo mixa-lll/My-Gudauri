@@ -28,7 +28,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  isolation: isolate;
+  /* No isolation needed now that the grain blends with plain alpha — it existed
+     only to keep mix-blend-mode from reaching the page behind the cover. */
   background: #24374e;
 }
 
@@ -46,13 +47,13 @@
   overflow: hidden;
   background: linear-gradient(
     180deg,
-    #17334f 0%,
-    #274b6f 14%,
-    #4a7096 28%,
-    #7f9fbf 40%,
-    #b9cdde 52%,
-    #e6dfca 66%,
-    #f7eedc 100%
+    #37628e 0%,
+    #4874a2 14%,
+    #6f95b9 28%,
+    #9fbad3 40%,
+    #ccdbe8 52%,
+    #ece5d2 66%,
+    #f9f1e0 100%
   );
 }
 
@@ -67,17 +68,24 @@
   animation: hero-glow 16s ease-in-out infinite alternate;
 }
 
-/* Cloud bands are seamless fractal-noise tiles (feTurbulence, stitched) that
-   drift sideways forever; the mountain cut-out occludes them for depth. Same
-   noise primitive the reference landing uses for its grain overlays. Every
-   baseFrequency divides the 1600x800 tile a whole number of times, which is
-   what lets stitchTiles actually join the left and right edges. */
+/* Cloud bands are seamless fractal-noise tiles that drift sideways forever;
+   the mountain cut-out occludes them for depth. Baked to WebP by
+   scripts/generate-cloud-textures.mjs rather than run as a live feTurbulence
+   filter: Safari rasterises filter output into a limited buffer, which showed
+   up as hard rectangular seams once the tile repeated.
+
+   Four textures cover six bands — each band picks its own --tile width, so the
+   same noise reads at a different scale and never lines up with its neighbour.
+   The top/bottom fade lives in the texture's alpha rather than a CSS mask: a
+   mask on a moving layer has to be re-rasterised every frame. */
 .home-cover__cloud {
   position: absolute;
   left: 0;
   right: 0;
-  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 38%, #000 74%, rgba(0, 0, 0, 0) 100%);
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000 38%, #000 74%, rgba(0, 0, 0, 0) 100%);
+  /* Bands sit in the upper half of the frame, so without a parallax of their
+     own they scroll out of view almost at once while the ridge is held back.
+     The offset is a share of the viewport so it keeps pace with the scroll. */
+  transform: translate3d(0, calc(var(--cover-scroll, 0) * var(--cloud-parallax, 44vh)), 0);
 }
 
 .home-cover__cloud::before {
@@ -86,82 +94,137 @@
   top: 0;
   bottom: 0;
   left: 0;
-  width: calc(100% + 1600px);
+  /* One spare tile of width, scrolled by exactly one tile — the pattern lands
+     back on itself, so the loop is invisible whatever --tile is. */
+  width: calc(100% + var(--tile));
   background-image: var(--cloud);
   background-repeat: repeat-x;
-  background-size: 1600px 100%;
+  background-size: var(--tile) 100%;
   animation: hero-cloud-drift var(--drift, 160s) linear infinite;
-  will-change: transform;
 }
 
 .home-cover__cloud--high {
-  top: 9%;
-  height: 26%;
-  opacity: 0.32;
-  --drift: 200s;
-  --cloud: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1600'%20height='800'%3E%3Cfilter%20id='c'%20filterUnits='userSpaceOnUse'%20x='0'%20y='0'%20width='1600'%20height='800'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.003125%200.0075'%20numOctaves='5'%20seed='41'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20values='0%200%200%200%201%200%200%200%200%200.99%200%200%200%200%200.96%200%200%200%201.9%20-0.75'/%3E%3C/filter%3E%3Crect%20width='1600'%20height='800'%20filter='url(%23c)'/%3E%3C/svg%3E");
+  --cloud-parallax: 56vh;
+  top: 4%;
+  height: 20%;
+  opacity: 0.5;
+  --tile: 1600px;
+  --drift: 240s;
+  --cloud: url('/assets/design-1/clouds/sky-high.webp');
 }
 
 .home-cover__cloud--far {
-  top: 14%;
-  height: 38%;
-  opacity: 0.48;
-  --drift: 260s;
-  --cloud: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1600'%20height='800'%3E%3Cfilter%20id='c'%20filterUnits='userSpaceOnUse'%20x='0'%20y='0'%20width='1600'%20height='800'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.0025%200.005'%20numOctaves='5'%20seed='8'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20values='0%200%200%200%201%200%200%200%200%200.99%200%200%200%200%200.96%200%200%200%201.35%20-0.45'/%3E%3C/filter%3E%3Crect%20width='1600'%20height='800'%20filter='url(%23c)'/%3E%3C/svg%3E");
+  --cloud-parallax: 50vh;
+  top: 10%;
+  height: 24%;
+  opacity: 0.72;
+  --tile: 1500px;
+  --drift: 185s;
+  --cloud: url('/assets/design-1/clouds/sky-far.webp');
 }
 
 .home-cover__cloud--mid {
-  top: 20%;
-  height: 34%;
-  opacity: 0.75;
-  --drift: 150s;
-  --cloud: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1600'%20height='800'%3E%3Cfilter%20id='c'%20filterUnits='userSpaceOnUse'%20x='0'%20y='0'%20width='1600'%20height='800'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.00375%200.0075'%20numOctaves='5'%20seed='17'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20values='0%200%200%200%201%200%200%200%200%200.99%200%200%200%200%200.96%200%200%200%201.7%20-0.66'/%3E%3C/filter%3E%3Crect%20width='1600'%20height='800'%20filter='url(%23c)'/%3E%3C/svg%3E");
+  --cloud-parallax: 44vh;
+  top: 17%;
+  height: 24%;
+  opacity: 0.9;
+  --tile: 1400px;
+  --drift: 135s;
+  --cloud: url('/assets/design-1/clouds/sky-mid.webp');
 }
 
 .home-cover__cloud--near {
-  top: 27%;
-  height: 30%;
-  opacity: 0.9;
+  --cloud-parallax: 38vh;
+  top: 25%;
+  height: 22%;
+  opacity: 1;
+  --tile: 1250px;
   --drift: 95s;
-  --cloud: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1600'%20height='800'%3E%3Cfilter%20id='c'%20filterUnits='userSpaceOnUse'%20x='0'%20y='0'%20width='1600'%20height='800'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.005%200.01'%20numOctaves='5'%20seed='29'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20values='0%200%200%200%201%200%200%200%200%200.99%200%200%200%200%200.96%200%200%200%202%20-0.9'/%3E%3C/filter%3E%3Crect%20width='1600'%20height='800'%20filter='url(%23c)'/%3E%3C/svg%3E");
+  --cloud: url('/assets/design-1/clouds/sky-near.webp');
 }
 
-.home-cover__cloud--band {
-  top: 36%;
+/* These two ride in *front* of the panorama — bigger tiles and quicker drift,
+   so they read as much closer than the bands behind the ridge. */
+.home-cover__cloud--front {
+  --cloud-parallax: -12vh;
+  top: 38%;
   height: 24%;
-  opacity: 0.85;
-  --drift: 70s;
-  --cloud: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='1600'%20height='800'%3E%3Cfilter%20id='c'%20filterUnits='userSpaceOnUse'%20x='0'%20y='0'%20width='1600'%20height='800'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.00625%200.0125'%20numOctaves='5'%20seed='53'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20values='0%200%200%200%201%200%200%200%200%200.99%200%200%200%200%200.96%200%200%200%202.2%20-1.05'/%3E%3C/filter%3E%3Crect%20width='1600'%20height='800'%20filter='url(%23c)'/%3E%3C/svg%3E");
+  z-index: 2;
+  opacity: 0.95;
+  --tile: 2200px;
+  --drift: 62s;
+  --cloud: url('/assets/design-1/clouds/sky-mid.webp');
 }
 
-/* The cut-out is anchored below the top of the frame and cropped from the
-   bottom, so the ridge always sits low and the sky above it stays open —
-   on a wide screen `cover` would otherwise scale to width and eat the peaks. */
-.home-cover__mountain {
-  position: absolute;
-  top: 8%;
-  right: 0;
-  left: 0;
-  z-index: 1;
-  width: 100%;
+.home-cover__cloud--front-low {
+  --cloud-parallax: -16vh;
+  top: 54%;
+  height: 22%;
+  z-index: 2;
+  opacity: 0.82;
+  --tile: 2600px;
+  --drift: 44s;
+  --cloud: url('/assets/design-1/clouds/sky-near.webp');
+}
+
+/* Both plates are cut from the same photograph and share an aspect ratio, so
+   identical geometry lands them pixel-on-pixel; only the parallax transform
+   below pulls them apart. Anchored below the top of the frame and cropped from
+   the bottom, so the ridge always sits low and the sky above it stays open — on
+   a wide screen `cover` would otherwise scale to width and eat the peaks. */
+.home-cover__mountain,
+.home-cover__foreground {
+  --plate-top: 8%;
   /* Explicit height — an <img> with height:auto would fall back to its own
      aspect ratio and `cover` would never crop. Overshoots the frame so the
      near slope runs off the bottom edge. */
-  height: 98%;
+  --plate-height: 98%;
+  position: absolute;
+  top: var(--plate-top);
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: var(--plate-height);
   display: block;
   object-fit: cover;
   object-position: 50% 0;
-  filter: saturate(0.96) contrast(1.02);
 }
 
-/* Film grain over the whole scene (fractal noise, overlay blend). */
+.home-cover__mountain {
+  z-index: 1;
+  filter: saturate(0.96) contrast(1.02);
+  /* Drifts down slightly as the cover scrolls — the far plane lags behind. */
+  transform: translate3d(0, calc(var(--cover-scroll, 0) * 26px), 0);
+}
+
+/* The near hillside sits in front of the clouds and creeps up and forward,
+   which separates it from the ridge and reads as depth. */
+.home-cover__foreground {
+  /* Starts higher than the far plate: sitting flush, its ridge line was too low
+     for the parallax to register in the first moments of the scroll. The height
+     grows by the same amount so the bottom edge stays put. */
+  --lift: 7%;
+  top: calc(var(--plate-top) - var(--lift));
+  height: calc(var(--plate-height) + var(--lift));
+  z-index: 3;
+  /* Rise is a share of the plate's own height, not a pixel count: the plate
+     only overhangs the frame by (plate-top + plate-height - 100%), so a fixed
+     offset would lift its bottom edge into view on a short viewport. */
+  transform: translate3d(0, calc(var(--cover-scroll, 0) * -4.5%), 0);
+}
+
+/* Film grain over the whole scene.
+   Plain alpha, NOT mix-blend-mode: a blended layer covering the whole cover has
+   to re-composite everything beneath it whenever anything down there moves, and
+   during a scroll the browser could not keep up — it served the frame with the
+   translucent cloud bands missing, which is why they vanished while scrolling
+   and snapped back the moment it stopped. */
 .home-cover__noise {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 4;
   pointer-events: none;
-  opacity: 0.4;
-  mix-blend-mode: overlay;
+  opacity: 0.16;
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='200'%20height='200'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='200'%20height='200'%20filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
 }
@@ -172,12 +235,12 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(9, 20, 34, 0.32) 0%, rgba(9, 20, 34, 0) 26%, rgba(9, 20, 34, 0) 55%, rgba(9, 20, 34, 0.5) 100%);
+  background: linear-gradient(180deg, rgba(9, 20, 34, 0.1) 0%, rgba(9, 20, 34, 0) 26%, rgba(9, 20, 34, 0) 55%, rgba(9, 20, 34, 0.5) 100%);
 }
 
 @keyframes hero-cloud-drift {
   to {
-    transform: translate3d(-1600px, 0, 0);
+    transform: translate3d(calc(var(--tile) * -1), 0, 0);
   }
 }
 
@@ -203,16 +266,18 @@
 /* Wider viewports scale the panorama up, so less of it fits vertically — the
    ridge starts higher there to keep the village inside the frame. */
 @media (min-width: 1100px) {
-  .home-cover__mountain {
-    top: 13%;
-    height: 93%;
+  .home-cover__mountain,
+  .home-cover__foreground {
+    --plate-top: 13%;
+    --plate-height: 93%;
   }
 }
 
 @media (min-width: 1600px) {
-  .home-cover__mountain {
-    top: 9%;
-    height: 97%;
+  .home-cover__mountain,
+  .home-cover__foreground {
+    --plate-top: 9%;
+    --plate-height: 97%;
   }
 }
 

@@ -18,7 +18,7 @@ import {
   SiteFooter,
   SiteNavbar,
 } from '../../design-system';
-import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
+import { createBookingDraft, createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { getInstructor, getInstructors } from '../../services/instructorsApi';
 import './ProfilePage.scss';
@@ -98,6 +98,7 @@ export function ProfilePage() {
     definition: bookingDefinition,
     object: { id: `instructor:${instructor.id ?? instructor.slug}`, slug: instructor.slug, name: instructor.name, typeLabel: t('instructor.typeLabel'), image: instructor.bookingAvatar },
     basePrice: instructor.pricing.hourlyRateGel,
+    pricingRules: instructor.pricing.rules,
     availability: instructor.availability,
     constraints: {
       duration: { min: instructor.pricing.minHours, max: instructor.pricing.maxHours, step: instructor.pricing.hoursStep, initial: instructor.pricing.defaultHours },
@@ -143,7 +144,7 @@ export function ProfilePage() {
       entryNote={bookingDefinition.entryNote}
       confirmationText={bookingDefinition.confirmationText}
       defaultValues={{ duration: instructor.pricing.defaultHours, participants: instructor.pricing.defaultPeople }}
-      estimate={(answers) => estimateBookingTotal(bookingDefinition, bookingOffer, answers)}
+      estimate={(answers) => estimateBookingPrice(bookingDefinition, bookingOffer, answers)}
       onContinue={startBooking}
     />}
     relatedListings={<ObjectRelatedListings cardType="instructor" title={t('instructor.related')} items={related} />}

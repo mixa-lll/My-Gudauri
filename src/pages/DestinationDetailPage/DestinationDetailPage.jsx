@@ -19,7 +19,7 @@ import {
   StayObjectPattern,
   TransferObjectPattern,
 } from '../../design-system';
-import { createBookingDraft, createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
+import { createBookingDraft, createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, localizeBookingDefinition, resolveEntryFields, saveBookingDraft } from '../../features/booking';
 import { getDestination, getDestinationItem } from '../../data/destinations';
 import { useLanguage } from '../../i18n/LanguageContext';
 import './DestinationDetailPage.scss';
@@ -102,7 +102,7 @@ export function DestinationDetailPage() {
       availability={bookingOffer.availability}
       entryNote={bookingDefinition.entryNote}
       confirmationText={bookingDefinition.confirmationText}
-      estimate={(answers) => estimateBookingTotal(bookingDefinition, bookingOffer, answers)}
+      estimate={(answers) => estimateBookingPrice(bookingDefinition, bookingOffer, answers)}
       actionLabel={t('object.continueRequest')}
       onContinue={startBooking}
     />}

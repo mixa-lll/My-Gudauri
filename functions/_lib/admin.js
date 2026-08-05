@@ -1,4 +1,5 @@
-import { INSTRUCTOR_DEFAULTS, resolveInstructor, validateInstructor } from '../../src/shared/instructorDefaults.js';
+import { INSTRUCTOR_DEFAULTS, INSTRUCTOR_PRICING_POLICY, resolveInstructor, validateInstructor } from '../../src/shared/instructorDefaults.js';
+import { flattenPricingTiers, groupPricingTiers } from '../../src/shared/pricing.js';
 import { collectMediaGarbage, nextSortOrder, resolveUniqueSlug } from './cms.js';
 
 const text = (value, fallback = '') => typeof value === 'string' ? value.trim() : fallback;
@@ -38,17 +39,19 @@ export async function listAdminInstructors(db) {
 export async function getAdminInstructor(db, slug) {
   const base = await db.prepare('SELECT * FROM instructors WHERE slug = ?').bind(slug).first();
   if (!base) return null;
-  const [disciplines, languages, about, tags, certifications, media, reviews] = await db.batch([
+  const [disciplines, languages, about, tags, certifications, media, reviews, priceTiers] = await db.batch([
     db.prepare('SELECT d.slug FROM instructor_disciplines link JOIN disciplines d ON d.id = link.discipline_id WHERE link.instructor_id = ? ORDER BY link.sort_order').bind(base.id),
     db.prepare('SELECT l.code FROM instructor_languages link JOIN languages l ON l.id = link.language_id WHERE link.instructor_id = ? ORDER BY link.sort_order').bind(base.id),
     db.prepare('SELECT body FROM instructor_about WHERE instructor_id = ? ORDER BY sort_order, id').bind(base.id),
     db.prepare('SELECT label FROM instructor_tags WHERE instructor_id = ? ORDER BY sort_order, id').bind(base.id),
     db.prepare('SELECT title, level, file_url FROM instructor_certifications WHERE instructor_id = ? ORDER BY sort_order, id').bind(base.id),
     db.prepare('SELECT media_type AS type, url, thumbnail_url, alt, is_featured AS featured FROM instructor_media WHERE instructor_id = ? ORDER BY sort_order, id').bind(base.id),
-    db.prepare('SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position, is_published FROM instructor_reviews WHERE instructor_id = ? ORDER BY sort_order, id').bind(base.id)
+    db.prepare('SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position, is_published FROM instructor_reviews WHERE instructor_id = ? ORDER BY sort_order, id').bind(base.id),
+    db.prepare('SELECT dimension, from_units, percent FROM instructor_price_tiers WHERE instructor_id = ? ORDER BY dimension, from_units').bind(base.id)
   ]);
   return {
     ...base,
+    price_tiers: groupPricingTiers(priceTiers.results),
     disciplines: disciplines.results.map((item) => item.slug),
     languages: languages.results.map((item) => item.code),
     about: about.results.map((item) => item.body),
@@ -67,8 +70,15 @@ async function replaceRelations(db, instructorId, payload) {
     db.prepare('DELETE FROM instructor_tags WHERE instructor_id = ?').bind(instructorId),
     db.prepare('DELETE FROM instructor_certifications WHERE instructor_id = ?').bind(instructorId),
     db.prepare('DELETE FROM instructor_media WHERE instructor_id = ?').bind(instructorId),
-    db.prepare('DELETE FROM instructor_reviews WHERE instructor_id = ?').bind(instructorId)
+    db.prepare('DELETE FROM instructor_reviews WHERE instructor_id = ?').bind(instructorId),
+    db.prepare('DELETE FROM instructor_price_tiers WHERE instructor_id = ?').bind(instructorId)
   ];
+  // `payload.price_tiers` is already normalized by resolveInstructor, so the
+  // rows written here are exactly the ladder the editor previewed.
+  flattenPricingTiers(INSTRUCTOR_PRICING_POLICY, payload.price_tiers).forEach((tier) => statements.push(
+    db.prepare('INSERT INTO instructor_price_tiers (instructor_id, dimension, from_units, percent, sort_order) VALUES (?, ?, ?, ?, ?)')
+      .bind(instructorId, tier.dimension, tier.from, tier.percent, tier.sort_order)
+  ));
   const disciplines = Array.isArray(payload.disciplines) ? payload.disciplines : [];
   const languages = Array.isArray(payload.languages) ? payload.languages : [];
   disciplines.forEach((slug, index) => statements.push(db.prepare('INSERT INTO instructor_disciplines (instructor_id, discipline_id, sort_order) SELECT ?, id, ? FROM disciplines WHERE slug = ?').bind(instructorId, index, text(slug))));
@@ -135,18 +145,19 @@ export async function saveInstructor(db, payload, currentSlug, { bucket } = {}) 
     Math.max(minPeople, optionalInteger(payload.max_people, INSTRUCTOR_DEFAULTS.max_people)),
     Math.max(minHours, optionalInteger(payload.default_hours, INSTRUCTOR_DEFAULTS.default_hours)),
     Math.max(minPeople, optionalInteger(payload.default_people, INSTRUCTOR_DEFAULTS.default_people)),
+    Math.max(1, optionalInteger(payload.price_round_to, INSTRUCTOR_DEFAULTS.price_round_to)),
     sortOrder,
   ];
 
   let instructorId;
   if (existing) {
-    await db.prepare('UPDATE instructors SET slug=?, status=?, display_name=?, gender=?, role=?, card_description=?, tagline=?, intro=?, card_image_url=?, hero_image_url=?, hero_image_alt=?, booking_avatar_url=?, experience_years=?, rating=?, review_count=?, availability_label=?, certificate_label=?, hourly_rate_gel=?, min_hours=?, max_hours=?, hours_step=?, min_people=?, max_people=?, default_hours=?, default_people=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?').bind(...values, existing.id).run();
+    await db.prepare('UPDATE instructors SET slug=?, status=?, display_name=?, gender=?, role=?, card_description=?, tagline=?, intro=?, card_image_url=?, hero_image_url=?, hero_image_alt=?, booking_avatar_url=?, experience_years=?, rating=?, review_count=?, availability_label=?, certificate_label=?, hourly_rate_gel=?, min_hours=?, max_hours=?, hours_step=?, min_people=?, max_people=?, default_hours=?, default_people=?, price_round_to=?, sort_order=?, updated_at=CURRENT_TIMESTAMP WHERE id=?').bind(...values, existing.id).run();
     instructorId = existing.id;
   } else {
-    const result = await db.prepare('INSERT INTO instructors (slug, status, display_name, gender, role, card_description, tagline, intro, card_image_url, hero_image_url, hero_image_alt, booking_avatar_url, experience_years, rating, review_count, availability_label, certificate_label, hourly_rate_gel, min_hours, max_hours, hours_step, min_people, max_people, default_hours, default_people, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').bind(...values).run();
+    const result = await db.prepare('INSERT INTO instructors (slug, status, display_name, gender, role, card_description, tagline, intro, card_image_url, hero_image_url, hero_image_alt, booking_avatar_url, experience_years, rating, review_count, availability_label, certificate_label, hourly_rate_gel, min_hours, max_hours, hours_step, min_people, max_people, default_hours, default_people, price_round_to, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').bind(...values).run();
     instructorId = result.meta.last_row_id;
   }
-  await replaceRelations(db, instructorId, { ...payload, about: resolved.about });
+  await replaceRelations(db, instructorId, { ...payload, about: resolved.about, price_tiers: resolved.price_tiers });
   const saved = await getAdminInstructor(db, slug);
   const dropped = previousMedia.filter((url) => !instructorMediaUrls(saved).includes(url));
   if (dropped.length) await collectMediaGarbage(db, bucket, dropped);

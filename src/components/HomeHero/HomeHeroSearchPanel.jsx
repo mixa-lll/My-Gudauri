@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Link, useNavigate } from 'react-router-dom';
@@ -39,6 +39,82 @@ function CaretIcon({ open = false }) {
   return <img className={cn('hero-search__caret', open && 'is-open')} src="/assets/navbar/caret-down.png" alt="" aria-hidden="true" />;
 }
 
+const CAROUSEL_QUERY = '(max-width: 820px)';
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => (typeof window === 'undefined' ? false : window.matchMedia(query).matches));
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const onChange = (event) => setMatches(event.matches);
+    setMatches(media.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, [query]);
+
+  return matches;
+}
+
+/* Narrow screens turn the tab row into a picker: the selected pill stays put in
+   the middle and the labels travel under it. Measuring is the only way to place
+   them — the labels are translated words of very different widths. */
+function useTabCarousel(activeSlug, enabled) {
+  const viewportRef = useRef(null);
+  const trackRef = useRef(null);
+  const [layout, setLayout] = useState({ offset: 0, pillWidth: 0 });
+
+  const measure = useCallback(() => {
+    const viewport = viewportRef.current;
+    const active = trackRef.current?.querySelector('.hero-search__tab.is-active');
+    if (!enabled || !viewport || !active) {
+      setLayout({ offset: 0, pillWidth: 0 });
+      return;
+    }
+
+    /* offsetLeft is measured against the track, which is the transformed
+       element, so it is the label's position before the slide — that makes this
+       safe to re-run at any time, including mid-transition. */
+    const centre = viewport.clientWidth / 2;
+    setLayout({
+      offset: Math.round(centre - (active.offsetLeft + active.offsetWidth / 2)),
+      pillWidth: Math.round(active.offsetWidth)
+    });
+  }, [enabled]);
+
+  useLayoutEffect(() => {
+    measure();
+    // The first pass can land before the panel has its final width, which put
+    // the labels off-centre; re-read once layout has settled.
+    const frame = requestAnimationFrame(measure);
+    return () => cancelAnimationFrame(frame);
+  }, [measure, activeSlug]);
+
+  useEffect(() => {
+    if (!enabled) return undefined;
+    // Fonts and translations settle after mount, and both change label widths.
+    const observer = new ResizeObserver(measure);
+    if (trackRef.current) observer.observe(trackRef.current);
+    if (viewportRef.current) observer.observe(viewportRef.current);
+
+    // The panel animates in, so its width is still settling for a few frames
+    // after mount; a late pass guarantees the final numbers.
+    const settled = setTimeout(measure, 400);
+
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) measure();
+    });
+
+    return () => {
+      cancelled = true;
+      clearTimeout(settled);
+      observer.disconnect();
+    };
+  }, [enabled, measure]);
+
+  return { viewportRef, trackRef, ...layout };
+}
+
 export function HomeHeroSearchPanel({ className }) {
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -51,6 +127,8 @@ export function HomeHeroSearchPanel({ className }) {
   const [openField, setOpenField] = useState(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const loadedRef = useRef({});
+  const isCarousel = useMediaQuery(CAROUSEL_QUERY);
+  const carousel = useTabCarousel(activeSlug, isCarousel);
 
   const section = HERO_SECTIONS.find((entry) => entry.slug === activeSlug);
   const items = itemsBySection[activeSlug] ?? getStaticSectionItems(activeSlug);
@@ -160,26 +238,40 @@ export function HomeHeroSearchPanel({ className }) {
 
   return (
     <div className={cn('hero-search', className)} role="search" aria-label={t('home.hero.searchLabel')}>
-      <div className="hero-search__tabs" role="tablist" aria-label={t('home.hero.categoriesLabel')}>
-        {HERO_SECTIONS.map((entry) => {
-          const active = entry.slug === activeSlug;
-          return (
-            <button
-              className={cn('hero-search__tab', active && 'is-active')}
-              type="button"
-              role="tab"
-              aria-selected={active}
-              onClick={() => {
-                setActiveSlug(entry.slug);
-                setOpenField(null);
-              }}
-              key={entry.slug}
-            >
-              {active ? <img src={entry.icon} alt="" aria-hidden="true" /> : null}
-              {t(`categories.${entry.slug}.title`)}
-            </button>
-          );
-        })}
+      <div
+        className={cn('hero-search__tabs', isCarousel && 'hero-search__tabs--carousel')}
+        role="tablist"
+        aria-label={t('home.hero.categoriesLabel')}
+        ref={carousel.viewportRef}
+      >
+        {isCarousel ? (
+          <span className="hero-search__tab-pill" style={{ width: carousel.pillWidth || undefined }} aria-hidden="true" />
+        ) : null}
+        <div
+          className="hero-search__tabs-track"
+          ref={carousel.trackRef}
+          style={isCarousel ? { transform: `translate3d(${carousel.offset}px, 0, 0)` } : undefined}
+        >
+          {HERO_SECTIONS.map((entry) => {
+            const active = entry.slug === activeSlug;
+            return (
+              <button
+                className={cn('hero-search__tab', active && 'is-active')}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => {
+                  setActiveSlug(entry.slug);
+                  setOpenField(null);
+                }}
+                key={entry.slug}
+              >
+                {active ? <img src={entry.icon} alt="" aria-hidden="true" /> : null}
+                {t(`categories.${entry.slug}.title`)}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="hero-search__bar hero-search__bar--desktop">

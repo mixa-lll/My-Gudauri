@@ -1,10 +1,10 @@
 import { BookingConfigurator } from '../../design-system';
-import { createBookingOffer, estimateBookingTotal, getBookingFlowDefinition, resolveEntryFields } from '../../features/booking';
+import { createBookingOffer, estimateBookingPrice, getBookingFlowDefinition, resolveEntryFields } from '../../features/booking';
 import { defineComposition } from '../../design-system/architecture/registry';
 
-function configuratorArgs(category, basePrice, overrides = {}) {
+function configuratorArgs(category, basePrice, overrides = {}, pricingRules) {
   const definition = getBookingFlowDefinition(category);
-  const offer = createBookingOffer({ definition, object: { id: `${definition.category}:storybook`, slug: 'storybook-offer', name: 'Storybook offer' }, basePrice, availability: 'Available this week' });
+  const offer = createBookingOffer({ definition, object: { id: `${definition.category}:storybook`, slug: 'storybook-offer', name: 'Storybook offer' }, basePrice, availability: 'Available this week', pricingRules });
   return {
     title: definition.title,
     priceLabel: definition.priceLabel,
@@ -14,7 +14,7 @@ function configuratorArgs(category, basePrice, overrides = {}) {
     availability: offer.availability,
     entryNote: definition.entryNote,
     confirmationText: definition.confirmationText,
-    estimate: (answers) => estimateBookingTotal(definition, offer, answers),
+    estimate: (answers) => estimateBookingPrice(definition, offer, answers),
     ...overrides,
   };
 }
@@ -31,6 +31,27 @@ export default {
 };
 
 export const Instructor = { args: configuratorArgs('instructors', 345) };
+
+/**
+ * A full day for a group: the breakdown separates the base rate, the surcharge
+ * for extra students and the volume discount, and the note under the total
+ * shows what the discounted hour actually costs.
+ */
+export const VolumePricing = {
+  name: 'Volume Pricing',
+  args: configuratorArgs('instructors', 345, { defaultValues: { duration: 8, participants: 3 } }),
+};
+
+/** An instructor whose CMS ladder is flatter than the platform default. */
+export const CustomLadder = {
+  name: 'Custom Ladder',
+  args: configuratorArgs(
+    'instructors',
+    345,
+    { defaultValues: { duration: 8, participants: 3 } },
+    { roundTo: 10, tiers: { duration: [{ from: 1, percent: 0 }, { from: 6, percent: 5 }], participants: [{ from: 2, percent: 50 }, { from: 3, percent: 40 }] } },
+  ),
+};
 export const MobileCollapsed = {
   args: configuratorArgs('instructors', 345),
   globals: { viewport: { value: 'mobile1', isRotated: false } },

@@ -11,6 +11,9 @@ export function createBookingDraft({ definition, offer, answers = {} }) {
     object: offer.object,
     offer: {
       basePrice: offer.basePrice,
+      // Carried with the draft so the flow quotes the same price the object
+      // page did, even if the object is edited mid-request.
+      pricingRules: offer.pricingRules ?? null,
       currency: offer.currency,
       constraints: offer.constraints,
       availability: offer.availability,

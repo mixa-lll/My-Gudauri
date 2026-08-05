@@ -4,6 +4,7 @@ export { CmsCollectionList } from './admin/CmsCollectionList';
 export { CmsActivityEditor } from './admin/CmsActivityEditor';
 export { CMS_PAGE_BLOCKS } from './admin/CmsEditorParts';
 export { CmsInstructorEditor } from './admin/CmsInstructorEditor';
+export { CmsPricingEditor, pricingPreviewRange } from './admin/CmsPricingEditor';
 export { CmsTransferEditor } from './admin/CmsTransferEditor';
 export { MediaUploadField } from './admin/MediaUploadField';
 export { BookingConfigurator, BookingFormSection, BookingProgress, BookingRequestSummary, BookingWidget, StickyBookingWidget } from './booking/BookingBlocks';

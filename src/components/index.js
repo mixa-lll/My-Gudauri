@@ -5,7 +5,7 @@ export { LanguageSwitcher } from './LanguageSwitcher/LanguageSwitcher';
 export { CategoryTab, CatalogCategoryTabs } from './CatalogCategoryTabs/CatalogCategoryTabs';
 export { CatalogRoutePanel, RouteOption } from './CatalogRoutePanel/CatalogRoutePanel';
 export { DestinationCard } from './DestinationCard/DestinationCard';
-export { FadeUp, WordsPullUp } from './HomeHero/HeroMotion';
+export { FadeUp, useCoverParallax, WordsPullUp } from './HomeHero/HeroMotion';
 export { MediaPlaceholder } from './MediaPlaceholder/MediaPlaceholder';
 export { ObjectMediaGallery } from './ProfileGallery/ProfileGallery';
 export { ListingCard, ListingCardAction, ListingCardFrame, ListingCardGrid, ListingCardPill, ListingCardPrice, ListingCardRating, Price, Rating } from './ListingCard/ListingCard';

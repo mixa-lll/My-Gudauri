@@ -85,5 +85,7 @@ export const INSTRUCTOR_DETAILS = Object.fromEntries(INSTRUCTORS.map((instructor
   tags: [...instructor.tags, 'Private lessons', 'Intermediate'],
   media: DEFAULT_MEDIA,
   reviewsList: DEFAULT_REVIEWS,
-  pricing: { hourlyRateGel: 345, minHours: 2, maxHours: 12, hoursStep: 2, minPeople: 1, maxPeople: 10, defaultHours: 8, defaultPeople: 2 }
+  // `rules.tiers` empty on purpose: the shared pricing engine fills in the
+  // platform ladders, so the dev fallback quotes what production quotes.
+  pricing: { hourlyRateGel: 345, minHours: 2, maxHours: 12, hoursStep: 2, minPeople: 1, maxPeople: 10, defaultHours: 8, defaultPeople: 2, rules: { roundTo: 5, tiers: {} } }
 }]));

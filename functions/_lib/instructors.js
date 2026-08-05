@@ -1,3 +1,5 @@
+import { groupPricingTiers } from '../../src/shared/pricing.js';
+
 function parseJson(value) {
   try {
     return JSON.parse(value || '[]');
@@ -79,18 +81,20 @@ export async function getInstructor(db, slug) {
   const instructor = await db.prepare(`${SUMMARY_SELECT} WHERE i.status = 'published' AND i.slug = ? LIMIT 1`).bind(slug).first();
   if (!instructor) return null;
 
-  const [aboutResult, tagsResult, certificationsResult, mediaResult, reviewsResult] = await db.batch([
+  const [aboutResult, tagsResult, certificationsResult, mediaResult, reviewsResult, priceTiersResult] = await db.batch([
     db.prepare('SELECT body FROM instructor_about WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT label FROM instructor_tags WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT title, level, file_url FROM instructor_certifications WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
     db.prepare('SELECT media_type, url, thumbnail_url, alt, is_featured FROM instructor_media WHERE instructor_id = ? ORDER BY sort_order, id').bind(instructor.id),
-    db.prepare("SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position FROM instructor_reviews WHERE instructor_id = ? AND is_published = 1 ORDER BY sort_order, id").bind(instructor.id)
+    db.prepare("SELECT author_name, lesson_label, rating, review_date, body, avatar_url, avatar_position FROM instructor_reviews WHERE instructor_id = ? AND is_published = 1 ORDER BY sort_order, id").bind(instructor.id),
+    db.prepare('SELECT dimension, from_units, percent FROM instructor_price_tiers WHERE instructor_id = ? ORDER BY dimension, from_units').bind(instructor.id)
   ]);
 
   const detail = await db.prepare(`
     SELECT role, tagline, intro, hero_image_url, hero_image_alt, booking_avatar_url,
       experience_years, availability_label, certificate_label, hourly_rate_gel,
-      min_hours, max_hours, hours_step, min_people, max_people, default_hours, default_people
+      min_hours, max_hours, hours_step, min_people, max_people, default_hours, default_people,
+      price_round_to
     FROM instructors WHERE id = ?
   `).bind(instructor.id).first();
 
@@ -136,7 +140,13 @@ export async function getInstructor(db, slug) {
       minPeople: detail.min_people,
       maxPeople: detail.max_people,
       defaultHours: detail.default_hours,
-      defaultPeople: detail.default_people
+      defaultPeople: detail.default_people,
+      // Volume ladders; an empty map lets the shared engine fall back to the
+      // platform defaults instead of silently quoting a flat rate.
+      rules: {
+        roundTo: detail.price_round_to,
+        tiers: groupPricingTiers(priceTiersResult.results)
+      }
     }
   };
 }

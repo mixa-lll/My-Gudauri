@@ -12,14 +12,55 @@ function formatQuantity(field, value, short = false) {
   return `${number} ${label.toLowerCase()}`;
 }
 
-function getPriceBreakdown(fields, values, basePrice, estimatedTotal) {
-  const priceField = fields.find((field) => field.control === 'quantity' && field.affectsPrice);
-  if (!priceField || !Number(basePrice) || !Number(estimatedTotal)) return [];
-  const quantity = Number(values[priceField.id]) || 0;
-  return [{
-    label: `${numberFormatter.format(Number(basePrice))} × ${formatQuantity(priceField, quantity, true)}`,
-    value: numberFormatter.format(Number(estimatedTotal)),
-  }];
+/** `estimate` may return a plain total or the full quote from the pricing engine. */
+function toQuote(result, basePrice) {
+  if (result && typeof result === 'object') return result;
+  return { total: Number(result ?? basePrice) || 0 };
+}
+
+const money = (amount) => numberFormatter.format(Math.round(amount));
+
+/**
+ * Why the total is what it is: base rate × units, the group surcharge on top,
+ * and the volume discount taken off. The rows are additive, so a guest can read
+ * the ladder rather than trust an opaque number.
+ */
+function getPriceBreakdown({ fields, values, basePrice, quote, t }) {
+  if (!Number(basePrice) || !Number(quote.total)) return [];
+  const labelFor = (id, units) => {
+    const field = fields.find((item) => item.id === id);
+    return field ? formatQuantity(field, units, true) : units;
+  };
+
+  if (!quote.dimensions) {
+    // Legacy BookingWidget path: a bare total with no engine breakdown.
+    const priceField = fields.find((field) => field.control === 'quantity' && field.affectsPrice);
+    if (!priceField) return [];
+    return [{ label: `${money(basePrice)} × ${formatQuantity(priceField, Number(values[priceField.id]) || 0, true)}`, value: money(quote.total) }];
+  }
+
+  const rows = [];
+  const multiply = quote.dimensions.find((item) => item.mode === 'multiply');
+  if (multiply) rows.push({ label: `${money(basePrice)} × ${labelFor(multiply.field, multiply.units)}`, value: money(quote.subtotal) });
+
+  const surcharge = quote.dimensions.find((item) => item.mode === 'surcharge');
+  if (surcharge && quote.groupAmount >= 1) {
+    rows.push({ label: t('configurator.groupSurcharge', { group: labelFor(surcharge.field, surcharge.units) }), value: `+${money(quote.groupAmount)}` });
+  }
+  if (quote.discountAmount >= 1) {
+    rows.push({ label: t('configurator.volumeDiscount', { percent: Math.round(quote.discountPercent) }), value: `−${money(quote.discountAmount)}`, saving: true });
+  }
+  return rows.length > 1 ? rows : rows.map((row) => ({ ...row, value: money(quote.total) }));
+}
+
+/** The line that makes “the more you book, the cheaper it gets” legible. */
+function getUnitNote({ fields, quote, currency, t }) {
+  if (!quote.dimensions || quote.discountAmount < 1) return '';
+  const multiply = quote.dimensions.find((item) => item.mode === 'multiply');
+  const field = multiply && fields.find((item) => item.id === multiply.field);
+  if (!field || !quote.units) return '';
+  const unit = field.shortSingularLabel ?? field.shortLabel ?? field.singularLabel ?? field.label;
+  return t('configurator.unitPrice', { amount: money(quote.unitPrice), currency, unit });
 }
 
 function initialValues(fields, defaults = {}) {
@@ -64,7 +105,7 @@ function EntryField({ field, value, onChange, disabled }) {
   </FormField>;
 }
 
-function ConfiguratorForm({ className = '', object, objectName, availability, fields, values, disabled, loading, update, breakdown, totalLabel, quantitySummary, priceLabel, entryNote, actionLabel, confirmationText, ready, onContinue }) {
+function ConfiguratorForm({ className = '', object, objectName, availability, fields, values, disabled, loading, update, breakdown, unitNote, totalLabel, quantitySummary, priceLabel, entryNote, actionLabel, confirmationText, ready, onContinue }) {
   return <form className={`ds-booking-configurator__form ${className}`} onSubmit={(event) => { event.preventDefault(); if (ready) onContinue?.(values); }}>
     <div className="ds-booking-configurator__head">
       {object?.image ? <img src={object.image} alt="" /> : <span className="ds-booking-configurator__object-fallback" aria-hidden="true">{objectName.slice(0, 1)}</span>}
@@ -73,8 +114,9 @@ function ConfiguratorForm({ className = '', object, objectName, availability, fi
     <div className="ds-booking-configurator__fields">
       {fields.map((field) => <EntryField field={field} value={values[field.id]} disabled={disabled || loading} onChange={update} key={field.id} />)}
     </div>
-    {breakdown.length ? <dl className="ds-booking-configurator__breakdown">{breakdown.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl> : null}
+    {breakdown.length ? <dl className="ds-booking-configurator__breakdown">{breakdown.map((row) => <div className={row.saving ? 'is-saving' : undefined} key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl> : null}
     <div className="ds-booking-configurator__total"><strong>{totalLabel}</strong>{quantitySummary ? <span>for {quantitySummary}</span> : <span>{priceLabel}</span>}</div>
+    {unitNote ? <p className="ds-booking-configurator__unit-note">{unitNote}</p> : null}
     {entryNote ? <p className="ds-booking-configurator__entry-note"><span aria-hidden="true">◷</span>{entryNote}</p> : null}
     <Button className="ds-booking-configurator__action" type="submit" size="lg" fullWidth disabled={disabled || !ready} loading={loading}>{actionLabel}</Button>
     <p className="ds-booking-configurator__note">{confirmationText}</p>
@@ -103,10 +145,12 @@ export function BookingConfigurator({
 }) {
   const { t } = useLanguage();
   const [values, setValues] = useState(() => initialValues(fields, defaultValues));
-  const estimatedTotal = useMemo(() => estimate?.(values) ?? (Number(basePrice) || 0), [basePrice, estimate, values]);
-  const totalLabel = estimatedTotal ? `${new Intl.NumberFormat('en').format(estimatedTotal)} ${currency}` : 'On request';
+  const quote = useMemo(() => toQuote(estimate?.(values), basePrice), [basePrice, estimate, values]);
+  const estimatedTotal = quote.total;
+  const totalLabel = estimatedTotal ? `${numberFormatter.format(estimatedTotal)} ${currency}` : 'On request';
   const ready = fields.every((field) => !field.required || String(values[field.id] ?? '').trim());
-  const breakdown = getPriceBreakdown(fields, values, basePrice, estimatedTotal);
+  const breakdown = getPriceBreakdown({ fields, values, basePrice, quote, t });
+  const unitNote = getUnitNote({ fields, quote, currency, t });
   const quantitySummary = fields.filter((field) => field.control === 'quantity').map((field) => formatQuantity(field, values[field.id], true)).join(' · ');
   const objectName = object?.name ?? title;
 
@@ -132,6 +176,7 @@ export function BookingConfigurator({
     loading,
     update,
     breakdown,
+    unitNote,
     totalLabel,
     quantitySummary,
     priceLabel: priceLabel ?? t('configurator.priceLabel'),

@@ -3,6 +3,7 @@ export {
   CATEGORY_BOOKING_REGISTRY,
   createBookingOffer,
   createInitialBookingAnswers,
+  estimateBookingPrice,
   estimateBookingTotal,
   formatBookingPrice,
   getBookingFlowDefinition,

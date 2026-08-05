@@ -500,6 +500,35 @@ export const ru = {
       { title: 'Получите подтверждение', description: 'Вы получите место встречи и финальные детали до оплаты.' }
     ]
   },
+  transfer: {
+    loading: 'Загружаем трансфер…',
+    notFound: 'Трансфер не найден',
+    backToList: 'Ко всем трансферам',
+    unavailable: 'Трансфер временно недоступен',
+    aboutKicker: 'О трансфере',
+    vehicle: 'Машина',
+    seats: 'Места',
+    duration: 'В пути',
+    routeKicker: 'Ваш маршрут',
+    routeDescription: 'Ориентировочно {{duration}} в пути. Точное время подачи менеджер подтвердит после запроса.',
+    routeDescriptionFallback: 'Точное время подачи и детали маршрута менеджер подтвердит после запроса.',
+    startLabel: 'Откуда',
+    finishLabel: 'Куда',
+    confirmationLabel: 'После подтверждения',
+    includedKicker: 'Фиксированная цена',
+    includedTitle: 'Что входит в трансфер',
+    includedLabel: 'Включено',
+    excludedLabel: 'Доплаты',
+    noExclusions: 'Для этого предложения дополнительные обязательные платежи не указаны.',
+    reviewsKicker: 'Опыт гостей',
+    reviewsTitle: 'Отзывы о поездках',
+    related: 'Другие маршруты',
+    bookingSteps: [
+      { title: 'Отправьте детали поездки', description: 'Укажите направление, место подачи и число пассажиров.' },
+      { title: 'Мы подтверждаем машину', description: 'Менеджер проверяет водителя, время подачи и зимние условия на дороге.' },
+      { title: 'Получите контакты водителя', description: 'До поездки вы получите подтверждённую цену, машину и детали встречи.' }
+    ]
+  },
   instructor: {
     notFound: 'Инструктор не найден',
     backToList: 'Ко всем инструкторам',
@@ -770,6 +799,9 @@ export const ru = {
   configurator: {
     title: 'Настройте запрос',
     priceLabel: 'Примерная сумма',
+    groupSurcharge: 'Группа {{group}}',
+    volumeDiscount: 'Скидка за объём −{{percent}}%',
+    unitPrice: 'Тариф со скидкой ≈ {{amount}} {{currency}} за {{unit}}',
     action: 'Продолжить',
     confirmation: 'Дальше выберете остальные детали. Местный менеджер подтвердит доступность до оплаты.'
   },

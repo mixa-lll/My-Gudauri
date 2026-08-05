@@ -261,14 +261,14 @@ export function ActivitySchedule({ id = 'schedule', kicker = 'Plan your day', ti
   </ObjectSection>;
 }
 
-export function RouteMap({ id = 'route-map', kicker = 'Navigation', title = 'Route map', description, start, finish, points = [], mapHref, mapLabel = 'Open map' }) {
+export function RouteMap({ id = 'route-map', kicker = 'Navigation', title = 'Route map', description, start, finish, startLabel = 'Start', finishLabel = 'Finish', confirmationLabel = 'On confirmation', points = [], mapHref, mapLabel = 'Open map', newTabLabel = 'opens in a new tab' }) {
   const titleId = useId();
   const hasOverview = start || finish || points.length;
   return <ObjectSection id={id} className="ds-route-map" kicker={kicker} title={title} description={description} titleId={titleId}>
     <div className="ds-route-map__panel">
-      {hasOverview ? <dl><div><dt>Start</dt><dd>{start || 'On confirmation'}</dd></div><div><dt>Finish</dt><dd>{finish || 'On confirmation'}</dd></div></dl> : null}
+      {hasOverview ? <dl><div><dt>{startLabel}</dt><dd>{start || confirmationLabel}</dd></div><div><dt>{finishLabel}</dt><dd>{finish || confirmationLabel}</dd></div></dl> : null}
       {points.length ? <ol>{points.map((point, index) => <li key={point.title ?? index}><span>{index + 1}</span><div><strong>{point.title}</strong>{point.description ? <p>{point.description}</p> : null}</div></li>)}</ol> : null}
-      {mapHref ? <a className="ds-route-map__link" href={mapHref} target="_blank" rel="noreferrer">{mapLabel}<span className="visually-hidden"> (opens in a new tab)</span><span aria-hidden="true">↗</span></a> : null}
+      {mapHref ? <a className="ds-route-map__link" href={mapHref} target="_blank" rel="noreferrer">{mapLabel}<span className="visually-hidden"> ({newTabLabel})</span><span aria-hidden="true">↗</span></a> : null}
     </div>
   </ObjectSection>;
 }

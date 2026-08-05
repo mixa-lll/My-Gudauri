@@ -25,6 +25,9 @@
 .ds-booking-configurator__breakdown > div { display: flex; justify-content: space-between; gap: var(--space-400); }
 .ds-booking-configurator__breakdown dt { color: var(--text-secondary); font-size: var(--type-label-size); line-height: var(--type-label-line); }
 .ds-booking-configurator__breakdown dd { margin: 0; font-size: var(--type-label-size); line-height: var(--type-label-line); font-variant-numeric: tabular-nums; }
+.ds-booking-configurator__breakdown .is-saving dt,
+.ds-booking-configurator__breakdown .is-saving dd { color: var(--status-success); }
+.ds-booking-configurator__unit-note { margin: var(--space-200) 0 0; color: var(--text-secondary); text-align: right; font-size: var(--type-caption-size); line-height: var(--type-caption-line); font-variant-numeric: tabular-nums; }
 .ds-booking-configurator__total { margin-top: var(--space-500); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-350); }
 .ds-booking-configurator__total strong { font: var(--fw-regular) var(--text-h4) / 1 var(--font-heading); letter-spacing: -0.04em; }
 .ds-booking-configurator__total span { color: var(--text-secondary); text-align: right; white-space: nowrap; font-size: var(--type-caption-size); }

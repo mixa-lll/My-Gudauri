@@ -500,6 +500,35 @@ export const en = {
       { title: 'Receive confirmation', description: 'Get your meeting point and final activity details before payment.' }
     ]
   },
+  transfer: {
+    loading: 'Loading transfer…',
+    notFound: 'Transfer not found',
+    backToList: 'Back to transfers',
+    unavailable: 'Transfer is temporarily unavailable',
+    aboutKicker: 'About the transfer',
+    vehicle: 'Vehicle',
+    seats: 'Seats',
+    duration: 'Journey',
+    routeKicker: 'Your route',
+    routeDescription: 'Allow approximately {{duration}} for the journey. The manager confirms the exact pickup time after your request.',
+    routeDescriptionFallback: 'The manager confirms the exact pickup time and route details after your request.',
+    startLabel: 'From',
+    finishLabel: 'To',
+    confirmationLabel: 'On confirmation',
+    includedKicker: 'One fixed price',
+    includedTitle: 'Included in the transfer',
+    includedLabel: 'Included',
+    excludedLabel: 'Extra charges',
+    noExclusions: 'No mandatory extra charges are listed for this offer.',
+    reviewsKicker: 'Guest experience',
+    reviewsTitle: 'Ride reviews',
+    related: 'Other routes',
+    bookingSteps: [
+      { title: 'Send your journey details', description: 'Add the direction, pickup point and passenger count.' },
+      { title: 'We confirm the vehicle', description: 'A manager checks the driver, pickup time and winter road conditions.' },
+      { title: 'Receive the driver details', description: 'Before the ride, get the confirmed price, vehicle and meeting instructions.' }
+    ]
+  },
   instructor: {
     notFound: 'Instructor not found',
     backToList: 'Back to instructors',
@@ -770,6 +799,9 @@ export const en = {
   configurator: {
     title: 'Configure your request',
     priceLabel: 'Estimated total',
+    groupSurcharge: 'Group of {{group}}',
+    volumeDiscount: 'Volume discount −{{percent}}%',
+    unitPrice: 'Effective rate ≈ {{amount}} {{currency}} per {{unit}}',
     action: 'Continue',
     confirmation: 'Continue to choose the remaining details. A local manager confirms availability before payment.'
   },

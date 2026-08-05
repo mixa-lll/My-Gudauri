@@ -17,9 +17,13 @@
 
 .hero-search__tabs {
   display: flex;
-  gap: 6px;
   overflow-x: auto;
   scrollbar-width: none;
+}
+
+.hero-search__tabs-track {
+  display: flex;
+  gap: 6px;
 }
 
 .hero-search__tabs::-webkit-scrollbar {
@@ -340,6 +344,58 @@
     height: 38px;
     padding: 0 14px;
     font-size: 13px;
+  }
+
+  /* Picker mode: the pill is parked in the middle and only resizes to the
+     current label, while the track of labels slides underneath it. */
+  .hero-search__tabs--carousel {
+    position: relative;
+    overflow: hidden;
+    /* Labels either side fade out rather than being clipped mid-word. */
+    -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #000 18%, #000 82%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #000 18%, #000 82%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .hero-search__tabs--carousel .hero-search__tabs-track {
+    transition: transform var(--motion-duration-slow, 360ms) var(--motion-ease-emphasized, cubic-bezier(0.22, 1, 0.36, 1));
+    will-change: transform;
+  }
+
+  .hero-search__tab-pill {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 38px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-card);
+    transform: translateX(-50%);
+    transition:
+      width var(--motion-duration-slow, 360ms) var(--motion-ease-emphasized, cubic-bezier(0.22, 1, 0.36, 1));
+    pointer-events: none;
+  }
+
+  /* The pill is a sibling now, so the buttons stay transparent and just ride
+     over it. */
+  .hero-search__tabs--carousel .hero-search__tab,
+  .hero-search__tabs--carousel .hero-search__tab.is-active {
+    position: relative;
+    background: transparent;
+  }
+
+  .hero-search__tabs--carousel .hero-search__tab {
+    color: rgba(255, 255, 255, 0.72);
+    transition: color var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .hero-search__tabs--carousel .hero-search__tab.is-active {
+    color: var(--text-primary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-search__tabs--carousel .hero-search__tabs-track,
+    .hero-search__tab-pill {
+      transition: none;
+    }
   }
 
   .hero-search__bar--desktop {

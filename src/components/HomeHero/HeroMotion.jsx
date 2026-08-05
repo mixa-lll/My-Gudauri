@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 /* Shared cinematic ease for the cover intro — the same curve the reference
@@ -30,6 +31,38 @@ export function WordsPullUp({ lines, startDelay = 0.15 }) {
       })}
     </span>
   ));
+}
+
+/* Publishes the cover's scroll progress (0 -> 1 across its own height) as a CSS
+   variable, so the parallax layers are pure CSS transforms. Written straight to
+   the element rather than through motion values: framer's useScroll reads the
+   target ref before React attaches it here, which pinned progress at zero. */
+export function useCoverParallax(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const height = el.offsetHeight || window.innerHeight;
+      const progress = Math.min(1, Math.max(0, window.scrollY / height));
+      el.style.setProperty('--cover-scroll', progress.toFixed(4));
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [ref]);
 }
 
 export function FadeUp({ children, delay = 0, className }) {

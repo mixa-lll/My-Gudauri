@@ -39,6 +39,7 @@ async function loadInstructorDraft(slug, t) {
       image: instructor.bookingAvatar ?? instructor.image,
     },
     basePrice: instructor.pricing.hourlyRateGel,
+    pricingRules: instructor.pricing.rules,
     availability: instructor.availability,
     constraints: {
       duration: { min: instructor.pricing.minHours, max: instructor.pricing.maxHours, step: instructor.pricing.hoursStep, initial: instructor.pricing.defaultHours },

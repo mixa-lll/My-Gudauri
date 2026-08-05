@@ -52,6 +52,44 @@ function activityFilters(items, t) {
   };
 }
 
+/**
+ * Transfer routes come from the database, so the city tabs are derived from the
+ * data rather than a hard-coded slug list — a route added in the CMS shows up
+ * without a code change. Cities the locale does not name yet fall back to their
+ * own slug instead of printing a translation path.
+ */
+function transferFilters(items, t) {
+  const label = (path, fallback) => {
+    const value = t(path);
+    return value === path ? fallback : value;
+  };
+  const cities = [...new Set(items.map((item) => item.city).filter(Boolean))];
+  const options = (field, group) => [...new Set(items.map((item) => item[field]).filter(Boolean))].map((value) => ({
+    id: `${field}:${value}`,
+    label: value,
+    field,
+    value,
+    group,
+    groupLabel: group ? t(`catalog.groups.${group}`) : undefined
+  }));
+  return {
+    categories: [
+      { id: 'all', label: t('catalog.transfers.categories.all.label'), description: t('catalog.transfers.categories.all.description') },
+      ...cities.map((city) => ({
+        id: city,
+        field: 'city',
+        value: city,
+        label: label(`catalog.transfers.categories.${city}.label`, `${city.charAt(0).toUpperCase()}${city.slice(1)}`),
+        description: label(`catalog.transfers.categories.${city}.description`, undefined)
+      }))
+    ],
+    refinements: [
+      ...options('vehicleClass', 'vehicle'),
+      ...options('pickupType', 'pickup')
+    ]
+  };
+}
+
 function PricingInfoPopover({ steps = [], t }) {
   return (
     <Popover.Root>
@@ -192,14 +230,18 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     };
   }, [apiBacked, config, searchKey, section, sectionTitle]);
 
-  const dynamicActivityFilters = useMemo(() => section === 'activities' ? activityFilters(items, t) : null, [items, section, t]);
+  const dynamicFilters = useMemo(() => {
+    if (section === 'activities') return activityFilters(items, t);
+    if (section === 'transfers') return transferFilters(items, t);
+    return null;
+  }, [items, section, t]);
   const categories = useMemo(
-    () => dynamicActivityFilters?.categories ?? toCategoryFilters(section, filterConfig?.categories ?? [], t),
-    [dynamicActivityFilters, filterConfig, section, t]
+    () => dynamicFilters?.categories ?? toCategoryFilters(section, filterConfig?.categories ?? [], t),
+    [dynamicFilters, filterConfig, section, t]
   );
   const refinements = useMemo(
-    () => dynamicActivityFilters?.refinements ?? toRefinementFilters(section, filterConfig?.refinements ?? [], t),
-    [dynamicActivityFilters, filterConfig, section, t]
+    () => dynamicFilters?.refinements ?? toRefinementFilters(section, filterConfig?.refinements ?? [], t),
+    [dynamicFilters, filterConfig, section, t]
   );
   const availableRefinements = refinements;
   const refinementGroups = useMemo(() => availableRefinements.reduce((groups, filter) => {
@@ -239,7 +281,8 @@ export function DestinationCatalogPage({ section: sectionProp }) {
     if (!isTransfers) return item;
     const [anchorEnd, cityEnd] = (item.category ?? '').split(' ↔ ');
     if (!cityEnd) return item;
-    return { ...item, category: fromGudauri ? `${anchorEnd} → ${cityEnd}` : `${cityEnd} → ${anchorEnd}` };
+    const route = fromGudauri ? `${anchorEnd} → ${cityEnd}` : `${cityEnd} → ${anchorEnd}`;
+    return { ...item, category: route, route, direction: routeDirection };
   };
 
   if (!config) return <Navigate to="/" replace />;

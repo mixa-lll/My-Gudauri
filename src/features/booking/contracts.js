@@ -1,3 +1,5 @@
+import { calculatePrice } from '../../shared/pricing';
+
 const COMMON_CONTACT_STEP = 'contact-details';
 const COMMON_REVIEW_STEP = 'request-review';
 
@@ -210,7 +212,7 @@ export function resolveEntryFields(definition, offer) {
   });
 }
 
-export function createBookingOffer({ definition, object, currency = 'GEL', basePrice = 0, constraints = {}, availability }) {
+export function createBookingOffer({ definition, object, currency = 'GEL', basePrice = 0, constraints = {}, availability, pricingRules }) {
   return Object.freeze({
     object,
     flowKey: definition.key,
@@ -218,23 +220,46 @@ export function createBookingOffer({ definition, object, currency = 'GEL', baseP
     pricingPolicyKey: definition.pricingPolicy,
     currency,
     basePrice: Number(basePrice) || 0,
+    // Per-object volume ladders. Left out, the shared engine applies the
+    // platform defaults for the policy — an offer is always quotable.
+    pricingRules: pricingRules ?? null,
     constraints,
     availability,
   });
 }
 
+/** Every slot in the operator-match flow is a two-hour block. */
+const MATCH_SLOT_HOURS = 2;
+
+/**
+ * Map a flow's answers onto the quantities the pricing engine expects.
+ * Only the match flow needs a translation: it has no hours field, its duration
+ * comes from the slots the guest picked, and its group size is split into
+ * adults and children.
+ */
+function pricingQuantities(definition, answers = {}) {
+  if (definition.pricingPolicy !== 'operator-match-v1') return answers;
+  const adults = Math.max(1, Number(answers.adultsCount) || 1);
+  const children = Math.max(0, Number(answers.childrenCount) || 0);
+  return {
+    ...answers,
+    duration: Object.values(answers.timeSlotsByDate ?? {}).flat().length * MATCH_SLOT_HOURS,
+    participants: adults + children,
+  };
+}
+
+/** The full quote — total plus the parts a price breakdown is built from. */
+export function estimateBookingPrice(definition, offer, answers) {
+  return calculatePrice({
+    basePrice: offer?.basePrice,
+    policyKey: definition.pricingPolicy,
+    rules: offer?.pricingRules,
+    quantities: pricingQuantities(definition, answers),
+  });
+}
+
 export function estimateBookingTotal(definition, offer, answers) {
-  const base = Number(offer?.basePrice) || 0;
-  switch (definition.pricingPolicy) {
-    case 'instructor-hourly-v1': return base * (Number(answers.duration) || 0);
-    case 'activity-per-person-v1': return base * (Number(answers.participants) || 1);
-    case 'rental-daily-v1': return base * (Number(answers.days) || 1);
-    case 'stay-nightly-v1': return base * (Number(answers.nights) || 1);
-    case 'transfer-fixed-v1': return base;
-    case 'operator-match-v1': return base * Object.values(answers.timeSlotsByDate ?? {}).flat().length * 2;
-    case 'request-only-v1': return base;
-    default: return 0;
-  }
+  return estimateBookingPrice(definition, offer, answers).total;
 }
 
 export function formatBookingPrice(amount, currency = 'GEL', onRequestLabel = 'On request') {
