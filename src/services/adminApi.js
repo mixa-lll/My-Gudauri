@@ -37,5 +37,9 @@ export const getTransferRoutes = () => request('/api/admin/transfers/routes');
 export const updateTransferRoutes = (routes) => request('/api/admin/transfers/routes', { method: 'PUT', body: JSON.stringify({ routes }) });
 export const getCollectionPricing = (collection) => request(`/api/admin/pricing/${encodeURIComponent(collection)}`);
 export const updateCollectionPricing = (collection, data) => request(`/api/admin/pricing/${encodeURIComponent(collection)}`, { method: 'PUT', body: JSON.stringify(data) });
+export const getAdminRequests = () => request('/api/admin/requests');
+export const getAdminRequest = (code) => request(`/api/admin/requests/${encodeURIComponent(code)}`);
+/** Every operator action posts the same shape and returns the refreshed card. */
+export const applyRequestAction = (code, action) => request(`/api/admin/requests/${encodeURIComponent(code)}`, { method: 'POST', body: JSON.stringify(action) });
 export const getCategories = () => request('/api/admin/categories');
 export const updateCategories = (categories) => request('/api/admin/categories', { method: 'PUT', body: JSON.stringify(categories) });

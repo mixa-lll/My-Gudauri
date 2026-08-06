@@ -6,11 +6,12 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { createInstructorRequest } from '../../services/instructorRequestsApi';
 import './InstructorMatchPage.scss';
 
-function matchPayload(answers) {
+function matchPayload(answers, estimatedTotal) {
   const people = Number(answers.adultsCount || 0) + Number(answers.childrenCount || 0);
   const dateRange = answers.dateRange ?? {};
   return {
     requestType: 'manager_match',
+    estimatedTotal,
     instructorSlug: '',
     instructorName: '',
     dateRangeStart: dateRange.start ?? '',
@@ -52,7 +53,7 @@ export function InstructorMatchPage() {
         </div>
       </Container>
       <Container width="detail" className="instructor-match-page__content">
-        <BookingRequestFlow definition={definition} offer={offer} initialAnswers={initialAnswers} onSubmit={({ answers }) => createInstructorRequest(matchPayload(answers))} onBack={() => navigate('/instructors')} />
+        <BookingRequestFlow definition={definition} offer={offer} initialAnswers={initialAnswers} onSubmit={({ answers, estimatedTotal }) => createInstructorRequest(matchPayload(answers, estimatedTotal))} onBack={() => navigate('/instructors')} />
       </Container>
     </main>
   </div>;

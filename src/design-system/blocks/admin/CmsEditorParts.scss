@@ -12,7 +12,14 @@
 .cms-editor__nav-children .is-active { background: var(--surface-subtle); color: var(--text-primary); font-weight: var(--fw-medium); }
 .cms-editor__nav-children button:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
 .cms-editor__secondary-nav { display: grid; }
-.cms-editor__secondary-nav span { padding: var(--space-300); color: var(--text-secondary); font-size: var(--type-body-small-size); }
+.cms-editor__secondary-nav > span { padding: var(--space-300); color: var(--text-secondary); font-size: var(--type-body-small-size); }
+.cms-editor__secondary-nav button { min-height: var(--control-height-sm); padding: var(--space-300); display: flex; align-items: center; justify-content: space-between; gap: var(--space-200); border: 0; border-radius: var(--radius-control); background: transparent; color: var(--text-secondary); font: var(--type-body-small-size) / var(--type-body-small-line) var(--font-body); text-align: left; cursor: pointer; }
+.cms-editor__secondary-nav button:hover { background: var(--surface-page); color: var(--text-primary); }
+.cms-editor__secondary-nav button.is-active { background: var(--surface-inverse); color: var(--text-inverse); font-weight: var(--fw-medium); }
+.cms-editor__secondary-nav button:focus-visible { outline: var(--focus-ring-width) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+.cms-editor__secondary-nav small { color: var(--text-disabled); font-size: var(--type-label-size); }
+/* Unanswered requests are the only count that must read as a demand. */
+.cms-editor__nav-alert { padding: 2px var(--space-200); border-radius: var(--radius-full); background: var(--status-warning-surface); color: var(--status-warning); font-weight: var(--fw-semibold); }
 .cms-editor__operator { margin-top: auto; padding: var(--space-300); display: flex; align-items: center; gap: var(--space-200); border-top: 1px solid var(--border-subtle); }
 .cms-editor__operator > span { width: var(--control-height-sm); height: var(--control-height-sm); display: grid; place-items: center; border-radius: var(--radius-full); background: var(--surface-subtle); }
 .cms-editor__operator div { min-width: 0; flex: 1; display: grid; }

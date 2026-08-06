@@ -1,4 +1,6 @@
 import { apiError, json } from '../_lib/http';
+import { insertRequest, objectImage } from '../_lib/requests';
+import { requestTimeSlot } from '../../src/shared/requests.js';
 
 const ALLOWED = {
   requestType: ['specific_instructor', 'manager_match'],
@@ -83,35 +85,57 @@ export async function onRequestPost({ request, env }) {
   if (requestType === 'manager_match' && (!languages.length || !activities.length || !pace || !skillLevel || !budget)) return apiError('Please complete your matching preferences.', 400);
   if (!contactName || !contactPhone || !contactEmail || !messenger) return apiError('Please add your name, phone, email and preferred contact method.', 400);
 
-  const requestCode = `MG-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
-  const legacyDiscipline = activities.includes('Snowboard') && !activities.includes('Ski') ? 'Snowboard' : activities.includes('Ski') && !activities.includes('Snowboard') ? 'Ski' : 'Either';
-  const legacySkillLevel = skillLevel || groupSkillLevel || participants[0]?.skillLevel || 'Beginner';
-  const legacyLanguage = languages[0] || 'English';
-  const legacyParticipantCount = participantCount;
+  const discipline = activities.includes('Snowboard') && !activities.includes('Ski') ? 'Snowboard' : activities.includes('Ski') && !activities.includes('Snowboard') ? 'Ski' : 'Either';
+  const groupLevel = skillLevel || groupSkillLevel || participants[0]?.skillLevel || 'Beginner';
+  const lessonLanguage = languages[0] || 'English';
+
+  // The first booked slot is what the operator answers first, so it becomes the
+  // request's own date and time — that is the value the object calendar checks.
+  const firstDate = Object.keys(sessionSlots).filter((date) => sessionSlots[date].length).sort()[0] ?? dateRangeStart;
+  const firstSlot = requestTimeSlot(sessionSlots[firstDate]?.[0]);
 
   try {
-    await env.DB.prepare(`
-      INSERT INTO instructor_requests (
-        request_code, instructor_slug, instructor_name, preferred_dates,
-        time_preferences_json, discipline, skill_level, lesson_language,
-        participant_count, has_children, extras_json, notes,
-        contact_name, contact_phone, contact_email, messenger,
-        request_type, date_range_start, date_range_end, session_slots_json,
-        company_type, children_count, languages_json, activities_json, pace,
-        budget, participants_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).bind(
-      requestCode, instructorSlug, instructorName, preferredDates || `${dateRangeStart} – ${dateRangeEnd}`,
-      JSON.stringify(selectedSlotIds), legacyDiscipline, legacySkillLevel, legacyLanguage,
-      legacyParticipantCount, childrenCount > 0 ? 1 : 0, '[]', notes || null,
-      contactName, contactPhone, contactEmail || null, messenger,
-      requestType, dateRangeStart, dateRangeEnd, JSON.stringify(sessionSlots),
-      companyType, childrenCount, JSON.stringify(languages), JSON.stringify(activities), pace || null,
-      budget || null, JSON.stringify(participants.length ? participants : [{
-        type: 'group', adults: Math.max(1, Number.parseInt(payload.adultsCount, 10) || participantCount - childrenCount),
-        children: childrenCount, skillLevel: groupSkillLevel || legacySkillLevel, languages
-      }])
-    ).run();
+    const requestCode = await insertRequest(env.DB, {
+      category: 'instructors',
+      source: requestType === 'manager_match' ? 'manager_match' : 'object_page',
+      sourceLabel: requestType === 'manager_match' ? 'подбор менеджером' : 'со страницы инструктора',
+      objectSlug: instructorSlug,
+      objectName: instructorName || 'Подбор инструктора',
+      objectKicker: [requestType === 'manager_match' ? 'Подбор' : 'Инструктор', activities.join(', ') || discipline].filter(Boolean).join(' · '),
+      objectImageUrl: await objectImage(env.DB, 'instructors', instructorSlug),
+      scheduledDate: firstDate,
+      scheduledEndDate: dateRangeEnd !== firstDate ? dateRangeEnd : null,
+      scheduledStart: firstSlot?.start,
+      scheduledEnd: firstSlot?.end,
+      scheduleLabel: preferredDates || `${dateRangeStart} – ${dateRangeEnd}`,
+      guestCount: participantCount,
+      amount: payload.estimatedTotal,
+      currency: payload.currency,
+      contactName,
+      contactPhone,
+      contactEmail,
+      messenger,
+      guestNote: notes,
+      arrivalNote: requestType === 'manager_match' ? 'Заявка получена — форма подбора инструктора' : 'Заявка получена — форма на странице инструктора',
+      details: {
+        requestType,
+        dateRangeStart,
+        dateRangeEnd,
+        sessionSlots,
+        selectedSlotIds,
+        discipline,
+        activities,
+        languages,
+        lessonLanguage,
+        skillLevel: groupLevel,
+        companyType,
+        childrenCount,
+        adultsCount: Math.max(1, Number.parseInt(payload.adultsCount, 10) || participantCount - childrenCount),
+        pace,
+        budget,
+        participants,
+      },
+    });
     return json({ data: { requestCode } }, { status: 201, cacheControl: 'no-store' });
   } catch (error) {
     console.error('Failed to create instructor request', error);

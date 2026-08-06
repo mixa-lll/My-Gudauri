@@ -7,6 +7,8 @@ export { CMS_PAGE_BLOCKS, describeCategoryPricing } from './admin/CmsEditorParts
 export { CmsCategorySettings } from './admin/CmsCategorySettings';
 export { CmsInstructorEditor } from './admin/CmsInstructorEditor';
 export { CmsPricingEditor, pricingPreviewRange } from './admin/CmsPricingEditor';
+export { CmsRequestCard } from './admin/CmsRequestCard';
+export { CmsRequestQueue } from './admin/CmsRequestQueue';
 export { CmsTransferEditor } from './admin/CmsTransferEditor';
 export { MediaUploadField } from './admin/MediaUploadField';
 export { BookingConfigurator, BookingFormSection, BookingJourneyHeader, BookingOptionCards, BookingPointDetails, BookingProgress, BookingRequestSent, BookingRequestSummary, BookingWidget, StickyBookingWidget } from './booking/BookingBlocks';

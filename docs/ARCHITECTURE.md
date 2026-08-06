@@ -69,6 +69,19 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 - `/booking/:category/:slug` resolves the same flow definition as the object page and restores a `BookingDraft` from session storage. Direct instructor URLs can rebuild the draft from the object API.
 - There is no standalone `/summary` route. Review and success are states of the live booking flow.
 
+## Request pipeline (CRM)
+
+Every guest form ends in one row of `requests`, whatever the category, so the
+operator has a single queue instead of one table per form.
+
+- Intake: `POST /api/instructor-requests` and `POST /api/booking-requests` validate their own flow, then call `insertRequest` in `functions/_lib/requests.js`. Category-specific answers are kept verbatim in `details_json`; only the facts the queue and the calendar need are normalised into columns.
+- Status model: `new → in_progress → waiting_guest | waiting_payment → confirmed → completed`, plus `cancelled` from any step. `src/shared/requests.js` owns the statuses, labels, allowed manual transitions and the slot times, and is imported by the API and the UI alike, so a transition the server refuses is never offered as a button.
+- Object calendar: a request in `waiting_payment`, `confirmed` or `completed` occupies its slot. Confirming a time re-checks the same table and fails with `409` if it is taken, so there is no second calendar to keep in sync. Cancelling frees the slot immediately.
+- Actions: `POST /api/admin/requests/:code` with `{action}` — `take`, `status`, `note`, `message`, `confirm`, `offer`, `accept-offer`, `payment`, `complete`, `cancel`. Each one writes its own `request_events` entry, so the card's history explains every status it shows.
+- Payment states (`none → link_created → link_sent → paid`) are recorded by the operator; the CRM stores the link and the 24-hour window and does not talk to a payment provider.
+- Admin UI: `CmsRequestQueue` (inbox) and `CmsRequestCard` (one request, with the availability panel) — both design-system blocks, driven by `/api/admin/requests`.
+- `instructor_requests` and `booking_requests` remain as the historic intake log; migration `0030` copied their rows into `requests` and nothing writes to them any more.
+
 ## Booking contracts
 
 - `src/features/booking/contracts.js` owns `BOOKING_FLOW_REGISTRY`, category mappings, field definitions and pricing-policy selection.
@@ -94,6 +107,8 @@ Maintain a React frontend and a Cloudflare-native content backend with clear bou
 - `GET /api/instructors/:slug` — full published instructor profile.
 - `POST /api/instructor-requests` — validated instructor lesson request.
 - `POST /api/booking-requests` — validated generic category inquiry using a registered flow/version.
+- `GET /api/admin/requests` — the operator queue (authenticated).
+- `GET|POST /api/admin/requests/:code` — one request with its history, offers and object calendar; `POST` applies one operator action.
 - Unknown or unpublished slugs return `404`.
 - Public responses are edge-cacheable; errors use `no-store`.
 

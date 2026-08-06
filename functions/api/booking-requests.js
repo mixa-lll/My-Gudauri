@@ -1,4 +1,5 @@
 import { apiError, json } from '../_lib/http';
+import { dateValue, insertRequest, objectImage, timeValue } from '../_lib/requests';
 
 // Each accepted flow pins its own version, so a flow can be revised without
 // forcing every other category to move at the same time.
@@ -49,19 +50,38 @@ export async function onRequestPost({ request, env }) {
   if (!contactName || !contactPhone || !messenger) return apiError('Please add your contact details.', 400);
   if (flow.requiresEmail !== false && !contactEmail) return apiError('Please add your contact details.', 400);
 
-  const requestCode = `MG-${Date.now().toString(36).toUpperCase()}-${crypto.randomUUID().slice(0, 4).toUpperCase()}`;
+  // Whatever the category asks for, the queue needs the same four facts: the
+  // object, the day, how many guests and how much — the rest stays in answers.
+  const answers = payload.answers ?? {};
+  const scheduledDate = dateValue(answers.date) ?? dateValue(answers.startDate) ?? dateValue(answers.checkIn);
+  const scheduledEndDate = dateValue(answers.returnDate) ?? dateValue(answers.endDate) ?? dateValue(answers.checkOut);
+  const scheduledStart = timeValue(answers.time) ?? timeValue(answers.pickupTime);
+  const guestCount = Number.parseInt(answers.passengers ?? answers.participants ?? answers.guests, 10) || 1;
+
   try {
-    await env.DB.prepare(`
-      INSERT INTO booking_requests (
-        request_code, category_slug, flow_key, flow_version, object_id, object_slug,
-        object_name, answers_json, estimated_total, currency, contact_name,
-        contact_phone, contact_email, messenger
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).bind(
-      requestCode, category, flowKey, flowVersion, objectId, objectSlug,
-      objectName, answersJson, estimatedTotal, currency, contactName,
-      contactPhone, contactEmail, messenger
-    ).run();
+    const requestCode = await insertRequest(env.DB, {
+      category,
+      source: 'booking_flow',
+      sourceLabel: 'из формы бронирования',
+      objectSlug,
+      objectName,
+      objectKicker: [answers.direction, answers.equipment, answers.duration].filter((value) => typeof value === 'string' && value).join(' · ') || null,
+      objectImageUrl: await objectImage(env.DB, category, objectSlug),
+      scheduledDate,
+      scheduledEndDate,
+      scheduledStart,
+      scheduleLabel: [scheduledDate, scheduledStart].filter(Boolean).join(', '),
+      guestCount,
+      amount: estimatedTotal,
+      currency,
+      contactName,
+      contactPhone,
+      contactEmail,
+      messenger,
+      guestNote: cleanText(answers.comment ?? answers.notes, 1200),
+      arrivalNote: 'Заявка получена — форма бронирования на сайте',
+      details: { flowKey, flowVersion, objectId, answers: JSON.parse(answersJson) },
+    });
     return json({ data: { requestCode } }, { status: 201, cacheControl: 'no-store' });
   } catch (error) {
     console.error('Failed to create booking request', error);

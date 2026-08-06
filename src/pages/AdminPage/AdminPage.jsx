@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
+  applyRequestAction,
   createActivity,
   createInstructor,
   deleteActivity,
@@ -9,6 +10,8 @@ import {
   getAdminActivity,
   getAdminInstructors,
   getAdminInstructor,
+  getAdminRequest,
+  getAdminRequests,
   getAdminSession,
   login,
   logout,
@@ -25,7 +28,7 @@ import {
   updateTransfer,
 } from '../../services/adminApi';
 import { uploadMedia } from '../../services/mediaApi';
-import { CmsActivityEditor, CmsCategorySettings, CmsCollectionList, CmsInstructorEditor, CmsRouteSettings, CmsTransferEditor } from '../../design-system';
+import { CmsActivityEditor, CmsCategorySettings, CmsCollectionList, CmsInstructorEditor, CmsRequestCard, CmsRequestQueue, CmsRouteSettings, CmsTransferEditor } from '../../design-system';
 import { CATEGORY_PRICED_COLLECTIONS } from '../../shared/pricing';
 import './AdminPage.scss';
 
@@ -46,6 +49,7 @@ export function AdminPage() {
   const [authenticated, setAuthenticated] = useState(null); const [password, setPassword] = useState(''); const [showPassword, setShowPassword] = useState(false);
   const [tab, setTab] = useState('instructors'); const [instructors, setInstructors] = useState([]); const [activities, setActivities] = useState([]); const [transfers, setTransfers] = useState([]); const [editor, setEditor] = useState(null); const [baseline, setBaseline] = useState(''); const [notice, setNotice] = useState(null); const [busy, setBusy] = useState(false);
   const [settings, setSettings] = useState(null); const [settingsBaseline, setSettingsBaseline] = useState('');
+  const [requests, setRequests] = useState([]); const [openRequest, setOpenRequest] = useState(null); const [requestStatus, setRequestStatus] = useState('all'); const [requestCategory, setRequestCategory] = useState('all');
   const [transferRoutes, setTransferRoutes] = useState([]);
   const [categoryPricing, setCategoryPricing] = useState({});
   const [query, setQuery] = useState(''); const [statusFilter, setStatusFilter] = useState('all'); const [categoryFilter, setCategoryFilter] = useState('all'); const [disciplineFilter, setDisciplineFilter] = useState('all'); const [languageFilter, setLanguageFilter] = useState('all'); const [openMenuId, setOpenMenuId] = useState(null);
@@ -57,10 +61,13 @@ export function AdminPage() {
   const openEditorWith = (kind, data) => { setEditor({ kind, data }); setBaseline(snapshot(data)); };
   // A response without a `data` array must not take the whole screen down.
   const load = async () => {
-    const [nextInstructors, nextActivities, nextTransfers, ...pricing] = await Promise.all([
+    const [nextInstructors, nextActivities, nextTransfers, nextRequests, ...pricing] = await Promise.all([
       getAdminInstructors(),
       getAdminActivities(),
       getAdminTransfers(),
+      // The queue is loaded with the content lists: the rail shows how many
+      // requests are unanswered on every screen, not only inside the section.
+      getAdminRequests().catch(() => []),
       // Category pricing is read with the lists: every instructor card shows
       // the tariff it inherits, so the editor must never open without it.
       ...CATEGORY_PRICED_COLLECTIONS.map((collection) => getCollectionPricing(collection).catch(() => null)),
@@ -68,12 +75,13 @@ export function AdminPage() {
     setInstructors(Array.isArray(nextInstructors) ? nextInstructors : []);
     setActivities(Array.isArray(nextActivities) ? nextActivities : []);
     setTransfers(Array.isArray(nextTransfers) ? nextTransfers : []);
+    setRequests(Array.isArray(nextRequests) ? nextRequests : []);
     getTransferRoutes().then((nextRoutes) => setTransferRoutes(Array.isArray(nextRoutes) ? nextRoutes : [])).catch(() => setTransferRoutes([]));
     setCategoryPricing(Object.fromEntries(CATEGORY_PRICED_COLLECTIONS.map((collection, index) => [collection, pricing[index]]).filter(([, item]) => item)));
   };
 
   useEffect(() => { getAdminSession().then(({ authenticated: allowed }) => { setAuthenticated(allowed); if (allowed) load().catch(fail); }).catch(() => setAuthenticated(false)); }, []);
-  useEffect(() => { setEditor(null); setSettings(null); setQuery(''); setStatusFilter('all'); setCategoryFilter('all'); setDisciplineFilter('all'); setLanguageFilter('all'); setOpenMenuId(null); }, [tab]);
+  useEffect(() => { setEditor(null); setSettings(null); setOpenRequest(null); setQuery(''); setStatusFilter('all'); setCategoryFilter('all'); setDisciplineFilter('all'); setLanguageFilter('all'); setOpenMenuId(null); }, [tab]);
   useEffect(() => { if (notice?.tone !== 'success') return undefined; const timer = setTimeout(() => setNotice(null), 4000); return () => clearTimeout(timer); }, [notice]);
 
   const dirty = Boolean(editor) && snapshot(editor.data) !== baseline;
@@ -142,6 +150,40 @@ export function AdminPage() {
     } catch (error) { fail(error); } finally { setBusy(false); }
   };
 
+  // What the operator just did, in their words — the timeline records the same
+  // action in the request's own history.
+  const REQUEST_NOTICES = {
+    take: 'Заявка в работе.',
+    status: 'Статус обновлён.',
+    note: 'Заметка добавлена в историю.',
+    message: 'Сообщение записано в историю.',
+    confirm: 'Слот закреплён — заявка ждёт оплаты.',
+    offer: 'Предложение записано, слоты держатся 24 часа.',
+    'accept-offer': 'Время гостя принято — можно подтверждать.',
+    payment: 'Оплата обновлена.',
+    complete: 'Заявка завершена.',
+    cancel: 'Заявка отменена, слот освобождён.',
+  };
+
+  const openRequestCard = async (code) => {
+    setBusy(true);
+    try { setOpenRequest(await getAdminRequest(code)); } catch (error) { fail(error); } finally { setBusy(false); }
+  };
+
+  const runRequestAction = async (action) => {
+    if (!openRequest) return;
+    setBusy(true);
+    try {
+      setOpenRequest(await applyRequestAction(openRequest.request_code, action));
+      setRequests(await getAdminRequests());
+      report(REQUEST_NOTICES[action.action] ?? 'Готово.', 'success');
+    } catch (error) {
+      fail(error);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const duplicate = async (slug) => {
     setBusy(true);
     try {
@@ -175,7 +217,7 @@ export function AdminPage() {
     }
   };
 
-  const navCounts = { instructors: instructors.length, activities: activities.length, transfers: transfers.length };
+  const navCounts = { instructors: instructors.length, activities: activities.length, transfers: transfers.length, requests: requests.length, requestsNew: requests.filter((item) => item.status === 'new').length };
   const matchesQuery = (item) => !query || item.name.toLowerCase().includes(query.toLowerCase());
   const matchesStatus = (item) => statusFilter === 'all' || item.status === statusFilter;
 
@@ -203,6 +245,39 @@ export function AdminPage() {
 
   if (authenticated === null) return <main className="admin-shell"><p>Загружаем админку…</p></main>;
   if (!authenticated) return <main className="admin-login"><form onSubmit={signIn}><p className="admin-kicker">My Gudauri</p><h1>Админка</h1><p>Введите пароль администратора, чтобы управлять контентом.</p><label><span>Пароль</span><span className="admin-password-field"><input type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} autoFocus required /><button className="admin-password-toggle" type="button" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>{showPassword ? 'Скрыть' : 'Показать'}</button></span></label>{notice && <p className={`admin-notice admin-notice--${notice.tone}`} role="alert">{notice.text}</p>}<button disabled={busy}>{busy ? 'Проверяем…' : 'Войти'}</button></form></main>;
+
+  // Requests are not a content collection: the queue replaces the object list
+  // and the card replaces the editor, but the rail and toasts stay the same.
+  if (tab === 'requests') {
+    return <main className="admin-cms-shell">
+      {toast}
+      {openRequest
+        ? <CmsRequestCard
+          request={openRequest}
+          counts={navCounts}
+          busy={busy}
+          onAction={runRequestAction}
+          onBack={() => { setOpenRequest(null); setNotice(null); }}
+          onNavigate={setTab}
+          onSignOut={signOut}
+        />
+        : <CmsRequestQueue
+          items={requests}
+          counts={navCounts}
+          status={requestStatus}
+          onStatusChange={setRequestStatus}
+          category={requestCategory}
+          onCategoryChange={setRequestCategory}
+          query={query}
+          onQueryChange={setQuery}
+          onOpen={openRequestCard}
+          onRefresh={() => { setBusy(true); getAdminRequests().then((next) => setRequests(Array.isArray(next) ? next : [])).catch(fail).finally(() => setBusy(false)); }}
+          onNavigate={setTab}
+          onSignOut={signOut}
+          busy={busy}
+        />}
+    </main>;
+  }
 
   if (settings) {
     if (settings.collection === 'transfers') {

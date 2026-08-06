@@ -83,12 +83,16 @@ async function loadTransferDraft(slug, t) {
   });
 }
 
-function instructorPayload({ offer, answers }) {
+function instructorPayload({ offer, answers, estimatedTotal }) {
   const adultsCount = Math.max(1, Number(answers.adultsCount) || Number(answers.participants) || 1);
   const childrenCount = Math.max(0, Number(answers.childrenCount) || 0);
   const participantCount = adultsCount + childrenCount;
   return {
     requestType: 'specific_instructor',
+    // The operator queue sorts and reports on money, so the estimate the guest
+    // saw travels with the request rather than being recomputed later.
+    estimatedTotal,
+    currency: offer.currency,
     instructorSlug: offer.object.slug,
     instructorName: offer.object.name,
     preferredDates: [answers.dateRange?.start, answers.dateRange?.end].filter(Boolean).join(' – '),
@@ -155,7 +159,7 @@ export function BookingFlowPage() {
   const offer = draftOffer(state.draft);
   const backPath = definition.category === 'instructors' ? `/instructors/${offer.object.slug}` : `/${definition.category}/${offer.object.slug}`;
   const submit = definition.category === 'instructors'
-    ? ({ offer: submittedOffer, answers }) => createInstructorRequest(instructorPayload({ offer: submittedOffer, answers }))
+    ? ({ offer: submittedOffer, answers, estimatedTotal }) => createInstructorRequest(instructorPayload({ offer: submittedOffer, answers, estimatedTotal }))
     : ({ offer: submittedOffer, answers, estimatedTotal }) => createBookingRequest({
       category: definition.category,
       flowKey: definition.key,

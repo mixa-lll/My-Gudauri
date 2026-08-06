@@ -23,6 +23,8 @@ npm run dev:cloudflare
 
 The content editor is available at `/admin`. It manages instructor cards (including status, profile data, disciplines, languages, gallery and reviews) and category visibility/order.
 
+Its **Заявки** section is the request CRM: every form submitted on the site lands in one queue, and a request card shows the booking, the guest, the payment state, the full history and the object's calendar side by side — a free slot can be confirmed (which blocks the time), a taken one answered with alternative slots. See [Request pipeline](./docs/ARCHITECTURE.md#request-pipeline-crm).
+
 Configure credentials before running Pages locally or deploying:
 
 ```bash

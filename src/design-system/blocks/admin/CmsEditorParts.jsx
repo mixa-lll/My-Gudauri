@@ -60,7 +60,15 @@ export function CmsAdminRail({ active = 'instructors', counts = {}, onNavigate, 
       {item('transfers', 'Трансферы')}
       <span>Прокат</span><span>Туры</span><span>Места</span>
     </div>
-    <nav className="cms-editor__secondary-nav" aria-label="Разделы админки"><span>Заявки</span><span>Отзывы</span><span>Настройки</span></nav>
+    {/* Requests is the one section outside content: unanswered ones are the
+        first thing an operator has to see, so the count sits in the rail. */}
+    <nav className="cms-editor__secondary-nav" aria-label="Разделы админки">
+      <button type="button" className={active === 'requests' ? 'is-active' : ''} onClick={() => onNavigate?.('requests')}>
+        <span>Заявки</span>
+        {counts.requestsNew ? <small className="cms-editor__nav-alert">{counts.requestsNew}</small> : counts.requests === undefined ? null : <small>{counts.requests}</small>}
+      </button>
+      <span>Отзывы</span><span>Настройки</span>
+    </nav>
     <div className="cms-editor__operator"><span aria-hidden="true">А</span><div><strong>Оператор</strong><small>admin</small></div><Button variant="ghost" onClick={onSignOut}>Выйти</Button></div>
   </aside>;
 }
